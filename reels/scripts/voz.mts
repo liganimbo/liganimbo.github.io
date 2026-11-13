@@ -11,7 +11,9 @@ const api = (ruta: string, init?: RequestInit) =>
   fetch(`https://api.elevenlabs.io/v1/${ruta}`, { ...init, headers: { "xi-api-key": clave, "Content-Type": "application/json", ...init?.headers } });
 
 if (process.argv[2] === "voces") {
-  const { voices } = await (await api("voices")).json();
+  const respuesta = await (await api("voices")).json();
+  if (!respuesta.voices) throw new Error(`ElevenLabs: ${JSON.stringify(respuesta.detail ?? respuesta)}`);
+  const { voices } = respuesta;
   for (const v of voices) console.log(`${v.voice_id}  ${v.name}  ${JSON.stringify(v.labels ?? {})}`);
   process.exit(0);
 }
