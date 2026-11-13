@@ -3,7 +3,7 @@
 import Base from "../layouts/Base.astro";
 import Emblema from "../components/Emblema.astro";
 import { temporada, url } from "../lib/liga";
-import { USUARIO, partidoDestacado } from "../lib/instagram";
+import { USUARIO, cartasDestacadas, partidoDestacado } from "../lib/instagram";
 
 // Plan en orden de publicación: presentación, tres cartas y, después, cada jornada.
 // Un carrusel es una sola publicación con varias diapositivas; en la cuadrícula se ve la primera.
@@ -28,6 +28,9 @@ const plan: { ruta: string; texto: string; diapositivas?: string[]; alto?: numbe
     texto: `Carrusel: franquicias ${g} de 3`,
     diapositivas: [1, 2, 3, 4, 5].map((n) => `ig/equipos/${g}/${n}`),
   })),
+  ...cartasDestacadas()
+    .slice(0, 3)
+    .map((j) => ({ ruta: `ig/carta/${j.id}`, texto: `Presentamos: ${j.nombre}` })),
 ];
 for (let n = 1; n <= Math.min(3, temporada.jornadas.length); n++) {
   plan.push(
