@@ -1,0 +1,33 @@
+---
+// Escudo provisional generado con los colores de la franquicia.
+import { franquicias } from "../lib/liga";
+
+interface Props {
+  id: string;
+  tam?: number;
+}
+const { id, tam = 32 } = Astro.props;
+const f = franquicias[id];
+const [principal, secundario] = f.colores;
+---
+
+<svg width={tam} height={tam} viewBox="0 0 40 44" role="img" aria-label={`Escudo de ${f.nombre}`} class="escudo">
+  <path d="M20 1 L38 7 V22 C38 33 30 40 20 43 C10 40 2 33 2 22 V7 Z" fill={principal} stroke={secundario} stroke-width="2.5"></path>
+  <text
+    x="20"
+    y="27"
+    text-anchor="middle"
+    fill={secundario}
+    font-family="Barlow Condensed, sans-serif"
+    font-weight="800"
+    font-size="14"
+    letter-spacing="0.5">{id}</text
+  >
+</svg>
+
+<style>
+  .escudo {
+    flex: none;
+    display: block;
+  }
+</style>

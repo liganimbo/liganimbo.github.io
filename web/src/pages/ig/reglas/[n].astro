@@ -1,0 +1,476 @@
+---
+// Carrusel de Instagram que explica las reglas. Los números salen de REGLAS, así que siempre coinciden con el motor.
+import Instagram from "../../../layouts/Instagram.astro";
+import CartaGrande from "../../../components/ig/CartaGrande.astro";
+import { franquicias, jugadores } from "../../../lib/liga";
+import { DESCRIPCION_ICONO, REGLAS, necesita, valorAtaque, valorDefensa } from "../../../motor/reglas.ts";
+
+export function getStaticPaths() {
+  return Array.from({ length: 8 }, (_, i) => ({ params: { n: String(i + 1) } }));
+}
+
+const TOTAL = 8;
+
+const n = Number(Astro.params.n);
+const cartas = Object.values(jugadores);
+const mejores = [...cartas].sort((a, b) => b.ataque + b.defensa - (a.ataque + a.defensa));
+
+// Ejemplo real: una carta con Pintura ataca a alguien con Muro de otro equipo.
+const atacante = mejores.find((j) => j.icono === "Pintura" && j.ataque >= 4) ?? mejores[0];
+const defensor = mejores.find((j) => j.icono === "Muro" && j.franquicia !== atacante.franquicia) ?? mejores[1];
+const dados: [number, number] = [5, 4];
+const ejAtaque = dados[0] + dados[1] + valorAtaque(atacante, "dentro");
+const ejDefensa = valorDefensa(defensor, "dentro", "dentro");
+const ejDefensaFuera = valorDefensa(defensor, "fuera", "dentro");
+const ejAtaqueFuera = dados[0] + dados[1] + valorAtaque(atacante, "fuera");
+const nombreCorto = (nombre: string) => nombre.split(" ")[0];
+
+const equipoEjemplo = franquicias[atacante.franquicia].plantilla.map((id) => jugadores[id]);
+const acento = n === 6 ? franquicias[atacante.franquicia].colores[0] : "#4f46e5";
+---
+
+<Instagram titulo={`Reglas ${n}/${TOTAL}`} etiqueta={`Reglas · ${n}/${TOTAL}`} acento={acento}>
+  {
+    n === 1 && (
+      <section class="portada">
+        <div class="antetitulo">Guía rápida</div>
+        <h1 class="titular grande">
+          Cómo se
+          <br />
+          juega la
+          <br />
+          <span class="lila">Liga Nimbo</span>
+        </h1>
+        <p class="entradilla">Baloncesto 3x3 con cartas y dos dados. Se aprende en un minuto; ganar ya es otra cosa.</p>
+        <div class="dados-portada">
+          <span>5</span>
+          <span>4</span>
+        </div>
+        <div class="desliza">Desliza →</div>
+      </section>
+    )
+  }
+
+  {
+    n === 2 && (
+      <section class="diapo">
+        <div class="paso">1</div>
+        <h1 class="titular">Tu equipo:<br />cuatro cartas</h1>
+        <div class="mano">
+          {equipoEjemplo.map((j, i) => (
+            <div class:list={["mini", { suplente: i === 3 }]}>
+              <CartaGrande j={j} />
+            </div>
+          ))}
+        </div>
+        <ul class="puntos">
+          <li><strong>3 en pista y 1 suplente.</strong> Cada carta tiene <strong>Ataque</strong> y <strong>Defensa</strong>, del 2 al 6.</li>
+          <li>Cada carta tiene <strong class="oro">{REGLAS.fichasPorCarta} tiros ●●</strong>. Por eso cada equipo ataca <strong>{REGLAS.ataquesPorEquipo} veces</strong>, por turnos.</li>
+          <li>Cada jugador en pista <strong>marca a un rival</strong>. Tú decides los emparejamientos.</li>
+        </ul>
+      </section>
+    )
+  }
+
+  {
+    n === 3 && (
+      <section class="diapo">
+        <div class="paso">2</div>
+        <h1 class="titular">Los iconos</h1>
+        <p class="entradilla">Algunas cartas tienen una especialidad. Como mucho, una.</p>
+        <div class="iconos">
+          {(["Tiro", "Pintura", "Muro"] as const).map((icono) => (
+            <div class="icono-fila">
+              <span class="pastilla">{icono}</span>
+              <span>{DESCRIPCION_ICONO[icono]}</span>
+            </div>
+          ))}
+        </div>
+        <p class="nota">El Tiro suma menos porque el triple ya vale más. El Muro manda en la zona, pero no frena los triples.</p>
+      </section>
+    )
+  }
+
+  {
+    n === 4 && (
+      <section class="diapo">
+        <div class="paso">3</div>
+        <h1 class="titular">Cada ataque<br />es un farol</h1>
+        <div class="duelo">
+          <div class="lado-duelo">
+            <div class="etq">Quien ataca</div>
+            <p>Elige <strong>quién tira</strong> (gasta un tiro) y, en secreto:</p>
+            <div class="opcion">Dentro · <strong>2 puntos</strong></div>
+            <div class="opcion">Fuera · <strong>3 puntos</strong></div>
+          </div>
+          <div class="contra">vs</div>
+          <div class="lado-duelo">
+            <div class="etq">Quien defiende</div>
+            <p>Elige en secreto <strong>qué cierra</strong>:</p>
+            <div class="opcion">Cierra dentro</div>
+            <div class="opcion">Cierra fuera</div>
+          </div>
+        </div>
+        <p class="grande-texto">Si la defensa lo adivina, suma <strong class="oro">+{REGLAS.bonusCierre}</strong>.<br />Se revela a la vez… y se tiran los dados.</p>
+      </section>
+    )
+  }
+
+  {
+    n === 5 && (
+      <section class="diapo">
+        <div class="paso">4</div>
+        <h1 class="titular">La cuenta</h1>
+        <div class="formula">
+          <div class="etq">Ataque</div>
+          <div class="f">🎲 + 🎲 + <strong>Ataque</strong> de quien tira <span class="suave">+ su icono</span></div>
+        </div>
+        <div class="formula">
+          <div class="etq">Defensa</div>
+          <div class="f">
+            <strong>{REGLAS.baseDefensa}</strong> + <strong>Defensa</strong> de quien marca <span class="suave">+ Muro + {REGLAS.bonusCierre} si lo adivinó</span>
+          </div>
+        </div>
+        <div class="reglas-tiro">
+          <div><span class="pastilla">Dentro</span> entra si el ataque <strong>iguala o supera</strong> la defensa.</div>
+          <div><span class="pastilla">Fuera</span> entra si la <strong>supera por {REGLAS.margenFuera} o más</strong>.</div>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    n === 6 && (
+      <section class="diapo">
+        <div class="paso">5</div>
+        <h1 class="titular">Un ejemplo</h1>
+        <div class="ejemplo">
+          <div class="mini"><CartaGrande j={atacante} giro={-3} /></div>
+          <div class="contra">vs</div>
+          <div class="mini"><CartaGrande j={defensor} giro={3} /></div>
+        </div>
+        <ol class="pasos">
+          <li>{nombreCorto(atacante.nombre)} tira <strong>dentro</strong>. La defensa lo lee y <strong>cierra dentro</strong>.</li>
+          <li>
+            Dados <span class="dado">{dados[0]}</span><span class="dado">{dados[1]}</span> → ataque {dados[0] + dados[1]} + {atacante.ataque} + {valorAtaque(atacante, "dentro") - atacante.ataque} (Pintura) = <strong>{ejAtaque}</strong>
+          </li>
+          <li>
+            Defensa: {REGLAS.baseDefensa} + {defensor.defensa} + {REGLAS.bonusMuro} (Muro) + {REGLAS.bonusCierre} (lo adivinó) = <strong>{ejDefensa}</strong>
+          </li>
+          <li class:list={["resultado", { falla: ejAtaque < ejDefensa }]}>{ejAtaque >= ejDefensa ? `${ejAtaque} ≥ ${ejDefensa}: ¡canasta de 2!` : `${ejAtaque} < ${ejDefensa}: no entra.`}</li>
+        </ol>
+        <p class="nota">
+          ¿Y si hubiera tirado de fuera? Perdía la Pintura ({ejAtaqueFuera}), pero la defensa se quedaba en {ejDefensaFuera}: necesitaba {ejDefensaFuera + REGLAS.margenFuera}.{" "}
+          {ejAtaqueFuera >= ejDefensaFuera + REGLAS.margenFuera ? "Habría sido triple." : "Tampoco entraba."}
+        </p>
+      </section>
+    )
+  }
+
+  {
+    n === 7 && (
+      <section class="diapo">
+        <div class="paso">6</div>
+        <h1 class="titular">Descanso<br />y final</h1>
+        <ul class="puntos grandes">
+          <li>
+            <strong>Tras {REGLAS.descansoTras} ataques</strong> de cada equipo, descanso: <strong>el suplente entra sí o sí</strong>, por alguien que ya haya gastado sus dos tiros. Y se rehacen los marcajes.
+          </li>
+          <li><strong>Tiempo muerto:</strong> una vez por partido, repites un tiro fallado.</li>
+          <li><strong>Gana quien más anote</strong> tras los {REGLAS.ataquesPorEquipo} ataques.</li>
+          <li><strong>¿Empate?</strong> Muerte súbita: un ataque más cada uno, puede tirar cualquiera, hasta que alguien quede por delante.</li>
+        </ul>
+        <p class="nota">La gran pregunta: ¿gastas pronto los tiros de tu estrella o los guardas para el final?</p>
+      </section>
+    )
+  }
+
+  {
+    n === 8 && (
+      <section class="portada">
+        <div class="antetitulo">Ahora tú</div>
+        <h1 class="titular grande">
+          Juega
+          <br />
+          tu partido
+        </h1>
+        <p class="entradilla">Elige franquicia, coloca tus cartas y enfréntate a la máquina. Unos minutos por partido.</p>
+        <ul class="puntos grandes">
+          <li>🔗 Enlace en la bio</li>
+          <li>🗓️ Noches Nimbo: <strong>martes y viernes</strong></li>
+          <li>💾 Guarda este carrusel para tenerlo a mano</li>
+        </ul>
+      </section>
+    )
+  }
+</Instagram>
+
+<style>
+  .portada,
+  .diapo {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .portada {
+    justify-content: center;
+  }
+  .diapo {
+    margin-top: 36px;
+  }
+  .titular {
+    font-size: 108px;
+  }
+  .titular.grande {
+    font-size: 150px;
+    margin: 12px 0 28px;
+  }
+  .lila {
+    color: var(--lila);
+  }
+  .oro {
+    color: var(--oro);
+  }
+  .entradilla {
+    font-size: 36px;
+    line-height: 1.35;
+    color: color-mix(in srgb, var(--texto) 80%, transparent);
+    margin: 14px 0 0;
+    max-width: 860px;
+  }
+  .paso {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 40px;
+    font-weight: 800;
+    background: var(--oro);
+    color: var(--sobre-oro);
+    margin-bottom: 18px;
+  }
+  .desliza {
+    margin-top: 48px;
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--oro);
+  }
+  .dados-portada {
+    display: flex;
+    gap: 22px;
+    margin-top: 48px;
+  }
+  .dados-portada span,
+  .dado {
+    display: inline-grid;
+    place-items: center;
+    background: #fff;
+    color: #0d0f1c;
+    box-shadow: 0 2px 10px rgb(0 0 0 / 18%);
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 800;
+  }
+  .dados-portada span {
+    width: 140px;
+    height: 140px;
+    border-radius: 28px;
+    font-size: 96px;
+    box-shadow: 0 20px 50px rgb(0 0 0 / 40%);
+  }
+  .dados-portada span:first-child {
+    rotate: -8deg;
+  }
+  .dados-portada span:last-child {
+    rotate: 6deg;
+  }
+  .dado {
+    width: 44px;
+    height: 44px;
+    border-radius: 9px;
+    font-size: 30px;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+  .mano {
+    display: flex;
+    gap: 14px;
+    margin: 34px 0 30px;
+    height: 270px;
+  }
+  .mano .mini {
+    width: 225px;
+  }
+  .mini :global(.carta-ig) {
+    transform-origin: top left;
+    scale: 0.53;
+  }
+  .mano .suplente {
+    opacity: 0.5;
+  }
+  .puntos {
+    margin: 0;
+    padding-left: 34px;
+    font-size: 32px;
+    line-height: 1.4;
+    color: color-mix(in srgb, var(--texto) 85%, transparent);
+  }
+  .puntos li + li {
+    margin-top: 16px;
+  }
+  .puntos.grandes {
+    font-size: 36px;
+    margin-top: 36px;
+  }
+  .puntos.grandes li + li {
+    margin-top: 22px;
+  }
+  .portada .puntos.grandes {
+    list-style: none;
+    padding: 0;
+  }
+  .iconos {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-top: 44px;
+  }
+  .icono-fila {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    font-size: 42px;
+    font-weight: 600;
+    padding: 26px 30px;
+    border-radius: 24px;
+    background: color-mix(in srgb, var(--texto) 7%, transparent);
+  }
+  .pastilla {
+    display: inline-block;
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 8px 20px;
+    border-radius: 999px;
+    background: var(--oro);
+    color: var(--sobre-oro);
+    min-width: 150px;
+    text-align: center;
+  }
+  .nota {
+    font-size: 28px;
+    line-height: 1.4;
+    color: color-mix(in srgb, var(--texto) 65%, transparent);
+    margin-top: 34px;
+  }
+  .duelo {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 18px;
+    align-items: center;
+    margin-top: 44px;
+  }
+  .lado-duelo {
+    padding: 28px;
+    border-radius: 24px;
+    background: color-mix(in srgb, var(--texto) 7%, transparent);
+    font-size: 28px;
+    line-height: 1.35;
+    min-height: 380px;
+  }
+  .lado-duelo p {
+    margin: 10px 0 18px;
+  }
+  .opcion {
+    font-size: 32px;
+    padding: 14px 18px;
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--texto) 10%, transparent);
+    margin-top: 10px;
+  }
+  .contra {
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 64px;
+    font-weight: 800;
+    color: var(--oro);
+  }
+  .etq {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--oro);
+  }
+  .grande-texto {
+    font-size: 38px;
+    line-height: 1.4;
+    margin-top: 40px;
+  }
+  .formula {
+    margin-top: 36px;
+    padding: 28px 32px;
+    border-radius: 24px;
+    background: color-mix(in srgb, var(--texto) 7%, transparent);
+  }
+  .formula .f {
+    font-size: 40px;
+    margin-top: 10px;
+    line-height: 1.3;
+  }
+  .formula .suave {
+    font-size: 30px;
+  }
+  .reglas-tiro {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    margin-top: 44px;
+    font-size: 34px;
+    line-height: 1.35;
+  }
+  .reglas-tiro .pastilla {
+    margin-right: 16px;
+  }
+  .ejemplo {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    margin: 36px 0 10px;
+    height: 310px;
+  }
+  .ejemplo .contra {
+    align-self: center;
+  }
+  .ejemplo .mini {
+    width: 245px;
+  }
+  .ejemplo .mini :global(.carta-ig) {
+    scale: 0.58;
+  }
+  .pasos {
+    margin: 0;
+    padding-left: 38px;
+    font-size: 31px;
+    line-height: 1.45;
+  }
+  .pasos li + li {
+    margin-top: 10px;
+  }
+  .pasos .resultado {
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 54px;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: #4ade80;
+    list-style: none;
+    margin-left: -38px;
+    margin-top: 18px;
+  }
+  .pasos .resultado.falla {
+    color: #f87171;
+  }
+</style>

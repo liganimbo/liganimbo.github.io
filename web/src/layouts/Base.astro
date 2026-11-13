@@ -1,0 +1,403 @@
+---
+import Emblema from "../components/Emblema.astro";
+import { url } from "../lib/liga";
+
+interface Props {
+  titulo: string;
+}
+const { titulo } = Astro.props;
+const secciones = [
+  ["", "Inicio"],
+  ["jugar", "Jugar"],
+  ["clasificacion", "Clasificación"],
+  ["calendario", "Calendario"],
+  ["playoffs", "Playoffs"],
+  ["franquicias", "Franquicias"],
+  ["jugadores", "Jugadores"],
+  ["draft", "Draft"],
+];
+const actual = Astro.url.pathname.replace(import.meta.env.BASE_URL, "").split("/")[0] ?? "";
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{titulo === "Liga Nimbo" ? titulo : `${titulo} · Liga Nimbo`}</title>
+    <link rel="icon" type="image/svg+xml" href={url("favicon.svg")} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header class="cabecera">
+      <div class="contenedor cabecera-fila">
+        <a class="marca" href={url()}>
+          <Emblema variante="palabra" tam={150} lema={false} />
+        </a>
+        <nav>
+          {
+            secciones.map(([ruta, nombre]) => (
+              <a href={url(ruta)} class:list={{ activo: actual === ruta }}>
+                {nombre}
+              </a>
+            ))
+          }
+        </nav>
+      </div>
+    </header>
+    <main class="contenedor">
+      <slot />
+    </main>
+    <footer class="contenedor pie">
+      Liga Nimbo · liga mixta de baloncesto 3x3, ficticia y jugada con cartas y dados · Temporada 1
+    </footer>
+  </body>
+</html>
+
+<style is:global>
+  /* Mismo estilo que Instagram: modo claro = flat claro (crema y naranja), modo oscuro = flat (índigo y dorado). */
+  :root {
+    --fondo: #f4efe4;
+    --superficie: #fffdf8;
+    --superficie-2: #efe8da;
+    --borde: #e0d6c3;
+    --texto: #16182e;
+    --texto-2: #4a4c63;
+    --texto-3: #85838f;
+    --acento: #e8590c;
+    --acento-suave: #fde4d4;
+    --sobre-acento: #ffffff;
+    --cabecera: #1d2060;
+    --victoria: #2f855a;
+    --derrota: #c53030;
+    --sombra: none;
+    --radio: 10px;
+    --titulo: "Barlow Condensed", system-ui, sans-serif;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --fondo: #1f2260;
+      --superficie: #2b2f80;
+      --superficie-2: #343991;
+      --borde: #4148a6;
+      --texto: #f1f2f8;
+      --texto-2: #cdd0f2;
+      --texto-3: #9ea4dc;
+      --acento: #ffc83d;
+      --acento-suave: #4a4772;
+      --sobre-acento: #16182e;
+      --cabecera: #16184a;
+      --victoria: #6ee7a8;
+      --derrota: #ff9b9b;
+      --sombra: none;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --fondo: #1f2260;
+    --superficie: #2b2f80;
+    --superficie-2: #343991;
+    --borde: #4148a6;
+    --texto: #f1f2f8;
+    --texto-2: #cdd0f2;
+    --texto-3: #9ea4dc;
+    --acento: #ffc83d;
+    --acento-suave: #4a4772;
+    --sobre-acento: #16182e;
+    --cabecera: #16184a;
+    --victoria: #6ee7a8;
+    --derrota: #ff9b9b;
+    --sombra: none;
+    color-scheme: dark;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    background: var(--fondo);
+    color: var(--texto);
+    font: 15px/1.5 Inter, system-ui, sans-serif;
+    font-variant-numeric: tabular-nums;
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+  a:hover {
+    color: var(--acento);
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--titulo);
+    letter-spacing: 0.01em;
+    line-height: 1.1;
+    margin: 0 0 0.5em;
+  }
+  h1 {
+    font-size: 2.4rem;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-top: 1.6em;
+  }
+  h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+  }
+  .contenedor {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 16px;
+  }
+  main.contenedor {
+    padding-top: 24px;
+    padding-bottom: 48px;
+  }
+
+  .cabecera {
+    background: var(--cabecera);
+    color: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .cabecera-fila {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    min-height: 56px;
+    flex-wrap: wrap;
+  }
+  .marca {
+    font-family: var(--titulo);
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #fff;
+  }
+  .marca:hover {
+    color: #fff;
+  }
+  .cabecera nav {
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+    flex: 1;
+    scrollbar-width: none;
+  }
+  .cabecera nav a {
+    padding: 6px 10px;
+    border-radius: 6px;
+    color: #c4c6d8;
+    font-weight: 500;
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+  .cabecera nav a:hover,
+  .cabecera nav a.activo {
+    color: #fff;
+    background: rgb(255 255 255 / 10%);
+  }
+  .pie {
+    color: var(--texto-3);
+    font-size: 0.85rem;
+    padding-bottom: 32px;
+  }
+
+  .tarjeta {
+    background: var(--superficie);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    box-shadow: var(--sombra);
+    padding: 16px;
+  }
+  .rejilla {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+  }
+  .subtitulo {
+    color: var(--texto-2);
+    margin-top: -0.3em;
+  }
+  .apagado {
+    color: var(--texto-3);
+  }
+  .etiqueta {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--acento-suave);
+    color: var(--acento);
+  }
+
+  .tabla-envoltorio {
+    overflow-x: auto;
+    background: var(--superficie);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    box-shadow: var(--sombra);
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 0.9rem;
+  }
+  th,
+  td {
+    padding: 8px 10px;
+    text-align: right;
+    white-space: nowrap;
+  }
+  th:first-child,
+  td:first-child,
+  .izq {
+    text-align: left;
+  }
+  thead th {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--texto-3);
+    font-weight: 600;
+    border-bottom: 1px solid var(--borde);
+    background: var(--superficie-2);
+  }
+  tbody tr + tr td {
+    border-top: 1px solid var(--borde);
+  }
+  tbody tr:hover td {
+    background: var(--superficie-2);
+  }
+  tr.corte td {
+    border-top: 2px dashed var(--texto-3) !important;
+  }
+  /* Cartas de jugador */
+  .carta {
+    display: flex;
+    flex-direction: column;
+    width: 168px;
+    min-height: 200px;
+    border-radius: 14px;
+    background: var(--superficie);
+    border: 2px solid var(--c1);
+    box-shadow: var(--sombra);
+    overflow: hidden;
+    color: var(--texto);
+    transition: transform 0.12s ease;
+  }
+  a.carta:hover {
+    color: var(--texto);
+    transform: translateY(-3px);
+  }
+  .carta.mini {
+    width: 132px;
+    min-height: 0;
+    border-radius: 10px;
+  }
+  .carta-cabeza {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 10px;
+    background: var(--c1);
+    color: var(--c2);
+    font-family: var(--titulo);
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    min-height: 30px;
+  }
+  .carta-icono {
+    font-family: Inter, sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 999px;
+    background: var(--c2);
+    color: var(--c1);
+  }
+  .carta-nombre {
+    font-family: var(--titulo);
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.05;
+    padding: 10px 10px 0;
+    text-transform: uppercase;
+  }
+  .mini .carta-nombre {
+    font-size: 1rem;
+    padding: 8px 8px 0;
+  }
+  .carta-meta {
+    font-size: 0.75rem;
+    color: var(--texto-3);
+    padding: 4px 10px 0;
+  }
+  .carta-numeros {
+    margin-top: auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    padding: 10px;
+  }
+  .mini .carta-numeros {
+    padding: 8px;
+  }
+  .carta-numeros div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: var(--superficie-2);
+    border-radius: 8px;
+    padding: 4px 0;
+  }
+  .carta-numeros span {
+    font-family: var(--titulo);
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1;
+  }
+  .mini .carta-numeros span {
+    font-size: 1.5rem;
+  }
+  .carta-numeros small {
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--texto-3);
+  }
+  .mano {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .v {
+    color: var(--victoria);
+    font-weight: 600;
+  }
+  .d {
+    color: var(--derrota);
+    font-weight: 600;
+  }
+</style>

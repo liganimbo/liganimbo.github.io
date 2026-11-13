@@ -1,0 +1,75 @@
+---
+import Base from "../layouts/Base.astro";
+import Carta from "../components/Carta.astro";
+import Escudo from "../components/Escudo.astro";
+import { franquicias, jugadores, mundo, url } from "../lib/liga";
+
+const { orden, elecciones } = mundo.draftFundacion;
+const rondas = Map.groupBy(elecciones, (e) => e.ronda);
+---
+
+<Base titulo="Draft de fundación">
+  <h1>Draft de fundación</h1>
+  <p class="subtitulo">
+    Así se formaron las plantillas: {rondas.size} rondas en serpiente entre las 12 franquicias. Cada una eligió con
+    información incompleta sobre las cartas.
+  </p>
+
+  <h2>Orden de elección</h2>
+  <div class="orden">
+    {
+      orden.map((fid, i) => (
+        <a href={url(`franquicias/${fid}`)} class="tarjeta turno">
+          <span class="num">{i + 1}</span>
+          <Escudo id={fid} tam={26} />
+          <span>{franquicias[fid].nombre}</span>
+        </a>
+      ))
+    }
+  </div>
+
+  {
+    [...rondas].map(([ronda, picks]) => (
+      <section>
+        <h2>Ronda {ronda}</h2>
+        <div class="mano">
+          {picks.map((e) => (
+            <div class="pick">
+              <div class="apagado">
+                #{e.numero} · {franquicias[e.franquicia].nombre}
+              </div>
+              <Carta j={jugadores[e.jugador]} mini />
+            </div>
+          ))}
+        </div>
+      </section>
+    ))
+  }
+</Base>
+
+<style>
+  .orden {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 8px;
+  }
+  .turno {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+  }
+  .num {
+    font-family: var(--titulo);
+    font-weight: 800;
+    font-size: 1.2rem;
+    width: 1.4em;
+    color: var(--texto-3);
+  }
+  .pick {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 0.75rem;
+  }
+</style>

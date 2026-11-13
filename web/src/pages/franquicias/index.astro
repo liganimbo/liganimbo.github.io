@@ -1,0 +1,60 @@
+---
+import Base from "../../layouts/Base.astro";
+import Escudo from "../../components/Escudo.astro";
+import { jugadores, mundo, temporada, url } from "../../lib/liga";
+import { perfilEquipo } from "../../motor/mundo.ts";
+
+const fila = Object.fromEntries(temporada.clasificacion.map((f: any) => [f.franquicia, f]));
+---
+
+<Base titulo="Franquicias">
+  <h1>Franquicias</h1>
+  <p class="subtitulo">Doce ciudades, doce formas de jugar. Elige la tuya. Nombres y colores provisionales: los votará la afición.</p>
+  <div class="rejilla">
+    {
+      mundo.franquicias.map((f: any) => (
+        <a class="tarjeta franquicia" href={url(`franquicias/${f.id}`)} style={`--c1:${f.colores[0]};--c2:${f.colores[1]}`}>
+          <Escudo id={f.id} tam={56} />
+          <div>
+            <div class="apagado">{f.ciudad}</div>
+            <div class="nombre">{f.nombre}</div>
+            <div class="caracter">{f.caracter}</div>
+            <div class="datos">
+              <span class="etiqueta">{perfilEquipo(f, jugadores).perfil}</span>{" "}
+              <span class="etiqueta">{perfilEquipo(f, jugadores).estilo}</span>{" "}
+              <span class="apagado">{fila[f.id].v}-{fila[f.id].d}</span>
+            </div>
+          </div>
+        </a>
+      ))
+    }
+  </div>
+</Base>
+
+<style>
+  .franquicia {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border-left: 6px solid var(--c1);
+  }
+  .franquicia:hover {
+    color: inherit;
+    border-color: var(--c1);
+  }
+  .nombre {
+    font-family: var(--titulo);
+    font-size: 1.6rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    line-height: 1.1;
+  }
+  .caracter {
+    font-size: 0.85rem;
+    color: var(--texto-2);
+    margin: 2px 0 6px;
+  }
+  .datos {
+    font-size: 0.8rem;
+  }
+</style>

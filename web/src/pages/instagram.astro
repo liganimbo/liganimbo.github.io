@@ -1,0 +1,195 @@
+---
+// Simulación del perfil de Instagram con el plan de publicaciones. Herramienta interna (no está en el menú).
+import Base from "../layouts/Base.astro";
+import Emblema from "../components/Emblema.astro";
+import { temporada, url } from "../lib/liga";
+import { USUARIO, partidoDestacado } from "../lib/instagram";
+
+// Plan en orden de publicación: presentación, tres cartas y, después, cada jornada.
+// Un carrusel es una sola publicación con varias diapositivas; en la cuadrícula se ve la primera.
+// La apertura se publica al revés (NIMBO, escudo, LIGA) para que en la cuadrícula se lea LIGA · escudo · NIMBO.
+const plan: { ruta: string; texto: string; diapositivas?: string[]; alto?: number }[] = [
+  { ruta: "ig/apertura/3", texto: "Apertura 1 de 3: NIMBO", alto: 1440 },
+  { ruta: "ig/apertura/2", texto: "Apertura 2 de 3: escudo", alto: 1440 },
+  { ruta: "ig/apertura/1", texto: "Apertura 3 de 3: LIGA", alto: 1440 },
+  { ruta: "ig/bienvenida", texto: "Bienvenida" },
+  {
+    ruta: "ig/reglas/1",
+    texto: "Carrusel: cómo se juega",
+    diapositivas: Array.from({ length: 8 }, (_, i) => `ig/reglas/${i + 1}`),
+  },
+  {
+    ruta: "ig/liga/1",
+    texto: "Carrusel: cómo funciona la liga",
+    diapositivas: Array.from({ length: 8 }, (_, i) => `ig/liga/${i + 1}`),
+  },
+  ...[1, 2, 3].map((g) => ({
+    ruta: `ig/equipos/${g}/1`,
+    texto: `Carrusel: franquicias ${g} de 3`,
+    diapositivas: [1, 2, 3, 4, 5].map((n) => `ig/equipos/${g}/${n}`),
+  })),
+];
+for (let n = 1; n <= Math.min(3, temporada.jornadas.length); n++) {
+  plan.push(
+    { ruta: `ig/jornada/${n}`, texto: `Resultados de la jornada ${n}` },
+    { ruta: `ig/partido/${partidoDestacado(n).id}`, texto: `Partido destacado de la jornada ${n}` },
+    { ruta: `ig/clasificacion/${n}`, texto: `Clasificación tras la jornada ${n}` },
+  );
+}
+const feed = [...plan].reverse();
+---
+
+<Base titulo="Instagram">
+  <p class="apagado aviso">Vista previa interna: así se vería el perfil con el plan de publicaciones. Pulsa una publicación para verla a tamaño real.</p>
+
+  <section class="perfil">
+    <div class="cabecera">
+      <div class="avatar"><Emblema variante="escudo" tam={74} /></div>
+      <div>
+        <div class="usuario">{USUARIO.slice(1)}</div>
+        <div class="cifras">
+          <span><strong>{feed.length}</strong> publicaciones</span>
+          <span><strong>—</strong> seguidores</span>
+          <span><strong>12</strong> seguidos</span>
+        </div>
+        <div class="bio">
+          <strong>Liga Nimbo</strong><br />
+          🏀 Liga mixta de baloncesto 3x3 · ficticia<br />
+          🃏 Se juega con cartas y dos dados<br />
+          🗓️ Noches Nimbo: martes y viernes<br />
+          👇 Juega tu partido y sigue la liga
+        </div>
+      </div>
+    </div>
+
+    <div class="rejilla-ig">
+      {
+        feed.map((post) => (
+          <a class="post" href={url(post.ruta)} title={post.texto} target="_blank" data-alto={post.alto ?? 1350}>
+            <iframe src={url(post.ruta)} loading="lazy" tabindex="-1" title={post.texto} style={`height:${post.alto ?? 1350}px`} />
+            {post.diapositivas && <span class="carrusel" aria-label="Carrusel">❐</span>}
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  <h2>Orden de publicación</h2>
+  <ol class="plan">
+    {
+      plan.map((post) => (
+        <li>
+          {post.diapositivas ? (
+            <>
+              {post.texto}:{" "}
+              {post.diapositivas.map((d, i) => (
+                <>
+                  <a href={url(d)} target="_blank">{i + 1}</a>{" "}
+                </>
+              ))}
+            </>
+          ) : (
+            <>
+              <a href={url(post.ruta)} target="_blank">{post.texto}</a> <span class="apagado">/{post.ruta}</span>
+            </>
+          )}
+        </li>
+      ))
+    }
+  </ol>
+</Base>
+
+<script>
+  // Como Instagram: cada publicación llena el alto de su casilla 3:4 y se recorta por los lados si es más ancha.
+  const ajustar = () =>
+    document.querySelectorAll<HTMLElement>(".post").forEach((p) => {
+      const escala = p.clientHeight / Number(p.dataset.alto);
+      p.style.setProperty("--escala", String(escala));
+      p.style.setProperty("--x", `${(p.clientWidth - 1080 * escala) / 2}px`);
+    });
+  new ResizeObserver(ajustar).observe(document.querySelector(".rejilla-ig")!);
+  ajustar();
+</script>
+
+<style>
+  .aviso {
+    font-size: 0.85rem;
+  }
+  .perfil {
+    max-width: 640px;
+    margin: 0 auto;
+    background: var(--superficie);
+    border: 1px solid var(--borde);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .cabecera {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    align-items: flex-start;
+  }
+  .avatar {
+    flex: none;
+    width: 86px;
+    height: 86px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: 44px;
+    color: #a5a0ff;
+    background: #12142a;
+    outline: 3px solid #e1306c;
+    outline-offset: 3px;
+  }
+  .usuario {
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+  .cifras {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 16px;
+    margin: 6px 0 10px;
+    font-size: 0.9rem;
+  }
+  .bio {
+    font-size: 0.9rem;
+    line-height: 1.45;
+  }
+  .rejilla-ig {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+  .post {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    background: #0d0f1c;
+  }
+  .post iframe {
+    position: absolute;
+    top: 0;
+    left: var(--x, 0);
+    width: 1080px;
+    border: 0;
+    transform: scale(var(--escala, 0.2));
+    transform-origin: 0 0;
+    pointer-events: none;
+  }
+  .carrusel {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    color: #fff;
+    font-size: 1.1rem;
+    text-shadow: 0 1px 3px rgb(0 0 0 / 60%);
+  }
+  .plan {
+    font-size: 0.9rem;
+  }
+  .plan li {
+    margin: 3px 0;
+  }
+</style>

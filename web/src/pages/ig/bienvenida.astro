@@ -1,0 +1,73 @@
+---
+import Instagram from "../../layouts/Instagram.astro";
+import Escudo from "../../components/Escudo.astro";
+import CartaGrande from "../../components/ig/CartaGrande.astro";
+import { mundo } from "../../lib/liga";
+import { cartasDestacadas } from "../../lib/instagram";
+
+const [a, b, c] = cartasDestacadas();
+---
+
+<Instagram titulo="Bienvenida">
+  <section class="portada">
+    <div class="antetitulo">Temporada 1</div>
+    <h1 class="titular">Una liga que se<br />juega <span>con cartas</span><br />y dos dados</h1>
+    <p class="suave texto">12 ciudades · 48 cartas · liga mixta de 3x3. Tú decides quién tira, dentro o fuera… y los dados hacen el resto.</p>
+  </section>
+  <div class="abanico">
+    <div class="c c1"><CartaGrande j={c} giro={-12} /></div>
+    <div class="c c2"><CartaGrande j={b} giro={8} /></div>
+    <div class="c c3"><CartaGrande j={a} giro={-2} /></div>
+  </div>
+  <div class="escudos">{mundo.franquicias.map((f) => <Escudo id={f.id} tam={52} />)}</div>
+</Instagram>
+
+<style>
+  .portada {
+    margin-top: 40px;
+  }
+  .titular {
+    font-size: 118px;
+    margin-top: 14px;
+  }
+  .titular span {
+    color: var(--lila);
+  }
+  .texto {
+    font-size: 30px;
+    line-height: 1.4;
+    margin-top: 24px;
+  }
+  .abanico {
+    position: relative;
+    height: 400px;
+    margin-top: 8px;
+  }
+  .c {
+    position: absolute;
+    top: 0;
+    scale: 0.72;
+    transform-origin: top center;
+  }
+  .c1 {
+    left: 0;
+    top: 30px;
+  }
+  .c2 {
+    left: 520px;
+    top: 30px;
+  }
+  .c3 {
+    left: 260px;
+    top: 0;
+    scale: 0.8;
+    z-index: 2;
+  }
+  .escudos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: auto;
+    margin-bottom: 28px;
+  }
+</style>

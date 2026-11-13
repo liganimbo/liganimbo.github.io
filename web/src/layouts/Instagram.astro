@@ -1,0 +1,200 @@
+---
+// Lienzo de una publicación de Instagram (1080×1350, formato vertical del feed).
+import Emblema from "../components/Emblema.astro";
+import "../styles/temas.css";
+import { USUARIO } from "../lib/instagram";
+
+interface Props {
+  titulo: string;
+  /** Color de acento (normalmente el principal de la franquicia protagonista). */
+  acento?: string;
+  /** Texto de la esquina superior derecha. */
+  etiqueta?: string;
+  /** Tema visual de esta publicación (por defecto, flat). Ver src/styles/temas.css. */
+  tema?: string;
+}
+const { titulo, acento = "#4f46e5", etiqueta, tema } = Astro.props;
+---
+
+<!doctype html>
+<html lang="es" data-tema={tema}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1080" />
+    <title>{titulo} · Instagram · Liga Nimbo</title>
+    <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL.replace(/\/$/, "")}/favicon.svg`} />
+    <script is:inline>
+      // Vista previa de otros estilos: ?tema=flat-claro | noche | vibrante | claro
+      const tema = new URLSearchParams(location.search).get("tema");
+      if (tema) document.documentElement.dataset.tema = tema;
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;0,800;1,700&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body style={`--acento:${acento}`}>
+    <main class="lienzo">
+      <header class="marca">
+        <Emblema variante="palabra" tam={170} lema={false} simbolo={false} />
+        {etiqueta && <span class="etiqueta">{etiqueta}</span>}
+      </header>
+      <slot />
+      <footer class="pie">{USUARIO} · Liga mixta de baloncesto 3x3 · Cartas y dados</footer>
+    </main>
+  </body>
+</html>
+
+<style is:global>
+  * {
+    box-sizing: border-box;
+  }
+  html,
+  body {
+    margin: 0;
+    width: 1080px;
+    height: 1350px;
+    overflow: hidden;
+    background: #0d0f1c;
+  }
+  body {
+    color: var(--texto);
+    font-family: Inter, system-ui, sans-serif;
+    font-variant-numeric: tabular-nums;
+  }
+  .lienzo {
+    position: relative;
+    width: 1080px;
+    height: 1350px;
+    padding: 64px 72px 56px;
+    display: flex;
+    flex-direction: column;
+    background: var(--lienzo);
+    overflow: hidden;
+  }
+  .marca {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 34px;
+    letter-spacing: 0.08em;
+  }
+  .firma {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .etiqueta {
+    font-family: Inter, sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 8px 18px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--texto) 12%, transparent);
+  }
+  .pie {
+    margin-top: auto;
+    font-size: 22px;
+    color: color-mix(in srgb, var(--texto) 55%, transparent);
+    letter-spacing: 0.02em;
+  }
+  .titular {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 800;
+    text-transform: uppercase;
+    line-height: 0.92;
+    letter-spacing: 0.01em;
+    margin: 0;
+  }
+  .antetitulo {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--oro);
+  }
+  .suave {
+    color: color-mix(in srgb, var(--texto) 65%, transparent);
+  }
+
+  /* Carta grande (versión Instagram de la carta de la web) */
+  .carta-ig {
+    width: 420px;
+    border-radius: var(--carta-radio);
+    background: var(--carta-fondo);
+    color: var(--carta-texto);
+    border: 6px solid var(--c1);
+    box-shadow: var(--carta-sombra);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .carta-ig .cabeza {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 24px;
+    background: var(--c1);
+    color: var(--c2);
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 40px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+  }
+  .carta-ig .icono-carta {
+    font-family: Inter, sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 999px;
+    background: var(--c2);
+    color: var(--c1);
+  }
+  .carta-ig .nombre {
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 54px;
+    font-weight: 800;
+    line-height: 0.95;
+    text-transform: uppercase;
+    padding: 24px 24px 0;
+  }
+  .carta-ig .meta {
+    font-size: 20px;
+    color: var(--carta-gris);
+    padding: 8px 24px 0;
+  }
+  .carta-ig .numeros {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    padding: 28px 24px 24px;
+  }
+  .carta-ig .numeros div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: var(--carta-caja);
+    border-radius: 18px;
+    padding: 10px 0 12px;
+  }
+  .carta-ig .numeros span {
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 104px;
+    font-weight: 800;
+    line-height: 1;
+  }
+  .carta-ig .numeros small {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--carta-gris);
+  }
+</style>

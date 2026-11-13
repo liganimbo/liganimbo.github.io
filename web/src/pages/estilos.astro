@@ -1,0 +1,83 @@
+---
+// Herramienta interna: comparar estilos visuales de las publicaciones (no está en el menú).
+import Base from "../layouts/Base.astro";
+import { url } from "../lib/liga";
+
+const estilos = [
+  { id: "flat", nombre: "Flat · por defecto", idea: "Colores planos y sólidos. Sin degradados, sombras ni brillos. Todas las publicaciones del día a día." },
+  { id: "flat-claro", nombre: "Flat claro · apertura y finales", idea: "La misma limpieza sobre crema, con tinta oscura y naranja. Para las piezas especiales." },
+  { id: "noche", nombre: "Noche (descartado)", idea: "Azul noche con degradados suaves, dorado y lila, brillos y sombras." },
+  { id: "vibrante", nombre: "Vibrante (descartado)", idea: "Degradados intensos de morado a rosa y naranja. Pop y llamativo." },
+  { id: "claro", nombre: "Claro (descartado)", idea: "Fondo crema, tinta oscura y naranja. Editorial, de revista deportiva." },
+];
+const piezas = [
+  { ruta: "ig/liga/1", alto: 1350 },
+  { ruta: "ig/equipos/1/3", alto: 1350 },
+  { ruta: "ig/reglas/6", alto: 1350 },
+];
+const ESCALA = 0.21;
+---
+
+<Base titulo="Estilos">
+  <h1>Estilos visuales</h1>
+  <p class="subtitulo">Herramienta interna. Las mismas publicaciones en cuatro estilos. Pulsa cualquiera para verla a tamaño real.</p>
+
+  {
+    estilos.map((e) => (
+      <section class="tarjeta estilo">
+        <h2>{e.nombre}</h2>
+        <p class="apagado">{e.idea}</p>
+        <div class="fila">
+          <div class="apertura">
+            {[3, 2, 1].reverse().map((n) => (
+              <a href={url(`ig/apertura/${n}?tema=${e.id}`)} target="_blank" class="pieza" style={`width:${1080 * ESCALA}px;height:${1440 * ESCALA}px`}>
+                <iframe src={url(`ig/apertura/${n}?tema=${e.id}`)} loading="lazy" title={`Apertura ${n}`} style={`height:1440px;transform:scale(${ESCALA})`} />
+              </a>
+            ))}
+          </div>
+          {piezas.map((p) => (
+            <a href={url(`${p.ruta}?tema=${e.id}`)} target="_blank" class="pieza" style={`width:${1080 * ESCALA}px;height:${p.alto * ESCALA}px`}>
+              <iframe src={url(`${p.ruta}?tema=${e.id}`)} loading="lazy" title={p.ruta} style={`height:${p.alto}px;transform:scale(${ESCALA})`} />
+            </a>
+          ))}
+        </div>
+      </section>
+    ))
+  }
+</Base>
+
+<style>
+  .estilo {
+    margin-bottom: 20px;
+  }
+  .estilo h2 {
+    margin: 0 0 4px;
+  }
+  .fila {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    align-items: flex-start;
+    margin-top: 10px;
+  }
+  .apertura {
+    display: flex;
+    gap: 2px;
+  }
+  .pieza {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    border-radius: 6px;
+    flex: none;
+  }
+  .pieza iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1080px;
+    border: 0;
+    transform-origin: 0 0;
+    pointer-events: none;
+  }
+</style>

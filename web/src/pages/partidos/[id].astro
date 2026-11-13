@@ -1,0 +1,309 @@
+---
+import Base from "../../layouts/Base.astro";
+import Carta from "../../components/Carta.astro";
+import Escudo from "../../components/Escudo.astro";
+import Evolucion from "../../components/Evolucion.astro";
+import { TIPO, fecha, franquicias, jugadores, partido, todosLosPartidos, url } from "../../lib/liga";
+import { REGLAS } from "../../motor/reglas.ts";
+
+export function getStaticPaths() {
+  return todosLosPartidos().map((resumen) => ({ params: { id: resumen.id }, props: { resumen } }));
+}
+
+const { resumen } = Astro.props;
+const p = partido(resumen.id);
+const lados = [p.local, p.visitante];
+const ganador = p.marcador[0] > p.marcador[1] ? 0 : 1;
+const prorroga = p.jugadas.length > 2 * REGLAS.ataquesPorEquipo;
+const descanso = p.cambios[0]?.tras;
+const textoCambios = p.cambios
+  .map((c) => `${franquicias[lados[c.equipo]].nombre}: entra ${jugadores[c.entra].nombre} por ${jugadores[c.sale].nombre}`)
+  .join(" · ");
+const mejor = p.estadisticas[p.mejor];
+
+const plantilla = (lado: number) => franquicias[lados[lado]].plantilla.filter((id) => p.estadisticas[id]);
+const tiros = ([a, i]: [number, number]) => (i ? `${a}/${i}` : "–");
+---
+
+<Base titulo={`${franquicias[p.visitante].nombre} ${p.marcador[1]}-${p.marcador[0]} ${franquicias[p.local].nombre}`}>
+  <p class="apagado contexto">{resumen.contexto} · {fecha(p.fecha)} · Pista de {franquicias[p.local].ciudad}</p>
+
+  <section class="marcador tarjeta">
+    {
+      [1, 0].map((lado) => (
+        <a href={url(`franquicias/${lados[lado]}`)} class:list={["lado", { ganador: ganador === lado }]}>
+          <Escudo id={lados[lado]} tam={64} />
+          <div class="ciudad apagado">{franquicias[lados[lado]].ciudad}</div>
+          <div class="nombre">{franquicias[lados[lado]].nombre}</div>
+          <div class="pts">{p.marcador[lado]}</div>
+        </a>
+      ))
+    }
+    <div class="centro">
+      <div class="final">Final</div>
+      <div class="apagado como">{prorroga ? "Decidido en muerte súbita" : "Tras 8 ataques por equipo"}</div>
+    </div>
+  </section>
+
+  <a class="tarjeta destacado" href={url(`jugadores/${p.mejor}`)}>
+    <span class="apagado">★ Mejor del partido</span>
+    <strong>{jugadores[p.mejor].nombre}</strong>
+    <span>{mejor.pts} puntos · {mejor.paradas} paradas</span>
+  </a>
+
+  <h2>Cómo fue</h2>
+  <Evolucion p={p} />
+
+  <h2>Jugada a jugada</h2>
+  <div class="tabla-envoltorio">
+    <table class="jugadas">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th class="izq">Ataque</th>
+          <th class="izq">Elección</th>
+          <th>Dados</th>
+          <th>Necesita</th>
+          <th class="izq">Resultado</th>
+          <th>{p.visitante}</th>
+          <th>{p.local}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          p.jugadas.map((j, i) => (
+            <>
+              {i === descanso && (
+                <tr class="aviso">
+                  <td colspan="8" class="izq">Descanso · {textoCambios}</td>
+                </tr>
+              )}
+              {i === 2 * REGLAS.ataquesPorEquipo && (
+                <tr class="aviso">
+                  <td colspan="8" class="izq">Empate tras 8 ataques: muerte súbita, puede tirar cualquiera</td>
+                </tr>
+              )}
+              <tr class:list={{ anota: j.anota }}>
+                <td class="apagado">{i + 1}</td>
+                <td class="izq">
+                  <span class="eq">
+                    <Escudo id={lados[j.equipo]} tam={18} />
+                    <strong>{jugadores[j.tirador].nombre}</strong>
+                  </span>
+                  <span class="apagado"> ante {jugadores[j.defensor].nombre}</span>
+                </td>
+                <td class="izq">
+                  {`Tira ${TIPO[j.tipo]} · `}
+                  <span class:list={["apagado", { acierto: j.cierra === j.tipo }]}>
+                    {j.cierra === j.tipo ? "la defensa lo adivina" : `cierran ${TIPO[j.cierra]}`}
+                  </span>
+                </td>
+                <td>
+                  <span class="dados">
+                    {j.dados[0]}·{j.dados[1]}
+                  </span>
+                  {j.tiempoMuerto && (
+                    <span class="etiqueta" title={`Primera tirada: ${j.tiempoMuerto.dadosAnteriores.join("·")}`}>
+                      T. muerto
+                    </span>
+                  )}
+                </td>
+                <td class="apagado">{j.necesita <= 2 ? "Siempre" : j.necesita > 12 ? "Imposible" : `${j.necesita}+`}</td>
+                <td class="izq">{j.anota ? <strong>+{j.puntos}</strong> : <span class="apagado">Fallo</span>}</td>
+                <td class:list={{ fuerte: j.equipo === 1 }}>{j.marcador[1]}</td>
+                <td class:list={{ fuerte: j.equipo === 0 }}>{j.marcador[0]}</td>
+              </tr>
+            </>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+  <p class="apagado nota">
+    "Necesita" es lo que tenían que sumar los dos dados para que entrara. Dentro basta con igualar la defensa; fuera hay que
+    superarla por 2.
+  </p>
+
+  {
+    [1, 0].map((lado) => (
+      <section>
+        <h2 class="cab-equipo">
+          <Escudo id={lados[lado]} tam={28} /> {franquicias[lados[lado]].nombre}
+        </h2>
+        <div class="equipo">
+          {plantilla(lado).map((id) => {
+            const l = p.estadisticas[id];
+            return (
+              <div class="jugador">
+                <Carta j={jugadores[id]} mini />
+                <dl>
+                  <div><dt>Puntos</dt><dd>{l.pts}</dd></div>
+                  <div><dt>Dentro</dt><dd>{tiros(l.dentro)}</dd></div>
+                  <div><dt>Fuera</dt><dd>{tiros(l.fuera)}</dd></div>
+                  <div><dt>Paradas</dt><dd>{l.paradas}/{l.marcados}</dd></div>
+                </dl>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+    ))
+  }
+  <p class="apagado semilla">Semilla: {p.semilla}</p>
+</Base>
+
+<style>
+  .contexto {
+    margin: 0 0 8px;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .marcador {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    grid-template-areas: "vis centro loc";
+    align-items: center;
+    gap: 16px;
+    padding: 24px;
+  }
+  .lado {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    color: var(--texto-3);
+  }
+  .lado:first-child {
+    grid-area: vis;
+  }
+  .lado:nth-child(2) {
+    grid-area: loc;
+  }
+  .lado.ganador {
+    color: var(--texto);
+  }
+  .centro {
+    grid-area: centro;
+    text-align: center;
+  }
+  .nombre {
+    font-family: var(--titulo);
+    font-size: 1.4rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .ciudad {
+    font-size: 0.8rem;
+    margin-top: 6px;
+  }
+  .pts {
+    font-family: var(--titulo);
+    font-size: 3.4rem;
+    font-weight: 800;
+    line-height: 1;
+  }
+  .final {
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    color: var(--acento);
+  }
+  .como {
+    font-size: 0.85rem;
+  }
+  @media (max-width: 640px) {
+    .marcador {
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas: "vis loc" "centro centro";
+      padding: 16px;
+    }
+    .pts {
+      font-size: 2.6rem;
+    }
+  }
+  .destacado {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 12px;
+    align-items: baseline;
+    margin-top: 16px;
+  }
+  .destacado .apagado {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .eq {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .jugadas td {
+    white-space: nowrap;
+  }
+  .jugadas tr.anota td:first-child {
+    box-shadow: inset 3px 0 0 var(--victoria);
+  }
+  .acierto {
+    color: var(--derrota);
+  }
+  .dados {
+    font-family: var(--titulo);
+    font-weight: 700;
+    font-size: 1.05rem;
+    letter-spacing: 0.05em;
+  }
+  .aviso td {
+    background: var(--acento-suave);
+    color: var(--acento);
+    font-weight: 600;
+    font-size: 0.85rem;
+  }
+  .fuerte {
+    font-weight: 700;
+  }
+  .nota {
+    font-size: 0.8rem;
+    margin-top: 6px;
+  }
+  .cab-equipo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .equipo {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .jugador {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  dl {
+    margin: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px 10px;
+    font-size: 0.8rem;
+  }
+  dl div {
+    display: flex;
+    justify-content: space-between;
+    gap: 6px;
+  }
+  dt {
+    color: var(--texto-3);
+  }
+  dd {
+    margin: 0;
+    font-weight: 700;
+  }
+  .semilla {
+    font-size: 0.75rem;
+    margin-top: 24px;
+  }
+</style>

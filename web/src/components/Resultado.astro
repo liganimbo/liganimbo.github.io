@@ -1,0 +1,78 @@
+---
+// Tarjeta compacta de un partido: visitante arriba, local abajo.
+import Escudo from "./Escudo.astro";
+import { franquicias, jugadores, url, type Resumen } from "../lib/liga";
+
+interface Props {
+  p: Resumen;
+  etiqueta?: string;
+}
+const { p, etiqueta } = Astro.props;
+const [ptsLocal, ptsVisitante] = p.marcador;
+const filas = [
+  { id: p.visitante, pts: ptsVisitante, gana: ptsVisitante > ptsLocal },
+  { id: p.local, pts: ptsLocal, gana: ptsLocal > ptsVisitante },
+];
+---
+
+<a class="resultado tarjeta" href={url(`partidos/${p.id}`)}>
+  {etiqueta && <div class="cabeza apagado">{etiqueta}</div>}
+  {
+    filas.map((f) => (
+      <div class:list={["fila", { ganador: f.gana }]}>
+        <Escudo id={f.id} tam={22} />
+        <span class="nombre">{franquicias[f.id].nombre}</span>
+        <span class="pts">{f.pts}</span>
+      </div>
+    ))
+  }
+  <div class="pie apagado">
+    {p.prorroga && <span class="etiqueta">Muerte súbita</span>}
+    <span>★ {jugadores[p.mejor].nombre}</span>
+  </div>
+</a>
+
+<style>
+  .resultado {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 12px 14px;
+  }
+  .resultado:hover {
+    color: inherit;
+    border-color: var(--acento);
+  }
+  .cabeza {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .fila {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--texto-2);
+  }
+  .fila.ganador {
+    color: var(--texto);
+    font-weight: 700;
+  }
+  .nombre {
+    flex: 1;
+  }
+  .pts {
+    font-family: var(--titulo);
+    font-size: 1.35rem;
+    font-weight: 700;
+  }
+  .pie {
+    font-size: 0.78rem;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    border-top: 1px solid var(--borde);
+    padding-top: 6px;
+    margin-top: 2px;
+  }
+</style>

@@ -1,0 +1,171 @@
+---
+// Carrera hacia 21: diferencia en el marcador tras cada ataque (positivo = va ganando el local).
+import { describirJugada, franquicias } from "../lib/liga";
+import type { PartidoGuardado } from "../motor/temporada.ts";
+
+interface Props {
+  p: PartidoGuardado;
+}
+const { p } = Astro.props;
+const loc = p.local;
+const vis = p.visitante;
+
+const puntos = [{ n: 0, dif: 0, m: [0, 0], texto: "Salto inicial" }].concat(
+  p.jugadas.map((j, i) => ({ n: i + 1, dif: j.marcador[0] - j.marcador[1], m: j.marcador, texto: describirJugada(j) })),
+);
+const total = puntos.length - 1;
+const tope = Math.max(8, Math.ceil(Math.max(...puntos.map((x) => Math.abs(x.dif))) / 4) * 4);
+const W = 800;
+const H = 220;
+const M = { izq: 34, der: 12, arr: 14, aba: 24 };
+const x = (n: number) => M.izq + (n / total) * (W - M.izq - M.der);
+const y = (d: number) => M.arr + ((tope - d) / (2 * tope)) * (H - M.arr - M.aba);
+
+let trazo = `M${x(0)},${y(0)}`;
+for (let i = 1; i < puntos.length; i++) trazo += ` H${x(puntos[i].n).toFixed(1)} V${y(puntos[i].dif).toFixed(1)}`;
+const area = `${trazo} V${y(0)} H${x(0)} Z`;
+const lineasY = [tope, tope / 2, 0, -tope / 2, -tope];
+const marcasX = Array.from({ length: Math.floor(total / 5) }, (_, i) => (i + 1) * 5);
+// El descanso llega tras 4 ataques de cada equipo.
+const descanso = p.cambios[0]?.tras;
+---
+
+<figure class="evolucion tarjeta" data-puntos={JSON.stringify(puntos)} data-loc={loc} data-vis={vis}>
+  <figcaption>
+    <strong>Carrera hacia 21</strong>
+    <span class="apagado">Diferencia en el marcador tras cada ataque.</span>
+  </figcaption>
+  <div class="lienzo">
+    <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label="Evolución de la diferencia en el marcador">
+      <defs>
+        <clipPath id="arriba"><rect x="0" y="0" width={W} height={y(0)}></rect></clipPath>
+        <clipPath id="abajo"><rect x="0" y={y(0)} width={W} height={H}></rect></clipPath>
+      </defs>
+      {
+        lineasY.map((v) => (
+          <>
+            <line x1={M.izq} x2={W - M.der} y1={y(v)} y2={y(v)} class:list={["rejilla-l", { cero: v === 0 }]} />
+            <text x={M.izq - 6} y={y(v) + 4} class="eje" text-anchor="end">
+              {v > 0 ? `+${v}` : v}
+            </text>
+          </>
+        ))
+      }
+      {
+        marcasX.map((n) => (
+          <text x={x(n)} y={H - 6} class="eje" text-anchor="middle">
+            {n}
+          </text>
+        ))
+      }
+      {descanso !== undefined && <line x1={x(descanso)} x2={x(descanso)} y1={M.arr} y2={H - M.aba} class="descanso" />}
+      <path d={area} fill={franquicias[loc].colores[0]} opacity="0.22" clip-path="url(#arriba)"></path>
+      <path d={area} fill={franquicias[vis].colores[0]} opacity="0.22" clip-path="url(#abajo)"></path>
+      <path d={trazo} class="trazo"></path>
+      <text x={M.izq + 8} y={M.arr + 14} class="lado-txt">▲ {franquicias[loc].nombre}</text>
+      <text x={M.izq + 8} y={H - M.aba - 8} class="lado-txt">▼ {franquicias[vis].nombre}</text>
+      <line class="cursor" x1="0" x2="0" y1={M.arr} y2={H - M.aba} visibility="hidden"></line>
+    </svg>
+    <div class="info" hidden></div>
+  </div>
+</figure>
+
+<script>
+  for (const fig of document.querySelectorAll<HTMLElement>(".evolucion")) {
+    const puntos: { n: number; dif: number; m: number[]; texto: string }[] = JSON.parse(fig.dataset.puntos!);
+    const total = puntos.length - 1;
+    const svg = fig.querySelector("svg")!;
+    const cursor = fig.querySelector<SVGLineElement>(".cursor")!;
+    const info = fig.querySelector<HTMLElement>(".info")!;
+    const lienzo = fig.querySelector<HTMLElement>(".lienzo")!;
+    const [izq, der] = [34, 12];
+
+    svg.addEventListener("pointermove", (e) => {
+      const caja = svg.getBoundingClientRect();
+      const fx = ((e.clientX - caja.left) / caja.width) * 800;
+      const n = Math.round(Math.min(total, Math.max(0, ((fx - izq) / (800 - izq - der)) * total)));
+      const pt = puntos[n];
+      const cx = izq + (n / total) * (800 - izq - der);
+      cursor.setAttribute("x1", String(cx));
+      cursor.setAttribute("x2", String(cx));
+      cursor.setAttribute("visibility", "visible");
+      info.innerHTML = `<div class="apagado">Ataque ${pt.n}</div><strong>${fig.dataset.vis} ${pt.m[1]} – ${pt.m[0]} ${fig.dataset.loc}</strong><div>${pt.texto}</div>`;
+      info.hidden = false;
+      const px = e.clientX - lienzo.getBoundingClientRect().left;
+      info.style.left = `${Math.max(0, Math.min(px + 12, lienzo.clientWidth - 190))}px`;
+    });
+    svg.addEventListener("pointerleave", () => {
+      cursor.setAttribute("visibility", "hidden");
+      info.hidden = true;
+    });
+  }
+</script>
+
+<style>
+  .evolucion {
+    margin: 0;
+  }
+  figcaption {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 12px;
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+  }
+  .lienzo {
+    position: relative;
+  }
+  svg {
+    width: 100%;
+    height: auto;
+    display: block;
+    touch-action: pan-y;
+  }
+  .rejilla-l {
+    stroke: var(--borde);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+  }
+  .rejilla-l.cero {
+    stroke: var(--texto-3);
+  }
+  .descanso {
+    stroke: var(--acento);
+    stroke-dasharray: 4 4;
+    vector-effect: non-scaling-stroke;
+  }
+  .eje {
+    fill: var(--texto-3);
+    font-size: 11px;
+  }
+  .lado-txt {
+    fill: var(--texto-2);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .trazo {
+    fill: none;
+    stroke: var(--texto);
+    stroke-width: 2;
+    vector-effect: non-scaling-stroke;
+  }
+  .cursor {
+    stroke: var(--texto-2);
+    stroke-dasharray: 3 3;
+    vector-effect: non-scaling-stroke;
+  }
+  .info {
+    position: absolute;
+    top: 4px;
+    width: 180px;
+    padding: 8px 10px;
+    font-size: 0.8rem;
+    background: var(--superficie);
+    border: 1px solid var(--borde);
+    border-radius: 8px;
+    border-width: 2px;
+    pointer-events: none;
+  }
+</style>

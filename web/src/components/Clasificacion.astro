@@ -1,0 +1,78 @@
+---
+import Equipo from "./Equipo.astro";
+import { temporada } from "../lib/liga";
+
+interface Props {
+  compacta?: boolean;
+}
+const { compacta = false } = Astro.props;
+---
+
+<div class="tabla-envoltorio">
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th class="izq">Franquicia</th>
+        <th>V</th>
+        <th>D</th>
+        <th>%</th>
+        {
+          !compacta && (
+            <>
+              <th>PF</th>
+              <th>PC</th>
+              <th>Dif</th>
+              <th>Local</th>
+              <th>Fuera</th>
+              <th>Racha</th>
+              <th>Últ. 5</th>
+            </>
+          )
+        }
+      </tr>
+    </thead>
+    <tbody>
+      {
+        temporada.clasificacion.map((f: any) => (
+          <tr class:list={{ corte: f.posicion === 9 }}>
+            <td class="apagado">{f.posicion}</td>
+            <td class="izq">
+              <Equipo id={f.franquicia} corto={compacta} />
+            </td>
+            <td>{f.v}</td>
+            <td>{f.d}</td>
+            <td>{f.pct.toFixed(3).replace(/^0/, "")}</td>
+            {!compacta && (
+              <>
+                <td>{f.pf}</td>
+                <td>{f.pc}</td>
+                <td class={f.dif >= 0 ? "v" : "d"}>{f.dif > 0 ? `+${f.dif}` : f.dif}</td>
+                <td>{f.local.join("-")}</td>
+                <td>{f.visitante.join("-")}</td>
+                <td class={f.racha.startsWith("V") ? "v" : "d"}>{f.racha}</td>
+                <td class="ultimos">
+                  {[...f.ultimos5].map((r) => (
+                    <span class={r === "V" ? "v" : "d"}>{r}</span>
+                  ))}
+                </td>
+              </>
+            )}
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+</div>
+<p class="apagado nota">Los 8 primeros se clasifican para los playoffs.</p>
+
+<style>
+  .ultimos span {
+    margin-left: 2px;
+    font-size: 0.8rem;
+  }
+  .nota {
+    font-size: 0.8rem;
+    margin-top: 6px;
+  }
+</style>

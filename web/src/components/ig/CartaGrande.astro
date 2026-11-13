@@ -1,0 +1,24 @@
+---
+import { franquicias } from "../../lib/liga";
+import type { Jugador } from "../../motor/mundo.ts";
+
+interface Props {
+  j: Jugador;
+  giro?: number;
+}
+const { j, giro = 0 } = Astro.props;
+const f = franquicias[j.franquicia];
+---
+
+<div class="carta-ig" style={`--c1:${f.colores[0]};--c2:${f.colores[1]};transform:rotate(${giro}deg)`}>
+  <div class="cabeza">
+    <span>{f.id}</span>
+    {j.icono && <span class="icono-carta">{j.icono}</span>}
+  </div>
+  <div class="nombre">{j.nombre}</div>
+  <div class="meta">{j.edad} años · {j.origen}</div>
+  <div class="numeros">
+    <div><span>{j.ataque}</span><small>Ataque</small></div>
+    <div><span>{j.defensa}</span><small>Defensa</small></div>
+  </div>
+</div>

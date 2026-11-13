@@ -1,0 +1,822 @@
+---
+import Base from "../layouts/Base.astro";
+import { mundo } from "../lib/liga";
+
+const datos = { franquicias: mundo.franquicias, jugadores: mundo.jugadores };
+---
+
+<Base titulo="Jugar">
+  <h1>Jugar</h1>
+  <p class="subtitulo">
+    Baloncesto 3x3 con cartas y dos dados. Cada carta tira dos veces; gana quien más anote. <a href="#reglas">Reglas rápidas</a>
+  </p>
+
+  <div id="mesa" aria-live="polite"></div>
+
+  <details id="reglas" class="tarjeta reglas">
+    <summary>Reglas rápidas</summary>
+    <ul>
+      <li>Cada equipo tiene 4 cartas: 3 en pista y 1 suplente. Cada jugador en pista marca a un rival.</li>
+      <li>Cada carta tiene <strong>2 tiros</strong> (●●). Cada equipo ataca 8 veces, por turnos.</li>
+      <li>Cuando atacas, eliges quién tira (de quienes tengan tiros) y si va <strong>dentro (2 puntos)</strong> o <strong>fuera (3 puntos)</strong>.</li>
+      <li>La defensa elige en secreto qué cierra. Si lo adivina, suma +2.</li>
+      <li><strong>Ataque</strong> = dos dados + Ataque de quien tira + su icono si encaja.</li>
+      <li><strong>Defensa</strong> = 5 + Defensa de quien marca + su icono si encaja + 2 si ha cerrado lo que era.</li>
+      <li>Iconos: <strong>Tiro</strong> +1 al tirar de fuera · <strong>Pintura</strong> +2 al tirar de dentro · <strong>Muro</strong> +2 al defender tiros de dentro.</li>
+      <li>Dentro entra si el ataque iguala o supera a la defensa. Fuera hay que superarla por 2.</li>
+      <li>Tras 4 ataques de cada equipo hay descanso: <strong>el suplente entra obligatoriamente</strong> por alguien que ya haya gastado sus dos tiros, y se rehacen los marcajes.</li>
+      <li>Un tiempo muerto por partido para repetir un tiro fallado.</li>
+      <li>Gana quien más puntos tenga tras los 8 ataques. Si hay empate, muerte súbita: un ataque más cada equipo (puede tirar cualquiera) hasta que alguien quede por delante.</li>
+    </ul>
+  </details>
+
+  <script type="application/json" id="datos-juego" set:html={JSON.stringify(datos)} />
+</Base>
+
+<script>
+  import { azarLibre as azar, dosDados } from "../motor/azar.ts";
+  import * as R from "../motor/reglas.ts";
+  import * as IA from "../motor/ia.ts";
+  import { type Franquicia, type Jugador, perfilEquipo } from "../motor/mundo.ts";
+
+  const datos: { franquicias: Franquicia[]; jugadores: Record<string, Jugador> } = JSON.parse(
+    document.getElementById("datos-juego")!.textContent!,
+  );
+  const F = Object.fromEntries(datos.franquicias.map((f) => [f.id, f]));
+  const J = datos.jugadores;
+  const YO: R.Lado = 0;
+  const RIVAL: R.Lado = 1;
+  const mesa = document.getElementById("mesa")!;
+
+  type Pantalla = "eleccion" | "alineacion" | "marcajes" | "partido" | "descanso" | "final";
+  interface Resultado {
+    jugada: R.Jugada;
+    nota?: string;
+  }
+  const st = {
+    pantalla: "eleccion" as Pantalla,
+    mio: datos.franquicias[0].id,
+    rival: datos.franquicias[1].id,
+    suplente: null as string | null,
+    marcajes: {} as Record<string, string>,
+    p: null as R.Partido | null,
+    tirador: null as string | null,
+    resultado: null as Resultado | null,
+    rodando: false,
+  };
+
+  // --- Piezas de interfaz ------------------------------------------------------
+
+  const TIPO = { dentro: "dentro", fuera: "de fuera" };
+  const nombre = (id: string) => J[id].nombre;
+  const nombreCorto = (id: string) => J[id].nombre.split(" ")[0];
+  const pct = (n: number) => `${Math.round(R.probabilidad(n) * 100)}%`;
+  const objetivo = (n: number) => (n <= 2 ? "siempre entra" : n > 12 ? "imposible" : `${n}+ (${pct(n)})`);
+
+  function escudo(fid: string, tam = 28) {
+    const [c1, c2] = F[fid].colores;
+    return `<svg width="${tam}" height="${tam}" viewBox="0 0 40 44" aria-hidden="true" class="escudo"><path d="M20 1 L38 7 V22 C38 33 30 40 20 43 C10 40 2 33 2 22 V7 Z" fill="${c1}" stroke="${c2}" stroke-width="2.5"/><text x="20" y="27" text-anchor="middle" fill="${c2}" font-family="Barlow Condensed, sans-serif" font-weight="800" font-size="14">${fid}</text></svg>`;
+  }
+
+  function carta(id: string, o: { accion?: string; clase?: string; etiqueta?: string } = {}) {
+    const j = J[id];
+    const [c1, c2] = F[j.franquicia].colores;
+    const atributos = o.accion ? `data-accion="${o.accion}" data-id="${id}"` : "disabled";
+    return `<button type="button" class="carta mini ${o.clase ?? ""}" style="--c1:${c1};--c2:${c2}" ${atributos}>
+      <div class="carta-cabeza"><span class="carta-equipo">${j.franquicia}</span>${j.icono ? `<span class="carta-icono" title="${R.DESCRIPCION_ICONO[j.icono]}">${j.icono}</span>` : ""}</div>
+      <div class="carta-nombre">${j.nombre}</div>
+      <div class="carta-numeros"><div><span>${j.ataque}</span><small>Ataque</small></div><div><span>${j.defensa}</span><small>Defensa</small></div></div>
+      ${o.etiqueta ? `<div class="carta-etiqueta">${o.etiqueta}</div>` : ""}
+    </button>`;
+  }
+
+  const fichas = (n: number) => "●".repeat(n) + "○".repeat(R.REGLAS.fichasPorCarta - n);
+  const dados = (d: [number, number], clase = "") => `<span class="dados ${clase}"><span>${d[0]}</span><span>${d[1]}</span></span>`;
+
+  // --- Pantallas ------------------------------------------------------------------
+
+  function pintar() {
+    const pantallas: Record<Pantalla, () => string> = {
+      eleccion: pantallaEleccion,
+      alineacion: pantallaAlineacion,
+      marcajes: pantallaMarcajes,
+      partido: pantallaPartido,
+      descanso: pantallaDescanso,
+      final: pantallaFinal,
+    };
+    mesa.innerHTML = pantallas[st.pantalla]();
+  }
+
+  function selectorEquipo(campo: "mio" | "rival") {
+    return `<div class="equipos">${datos.franquicias
+      .map(
+        (f) =>
+          `<button type="button" class="equipo-opcion ${st[campo] === f.id ? "elegido" : ""}" data-accion="equipo-${campo}" data-id="${f.id}" ${
+            campo === "rival" && f.id === st.mio ? "disabled" : ""
+          }>${escudo(f.id, 30)}<span>${f.nombre}</span></button>`,
+      )
+      .join("")}</div>`;
+  }
+
+  function identidad(fid: string) {
+    const f = F[fid];
+    const p = perfilEquipo(f, J);
+    return `<p class="identidad"><strong>${f.ciudad}.</strong> ${f.caracter} <span class="etq-id">${p.perfil}</span> <span class="etq-id">${p.estilo}</span></p>`;
+  }
+
+  function pantallaEleccion() {
+    if (st.rival === st.mio) st.rival = datos.franquicias.find((f) => f.id !== st.mio)!.id;
+    return `<section class="paso tarjeta">
+      <h2>1 · Tu equipo</h2>${selectorEquipo("mio")}${identidad(st.mio)}
+      <div class="mano">${F[st.mio].plantilla.map((id) => carta(id)).join("")}</div>
+      <h2>2 · Rival</h2>${selectorEquipo("rival")}${identidad(st.rival)}
+      <div class="mano">${F[st.rival].plantilla.map((id) => carta(id)).join("")}</div>
+      <div class="acciones"><button class="boton" data-accion="a-alineacion">Siguiente: alineación →</button></div>
+    </section>`;
+  }
+
+  function pantallaAlineacion() {
+    st.suplente ??= IA.alinear(F[st.mio].plantilla.map((id) => J[id])).suplente;
+    return `<section class="paso tarjeta">
+      <h2>3 · ¿Quién empieza en el banquillo?</h2>
+      <p class="apagado">Toca la carta que quieres dejar de suplente. Entrará en el descanso (tras 4 ataques por equipo) por alguien que ya haya gastado sus dos tiros.</p>
+      <div class="mano">${F[st.mio].plantilla
+        .map((id) => carta(id, { accion: "suplente", clase: id === st.suplente ? "banquillo" : "", etiqueta: id === st.suplente ? "Suplente" : "En pista" }))
+        .join("")}</div>
+      <div class="acciones">
+        <button class="boton secundario" data-accion="a-eleccion">← Equipos</button>
+        <button class="boton" data-accion="a-marcajes">Siguiente: marcajes →</button>
+      </div>
+    </section>`;
+  }
+
+  function pantallaMarcajes() {
+    const p = st.p!;
+    const mios = p.equipos[YO].pista;
+    const suyos = p.equipos[RIVAL].pista;
+    const enDescanso = p.fase === "descanso";
+    return `<section class="paso tarjeta">
+      <h2>${enDescanso ? "Descanso · " : "4 · "}Marcajes</h2>
+      <p class="apagado">Decide a quién marca cada uno de tus jugadores. Quien marca suma su Defensa (y su Muro, si lo tiene, contra tiros de dentro) cuando ese rival tira.</p>
+      <div class="marcajes">${suyos
+        .map((r) => {
+          const opciones = mios
+            .map((m) => `<option value="${m}" ${st.marcajes[r] === m ? "selected" : ""}>${nombre(m)} · Def ${J[m].defensa}${J[m].icono === "Muro" ? " · Muro (dentro)" : ""}</option>`)
+            .join("");
+          const rj = J[r];
+          return `<div class="par">${carta(r)}<div class="flecha">marcado por</div><select data-rival="${r}">${opciones}</select>
+            <div class="apagado peligro">Ataque ${rj.ataque}${rj.icono === "Tiro" || rj.icono === "Pintura" ? ` · ${rj.icono} (${R.DESCRIPCION_ICONO[rj.icono]})` : ""}</div></div>`;
+        })
+        .join("")}</div>
+      <div class="acciones">
+        <button class="boton secundario" data-accion="marcaje-auto">Sugerencia automática</button>
+        <button class="boton" data-accion="a-partido">${enDescanso ? "Volver a la pista →" : "¡A jugar! →"}</button>
+      </div>
+    </section>`;
+  }
+
+  function marcador() {
+    const p = st.p!;
+    const lado = (l: R.Lado) => {
+      const f = F[p.equipos[l].franquicia];
+      const tm = p.equipos[l].tiempoMuertoUsado ? "" : `<span class="tm" title="Tiempo muerto disponible">TM</span>`;
+      return `<div class="m-lado ${p.turno === l && p.fase === "juego" ? "con-balon" : ""}">${escudo(f.id, 40)}
+        <div><div class="m-nombre">${l === YO ? "Tú · " : ""}${f.nombre}</div><div class="apagado m-sub">Ataque ${Math.min(p.ataques[l], R.REGLAS.ataquesPorEquipo)}/${R.REGLAS.ataquesPorEquipo} ${tm}</div></div>
+        <div class="m-pts">${p.puntos[l]}</div></div>`;
+    };
+    const meta = R.enProrroga(p, YO) && R.enProrroga(p, RIVAL) ? "Muerte súbita" : p.descansoHecho ? "2ª parte" : "1ª parte";
+    return `<div class="marcador-juego tarjeta">${lado(YO)}<div class="m-meta">${meta}</div>${lado(RIVAL)}</div>`;
+  }
+
+  function filaPista(l: R.Lado, accion?: string) {
+    const p = st.p!;
+    const eq = p.equipos[l];
+    const otros = p.equipos[R.rival(l)];
+    const prorroga = R.enProrroga(p, l);
+    const cartas = eq.pista
+      .map((id) => {
+        const sinTiros = !prorroga && eq.fichas[id] === 0;
+        const etiqueta = `${prorroga ? "" : `<span class="fichas">${fichas(eq.fichas[id])}</span> `}Le marca ${nombreCorto(otros.marcajes[id])}`;
+        const clase = [st.tirador === id && l === YO ? "elegida" : "", sinTiros ? "descansa" : ""].join(" ");
+        return carta(id, { accion: accion && !sinTiros ? accion : undefined, clase, etiqueta });
+      })
+      .join("");
+    const suplente = eq.suplente
+      ? `<div class="suplente">${carta(eq.suplente, { etiqueta: `<span class="fichas">${fichas(eq.fichas[eq.suplente])}</span> Suplente`, clase: "banquillo" })}</div>`
+      : "";
+    return `<div class="pista">${cartas}${suplente}</div>`;
+  }
+
+  function panelResultado() {
+    const p = st.p!;
+    const { jugada: j, nota } = st.resultado!;
+    const at = J[j.tirador];
+    const de = J[j.defensor];
+    const mio = j.equipo === YO;
+    const titulo = j.anota
+      ? `${mio ? "¡" : ""}${nombre(j.tirador)} anota ${j.tipo === "fuera" ? "un triple" : "dentro"}${mio ? "!" : ""} +${j.puntos}`
+      : `${nombre(j.tirador)} falla ${TIPO[j.tipo]}`;
+    const adivina = j.cierra === j.tipo;
+    const cierre = mio
+      ? adivina ? `La defensa lo adivinó y cerró ${TIPO[j.cierra]} (+2).` : `La defensa cerró ${TIPO[j.cierra]}: no lo vio venir.`
+      : adivina ? `Cerraste ${TIPO[j.cierra]}: lo adivinaste (+2).` : `Cerraste ${TIPO[j.cierra]}, pero tiró ${TIPO[j.tipo]}.`;
+    const tm = mio && R.puedeTiempoMuerto(p, YO) ? `<button class="boton secundario" data-accion="tiempo-muerto">Pedir tiempo muerto (repetir tirada)</button>` : "";
+    return `<div class="panel resultado ${j.anota ? (mio ? "bien" : "mal") : mio ? "mal" : "bien"}">
+      <div class="tirada">${dados(j.dados, st.rodando ? "rodando" : "")}</div>
+      <div class="r-titulo">${st.rodando ? "…" : titulo}</div>
+      <div class="r-cuenta apagado">${st.rodando ? "" : `Ataque: ${j.dados[0]} + ${j.dados[1]} + ${R.valorAtaque(at, j.tipo)} (${at.nombre.split(" ")[0]}) = <strong>${j.ataque}</strong> · Defensa de ${nombreCorto(j.defensor)}: <strong>${j.defensa}</strong>${j.tipo === "fuera" ? " (de fuera hay que superarla por 2)" : ""}`}</div>
+      ${st.rodando ? "" : `<div class="apagado">${cierre}${nota ? ` ${nota}` : ""}</div>`}
+      ${st.rodando ? "" : `<div class="acciones">${tm}<button class="boton" data-accion="seguir">Seguir →</button></div>`}
+    </div>`;
+  }
+
+  function panelAtaque() {
+    const p = st.p!;
+    const opciones = R.tiradoresDisponibles(p);
+    if (!st.tirador || !opciones.includes(st.tirador)) {
+      return `<div class="panel"><div class="r-titulo">Tu ataque</div><div class="apagado">Toca la carta de quien se la juega.</div></div>`;
+    }
+    const at = J[st.tirador];
+    const de = J[R.defensorDe(p, st.tirador)];
+    const boton = (tipo: R.Tipo) => {
+      const abierto = R.necesita(at, de, tipo, tipo === "dentro" ? "fuera" : "dentro");
+      const cerrado = R.necesita(at, de, tipo, tipo);
+      return `<button class="boton grande" data-accion="tirar" data-tipo="${tipo}">
+        <span>Tirar ${TIPO[tipo]} · ${R.REGLAS.puntos[tipo]} pts</span>
+        <small>Necesitas ${objetivo(abierto)} · si lo adivinan, ${objetivo(cerrado)}</small></button>`;
+    };
+    return `<div class="panel"><div class="r-titulo">${nombre(st.tirador)} contra ${nombre(de.id)}</div>
+      <div class="acciones">${boton("dentro")}${boton("fuera")}</div></div>`;
+  }
+
+  function panelDefensa() {
+    const p = st.p!;
+    const amenazas = R.tiradoresDisponibles(p)
+      .map((id) => {
+        const at = J[id];
+        const de = J[R.defensorDe(p, id)];
+        const n = (tipo: R.Tipo) => objetivo(R.necesita(at, de, tipo, tipo === "dentro" ? "fuera" : "dentro"));
+        return `<li><strong>${nombre(id)}</strong> ante ${nombreCorto(de.id)}: dentro ${n("dentro")}, fuera ${n("fuera")}</li>`;
+      })
+      .join("");
+    return `<div class="panel"><div class="r-titulo">Ataca ${F[st.rival].nombre}. ¿Qué cierras?</div>
+      <div class="apagado">Pueden tirar (lo que necesitan si no lo adivinas):</div><ul class="amenazas">${amenazas}</ul>
+      <div class="acciones"><button class="boton grande" data-accion="cerrar" data-tipo="dentro"><span>Cerrar dentro</span></button>
+      <button class="boton grande" data-accion="cerrar" data-tipo="fuera"><span>Cerrar fuera</span></button></div></div>`;
+  }
+
+  function registro() {
+    const p = st.p!;
+    const filas = [...p.jugadas]
+      .reverse()
+      .slice(0, 12)
+      .map((j) => {
+        const txt = j.anota ? `${nombre(j.tirador)} anota ${j.tipo === "fuera" ? "de 3" : "de 2"}` : `${nombre(j.tirador)} falla ${TIPO[j.tipo]}`;
+        return `<li class="${j.anota ? "" : "apagado"}">${escudo(p.equipos[j.equipo].franquicia, 18)} ${txt}${j.tiempoMuerto ? " (tras tiempo muerto)" : ""}<span class="reg-m">${j.marcador[YO]}-${j.marcador[RIVAL]}</span></li>`;
+      })
+      .join("");
+    return filas ? `<h3>Últimas jugadas</h3><ol class="registro">${filas}</ol>` : "";
+  }
+
+  function pantallaPartido() {
+    const p = st.p!;
+    let panel: string;
+    if (st.resultado) panel = panelResultado();
+    else if (p.turno === YO) panel = panelAtaque();
+    else panel = panelDefensa();
+    const atacoYo = !st.resultado && p.turno === YO;
+    return `${marcador()}
+      <div class="cancha">
+        <div class="rotulo apagado">${F[st.rival].nombre}</div>${filaPista(RIVAL)}
+        ${panel}
+        ${filaPista(YO, atacoYo ? "tirador" : undefined)}<div class="rotulo apagado">Tú · ${F[st.mio].nombre}</div>
+      </div>${registro()}`;
+  }
+
+  function pantallaDescanso() {
+    const p = st.p!;
+    const eq = p.equipos[YO];
+    const pueden = R.puedenSalir(p, YO);
+    return `${marcador()}<section class="paso tarjeta">
+      <h2>Descanso</h2>
+      <p class="apagado">Entra ${nombre(eq.suplente!)} con sus dos tiros. Elige quién sale: solo puede salir quien ya ha gastado los suyos.
+      Piensa también en la defensa: quien se queda sigue marcando.</p>
+      <div class="mano">${eq.pista
+        .map((id) =>
+          carta(id, {
+            accion: pueden.includes(id) ? "cambio" : undefined,
+            clase: [st.suplente === id ? "banquillo" : "", pueden.includes(id) ? "" : "descansa"].join(" "),
+            etiqueta: `<span class="fichas">${fichas(eq.fichas[id])}</span> ${st.suplente === id ? "Sale" : pueden.includes(id) ? "Puede salir" : "Le quedan tiros"}`,
+          }),
+        )
+        .join("")}
+      ${carta(eq.suplente!, { etiqueta: `<span class="fichas">${fichas(eq.fichas[eq.suplente!])}</span> Entra`, clase: "elegida" })}</div>
+      <div class="acciones">
+        <button class="boton" data-accion="confirmar-cambio" ${st.suplente ? "" : "disabled"}>Hacer el cambio →</button>
+      </div></section>`;
+  }
+
+  function pantallaFinal() {
+    const p = st.p!;
+    const gano = p.ganador === YO;
+    const mejor = R.mejorDelPartido(p);
+    const stats = R.estadisticas(p)[mejor];
+    return `${marcador()}<section class="paso tarjeta final ${gano ? "bien" : "mal"}">
+      <h2>${gano ? "¡Victoria!" : "Derrota"}</h2>
+      <p>${gano ? `Los ${F[st.mio].nombre} ganan ${p.puntos[YO]}-${p.puntos[RIVAL]}.` : `Los ${F[st.rival].nombre} ganan ${p.puntos[RIVAL]}-${p.puntos[YO]}.`}
+      ${p.jugadas.length > 2 * R.REGLAS.ataquesPorEquipo ? "Se decidió en la muerte súbita." : ""}</p>
+      <p>★ Mejor del partido: <strong>${nombre(mejor)}</strong> (${stats.pts} puntos, ${stats.paradas} paradas).</p>
+      <div class="acciones"><button class="boton" data-accion="revancha">Revancha</button><button class="boton secundario" data-accion="a-eleccion">Otros equipos</button></div>
+    </section>${registro()}`;
+  }
+
+  // --- Lógica del partido -----------------------------------------------------------
+
+  function empezar() {
+    const mias = F[st.mio].plantilla.map((id) => J[id]);
+    const suyas = F[st.rival].plantilla.map((id) => J[id]);
+    st.p = R.crearPartido(
+      { franquicia: st.mio, cartas: mias, pista: mias.map((c) => c.id).filter((id) => id !== st.suplente), suplente: st.suplente },
+      { franquicia: st.rival, cartas: suyas, ...IA.alinear(suyas) },
+      azar() < 0.5 ? YO : RIVAL,
+    );
+    R.fijarMarcajes(st.p, RIVAL, IA.marcar(st.p, RIVAL));
+    st.marcajes = IA.marcar(st.p, YO);
+    st.tirador = null;
+    st.resultado = null;
+    st.pantalla = "marcajes";
+  }
+
+  function mostrarTirada(resultado: Resultado) {
+    st.resultado = resultado;
+    st.rodando = true;
+    pintar();
+    window.setTimeout(() => {
+      st.rodando = false;
+      pintar();
+    }, 650);
+  }
+
+  function seguir() {
+    const p = st.p!;
+    st.resultado = null;
+    st.tirador = null;
+    if (p.fase === "final") st.pantalla = "final";
+    else if (p.fase === "descanso") {
+      st.suplente = null;
+      st.pantalla = "descanso";
+    }
+    pintar();
+  }
+
+  function cerrarDescanso(sale: string) {
+    const p = st.p!;
+    R.cambiar(p, YO, sale);
+    const suyo = IA.decidirCambio(p, RIVAL);
+    if (suyo) R.cambiar(p, RIVAL, suyo);
+    R.fijarMarcajes(p, RIVAL, IA.marcar(p, RIVAL));
+    st.marcajes = IA.marcar(p, YO);
+    st.pantalla = "marcajes";
+    pintar();
+  }
+
+  mesa.addEventListener("change", (e) => {
+    const sel = e.target as HTMLSelectElement;
+    if (!sel.dataset.rival) return;
+    // Si ese jugador ya marcaba a otro rival, se intercambian.
+    const anterior = st.marcajes[sel.dataset.rival];
+    const otro = Object.keys(st.marcajes).find((r) => r !== sel.dataset.rival && st.marcajes[r] === sel.value);
+    if (otro) st.marcajes[otro] = anterior;
+    st.marcajes[sel.dataset.rival] = sel.value;
+    pintar();
+  });
+
+  mesa.addEventListener("click", (e) => {
+    const el = (e.target as HTMLElement).closest<HTMLElement>("[data-accion]");
+    if (!el || st.rodando) return;
+    const { accion, id, tipo } = el.dataset;
+    const p = st.p;
+    switch (accion) {
+      case "equipo-mio":
+        st.mio = id!;
+        st.suplente = null;
+        break;
+      case "equipo-rival":
+        st.rival = id!;
+        break;
+      case "a-eleccion":
+        st.pantalla = "eleccion";
+        break;
+      case "a-alineacion":
+        st.pantalla = "alineacion";
+        break;
+      case "suplente":
+        st.suplente = id!;
+        break;
+      case "a-marcajes":
+        empezar();
+        break;
+      case "marcaje-auto":
+        st.marcajes = IA.marcar(p!, YO);
+        break;
+      case "a-partido":
+        R.fijarMarcajes(p!, YO, st.marcajes);
+        if (p!.fase === "descanso") R.terminarDescanso(p!);
+        st.pantalla = "partido";
+        break;
+      case "tirador":
+        st.tirador = id!;
+        break;
+      case "tirar": {
+        const cierra = IA.decidirCierre(p!, azar);
+        const jugada = R.atacar(p!, st.tirador!, tipo as R.Tipo, cierra, dosDados(azar));
+        mostrarTirada({ jugada });
+        return;
+      }
+      case "cerrar": {
+        const { tirador, tipo: suTipo } = IA.decidirAtaque(p!, azar, F[st.rival].estilo);
+        let jugada = R.atacar(p!, tirador, suTipo, tipo as R.Tipo, dosDados(azar));
+        let nota: string | undefined;
+        if (IA.decidirTiempoMuerto(p!, RIVAL)) {
+          const antes = jugada.dados;
+          jugada = R.tiempoMuerto(p!, RIVAL, dosDados(azar));
+          nota = `Habían fallado con ${antes[0]}·${antes[1]}, pero piden tiempo muerto y repiten la tirada.`;
+        }
+        mostrarTirada({ jugada, nota });
+        return;
+      }
+      case "tiempo-muerto": {
+        const jugada = R.tiempoMuerto(p!, YO, dosDados(azar));
+        mostrarTirada({ jugada, nota: "Tiempo muerto: tirada repetida." });
+        return;
+      }
+      case "seguir":
+        seguir();
+        return;
+      case "cambio":
+        st.suplente = st.suplente === id ? null : id!;
+        break;
+      case "confirmar-cambio":
+        if (st.suplente) cerrarDescanso(st.suplente);
+        return;
+      case "revancha":
+        st.suplente = null;
+        st.pantalla = "alineacion";
+        break;
+    }
+    pintar();
+  });
+
+  pintar();
+</script>
+
+<style is:global>
+  #mesa {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  #mesa h2 {
+    margin-top: 0.4em;
+  }
+  .paso .mano {
+    margin: 8px 0 4px;
+  }
+  .equipos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+  .identidad {
+    margin: 4px 0 8px;
+    color: var(--texto-2);
+  }
+  .etq-id {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    margin-left: 4px;
+    border-radius: 999px;
+    background: var(--acento-suave);
+    color: var(--acento);
+  }
+  .equipo-opcion {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font: inherit;
+    font-size: 0.85rem;
+    padding: 4px 10px 4px 6px;
+    border-radius: 999px;
+    border: 1px solid var(--borde);
+    background: var(--superficie);
+    color: var(--texto);
+    cursor: pointer;
+  }
+  .equipo-opcion.elegido {
+    border-color: var(--acento);
+    background: var(--acento-suave);
+    font-weight: 700;
+  }
+  .equipo-opcion:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+  button.carta {
+    font: inherit;
+    text-align: left;
+    padding: 0;
+    cursor: pointer;
+  }
+  button.carta:disabled {
+    cursor: default;
+  }
+  button.carta:not(:disabled):hover {
+    transform: translateY(-3px);
+  }
+  .carta.elegida {
+    outline: 3px solid var(--acento);
+    outline-offset: 2px;
+    transform: translateY(-4px);
+  }
+  .carta.banquillo {
+    opacity: 0.6;
+    filter: saturate(0.6);
+  }
+  .carta.descansa {
+    opacity: 0.45;
+  }
+  .fichas {
+    color: #f59e0b;
+    letter-spacing: 0.1em;
+  }
+  .carta-etiqueta {
+    font-size: 0.68rem;
+    text-align: center;
+    padding: 4px 6px 6px;
+    color: var(--texto-2);
+    border-top: 1px solid var(--borde);
+  }
+  .acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .boton {
+    font: inherit;
+    font-weight: 700;
+    color: var(--sobre-acento);
+    background: var(--acento);
+    border: 0;
+    padding: 9px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  .boton:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .boton.secundario {
+    background: var(--superficie-2);
+    color: var(--texto);
+    border: 1px solid var(--borde);
+  }
+  .boton.grande {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    flex: 1 1 220px;
+    padding: 12px 16px;
+    text-align: left;
+  }
+  .boton.grande span {
+    font-size: 1.05rem;
+  }
+  .boton.grande small {
+    font-weight: 500;
+    opacity: 0.85;
+  }
+  .marcajes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .par {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: flex-start;
+  }
+  .par select {
+    font: inherit;
+    padding: 6px;
+    border-radius: 6px;
+    border: 1px solid var(--borde);
+    background: var(--superficie);
+    color: var(--texto);
+    max-width: 210px;
+  }
+  .flecha,
+  .peligro {
+    font-size: 0.8rem;
+  }
+  .marcador-juego {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 12px;
+  }
+  .m-lado {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .m-lado:last-child {
+    flex-direction: row-reverse;
+    text-align: right;
+  }
+  .m-lado.con-balon .m-nombre::after {
+    content: " ●";
+    color: #f59e0b;
+  }
+  .m-nombre {
+    font-family: var(--titulo);
+    font-size: 1.2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .m-sub {
+    font-size: 0.75rem;
+  }
+  .m-pts {
+    font-family: var(--titulo);
+    font-size: 3rem;
+    font-weight: 800;
+    line-height: 1;
+    margin-left: auto;
+  }
+  .m-lado:last-child .m-pts {
+    margin-left: 0;
+    margin-right: auto;
+  }
+  .m-meta {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--texto-3);
+  }
+  .tm {
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: 4px;
+    background: var(--acento-suave);
+    color: var(--acento);
+  }
+  .cancha {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px;
+    border-radius: 16px;
+    background: var(--superficie-2);
+    border: 2px solid var(--borde);
+  }
+  .pista {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .suplente {
+    margin-left: auto;
+    transform: scale(0.85);
+    transform-origin: top right;
+  }
+  .rotulo {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+  }
+  .panel {
+    background: var(--superficie);
+    border: 1px solid var(--borde);
+    border-radius: 12px;
+    padding: 14px 16px;
+  }
+  .panel.bien {
+    border-color: var(--victoria);
+  }
+  .panel.mal {
+    border-color: var(--derrota);
+  }
+  .r-titulo {
+    font-family: var(--titulo);
+    font-size: 1.4rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .r-cuenta {
+    font-size: 0.9rem;
+    margin: 4px 0;
+  }
+  .tirada {
+    float: right;
+    margin-left: 12px;
+  }
+  .dados {
+    display: inline-flex;
+    gap: 6px;
+  }
+  .dados span {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: var(--texto);
+    color: var(--superficie);
+    font-family: var(--titulo);
+    font-size: 1.6rem;
+    font-weight: 800;
+  }
+  .dados.rodando span {
+    animation: rodar 0.65s ease-out;
+  }
+  @keyframes rodar {
+    0% {
+      transform: rotate(0) scale(0.6);
+      opacity: 0.2;
+    }
+    60% {
+      transform: rotate(320deg) scale(1.1);
+    }
+    100% {
+      transform: rotate(360deg) scale(1);
+      opacity: 1;
+    }
+  }
+  .amenazas {
+    margin: 4px 0;
+    padding-left: 18px;
+    font-size: 0.85rem;
+  }
+  .registro {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 0.85rem;
+  }
+  .registro li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+    border-bottom: 1px solid var(--borde);
+  }
+  .reg-m {
+    margin-left: auto;
+    font-weight: 700;
+  }
+  .final.bien {
+    border-color: var(--victoria);
+  }
+  .final.mal {
+    border-color: var(--derrota);
+  }
+  .reglas {
+    margin-top: 24px;
+  }
+  .reglas summary {
+    cursor: pointer;
+    font-weight: 700;
+  }
+  .reglas li {
+    margin: 4px 0;
+  }
+  @media (max-width: 640px) {
+    .m-pts {
+      font-size: 2.2rem;
+    }
+    .m-nombre {
+      font-size: 0.95rem;
+    }
+    .m-lado > svg {
+      display: none;
+    }
+    .cancha {
+      padding: 10px;
+    }
+    .suplente {
+      margin-left: 0;
+    }
+    .pista .carta.mini {
+      width: 104px;
+    }
+  }
+</style>

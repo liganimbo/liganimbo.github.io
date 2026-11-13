@@ -1,0 +1,131 @@
+---
+import Instagram from "../../../layouts/Instagram.astro";
+import Escudo from "../../../components/Escudo.astro";
+import { fecha, franquicias, jugadores, partido, temporada } from "../../../lib/liga";
+import { mejorDeLaJornada } from "../../../lib/instagram";
+
+export function getStaticPaths() {
+  return temporada.jornadas.map((j) => ({ params: { n: String(j.jornada) } }));
+}
+
+const n = Number(Astro.params.n);
+const jornada = temporada.jornadas[n - 1];
+const partidos = jornada.partidos.map(partido);
+const mejor = mejorDeLaJornada(n);
+---
+
+<Instagram titulo={`Jornada ${n}`} etiqueta="Resultados">
+  <div class="cabecera">
+    <h1 class="titular">Jornada {n}</h1>
+    <div class="suave fecha">{fecha(jornada.fecha)} · Noche Nimbo</div>
+  </div>
+
+  <section class="lista">
+    {
+      partidos.map((p) => {
+        const filas = [
+          { id: p.visitante, pts: p.marcador[1], gana: p.marcador[1] > p.marcador[0] },
+          { id: p.local, pts: p.marcador[0], gana: p.marcador[0] > p.marcador[1] },
+        ];
+        return (
+          <div class="partido">
+            {filas.map((f) => (
+              <div class:list={["fila", { pierde: !f.gana }]}>
+                <Escudo id={f.id} tam={46} />
+                <span class="nom">{franquicias[f.id].nombre}</span>
+                <span class="pts">{f.pts}</span>
+              </div>
+            ))}
+            {p.jugadas.length > 16 && <div class="ms">Muerte súbita</div>}
+          </div>
+        );
+      })
+    }
+  </section>
+
+  <div class="mejor">
+    <span class="etq">★ Mejor de la jornada</span>
+    <strong>{jugadores[mejor.jid].nombre}</strong>
+    <span class="suave">{mejor.l.pts} pts · {mejor.l.paradas} {mejor.l.paradas === 1 ? "parada" : "paradas"}</span>
+  </div>
+</Instagram>
+
+<style>
+  .cabecera {
+    margin-top: 44px;
+  }
+  .titular {
+    font-size: 150px;
+  }
+  .fecha {
+    font-size: 30px;
+    margin-top: 6px;
+  }
+  .fecha::first-letter {
+    text-transform: uppercase;
+  }
+  .lista {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 40px;
+  }
+  .partido {
+    position: relative;
+    padding: 18px 24px;
+    border-radius: 22px;
+    background: color-mix(in srgb, var(--texto) 7%, transparent);
+    border: 1px solid color-mix(in srgb, var(--texto) 10%, transparent);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .fila {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .fila.pierde {
+    opacity: 0.5;
+  }
+  .nom {
+    flex: 1;
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 700;
+    font-size: 38px;
+    text-transform: uppercase;
+  }
+  .pts {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 800;
+    font-size: 52px;
+  }
+  .ms {
+    position: absolute;
+    top: -12px;
+    right: 18px;
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: var(--oro);
+    color: var(--sobre-oro);
+  }
+  .mejor {
+    display: flex;
+    align-items: baseline;
+    gap: 18px;
+    flex-wrap: wrap;
+    margin-top: 36px;
+    font-size: 32px;
+  }
+  .etq {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--oro);
+  }
+</style>

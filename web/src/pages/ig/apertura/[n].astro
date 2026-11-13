@@ -1,0 +1,102 @@
+---
+// Las tres publicaciones de apertura (1080×1440 cada una). Juntas en la cuadrícula del perfil forman
+// LIGA · escudo · NIMBO, en estilo flat claro. Se publican en orden inverso: primero la 3 (NIMBO), luego la 2 y por último la 1 (LIGA).
+import Emblema from "../../../components/Emblema.astro";
+import "../../../styles/temas.css";
+import { fecha, temporada } from "../../../lib/liga";
+
+export function getStaticPaths() {
+  return [1, 2, 3].map((n) => ({ params: { n: String(n) } }));
+}
+
+const n = Number(Astro.params.n);
+const pies = ["Baloncesto 3x3", `Temporada ${temporada.temporada}`, `Desde el ${fecha(temporada.calendario[0].fecha).replace(/^\w+, /, "")}`];
+---
+
+<!doctype html>
+<html lang="es" data-tema="flat-claro">
+  <head>
+    <meta charset="utf-8" />
+    <title>Apertura {n}/3 · Liga Nimbo</title>
+    <script is:inline>
+      const tema = new URLSearchParams(location.search).get("tema");
+      if (tema) document.documentElement.dataset.tema = tema;
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,700;0,800;1,800&family=Inter:wght@600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="lienzo" style={`transform: translateX(-${(n - 1) * 1080}px)`}>
+      <svg class="trayectoria" width="3240" height="1440" viewBox="0 0 3240 1440">
+        <path d="M420 860 Q1100 120 1620 330 T2820 860" fill="none" style="stroke: var(--oro)" stroke-width="9" stroke-linecap="round" stroke-dasharray="1 34" opacity="0.75"></path>
+      </svg>
+      <div class="pieza liga">LIGA</div>
+      <div class="pieza escudo"><Emblema variante="escudo" tam={860} /></div>
+      <div class="pieza nimbo">NIMBO</div>
+      {pies.map((t, i) => <div class="pie" style={`left:${i * 1080}px`}>{t}</div>)}
+    </div>
+  </body>
+</html>
+
+<style is:global>
+  html,
+  body {
+    margin: 0;
+    width: 1080px;
+    height: 1440px;
+    overflow: hidden;
+    background: #0d0f1c;
+  }
+  .lienzo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3240px;
+    height: 1440px;
+    background: var(--apertura);
+  }
+  .trayectoria {
+    position: absolute;
+    inset: 0;
+  }
+  .pieza {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    top: 0;
+    width: 1080px;
+    height: 1440px;
+  }
+  .liga {
+    left: 0;
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 800;
+    font-size: 400px;
+    letter-spacing: 0.08em;
+    color: var(--oro);
+  }
+  .escudo {
+    left: 1080px;
+  }
+  .nimbo {
+    left: 2160px;
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 800;
+    font-style: italic;
+    font-size: 330px;
+    color: var(--texto);
+  }
+  .pie {
+    position: absolute;
+    bottom: 110px;
+    width: 1080px;
+    text-align: center;
+    font-family: Inter, sans-serif;
+    font-weight: 700;
+    font-size: 40px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--lila);
+  }
+</style>

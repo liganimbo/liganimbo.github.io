@@ -1,0 +1,167 @@
+---
+// Carruseles de presentación de franquicias: 3 carruseles de 4 equipos (portada + una diapositiva por equipo).
+import Instagram from "../../../../layouts/Instagram.astro";
+import Escudo from "../../../../components/Escudo.astro";
+import CartaGrande from "../../../../components/ig/CartaGrande.astro";
+import { jugadores, mundo } from "../../../../lib/liga";
+import { perfilEquipo } from "../../../../motor/mundo.ts";
+
+export function getStaticPaths() {
+  return [1, 2, 3].flatMap((g) => [1, 2, 3, 4, 5].map((n) => ({ params: { g: String(g), n: String(n) } })));
+}
+
+const g = Number(Astro.params.g);
+const n = Number(Astro.params.n);
+const grupo = mundo.franquicias.slice((g - 1) * 4, g * 4);
+const f = n > 1 ? grupo[n - 2] : null;
+const perfil = f ? perfilEquipo(f, jugadores) : null;
+const cartas = f ? [...f.plantilla].map((id) => jugadores[id]).sort((a, b) => b.ataque + b.defensa - (a.ataque + a.defensa)) : [];
+---
+
+<Instagram titulo={`Franquicias ${g}/3 · ${n}/5`} etiqueta={`Franquicias ${g}/3 · ${n}/5`} acento={f ? f.colores[0] : "#4f46e5"}>
+  {
+    !f && (
+      <section class="portada">
+        <div class="antetitulo">Conoce a las franquicias · {g} de 3</div>
+        <h1 class="titular grande">¿Con quién<br />vas a ir?</h1>
+        <div class="lista">
+          {grupo.map((x) => (
+            <div class="fila">
+              <Escudo id={x.id} tam={96} />
+              <div>
+                <div class="nom">{x.nombre}</div>
+                <div class="suave ciu">{x.ciudad}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div class="desliza">Desliza →</div>
+      </section>
+    )
+  }
+  {
+    f && perfil && (
+      <section class="equipo">
+        <div class="cabeza">
+          <Escudo id={f.id} tam={150} />
+          <div>
+            <div class="antetitulo">{f.ciudad}</div>
+            <h1 class="titular">{f.nombre}</h1>
+          </div>
+        </div>
+        <p class="caracter">“{f.caracter}”</p>
+        <div class="chips">
+          <span class="chip">{perfil.perfil}</span>
+          <span class="chip">{perfil.estilo}</span>
+          <span class="chip suave-chip">{perfil.edadMedia} años de media</span>
+        </div>
+        <div class="cartas">
+          {cartas.map((j) => (
+            <div class="hueco">
+              <CartaGrande j={j} />
+            </div>
+          ))}
+        </div>
+      </section>
+    )
+  }
+</Instagram>
+
+<style>
+  .portada,
+  .equipo {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .portada {
+    margin-top: 40px;
+  }
+  .titular.grande {
+    font-size: 140px;
+    margin: 14px 0 40px;
+  }
+  .lista {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+  .fila {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+  .nom {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 800;
+    font-size: 64px;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+  .ciu {
+    font-size: 28px;
+    margin-top: 4px;
+  }
+  .desliza {
+    margin-top: 40px;
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--oro);
+  }
+  .equipo {
+    margin-top: 36px;
+  }
+  .cabeza {
+    display: flex;
+    align-items: center;
+    gap: 34px;
+  }
+  .cabeza .titular {
+    font-size: 132px;
+    margin-top: 6px;
+  }
+  .caracter {
+    font-size: 38px;
+    font-style: italic;
+    line-height: 1.3;
+    color: color-mix(in srgb, var(--texto) 85%, transparent);
+    margin: 30px 0 22px;
+  }
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+  .chip {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 10px 22px;
+    border-radius: 999px;
+    background: var(--oro);
+    color: var(--sobre-oro);
+  }
+  .suave-chip {
+    background: color-mix(in srgb, var(--texto) 12%, transparent);
+    color: var(--texto);
+  }
+  /* Cartas en 2×2. El hueco tiene el tamaño de la carta ya escalada (420 de ancho a escala 0,66). */
+  .cartas {
+    display: grid;
+    grid-template-columns: repeat(2, 277px);
+    gap: 26px 26px;
+    justify-content: center;
+    margin-top: 34px;
+  }
+  .hueco {
+    width: 277px;
+    height: 270px;
+  }
+  .hueco :global(.carta-ig) {
+    transform-origin: top left;
+    scale: 0.66;
+  }
+</style>

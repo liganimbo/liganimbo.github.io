@@ -1,0 +1,46 @@
+---
+// Balón con volumen: degradado, costuras giradas y un brillo.
+// Los colores salen de variables de tema (src/styles/temas.css), con los del tema "flat" por defecto.
+interface Props {
+  id: string;
+  cx: number;
+  cy: number;
+  r: number;
+}
+const { id, cx, cy, r } = Astro.props;
+const costuras = [
+  `M${cx} ${cy - r} V${cy + r}`,
+  `M${cx - r} ${cy} H${cx + r}`,
+  `M${cx - r * 0.6} ${cy - r * 0.8} C${cx - r * 0.2} ${cy - r * 0.3} ${cx - r * 0.2} ${cy + r * 0.3} ${cx - r * 0.6} ${cy + r * 0.8}`,
+  `M${cx + r * 0.6} ${cy - r * 0.8} C${cx + r * 0.2} ${cy - r * 0.3} ${cx + r * 0.2} ${cy + r * 0.3} ${cx + r * 0.6} ${cy + r * 0.8}`,
+];
+---
+
+<radialGradient id={`${id}-color`} cx="0.35" cy="0.3" r="0.8">
+  <stop offset="0" style="stop-color: var(--balon-1, #f7a531)"></stop>
+  <stop offset="0.45" style="stop-color: var(--balon-2, #f7a531)"></stop>
+  <stop offset="1" style="stop-color: var(--balon-3, #f7a531)"></stop>
+</radialGradient>
+<clipPath id={`${id}-recorte`}>
+  <circle cx={cx} cy={cy} r={r}></circle>
+</clipPath>
+<circle cx={cx} cy={cy} r={r} fill={`url(#${id}-color)`}></circle>
+<g
+  clip-path={`url(#${id}-recorte)`}
+  style="stroke: var(--costura, #12142a)"
+  stroke-width={Math.max(2, r * 0.09)}
+  fill="none"
+  stroke-linecap="round"
+  transform={`rotate(-18 ${cx} ${cy})`}
+>
+  {costuras.map((d) => <path d={d}></path>)}
+</g>
+<ellipse
+  cx={cx - r * 0.34}
+  cy={cy - r * 0.42}
+  rx={r * 0.28}
+  ry={r * 0.15}
+  fill="#fff"
+  style="opacity: var(--balon-brillo, 0)"
+  transform={`rotate(-30 ${cx - r * 0.34} ${cy - r * 0.42})`}
+></ellipse>

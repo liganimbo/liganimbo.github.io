@@ -1,0 +1,26 @@
+---
+// Escudo + nombre de una franquicia, enlazado a su página.
+import Escudo from "./Escudo.astro";
+import { franquicias, url } from "../lib/liga";
+
+interface Props {
+  id: string;
+  tam?: number;
+  corto?: boolean;
+}
+const { id, tam = 24, corto = false } = Astro.props;
+const f = franquicias[id];
+---
+
+<a class="equipo" href={url(`franquicias/${id}`)}>
+  <Escudo id={id} tam={tam} />
+  <span>{corto ? f.nombre : <>{f.ciudad} <strong>{f.nombre}</strong></>}</span>
+</a>
+
+<style>
+  .equipo {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+</style>

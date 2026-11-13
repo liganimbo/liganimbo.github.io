@@ -1,0 +1,97 @@
+---
+import Base from "../layouts/Base.astro";
+import Resultado from "../components/Resultado.astro";
+import Escudo from "../components/Escudo.astro";
+import { fecha, franquicias, resumen, temporada, url } from "../lib/liga";
+
+const pendientes = temporada.calendario.slice(temporada.jornadas.length);
+---
+
+<Base titulo="Calendario">
+  <h1>Calendario y resultados</h1>
+  <p class="subtitulo">Noches Nimbo: martes y viernes. Los playoffs están en su <a href={url("playoffs")}>propia página</a>.</p>
+
+  <nav class="saltos">
+    {temporada.calendario.map((j) => <a href={`#j${j.jornada}`} class:list={{ pendiente: j.jornada > temporada.jornadas.length }}>{j.jornada}</a>)}
+  </nav>
+
+  {
+    temporada.jornadas.map((j) => (
+      <section id={`j${j.jornada}`}>
+        <h2>
+          Jornada {j.jornada} <span class="apagado fecha">{fecha(j.fecha)}</span>
+        </h2>
+        <div class="rejilla">
+          {j.partidos.map((id) => (
+            <Resultado p={resumen(id)} />
+          ))}
+        </div>
+      </section>
+    ))
+  }
+  {
+    pendientes.map((j) => (
+      <section id={`j${j.jornada}`}>
+        <h2>
+          Jornada {j.jornada} <span class="apagado fecha">{fecha(j.fecha)} · por jugar</span>
+        </h2>
+        <div class="rejilla">
+          {j.cruces.map(([loc, vis]) => (
+            <div class="tarjeta cruce">
+              {[vis, loc].map((fid) => (
+                <div class="fila-cruce">
+                  <Escudo id={fid} tam={22} />
+                  <span>{franquicias[fid].nombre}</span>
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      </section>
+    ))
+  }
+</Base>
+
+<style>
+  .saltos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .saltos a {
+    width: 36px;
+    text-align: center;
+    padding: 4px 0;
+    border-radius: 6px;
+    background: var(--superficie);
+    border: 1px solid var(--borde);
+    font-weight: 600;
+    font-size: 0.85rem;
+  }
+  section {
+    scroll-margin-top: 70px;
+  }
+  .saltos a.pendiente {
+    color: var(--texto-3);
+    background: none;
+  }
+  .cruce {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px 14px;
+  }
+  .fila-cruce {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--texto-2);
+  }
+  .fecha {
+    font-family: Inter, sans-serif;
+    font-size: 0.95rem;
+    text-transform: none;
+    font-weight: 500;
+    margin-left: 8px;
+  }
+</style>

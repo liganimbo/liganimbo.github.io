@@ -1,0 +1,32 @@
+---
+// Carta de jugador. Los estilos (.carta) son globales para que la página Jugar pueda pintar las mismas cartas.
+import { franquicias, url } from "../lib/liga";
+import type { Jugador } from "../motor/mundo.ts";
+import { DESCRIPCION_ICONO } from "../motor/reglas.ts";
+
+interface Props {
+  j: Jugador;
+  mini?: boolean;
+  enlace?: boolean;
+}
+const { j, mini = false, enlace = true } = Astro.props;
+const f = franquicias[j.franquicia];
+const Etiqueta = enlace ? "a" : "div";
+---
+
+<Etiqueta
+  class:list={["carta", { mini }]}
+  href={enlace ? url(`jugadores/${j.id}`) : undefined}
+  style={`--c1:${f.colores[0]};--c2:${f.colores[1]}`}
+>
+  <div class="carta-cabeza">
+    <span class="carta-equipo">{f.id}</span>
+    {j.icono && <span class="carta-icono" title={DESCRIPCION_ICONO[j.icono]}>{j.icono}</span>}
+  </div>
+  <div class="carta-nombre">{j.nombre}</div>
+  {!mini && <div class="carta-meta">{j.edad} años · {j.origen}</div>}
+  <div class="carta-numeros">
+    <div><span>{j.ataque}</span><small>Ataque</small></div>
+    <div><span>{j.defensa}</span><small>Defensa</small></div>
+  </div>
+</Etiqueta>

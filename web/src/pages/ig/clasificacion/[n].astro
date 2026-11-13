@@ -1,0 +1,118 @@
+---
+import Instagram from "../../../layouts/Instagram.astro";
+import Escudo from "../../../components/Escudo.astro";
+import { franquicias, temporada } from "../../../lib/liga";
+import { clasificacionTras } from "../../../lib/instagram";
+
+export function getStaticPaths() {
+  return temporada.jornadas.map((j) => ({ params: { n: String(j.jornada) } }));
+}
+
+const n = Number(Astro.params.n);
+const tabla = clasificacionTras(n);
+const anterior = n > 1 ? Object.fromEntries(clasificacionTras(n - 1).map((f) => [f.franquicia, f.posicion])) : null;
+const flecha = (fid: string, pos: number) => {
+  if (!anterior) return "";
+  const d = anterior[fid] - pos;
+  return d > 0 ? `▲${d}` : d < 0 ? `▼${-d}` : "=";
+};
+---
+
+<Instagram titulo={`Clasificación tras la jornada ${n}`} etiqueta={`Tras la jornada ${n}`}>
+  <h1 class="titular">Clasificación</h1>
+  <table>
+    <thead>
+      <tr><th></th><th class="izq">Franquicia</th><th>V</th><th>D</th><th>Dif</th><th></th></tr>
+    </thead>
+    <tbody>
+      {
+        tabla.map((f) => (
+          <tr class:list={{ corte: f.posicion === 9 }}>
+            <td class="pos">{f.posicion}</td>
+            <td class="izq">
+              <span class="eq">
+                <Escudo id={f.franquicia} tam={44} />
+                {franquicias[f.franquicia].nombre}
+              </span>
+            </td>
+            <td class="num">{f.v}</td>
+            <td class="num">{f.d}</td>
+            <td class="dif">{f.dif > 0 ? `+${f.dif}` : f.dif}</td>
+            <td class:list={["mov", { sube: flecha(f.franquicia, f.posicion).startsWith("▲"), baja: flecha(f.franquicia, f.posicion).startsWith("▼") }]}>
+              {flecha(f.franquicia, f.posicion)}
+            </td>
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+  <p class="suave nota">Los 8 primeros, a playoffs.</p>
+</Instagram>
+
+<style>
+  .titular {
+    font-size: 120px;
+    margin-top: 40px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 24px;
+    font-size: 34px;
+  }
+  th {
+    font-size: 20px;
+    letter-spacing: 0.12em;
+    color: color-mix(in srgb, var(--texto) 55%, transparent);
+    text-align: right;
+    padding: 0 12px 10px;
+  }
+  td {
+    padding: 9px 12px;
+    text-align: right;
+    border-top: 1px solid color-mix(in srgb, var(--texto) 8%, transparent);
+  }
+  .izq {
+    text-align: left;
+  }
+  tr.corte td {
+    border-top: 3px dashed rgb(255 209 102 / 70%);
+  }
+  .pos {
+    color: color-mix(in srgb, var(--texto) 55%, transparent);
+    width: 50px;
+  }
+  .eq {
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 700;
+    font-size: 40px;
+    text-transform: uppercase;
+  }
+  .num {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 800;
+    font-size: 44px;
+  }
+  .dif {
+    color: color-mix(in srgb, var(--texto) 65%, transparent);
+    font-size: 28px;
+  }
+  .mov {
+    font-size: 22px;
+    width: 70px;
+    color: color-mix(in srgb, var(--texto) 45%, transparent);
+  }
+  .sube {
+    color: #4ade80;
+  }
+  .baja {
+    color: #f87171;
+  }
+  .nota {
+    font-size: 24px;
+    margin-top: 10px;
+  }
+</style>

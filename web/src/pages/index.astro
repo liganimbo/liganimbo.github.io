@@ -1,0 +1,245 @@
+---
+import Base from "../layouts/Base.astro";
+import Clasificacion from "../components/Clasificacion.astro";
+import Emblema from "../components/Emblema.astro";
+import Escudo from "../components/Escudo.astro";
+import Resultado from "../components/Resultado.astro";
+import { dec, carreraMvp, fecha, franquicias, jugadores, lideres, pct, resumen, temporada, url } from "../lib/liga";
+
+// Tres momentos: pretemporada, temporada en juego y temporada terminada.
+const campeon = temporada.playoffs.campeon;
+const final = temporada.playoffs.rondas.find((r) => r.ronda === "final")?.series[0];
+const subcampeon = campeon && final ? (final.ganador === final.alto ? final.bajo : final.alto) : null;
+const ultimaJornada = temporada.jornadas.at(-1);
+const enPretemporada = temporada.jornadas.length === 0;
+const proxima = temporada.proxima;
+const mvp = carreraMvp(5);
+const destacados = [
+  { titulo: "Puntos por partido", lista: lideres((s) => s.medias.pts, 1), valor: (s: any) => dec(s.medias.pts) },
+  { titulo: "Paradas por partido", lista: lideres((s) => s.medias.paradas, 1), valor: (s: any) => dec(s.medias.paradas) },
+  {
+    titulo: "Acierto de fuera",
+    lista: lideres((s) => s.medias.fuera, 1, (s) => s.fuera[1] >= 10),
+    valor: (s: any) => pct(s.medias.fuera),
+  },
+];
+---
+
+<Base titulo="Liga Nimbo">
+  {
+    campeon && final && subcampeon ? (
+      <section class="campeon" style={`--c1:${franquicias[campeon].colores[0]};--c2:${franquicias[campeon].colores[1]}`}>
+        <Escudo id={campeon} tam={88} />
+        <div>
+          <div class="sobre">Campeón de la Temporada {temporada.temporada}</div>
+          <h1>{franquicias[campeon].nombre} de {franquicias[campeon].ciudad}</h1>
+          <p>
+            {`Ganan las Finales Nimbo ${Math.max(...final.victorias)}-${Math.min(...final.victorias)} a los ${franquicias[subcampeon].nombre} de ${franquicias[subcampeon].ciudad}. `}
+            <a href={url("playoffs")}>Ver el cuadro →</a>
+          </p>
+        </div>
+      </section>
+    ) : (
+      <section class="campeon" style="--c1:#2b2f80;--c2:#ffc83d">
+        <Emblema variante="escudo" tam={110} />
+        <div>
+          <div class="sobre">{enPretemporada ? "Pretemporada" : `Temporada ${temporada.temporada} en juego`}</div>
+          <h1>
+            {enPretemporada
+              ? `La Temporada ${temporada.temporada} arranca el ${fecha(temporada.calendario[0].fecha)}`
+              : `Jornada ${temporada.jornadas.length} de ${temporada.calendario.length}`}
+          </h1>
+          <p>
+            {proxima && `Próxima Noche Nimbo: ${proxima.descripcion}, ${fecha(proxima.fecha)}. `}
+            <a href={url("calendario")}>Ver el calendario →</a>
+          </p>
+        </div>
+      </section>
+    )
+  }
+
+  <a class="jugar tarjeta" href={url("jugar")}>
+    <div>
+      <strong>Juega tú.</strong> Elige una franquicia, coloca tus cartas y enfréntate a la máquina. Cada carta tira dos
+      veces: un partido dura unos minutos.
+    </div>
+    <span class="boton">Jugar un partido →</span>
+  </a>
+
+  <div class="dos-columnas">
+    <section>
+      <h2>{campeon ? "Clasificación final" : "Clasificación"}</h2>
+      <Clasificacion compacta />
+    </section>
+
+    <section>
+      <h2>Carrera por el MVP</h2>
+      {mvp.length === 0 && <p class="apagado">Empieza con la primera jornada.</p>}
+      <ol class="mvp tarjeta" hidden={mvp.length === 0}>
+        {
+          mvp.map(({ jid, s }, i) => (
+            <li>
+              <span class="puesto">{i + 1}</span>
+              <Escudo id={s.franquicia} tam={28} />
+              <div>
+                <a href={url(`jugadores/${jid}`)} class="nombre">
+                  {jugadores[jid].nombre}
+                </a>
+                <div class="apagado linea">
+                  {dec(s.medias.pts)} pts · {dec(s.medias.paradas)} paradas · {pct(s.medias.acierto)} de acierto
+                </div>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+
+      <h2 hidden={mvp.length === 0}>Líderes</h2>
+      <div class="lideres">
+        {
+          destacados.map((d) => {
+            if (d.lista.length === 0) return null;
+            const [[jid, s]] = d.lista;
+            return (
+              <a class="tarjeta lider" href={url(`jugadores/${jid}`)}>
+                <div class="apagado">{d.titulo}</div>
+                <div class="cifra">{d.valor(s)}</div>
+                <div class="quien">{jugadores[jid].nombre}</div>
+              </a>
+            );
+          })
+        }
+      </div>
+    </section>
+  </div>
+
+  {
+    ultimaJornada && (
+      <>
+        <h2>Última jornada de liga · Jornada {ultimaJornada.jornada}</h2>
+        <div class="rejilla">
+          {ultimaJornada.partidos.map((id) => (
+            <Resultado p={resumen(id)} />
+          ))}
+        </div>
+      </>
+    )
+  }
+</Base>
+
+<style>
+  .campeon {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    padding: 28px;
+    border-radius: 16px;
+    color: #fff;
+    background:
+      color-mix(in srgb, var(--c1) 80%, #16184a);
+  }
+  .campeon h1 {
+    margin: 4px 0 8px;
+  }
+  .campeon p {
+    margin: 0;
+    color: #d8daea;
+  }
+  .campeon a {
+    color: #fff;
+    font-weight: 600;
+  }
+  .sobre {
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #ffd166;
+  }
+  .jugar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+    border-color: var(--acento);
+    background: var(--acento-suave);
+  }
+  .jugar:hover {
+    color: inherit;
+  }
+  .boton {
+    font-weight: 700;
+    color: var(--sobre-acento);
+    background: var(--acento);
+    padding: 8px 16px;
+    border-radius: 8px;
+    white-space: nowrap;
+  }
+  .dos-columnas {
+    display: grid;
+    gap: 0 24px;
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  }
+  @media (max-width: 800px) {
+    .dos-columnas {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .campeon {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 20px;
+    }
+  }
+  .mvp {
+    list-style: none;
+    margin: 0;
+    padding: 4px 16px;
+  }
+  .mvp li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+  }
+  .mvp li + li {
+    border-top: 1px solid var(--borde);
+  }
+  .puesto {
+    font-family: var(--titulo);
+    font-size: 1.4rem;
+    font-weight: 800;
+    width: 1.2em;
+    color: var(--texto-3);
+  }
+  .nombre {
+    font-weight: 600;
+  }
+  .linea {
+    font-size: 0.85rem;
+  }
+  .lideres {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .lider {
+    padding: 12px;
+  }
+  .lider .apagado {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .cifra {
+    font-family: var(--titulo);
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1.1;
+  }
+  .quien {
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+</style>

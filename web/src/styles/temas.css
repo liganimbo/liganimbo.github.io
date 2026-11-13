@@ -1,0 +1,138 @@
+/* Temas visuales de las publicaciones de Instagram.
+   Por defecto: "flat" (colores sólidos, sin degradados, sombras ni brillos).
+   "flat-claro" se usa en las piezas especiales: la apertura y las Finales Nimbo.
+   Para previsualizar cualquier otro: ?tema=flat-claro | noche | vibrante | claro en la URL.
+   --acento lo fija cada publicación (normalmente el color de la franquicia protagonista). */
+
+body {
+  --texto: #f1f2f8;
+  --oro: #ffc83d;
+  --lila: #9b95ff;
+  --sobre-oro: #0d0f1c;
+  --lienzo: color-mix(in srgb, var(--acento, #4f46e5) 50%, #22256a);
+  --apertura: #2b2f80;
+  --carta-fondo: #f7f7fb;
+  --carta-texto: #151823;
+  --carta-caja: #e9eaf2;
+  --carta-gris: #6b7084;
+  --carta-sombra: none;
+  --carta-radio: 20px;
+
+  --emb-fondo-1: #1d2060;
+  --emb-fondo-2: #1d2060;
+  --emb-oro-1: #ffc83d;
+  --emb-oro-2: #ffc83d;
+  --emb-pliegue: #d9971c;
+  --emb-linea: #9b95ff;
+  --emb-rayos: 0;
+  --emb-brillo: 0;
+  --emb-texto-cinta: #12142a;
+  --emb-nimbo: #f1f2f8;
+  --balon-1: #f7a531;
+  --balon-2: #f7a531;
+  --balon-3: #f7a531;
+  --costura: #12142a;
+  --balon-brillo: 0;
+}
+
+/* Flat claro: la misma limpieza sobre crema, con tinta oscura y naranja. Apertura y finales. */
+[data-tema="flat-claro"] body {
+  --texto: #16182e;
+  --oro: #e8590c;
+  --lila: #3b3bd6;
+  --sobre-oro: #ffffff;
+  --lienzo: color-mix(in srgb, var(--acento, #e8590c) 5%, #f4efe4);
+  --apertura: #f4efe4;
+  --carta-fondo: #ffffff;
+  --carta-caja: #f1ece0;
+  --emb-oro-1: #e8590c;
+  --emb-oro-2: #e8590c;
+  --emb-pliegue: #b8430a;
+  --emb-linea: #8f95ff;
+  --emb-texto-cinta: #ffffff;
+  --emb-nimbo: #16182e;
+}
+
+/* Estilos descartados, que se pueden seguir previsualizando con ?tema=. */
+
+[data-tema="noche"] body {
+  --oro: #ffd166;
+  --lila: #a5a0ff;
+  --lienzo:
+    radial-gradient(circle at 90% 0%, color-mix(in srgb, var(--acento, #4f46e5) 55%, transparent), transparent 55%),
+    radial-gradient(circle at 0% 100%, color-mix(in srgb, var(--acento, #4f46e5) 30%, transparent), transparent 50%),
+    #0d0f1c;
+  --apertura:
+    radial-gradient(circle at 50% 38%, #3a3590 0%, transparent 42%),
+    radial-gradient(circle at 10% 90%, rgb(165 160 255 / 25%), transparent 35%),
+    radial-gradient(circle at 92% 12%, rgb(255 209 102 / 18%), transparent 35%),
+    #0d0f1c;
+  --carta-sombra: 0 30px 80px rgb(0 0 0 / 45%);
+  --carta-radio: 34px;
+  --emb-fondo-1: #3a3590;
+  --emb-fondo-2: #12142a;
+  --emb-oro-1: #ffe29a;
+  --emb-oro-2: #e9a93a;
+  --emb-pliegue: #b97a14;
+  --emb-linea: #a5a0ff;
+  --emb-rayos: 0.28;
+  --emb-brillo: 0.55;
+  --balon-1: #ffd27a;
+  --balon-2: #f5a524;
+  --balon-3: #c46a06;
+  --balon-brillo: 0.38;
+}
+
+[data-tema="vibrante"] body {
+  --oro: #ffe066;
+  --lila: #ffb3f0;
+  --sobre-oro: #2a0b4a;
+  --lienzo:
+    radial-gradient(circle at 85% 8%, rgb(255 224 102 / 35%), transparent 40%),
+    linear-gradient(160deg, color-mix(in srgb, var(--acento, #4f46e5) 55%, #14002e) 0%, #3d0b78 45%, #b0185f 85%, #ff7043 125%);
+  --apertura: radial-gradient(circle at 50% 38%, rgb(255 224 102 / 30%), transparent 35%), linear-gradient(100deg, #1a0538 0%, #5b129e 40%, #c2185b 75%, #ff7043 100%);
+  --carta-sombra: 0 30px 70px rgb(40 0 60 / 55%);
+  --carta-radio: 34px;
+  --emb-fondo-1: #8a3cff;
+  --emb-fondo-2: #2a0b4a;
+  --emb-oro-1: #fff1a8;
+  --emb-oro-2: #ff9f43;
+  --emb-pliegue: #d35400;
+  --emb-linea: #ffb3f0;
+  --emb-rayos: 0.45;
+  --emb-brillo: 0.8;
+  --emb-texto-cinta: #2a0b4a;
+  --balon-1: #ffe08a;
+  --balon-2: #ff8a00;
+  --balon-3: #d9480f;
+  --balon-brillo: 0.38;
+}
+
+[data-tema="claro"] body {
+  --texto: #16182e;
+  --oro: #e8590c;
+  --lila: #3b3bd6;
+  --sobre-oro: #ffffff;
+  --lienzo:
+    radial-gradient(circle at 92% 0%, color-mix(in srgb, var(--acento, #e8590c) 20%, transparent), transparent 45%),
+    #f4efe4;
+  --apertura: radial-gradient(circle at 50% 40%, rgb(232 89 12 / 16%), transparent 40%), #f4efe4;
+  --carta-fondo: #ffffff;
+  --carta-caja: #f1ece0;
+  --carta-sombra: 0 14px 30px rgb(60 40 10 / 16%);
+  --carta-radio: 34px;
+  --emb-fondo-1: #2a2f6e;
+  --emb-fondo-2: #16182e;
+  --emb-oro-1: #ff8a3d;
+  --emb-oro-2: #e8590c;
+  --emb-pliegue: #b8430a;
+  --emb-linea: #8f95ff;
+  --emb-rayos: 0.28;
+  --emb-brillo: 0.55;
+  --emb-texto-cinta: #ffffff;
+  --emb-nimbo: #16182e;
+  --balon-1: #ffd27a;
+  --balon-2: #f5a524;
+  --balon-3: #c46a06;
+  --balon-brillo: 0.38;
+}

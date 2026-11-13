@@ -1,0 +1,154 @@
+---
+import Base from "../layouts/Base.astro";
+import Escudo from "../components/Escudo.astro";
+import Resultado from "../components/Resultado.astro";
+import { NOMBRES_RONDA, fecha, franquicias, resumen, temporada, url } from "../lib/liga";
+
+const semilla = Object.fromEntries(temporada.clasificacion.map((f) => [f.franquicia, f.posicion]));
+const campeon = temporada.playoffs.campeon;
+---
+
+<Base titulo="Playoffs">
+  <h1>Playoffs</h1>
+  <p class="subtitulo">Cuartos y semifinales al mejor de 3 · Finales Nimbo al mejor de 5</p>
+  {
+    temporada.playoffs.rondas.length === 0 && (
+      <p class="tarjeta">
+        Los playoffs empiezan cuando acabe la liga regular. Se clasifican los 8 primeros: 1º contra 8º, 4º contra 5º, 2º contra 7º
+        y 3º contra 6º.
+      </p>
+    )
+  }
+
+  <div class="cuadro">
+    {
+      temporada.playoffs.rondas.map((r: any) => (
+        <div class="ronda">
+          <h3>{NOMBRES_RONDA[r.ronda]}</h3>
+          <div class="series">
+            {r.series.map((s: any) => (
+              <a class="serie tarjeta" href={`#${s.codigo}`}>
+                {[
+                  [s.alto, s.victorias[0]],
+                  [s.bajo, s.victorias[1]],
+                ].map(([id, v]) => (
+                  <div class:list={["linea", { gana: id === s.ganador }]}>
+                    <span class="sem">{semilla[id]}</span>
+                    <Escudo id={id} tam={22} />
+                    <span class="nom">{franquicias[id].nombre}</span>
+                    <span class="vic">{v}</span>
+                  </div>
+                ))}
+              </a>
+            ))}
+          </div>
+        </div>
+      ))
+    }
+    {
+      campeon && (
+        <div class="ronda">
+          <h3>Campeón</h3>
+          <div class="series">
+            <a class="serie tarjeta trofeo" href={url(`franquicias/${campeon}`)}>
+              <Escudo id={campeon} tam={56} />
+              <strong>{franquicias[campeon].nombre}</strong>
+              <span class="apagado">{franquicias[campeon].ciudad}</span>
+            </a>
+          </div>
+        </div>
+      )
+    }
+  </div>
+
+  {
+    temporada.playoffs.rondas.map((r: any) => (
+      <section>
+        <h2>{NOMBRES_RONDA[r.ronda]}</h2>
+        {r.series.map((s: any) => (
+          <div id={s.codigo} class="detalle">
+            <h3>
+              {s.ganador
+                ? `${franquicias[s.ganador].nombre} gana ${Math.max(...s.victorias)}-${Math.min(...s.victorias)} a los ${franquicias[s.ganador === s.alto ? s.bajo : s.alto].nombre}`
+                : `${franquicias[s.alto].nombre} ${s.victorias[0]} - ${s.victorias[1]} ${franquicias[s.bajo].nombre} (en juego)`}
+            </h3>
+            <div class="rejilla">
+              {s.partidos.map((id, n) => (
+                <Resultado p={resumen(id)} etiqueta={`Partido ${n + 1} · ${fecha(resumen(id).fecha)}`} />
+              ))}
+            </div>
+          </div>
+        ))}
+      </section>
+    ))
+  }
+</Base>
+
+<style>
+  .cuadro {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(170px, 1fr));
+    gap: 16px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+  }
+  .ronda {
+    display: flex;
+    flex-direction: column;
+  }
+  .ronda h3 {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    color: var(--texto-3);
+  }
+  .series {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: 12px;
+    flex: 1;
+  }
+  .serie {
+    padding: 8px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .serie:hover {
+    color: inherit;
+    border-color: var(--acento);
+  }
+  .linea {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--texto-3);
+    font-size: 0.9rem;
+  }
+  .linea.gana {
+    color: var(--texto);
+    font-weight: 700;
+  }
+  .sem {
+    width: 1em;
+    font-size: 0.75rem;
+  }
+  .nom {
+    flex: 1;
+  }
+  .vic {
+    font-family: var(--titulo);
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
+  .trofeo {
+    align-items: center;
+    text-align: center;
+    padding: 16px;
+    border-color: #e9b949;
+  }
+  .detalle {
+    margin-bottom: 24px;
+    scroll-margin-top: 70px;
+  }
+</style>

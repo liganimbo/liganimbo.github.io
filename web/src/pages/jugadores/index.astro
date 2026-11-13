@@ -1,0 +1,97 @@
+---
+import Base from "../../layouts/Base.astro";
+import Carta from "../../components/Carta.astro";
+import { dec, jugadores, statsRegular } from "../../lib/liga";
+
+const lista = Object.values(jugadores);
+const ordenes = [
+  ["valor", "Mejores cartas"],
+  ["ataque", "Ataque"],
+  ["defensa", "Defensa"],
+  ["pts", "Puntos por partido"],
+  ["paradas", "Paradas por partido"],
+  ["equipo", "Equipo"],
+];
+---
+
+<Base titulo="Jugadores">
+  <h1>Jugadores</h1>
+  <p class="subtitulo">Las {lista.length} cartas de la liga: {lista.filter((j) => j.genero === "f").length} jugadoras y {lista.filter((j) => j.genero === "m").length} jugadores.</p>
+
+  <div class="ordenar">
+    <span class="apagado">Ordenar por</span>
+    {ordenes.map(([clave, nombre], i) => <button data-orden={clave} class:list={{ activo: i === 0 }}>{nombre}</button>)}
+  </div>
+
+  <div class="mano" id="cartas">
+    {
+      lista.map((j) => {
+        const s = statsRegular[j.id];
+        return (
+          <div
+            class="hueco"
+            data-valor={j.ataque + j.defensa + (j.icono ? 1.5 : 0)}
+            data-ataque={j.ataque}
+            data-defensa={j.defensa}
+            data-pts={s?.medias.pts ?? 0}
+            data-paradas={s?.medias.paradas ?? 0}
+            data-equipo={j.franquicia}
+          >
+            <Carta j={j} mini />
+            <div class="linea apagado">{s ? `${dec(s.medias.pts)} pts · ${dec(s.medias.paradas)} par.` : "Sin jugar"}</div>
+          </div>
+        );
+      })
+    }
+  </div>
+</Base>
+
+<script>
+  const contenedor = document.querySelector<HTMLElement>("#cartas")!;
+  const botones = document.querySelectorAll<HTMLButtonElement>("[data-orden]");
+  const ordenar = (clave: string) => {
+    const huecos = [...contenedor.children] as HTMLElement[];
+    huecos.sort((a, b) =>
+      clave === "equipo"
+        ? a.dataset.equipo!.localeCompare(b.dataset.equipo!)
+        : Number(b.dataset[clave]) - Number(a.dataset[clave]) || Number(b.dataset.valor) - Number(a.dataset.valor),
+    );
+    contenedor.append(...huecos);
+    botones.forEach((b) => b.classList.toggle("activo", b.dataset.orden === clave));
+  };
+  botones.forEach((b) => b.addEventListener("click", () => ordenar(b.dataset.orden!)));
+  ordenar("valor");
+</script>
+
+<style>
+  .ordenar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 16px;
+    font-size: 0.85rem;
+  }
+  .ordenar button {
+    font: inherit;
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--borde);
+    background: var(--superficie);
+    color: var(--texto-2);
+    cursor: pointer;
+  }
+  .ordenar button.activo {
+    background: var(--acento);
+    border-color: var(--acento);
+    color: var(--sobre-acento);
+  }
+  .hueco {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .linea {
+    font-size: 0.75rem;
+  }
+</style>

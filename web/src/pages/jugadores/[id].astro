@@ -1,0 +1,155 @@
+---
+import Base from "../../layouts/Base.astro";
+import Carta from "../../components/Carta.astro";
+import { DESCRIPCION_ICONO } from "../../motor/reglas.ts";
+import { dec, fecha, franquicias, jugadores, mundo, partido, partidosDe, pct, statsPlayoffs, statsRegular, url } from "../../lib/liga";
+
+export function getStaticPaths() {
+  return Object.keys(mundo.jugadores).map((id) => ({ params: { id } }));
+}
+
+const { id } = Astro.params as { id: string };
+const j = jugadores[id];
+const f = franquicias[j.franquicia];
+const fases = [
+  ["Temporada regular", statsRegular[id]],
+  ["Playoffs", statsPlayoffs[id]],
+].filter(([, s]) => s) as [string, (typeof statsRegular)[string]][];
+
+const log = partidosDe(j.franquicia)
+  .map((p) => ({ p, l: partido(p.id).estadisticas[id], local: p.local === j.franquicia }))
+  .filter((x) => x.l);
+const tiros = ([a, i]: [number, number]) => (i ? `${a}/${i}` : "–");
+---
+
+<Base titulo={j.nombre}>
+  <section class="ficha">
+    <Carta j={j} enlace={false} />
+    <div class="datos">
+      <a class="apagado equipo" href={url(`franquicias/${f.id}`)}>{f.nombre} de {f.ciudad}</a>
+      <h1>{j.nombre}</h1>
+      <div class="linea">
+        <span>{j.edad} años</span>
+        <span>De {j.origen}</span>
+        <span>Salario: {dec(j.salario)}M</span>
+      </div>
+      <p class="historia">{j.historia}</p>
+      <ul class="rasgos">
+        {j.icono && <li><strong>{j.icono}</strong> <span class="apagado">{DESCRIPCION_ICONO[j.icono]}.</span></li>}
+        {j.rasgo && <li><strong>{j.rasgo}</strong> <span class="apagado">{mundo.rasgos[j.rasgo]} (fuera de la pista)</span></li>}
+      </ul>
+    </div>
+  </section>
+
+  <h2>Estadísticas</h2>
+  <div class="tabla-envoltorio">
+    <table>
+      <thead>
+        <tr><th>Fase</th><th>PJ</th><th>Pts</th><th>Pts/P</th><th>Dentro</th><th>Fuera</th><th>Acierto</th><th>Paradas/P</th><th>Mejor del partido</th></tr>
+      </thead>
+      <tbody>
+        {
+          fases.length === 0 ? (
+            <tr><td colspan="9" class="apagado">Sin jugar esta temporada.</td></tr>
+          ) : (
+            fases.map(([nombre, s]) => (
+              <tr>
+                <td>{nombre}</td>
+                <td>{s.pj}</td>
+                <td>{s.pts}</td>
+                <td><strong>{dec(s.medias.pts)}</strong></td>
+                <td>{tiros(s.dentro)} <span class="apagado">({pct(s.medias.dentro)})</span></td>
+                <td>{tiros(s.fuera)} <span class="apagado">({pct(s.medias.fuera)})</span></td>
+                <td>{pct(s.medias.acierto)}</td>
+                <td>{dec(s.medias.paradas)}</td>
+                <td>{s.mejor}</td>
+              </tr>
+            ))
+          )
+        }
+      </tbody>
+    </table>
+  </div>
+
+  {
+    log.length > 0 && (
+      <>
+        <h2>Partido a partido</h2>
+        <div class="tabla-envoltorio">
+          <table>
+            <thead>
+              <tr><th>Fecha</th><th class="izq">Rival</th><th>Res.</th><th>Pts</th><th>Dentro</th><th>Fuera</th><th>Paradas</th></tr>
+            </thead>
+            <tbody>
+              {log.map(({ p, l, local }) => {
+                const [propio, ajeno] = local ? p.marcador : [p.marcador[1], p.marcador[0]];
+                return (
+                  <tr>
+                    <td class="izq apagado">{p.jornada ? fecha(p.fecha) : p.contexto}</td>
+                    <td class="izq">
+                      <span class="apagado">{local ? "vs" : "@"}</span> {franquicias[local ? p.visitante : p.local].nombre}
+                      {p.mejor === id && <span title="Mejor del partido"> ★</span>}
+                    </td>
+                    <td>
+                      <a href={url(`partidos/${p.id}`)} class={propio > ajeno ? "v" : "d"}>
+                        {propio}-{ajeno}
+                      </a>
+                    </td>
+                    <td><strong>{l.pts}</strong></td>
+                    <td>{tiros(l.dentro)}</td>
+                    <td>{tiros(l.fuera)}</td>
+                    <td>{l.paradas}/{l.marcados}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </>
+    )
+  }
+</Base>
+
+<style>
+  .ficha {
+    display: flex;
+    gap: 28px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .ficha :global(.carta) {
+    width: 220px;
+    min-height: 260px;
+  }
+  .datos {
+    flex: 1;
+    min-width: 260px;
+  }
+  .datos h1 {
+    margin: 2px 0 8px;
+  }
+  .equipo {
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.8rem;
+  }
+  .linea {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 16px;
+    color: var(--texto-2);
+  }
+  .historia {
+    font-style: italic;
+    color: var(--texto-2);
+  }
+  .rasgos {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+</style>

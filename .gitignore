@@ -1,0 +1,8 @@
+node_modules/
+web/dist/
+web/.astro/
+# Imágenes de Instagram: se regeneran con npm run instagram
+instagram/
+# Documentos internos: se quedan solo en local
+PLANTEAMIENTO.md
+LANZAMIENTO.md
