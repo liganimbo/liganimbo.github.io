@@ -14,13 +14,13 @@ const pies = ["Baloncesto 3x3", `Temporada ${temporada.temporada}`, `Desde el ${
 ---
 
 <!doctype html>
-<html lang="es" data-tema="flat-claro">
+<html lang="es" data-tema="claro">
   <head>
     <meta charset="utf-8" />
     <title>Apertura {n}/3 · Liga Nimbo</title>
     <script is:inline>
       const tema = new URLSearchParams(location.search).get("tema");
-      if (tema) document.documentElement.dataset.tema = tema;
+      if (tema !== null) document.documentElement.dataset.tema = tema;
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

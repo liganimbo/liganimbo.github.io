@@ -1,7 +1,7 @@
 ---
 // Marca de la Liga Nimbo: el balón con su halo (el nimbo). Dos piezas:
 //   escudo  → emblema principal (foto de perfil, avatar)
-//   palabra → logotipo horizontal: LIGA NIMBO (+ balón con halo, opcional)
+//   palabra → logotipo horizontal: LIGA NIMBO, solo texto
 // Los colores salen de variables de tema (src/styles/temas.css); sin tema, los del tema "flat".
 // Para tamaños diminutos (pestaña del navegador) está public/favicon.svg.
 import Balon from "./marca/Balon.astro";
@@ -11,12 +11,10 @@ interface Props {
   tam?: number;
   /** Lema bajo el logotipo; conviene quitarlo cuando se usa pequeño. */
   lema?: boolean;
-  /** Balón con halo junto al logotipo; sin él queda solo el texto LIGA NIMBO. */
-  simbolo?: boolean;
 }
-const { variante, tam = 240, lema = true, simbolo = true } = Astro.props;
-const uid = `${variante}-${tam}-${lema ? "l" : "s"}-${simbolo ? "b" : "t"}`;
-const [anchoVB, altoVB] = variante === "palabra" ? [simbolo ? 430 : 300, lema ? 150 : 132] : [240, 240];
+const { variante, tam = 240, lema = true } = Astro.props;
+const uid = `${variante}-${tam}-${lema ? "l" : "s"}`;
+const [anchoVB, altoVB] = variante === "palabra" ? [300, lema ? 150 : 132] : [240, 240];
 const escudo = "M44 18 H196 Q204 18 204 26 V112 C204 170 166 208 120 228 C74 208 36 170 36 112 V26 Q36 18 44 18 Z";
 const estrella = (x: number, y: number, s: number) =>
   `M${x} ${y - s} L${x + s * 0.3} ${y - s * 0.3} L${x + s} ${y} L${x + s * 0.3} ${y + s * 0.3} L${x} ${y + s} L${x - s * 0.3} ${y + s * 0.3} L${x - s} ${y} L${x - s * 0.3} ${y - s * 0.3} Z`;
@@ -120,14 +118,6 @@ const rayos = (cx: number, cy: number, r1: number, r2: number, n: number) =>
         >
           NIMBO
         </text>
-        {simbolo && (
-          <>
-            <circle cx="360" cy="80" r="50" fill={`url(#brillo-${uid})`} />
-            <Balon id={`b-${uid}`} cx={360} cy={84} r={32} />
-            <ellipse cx="360" cy="40" rx="27" ry="7" fill="none" stroke={`url(#oro-${uid})`} stroke-width="5" transform="rotate(-8 360 40)" />
-            <path d={estrella(410, 104, 5)} style="fill: var(--oro, #ffc83d)" />
-          </>
-        )}
         {lema && (
           <text x="20" y="144" font-family="Inter, sans-serif" font-weight="700" font-size="12" letter-spacing="2.6" style="fill: var(--lila, #9b95ff)">
             BALONCESTO 3X3 · CARTAS Y DADOS

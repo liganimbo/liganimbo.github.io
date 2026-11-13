@@ -158,7 +158,9 @@ const iconos = [...new Set(perfil.iconos)].map((i) => `${perfil.iconos.filter((x
     padding: 28px;
     border-radius: 16px;
     color: #fff;
-    background: var(--c1);
+    background:
+      radial-gradient(circle at 88% 0%, rgb(255 255 255 / 14%), transparent 45%),
+      linear-gradient(120deg, var(--c1), color-mix(in srgb, var(--c1) 55%, #0d0f1c));
     border-bottom: 6px solid var(--c2);
   }
   .cabeza h1 {

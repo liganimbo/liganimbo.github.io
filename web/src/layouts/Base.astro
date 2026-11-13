@@ -41,7 +41,7 @@ const actual = Astro.url.pathname.replace(import.meta.env.BASE_URL, "").split("/
     <header class="cabecera">
       <div class="contenedor cabecera-fila">
         <a class="marca" href={url()}>
-          <Emblema variante="palabra" tam={150} lema={false} />
+          <Emblema variante="palabra" tam={105} lema={false} />
         </a>
         <nav>
           {
@@ -64,7 +64,8 @@ const actual = Astro.url.pathname.replace(import.meta.env.BASE_URL, "").split("/
 </html>
 
 <style is:global>
-  /* Mismo estilo que Instagram: modo claro = flat claro (crema y naranja), modo oscuro = flat (índigo y dorado). */
+  /* Mismo estilo que Instagram: modo claro = crema con halo naranja, modo oscuro = azul noche con degradados.
+     El escudo y el logotipo siguen en flat. */
   :root {
     --fondo: #f4efe4;
     --superficie: #fffdf8;
@@ -76,48 +77,60 @@ const actual = Astro.url.pathname.replace(import.meta.env.BASE_URL, "").split("/
     --acento: #e8590c;
     --acento-suave: #fde4d4;
     --sobre-acento: #ffffff;
-    --cabecera: #1d2060;
+    --lienzo-web:
+      radial-gradient(circle at 92% 0%, rgb(232 89 12 / 14%), transparent 40%),
+      radial-gradient(circle at 0% 100%, rgb(59 59 214 / 7%), transparent 45%),
+      #f4efe4;
+    --cabecera: linear-gradient(100deg, #12142a 0%, #2a2f6e 65%, #3a3590 100%);
     --victoria: #2f855a;
     --derrota: #c53030;
-    --sombra: none;
-    --radio: 10px;
+    --sombra: 0 10px 24px rgb(60 40 10 / 10%);
+    --radio: 14px;
     --titulo: "Barlow Condensed", system-ui, sans-serif;
     color-scheme: light;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-      --fondo: #1f2260;
-      --superficie: #2b2f80;
-      --superficie-2: #343991;
-      --borde: #4148a6;
+      --fondo: #0d0f1c;
+      --superficie: #171a38;
+      --superficie-2: #20244c;
+      --borde: #2d3270;
       --texto: #f1f2f8;
       --texto-2: #cdd0f2;
       --texto-3: #9ea4dc;
       --acento: #ffc83d;
       --acento-suave: #4a4772;
       --sobre-acento: #16182e;
-      --cabecera: #16184a;
+      --lienzo-web:
+        radial-gradient(circle at 90% 0%, rgb(79 70 229 / 38%), transparent 45%),
+        radial-gradient(circle at 0% 100%, rgb(155 149 255 / 14%), transparent 45%),
+        #0d0f1c;
+      --cabecera: linear-gradient(100deg, #0d0f1c 0%, #262a6a 65%, #3a3590 100%);
       --victoria: #6ee7a8;
       --derrota: #ff9b9b;
-      --sombra: none;
+      --sombra: 0 16px 40px rgb(0 0 0 / 40%);
       color-scheme: dark;
     }
   }
   :root[data-theme="dark"] {
-    --fondo: #1f2260;
-    --superficie: #2b2f80;
-    --superficie-2: #343991;
-    --borde: #4148a6;
+    --fondo: #0d0f1c;
+    --superficie: #171a38;
+    --superficie-2: #20244c;
+    --borde: #2d3270;
     --texto: #f1f2f8;
     --texto-2: #cdd0f2;
     --texto-3: #9ea4dc;
     --acento: #ffc83d;
     --acento-suave: #4a4772;
     --sobre-acento: #16182e;
-    --cabecera: #16184a;
+    --lienzo-web:
+      radial-gradient(circle at 90% 0%, rgb(79 70 229 / 38%), transparent 45%),
+      radial-gradient(circle at 0% 100%, rgb(155 149 255 / 14%), transparent 45%),
+      #0d0f1c;
+    --cabecera: linear-gradient(100deg, #0d0f1c 0%, #262a6a 65%, #3a3590 100%);
     --victoria: #6ee7a8;
     --derrota: #ff9b9b;
-    --sombra: none;
+    --sombra: 0 16px 40px rgb(0 0 0 / 40%);
     color-scheme: dark;
   }
 
@@ -126,7 +139,9 @@ const actual = Astro.url.pathname.replace(import.meta.env.BASE_URL, "").split("/
   }
   body {
     margin: 0;
-    background: var(--fondo);
+    min-height: 100vh;
+    background: var(--lienzo-web);
+    background-attachment: fixed;
     color: var(--texto);
     font: 15px/1.5 Inter, system-ui, sans-serif;
     font-variant-numeric: tabular-nums;
