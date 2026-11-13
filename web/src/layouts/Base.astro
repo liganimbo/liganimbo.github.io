@@ -4,8 +4,10 @@ import { url } from "../lib/liga";
 
 interface Props {
   titulo: string;
+  /** Página escondida: fuera del menú y sin indexar en buscadores. */
+  oculta?: boolean;
 }
-const { titulo } = Astro.props;
+const { titulo, oculta = false } = Astro.props;
 const secciones = [
   ["", "Inicio"],
   ["reglas", "Reglas"],
@@ -24,6 +26,7 @@ const actual = Astro.url.pathname.replace(import.meta.env.BASE_URL, "").split("/
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {oculta && <meta name="robots" content="noindex" />}
     <title>{titulo === "Liga Nimbo" ? titulo : `${titulo} · Liga Nimbo`}</title>
     <link rel="icon" type="image/svg+xml" href={url("favicon.svg")} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
