@@ -13,7 +13,8 @@ const { id } = Astro.params as { id: string };
 const f = franquicias[id];
 const fila = temporada.clasificacion.find((x) => x.franquicia === id)!;
 const plantilla = [...f.plantilla].sort((a, b) => jugadores[b].ataque + jugadores[b].defensa - (jugadores[a].ataque + jugadores[a].defensa));
-const masa = plantilla.reduce((s, j) => s + jugadores[j].salario, 0);
+const sueldos = plantilla.reduce((s, j) => s + jugadores[j].sueldo, 0);
+const nivel = (n: number) => "●".repeat(n) + "○".repeat(3 - n);
 const partidos = partidosDe(id);
 // Próximos partidos de liga, para la pretemporada y para lo que queda de temporada.
 const proximos = temporada.calendario
@@ -61,8 +62,15 @@ const iconos = [...new Set(perfil.iconos)].map((i) => `${perfil.iconos.filter((x
     <div class="dato"><span class="etq">Plantilla</span><strong>{perfil.edadMedia} años de media</strong><span class="apagado">Estrella: {perfil.estrella.nombre}</span></div>
   </div>
 
+  <h2>El club</h2>
+  <div class="ficha-equipo">
+    <div class="dato"><span class="etq">Presupuesto</span><strong>{f.club.presupuesto ?? "—"}</strong><span class="apagado">{f.club.presupuesto === null ? "Se fija en el primer verano" : `Sueldos ${sueldos} · ahorro ${f.club.ahorro}`}</span></div>
+    <div class="dato"><span class="etq">Ojeadores</span><strong class="nivel">{nivel(f.club.ojeadores)}</strong><span class="apagado">Ven el potencial de las promesas del draft</span></div>
+    <div class="dato"><span class="etq">Entrenamiento</span><strong class="nivel">{nivel(f.club.entrenamiento)}</strong><span class="apagado">Hace crecer más a las cartas jóvenes</span></div>
+  </div>
+
   <h2>Plantilla</h2>
-  <p class="apagado">Masa salarial: {dec(masa)}M.</p>
+  <p class="apagado">Sueldos: {sueldos}{f.club.presupuesto !== null ? ` de un presupuesto de ${f.club.presupuesto}` : ""}.</p>
   <div class="mano">
     {
       plantilla.map((jid) => {
@@ -72,6 +80,8 @@ const iconos = [...new Set(perfil.iconos)].map((i) => `${perfil.iconos.filter((x
             <Carta j={jugadores[jid]} />
             <div class="linea apagado">
               {s ? `${dec(s.medias.pts)} pts · ${dec(s.medias.paradas)} paradas · ${s.pj} PJ` : "Sin jugar"}
+              <br />
+              Sueldo {jugadores[jid].sueldo} · {jugadores[jid].contrato} {jugadores[jid].contrato === 1 ? "temporada" : "temporadas"} de contrato
             </div>
           </div>
         );
@@ -191,6 +201,10 @@ const iconos = [...new Set(perfil.iconos)].map((i) => `${perfil.iconos.filter((x
     font-family: var(--titulo);
     font-size: 1.5rem;
     text-transform: uppercase;
+  }
+  .nivel {
+    color: var(--acento);
+    letter-spacing: 0.1em;
   }
   .dato .apagado {
     font-size: 0.85rem;

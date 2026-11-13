@@ -2,10 +2,10 @@
 import Base from "../../layouts/Base.astro";
 import Carta from "../../components/Carta.astro";
 import { DESCRIPCION_ICONO } from "../../motor/reglas.ts";
-import { dec, fecha, franquicias, jugadores, mundo, partido, partidosDe, pct, statsPlayoffs, statsRegular, url } from "../../lib/liga";
+import { activas, dec, fecha, franquicias, jugadores, mundo, partido, partidosDe, pct, statsPlayoffs, statsRegular, url } from "../../lib/liga";
 
 export function getStaticPaths() {
-  return Object.keys(mundo.jugadores).map((id) => ({ params: { id } }));
+  return activas().map((j) => ({ params: { id: j.id } }));
 }
 
 const { id } = Astro.params as { id: string };
@@ -31,7 +31,7 @@ const tiros = ([a, i]: [number, number]) => (i ? `${a}/${i}` : "–");
       <div class="linea">
         <span>{j.edad} años</span>
         <span>De {j.origen}</span>
-        <span>Salario: {dec(j.salario)}M</span>
+        <span>Sueldo {j.sueldo} · contrato: {j.contrato} {j.contrato === 1 ? "temporada" : "temporadas"}</span>
       </div>
       <p class="historia">{j.historia}</p>
       <ul class="rasgos">

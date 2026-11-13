@@ -1,4 +1,4 @@
-# Nimbo · Reglamento v0.3.1
+# Nimbo · Reglamento v0.4
 
 > El juego con el que se deciden los partidos de la Liga Nimbo: baloncesto 3x3 con cartas y dos dados.
 > Se puede jugar en la web, con papel o dejar que el motor lo juegue con el plan de cada equipo.
@@ -119,13 +119,55 @@ Si Búhos hubiera cerrado fuera, la defensa habría sido 12. Y si Forjadores hub
 
 ---
 
-## 8. Fuera de la pista
+## 8. Fuera de la pista: el verano Nimbo
 
-Esbozo para la versión 0.4:
-- **Plantilla de 4** y **tope salarial**. El salario depende de Ataque, Defensa e icono.
-- **Draft con cartas tapadas:** de cada jugador del draft solo se ve una parte de la carta hasta elegirlo.
-- **Evolución por edad** al acabar cada temporada: las cartas jóvenes tienden a mejorar y las veteranas a empeorar.
-- **Rasgos de personalidad**, con efecto solo en la gestión: *Corazón del club* (renueva por menos), *A sueldo* (pide el traspaso si no hay playoffs), *Veteranía* (ayuda a evolucionar a los jóvenes de su equipo), *Polvorín* (puede provocar conflictos)… y todo lo que dé historias.
+Al acabar las Finales llega el verano. Se hace en este orden y todo se puede resolver con un dado.
+
+### 8.1 Presupuesto
+Cada club ingresa **11**, +1 si su mercado es mediano o +2 si es grande, y **+1 por cada ronda de playoffs que gane**. A eso se suma lo que ahorró el verano anterior.
+
+### 8.2 Evolución
+Cada carta tira **un dado**:
+
+| Edad | Resultado |
+|---|---|
+| **Joven (23 o menos)** | 5-6: **+1**. 7 o más (con bonus): **+2** |
+| **Plenitud (24-29)** | 1-2: **−1**. 6 o más: **+1** |
+| **Veterana (30 o más)** | 1-3: **−1** (desde los 33, 1-4) |
+
+- Bonus al dado: *Esfuerzo* +1. Las jóvenes suman además +1 por cada nivel de **entrenamiento** de su club y +1 si en su equipo hay una carta con *Veteranía*.
+- El club reparte los puntos entre Ataque y Defensa (ninguno pasa de 6 ni baja de 2).
+- **Potencial:** cada carta tiene un **techo secreto**: lo máximo que pueden sumar su Ataque y su Defensa. Nunca se publica.
+- Después, todas cumplen un año.
+
+### 8.3 Retiradas
+Desde los **34 años**, una carta se retira si saca **1 o 2**. Las cartas libres de 31 o más que nadie ha fichado también dejan el baloncesto.
+
+### 8.4 Contratos
+- Cada carta tiene contrato de 1 a 3 temporadas. Su **sueldo (de 1 a 5)** depende de su valor (Ataque + Defensa + 1 si tiene icono): hasta 6, 1; 7, 2; 8, 3; 9, 4; 10 o más, 5. **El sueldo no cambia mientras dura el contrato.**
+- Al acabar el contrato, el club **renueva** (con el sueldo que corresponda a su valor de ahora) o **la deja libre**.
+- *Corazón del club* renueva cobrando 1 menos. *A sueldo* se marcha si su equipo no ha jugado playoffs.
+
+### 8.5 Draft
+- **12 promesas** de 19 a 21 años. Se ve su Ataque y su Defensa, pero no su techo.
+- Elige primero el **último** de la liga regular, y así hasta el primero.
+- Los **ojeadores** ayudan a intuir el techo: sin ojeadores es casi una apuesta; con nivel 3 se ve exacto.
+- La promesa elegida entra siempre en la plantilla.
+
+### 8.6 Plantilla y agencia libre
+- Cada club se queda con **4 cartas** cuyos sueldos quepan en su presupuesto. Las que no entran, a la **agencia libre**.
+- En orden inverso a la clasificación, cada club puede fichar una carta libre si le cabe en el presupuesto, o cambiarla por su peor carta.
+- Si a un club le falta alguien, sube una carta de su **cantera** (valor 5, sueldo 1).
+
+### 8.7 Instalaciones
+Lo que sobra del presupuesto se invierte (**3 por nivel**, hasta nivel 3) o se ahorra (**como mucho 3**):
+- **Ojeadores:** ven mejor el potencial de las promesas.
+- **Centro de entrenamiento:** +1 al dado de evolución de las cartas jóvenes por nivel.
+
+El dilema de cada verano: estrellas hoy o estructura para mañana.
+
+### 8.8 Quién decide
+Mientras no haya dirección deportiva elegida por la afición, las decisiones las toma la Oficina de la Liga según la filosofía de cada franquicia. Las aficiones que desbloqueen su dirección deportiva podrán decidir renovaciones, draft y fichajes.
 
 ---
 

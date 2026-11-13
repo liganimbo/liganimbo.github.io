@@ -1,0 +1,268 @@
+---
+// El verano Nimbo: qué pasa entre temporadas y, si ya ha habido uno, todo lo que ocurrió en el último.
+import Base from "../layouts/Base.astro";
+import Carta from "../components/Carta.astro";
+import Escudo from "../components/Escudo.astro";
+import { fecha, franquicias, jugadores, mundo, palmares, temporada, url, verano } from "../lib/liga";
+import { VERANO } from "../motor/verano.ts";
+
+const nombre = (id: string) => jugadores[id]?.nombre ?? id;
+const equipo = (fid: string) => (franquicias[fid] ? franquicias[fid].nombre : fid === "cantera" ? "Cantera" : "Agencia libre");
+const mejoras = verano ? [...verano.evoluciones].filter((e) => e.cambio > 0).sort((a, b) => b.cambio - a.cambio) : [];
+const bajones = verano ? verano.evoluciones.filter((e) => e.cambio < 0) : [];
+const enEquipo = (id: string) => !!franquicias[jugadores[id]?.franquicia];
+---
+
+<Base titulo="Verano">
+  <section class="portada">
+    <div class="sobre">Entre temporadas</div>
+    <h1>{verano ? `El verano de la Temporada ${verano.temporada}` : "El verano Nimbo"}</h1>
+    <p>
+      {
+        verano
+          ? `Así se movió la liga antes de la Temporada ${mundo.temporada}, que arranca el ${fecha(temporada.calendario[0].fecha)}.`
+          : `Al acabar las Finales llega el verano: las cartas evolucionan, se renuevan contratos, llegan promesas del draft y se mueve el mercado. El primero será al terminar la Temporada ${mundo.temporada}.`
+      }
+    </p>
+  </section>
+
+  {
+    palmares.length > 0 && (
+      <>
+        <h2>Palmarés</h2>
+        <div class="tabla-envoltorio">
+          <table>
+            <thead>
+              <tr><th>Temporada</th><th class="izq">Campeón</th><th class="izq">Finalista</th><th>Finales</th></tr>
+            </thead>
+            <tbody>
+              {palmares.map((p) => (
+                <tr>
+                  <td>{p.temporada}</td>
+                  <td class="izq"><span class="eq"><Escudo id={p.campeon} tam={22} /> <strong>{franquicias[p.campeon].nombre}</strong></span></td>
+                  <td class="izq"><span class="eq"><Escudo id={p.finalista} tam={22} /> {franquicias[p.finalista].nombre}</span></td>
+                  <td>{p.resultado}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </>
+    )
+  }
+
+  {
+    !verano && (
+      <>
+        <h2>Qué pasa en verano</h2>
+        <ol class="pasos">
+          <li><strong>Presupuesto.</strong> Cada club ingresa {VERANO.presupuestoBase} (+1 si su mercado es mediano, +2 si es grande) y +1 por cada ronda de playoffs ganada.</li>
+          <li><strong>Evolución.</strong> Cada carta tira un dado: las jóvenes mejoran, las de plenitud se mantienen y las veteranas se desgastan. Cada carta tiene un techo secreto.</li>
+          <li><strong>Retiradas.</strong> Desde los {VERANO.edadRetiro} años, una carta puede colgar las botas.</li>
+          <li><strong>Contratos.</strong> Las que acaban contrato renuevan con su sueldo nuevo… o se van.</li>
+          <li><strong>Draft.</strong> {VERANO.promesas} promesas de 19 a 21 años. Elige primero el último de la liga; los ojeadores ayudan a ver su potencial.</li>
+          <li><strong>Agencia libre.</strong> Las cartas sin equipo, a disposición de quien pueda pagarlas.</li>
+          <li><strong>Instalaciones.</strong> Lo que sobra se invierte en ojeadores o en el centro de entrenamiento.</li>
+        </ol>
+        <p><a href={url("reglas")}>Las reglas completas, en la página de reglas →</a></p>
+      </>
+    )
+  }
+
+  {
+    verano && (
+      <>
+        <h2>Draft</h2>
+        <p class="apagado">Las promesas eligen en orden inverso a la clasificación. Su potencial es secreto: se descubrirá jugando.</p>
+        <div class="mano">
+          {verano.draft.map((d) => (
+            <div class="pick">
+              <div class="apagado">#{d.numero} · {equipo(d.franquicia)}</div>
+              {enEquipo(d.jugador) ? <Carta j={jugadores[d.jugador]} mini /> : <div class="tarjeta fuera">{nombre(d.jugador)}<span class="apagado">Descartada</span></div>}
+            </div>
+          ))}
+        </div>
+
+        <div class="dos">
+          <section>
+            <h2>Fichajes</h2>
+            <ul class="lista">
+              {verano.fichajes.length === 0 && <li class="apagado">Ninguno.</li>}
+              {verano.fichajes.map((x) => (
+                <li>
+                  <Escudo id={x.franquicia} tam={18} /> <strong>{nombre(x.jugador)}</strong>
+                  <span class="apagado"> · {x.desde === "cantera" ? "sube de la cantera" : `desde ${equipo(x.desde)}`}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+          <section>
+            <h2>Salidas</h2>
+            <ul class="lista">
+              {verano.salidas.length === 0 && <li class="apagado">Ninguna.</li>}
+              {verano.salidas.map((x) => (
+                <li>
+                  {franquicias[x.franquicia] && <Escudo id={x.franquicia} tam={18} />} <strong>{nombre(x.jugador)}</strong>
+                  <span class="apagado"> · {x.motivo}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        </div>
+
+        <div class="dos">
+          <section>
+            <h2>Quién ha mejorado</h2>
+            <ul class="lista">
+              {mejoras.length === 0 && <li class="apagado">Nadie.</li>}
+              {mejoras.map((e) => (
+                <li>
+                  <Escudo id={e.franquicia} tam={18} /> <strong>{nombre(e.jugador)}</strong>
+                  <span class="apagado"> · {e.antes.join("/")} → </span><strong class="sube">{e.despues.join("/")}</strong>
+                  <span class="apagado"> (dado {e.tirada})</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+          <section>
+            <h2>Quién ha empeorado</h2>
+            <ul class="lista">
+              {bajones.length === 0 && <li class="apagado">Nadie.</li>}
+              {bajones.map((e) => (
+                <li>
+                  <Escudo id={e.franquicia} tam={18} /> <strong>{nombre(e.jugador)}</strong>
+                  <span class="apagado"> · {e.antes.join("/")} → </span><strong class="baja">{e.despues.join("/")}</strong>
+                  <span class="apagado"> ({e.edad} años, dado {e.tirada})</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        </div>
+
+        {verano.retiradas.length > 0 && (
+          <>
+            <h2>Se retiran</h2>
+            <ul class="lista">
+              {verano.retiradas.map((r) => (
+                <li>
+                  <Escudo id={r.franquicia} tam={18} /> <strong>{nombre(r.jugador)}</strong>
+                  <span class="apagado"> · {r.edad} años</span>
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
+
+        <h2>Renovaciones</h2>
+        <ul class="lista columnas">
+          {verano.renovaciones.map((r) => (
+            <li>
+              <Escudo id={r.franquicia} tam={18} /> <strong>{nombre(r.jugador)}</strong>
+              <span class="apagado"> · sueldo {r.sueldo}, {r.anios} {r.anios === 1 ? "temporada" : "temporadas"}</span>
+            </li>
+          ))}
+        </ul>
+
+        <h2>Las cuentas de cada club</h2>
+        <div class="tabla-envoltorio">
+          <table>
+            <thead>
+              <tr><th class="izq">Franquicia</th><th>Ingresos</th><th>Ahorro previo</th><th>Presupuesto</th><th>Sueldos</th><th>Inversión</th><th>Ahorro</th><th class="izq">Instalaciones nuevas</th></tr>
+            </thead>
+            <tbody>
+              {Object.entries(verano.presupuestos).map(([fid, p]) => (
+                <tr>
+                  <td class="izq"><span class="eq"><Escudo id={fid} tam={20} /> {franquicias[fid].nombre}</span></td>
+                  <td>{p.ingresos}</td>
+                  <td>{p.ahorroPrevio}</td>
+                  <td><strong>{p.total}</strong></td>
+                  <td>{p.sueldos}</td>
+                  <td>{p.inversion}</td>
+                  <td>{p.ahorro}</td>
+                  <td class="izq apagado">
+                    {verano.instalaciones.filter((i) => i.franquicia === fid).map((i) => `${i.tipo === "ojeadores" ? "Ojeadores" : "Entrenamiento"} ${i.nivel}`).join(" · ") || "—"}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </>
+    )
+  }
+</Base>
+
+<style>
+  .portada {
+    padding: 28px;
+    border-radius: 16px;
+    background: var(--cabecera);
+    color: #f1f2f8;
+  }
+  .portada h1 {
+    margin: 4px 0 10px;
+  }
+  .portada p {
+    margin: 0;
+    max-width: 760px;
+    color: #d6d8f2;
+  }
+  .sobre {
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #ffc83d;
+  }
+  .eq {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .pasos li {
+    margin: 6px 0;
+  }
+  .pick {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 0.75rem;
+  }
+  .fuera {
+    width: 132px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-weight: 600;
+  }
+  .dos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr));
+    gap: 0 24px;
+  }
+  .lista {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .lista li {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 5px 0;
+    border-bottom: 1px solid var(--borde);
+  }
+  .columnas {
+    columns: 2 320px;
+  }
+  .columnas li {
+    break-inside: avoid;
+  }
+  .sube {
+    color: var(--victoria);
+  }
+  .baja {
+    color: var(--derrota);
+  }
+</style>

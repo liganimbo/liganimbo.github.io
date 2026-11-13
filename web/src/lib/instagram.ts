@@ -2,9 +2,9 @@
 import { clasificacion } from "../motor/temporada.ts";
 import type { Jugada } from "../motor/reglas.ts";
 import type { PartidoGuardado } from "../motor/temporada.ts";
-import { jugadores, mundo, partido, statsRegular, temporada } from "./liga";
+import { activas, jugadores, mundo, partido, statsRegular, temporada } from "./liga";
 
-export const USUARIO = "@liganimbo"; // provisional: comprobar que está libre
+export const USUARIO = "@liganimbo";
 
 /** La canasta que puso al ganador por delante para no volver a ir por detrás. */
 export function jugadaDecisiva(p: PartidoGuardado): { jugada: Jugada; quedaban: number } | null {
@@ -49,6 +49,6 @@ export function mejorDeLaJornada(jornada: number) {
 
 /** Cartas para presentar, de mejor a peor. */
 export const cartasDestacadas = () =>
-  Object.values(jugadores).sort((a, b) => b.ataque + b.defensa + (b.icono ? 1 : 0) - (a.ataque + a.defensa + (a.icono ? 1 : 0)));
+  activas().sort((a, b) => b.ataque + b.defensa + (b.icono ? 1 : 0) - (a.ataque + a.defensa + (a.icono ? 1 : 0)));
 
 export const statsDe = (jid: string) => statsRegular[jid];

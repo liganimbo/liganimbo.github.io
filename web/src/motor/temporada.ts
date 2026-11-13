@@ -6,15 +6,17 @@ import type { Mundo } from "./mundo.ts";
 
 export const CONFIG = {
   temporada: 1,
-  inicio: "2027-01-12", // primer martes; hay partidos martes y viernes
+  inicio: "2027-01-12", // primer martes de la Temporada 1; hay partidos martes y viernes
+  /** Semanas de verano entre la última noche de una temporada y el inicio de la siguiente. */
+  semanasDeVerano: 18,
   playoffs: 8,
   victoriasPorRonda: { cuartos: 2, semifinales: 2, final: 3 } as Record<string, number>,
 };
 
 const RONDAS = ["cuartos", "semifinales", "final"] as const;
 
-export function fechaNoche(numero: number): string {
-  const d = new Date(`${CONFIG.inicio}T12:00:00Z`);
+export function fechaNoche(numero: number, inicio = CONFIG.inicio): string {
+  const d = new Date(`${inicio}T12:00:00Z`);
   d.setUTCDate(d.getUTCDate() + 7 * Math.floor(numero / 2) + (numero % 2 ? 3 : 0));
   return d.toISOString().slice(0, 10);
 }
@@ -104,6 +106,8 @@ export interface Serie {
 export interface Estado {
   temporada: number;
   semilla: string;
+  /** Primer martes de la temporada. */
+  inicio: string;
   calendario: { jornada: number; fecha: string; cruces: [string, string][] }[];
   /** Jornadas de liga regular ya jugadas. */
   jugadas: number;
@@ -113,13 +117,14 @@ export interface Estado {
   campeon: string | null;
 }
 
-export function crearTemporada(mundo: Mundo): Estado {
-  const semilla = `${mundo.semilla}-T${CONFIG.temporada}`;
+export function crearTemporada(mundo: Mundo, numero = mundo.temporada, inicio = CONFIG.inicio): Estado {
+  const semilla = `${mundo.semilla}-T${numero}`;
   const cruces = calendario(mundo.franquicias.map((f) => f.id), crearAzar(`calendario-${semilla}`));
   return {
-    temporada: CONFIG.temporada,
+    temporada: numero,
     semilla,
-    calendario: cruces.map((c, i) => ({ jornada: i + 1, fecha: fechaNoche(i), cruces: c })),
+    inicio,
+    calendario: cruces.map((c, i) => ({ jornada: i + 1, fecha: fechaNoche(i, inicio), cruces: c })),
     jugadas: 0,
     noches: 0,
     playoffs: [],
@@ -137,7 +142,7 @@ export function siguienteNoche(e: Estado): { fecha: string; descripcion: string 
     return { fecha: j.fecha, descripcion: `Jornada ${j.jornada}` };
   }
   const ronda = rondaEnJuego(e);
-  return { fecha: fechaNoche(e.noches + 1), descripcion: ronda ? nombreRonda(ronda.ronda) : "Cuartos de final" };
+  return { fecha: fechaNoche(e.noches + 1, e.inicio), descripcion: ronda ? nombreRonda(ronda.ronda) : "Cuartos de final" };
 }
 
 const nombreRonda = (r: string) => ({ cuartos: "Cuartos de final", semifinales: "Semifinales", final: "Finales Nimbo" })[r] ?? r;
@@ -166,7 +171,7 @@ export function jugarNoche(mundo: Mundo, e: Estado, partidosPrevios: PartidoGuar
     e.playoffs.push(ronda);
     e.noches += 1; // noche de descanso antes de cada ronda
   }
-  const fecha = fechaNoche(e.noches);
+  const fecha = fechaNoche(e.noches, e.inicio);
   const necesarias = CONFIG.victoriasPorRonda[ronda.ronda];
   const campos = necesarias === 2 ? [true, false, true] : [true, true, false, false, true];
   const jugados: PartidoGuardado[] = [];
@@ -317,3 +322,11 @@ export function vista(mundo: Mundo, e: Estado, partidos: PartidoGuardado[]) {
 }
 
 export type Temporada = ReturnType<typeof vista>;
+
+/** Inicio de la siguiente temporada: el primer martes tras el verano. */
+export function inicioSiguiente(e: Estado): string {
+  const d = new Date(`${fechaNoche(e.noches - 1, e.inicio)}T12:00:00Z`);
+  d.setUTCDate(d.getUTCDate() + 7 * CONFIG.semanasDeVerano);
+  while (d.getUTCDay() !== 2) d.setUTCDate(d.getUTCDate() + 1);
+  return d.toISOString().slice(0, 10);
+}

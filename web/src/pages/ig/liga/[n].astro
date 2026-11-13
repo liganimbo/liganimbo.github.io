@@ -3,7 +3,7 @@
 import Instagram from "../../../layouts/Instagram.astro";
 import Escudo from "../../../components/Escudo.astro";
 import CartaGrande from "../../../components/ig/CartaGrande.astro";
-import { fecha, franquicias, jugadores, mundo, temporada } from "../../../lib/liga";
+import { activas, fecha, franquicias, jugadores, mundo, temporada } from "../../../lib/liga";
 import { CONFIG } from "../../../motor/temporada.ts";
 import { CARTAS_POR_EQUIPO } from "../../../motor/mundo.ts";
 
@@ -13,7 +13,7 @@ export function getStaticPaths() {
 
 const TOTAL = 8;
 const n = Number(Astro.params.n);
-const cartas = Object.values(jugadores);
+const cartas = activas();
 const jugadoras = cartas.filter((j) => j.genero === "f").length;
 const numFranquicias = mundo.franquicias.length;
 const jornadas = temporada.calendario.length;
@@ -21,7 +21,8 @@ const inicio = temporada.calendario[0].fecha;
 const finLiga = temporada.calendario.at(-1)!.fecha;
 const partidosPorEquipo = (numFranquicias - 1) * 2;
 const mejorDe = (victorias: number) => victorias * 2 - 1;
-const primeras = mundo.draftFundacion.elecciones.slice(0, 3).map((e) => jugadores[e.jugador]);
+// Las primeras elecciones del draft de fundación que siguen en un equipo.
+const primeras = mundo.draftFundacion.elecciones.filter((e) => jugadores[e.jugador].estado === "activa" && franquicias[jugadores[e.jugador].franquicia]).slice(0, 3);
 const mes = (iso: string) => new Date(`${iso}T12:00:00`).toLocaleDateString("es-ES", { month: "long" });
 ---
 
@@ -81,10 +82,10 @@ const mes = (iso: string) => new Date(`${iso}T12:00:00`).toLocaleDateString("es-
           Las plantillas salieron de un <strong>draft de fundación</strong>: {mundo.draftFundacion.elecciones.length / numFranquicias} rondas en serpiente en las que cada franquicia elegía sin conocer del todo el potencial de las cartas.
         </p>
         <div class="tres-cartas">
-          {primeras.map((j, i) => (
+          {primeras.map((e) => (
             <div class="mini">
-              <div class="suave num-pick">Elección {i + 1}</div>
-              <CartaGrande j={j} />
+              <div class="suave num-pick">Elección {e.numero}</div>
+              <CartaGrande j={jugadores[e.jugador]} />
             </div>
           ))}
         </div>

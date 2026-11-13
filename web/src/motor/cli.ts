@@ -4,15 +4,19 @@
 //   siguiente         juega la siguiente noche (una jornada de liga o una noche de playoffs)
 //   hasta <n>         juega hasta completar la jornada n de liga
 //   todo              juega lo que quede de temporada, playoffs incluidos
+//   verano            al acabar la temporada: evolución, contratos, draft, fichajes… y crea la siguiente
 //   estilo <ID> <x>   cambia el estilo de juego de una franquicia (0 = todo dentro, 1 = todo fuera)
 //   estado            muestra en qué punto está la temporada
 import fs from "node:fs";
 import path from "node:path";
-import { generarMundo, type Mundo } from "./mundo.ts";
-import { type Estado, type PartidoGuardado, crearTemporada, jugarNoche, siguienteNoche, terminada, vista } from "./temporada.ts";
+import { generarMundo, generarPotenciales, type Mundo } from "./mundo.ts";
+import { type Estado, type PartidoGuardado, crearTemporada, inicioSiguiente, jugarNoche, siguienteNoche, terminada, vista } from "./temporada.ts";
+import { jugarVerano } from "./verano.ts";
 
 const DATOS = path.resolve(import.meta.dirname, "../../../datos");
 const RUTA_MUNDO = path.join(DATOS, "mundo.json");
+// Potenciales secretos: este archivo no se sube al repositorio (ver .gitignore).
+const RUTA_POTENCIALES = path.join(DATOS, "potenciales.json");
 const carpeta = (t: number) => path.join(DATOS, `temporada-${t}`);
 
 const leer = <T>(ruta: string): T => JSON.parse(fs.readFileSync(ruta, "utf-8"));
@@ -23,7 +27,7 @@ const escribir = (ruta: string, contenido: unknown) => {
 
 function cargar() {
   const mundo = leer<Mundo>(RUTA_MUNDO);
-  const dir = carpeta(1);
+  const dir = carpeta(mundo.temporada);
   const estado = leer<Estado>(path.join(dir, "estado.json"));
   const dirPartidos = path.join(dir, "partidos");
   const partidos = fs.existsSync(dirPartidos)
@@ -57,7 +61,7 @@ function noche(mundo: Mundo, estado: Estado, partidos: PartidoGuardado[]) {
 
 function resumen(mundo: Mundo, estado: Estado) {
   const prox = siguienteNoche(estado);
-  console.log(`\nJornadas de liga jugadas: ${estado.jugadas}/${estado.calendario.length}`);
+  console.log(`\nTemporada ${estado.temporada} · jornadas de liga jugadas: ${estado.jugadas}/${estado.calendario.length}`);
   if (estado.campeon) console.log(`Campeón: ${nombre(mundo, estado.campeon)}`);
   else if (prox) console.log(`Siguiente: ${prox.descripcion} (${prox.fecha})`);
 }
@@ -71,6 +75,7 @@ switch (orden) {
     const mundo = generarMundo(semilla);
     const estado = crearTemporada(mundo);
     guardar(mundo, estado, []);
+    escribir(RUTA_POTENCIALES, generarPotenciales(mundo));
     console.log(`Liga creada con la semilla "${semilla}": ${Object.keys(mundo.jugadores).length} cartas, ${estado.calendario.length} jornadas. Pretemporada.`);
     resumen(mundo, estado);
     break;
@@ -89,6 +94,28 @@ switch (orden) {
     guardar(mundo, estado, partidos, nuevos);
     if (!nuevos.length) console.log("La temporada ya ha terminado.");
     resumen(mundo, estado);
+    break;
+  }
+  case "verano": {
+    const { mundo, estado, partidos } = cargar();
+    if (!terminada(estado)) {
+      console.error(`La Temporada ${estado.temporada} aún no ha terminado: el verano llega después de las Finales.`);
+      process.exit(1);
+    }
+    const potenciales = leer<Record<string, number>>(RUTA_POTENCIALES);
+    const tabla = vista(mundo, estado, partidos).clasificacion;
+    const informe = jugarVerano(mundo, potenciales, tabla, estado.playoffs);
+    const nueva = crearTemporada(mundo, mundo.temporada, inicioSiguiente(estado));
+    guardar(mundo, nueva, []);
+    escribir(path.join(carpeta(nueva.temporada), "verano.json"), informe);
+    escribir(RUTA_POTENCIALES, potenciales);
+    const n = (id: string) => mundo.jugadores[id].nombre;
+    console.log(`Verano de la Temporada ${informe.temporada}:`);
+    console.log(`  Retiradas: ${informe.retiradas.map((r) => n(r.jugador)).join(", ") || "ninguna"}`);
+    console.log(`  Draft (1ª elección): ${n(informe.draft[0].jugador)} → ${nombre(mundo, informe.draft[0].franquicia)}`);
+    console.log(`  Fichajes: ${informe.fichajes.length} · salidas: ${informe.salidas.length} · renovaciones: ${informe.renovaciones.length}`);
+    console.log(`  Instalaciones nuevas: ${informe.instalaciones.map((i) => `${i.franquicia} ${i.tipo} ${i.nivel}`).join(", ") || "ninguna"}`);
+    resumen(mundo, nueva);
     break;
   }
   case "estilo": {

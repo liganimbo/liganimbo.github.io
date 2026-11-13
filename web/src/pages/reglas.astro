@@ -2,11 +2,12 @@
 // Cómo se juega: el reglamento explicado para la web. Los números salen de REGLAS, así que siempre coinciden con el motor.
 import Base from "../layouts/Base.astro";
 import Carta from "../components/Carta.astro";
-import { jugadores, url } from "../lib/liga";
+import { activas, url } from "../lib/liga";
 import { DESCRIPCION_ICONO, REGLAS, valorAtaque, valorDefensa } from "../motor/reglas.ts";
 import { CARTAS_POR_EQUIPO } from "../motor/mundo.ts";
+import { VERANO } from "../motor/verano.ts";
 
-const cartas = Object.values(jugadores).sort((a, b) => b.ataque + b.defensa - (a.ataque + a.defensa));
+const cartas = activas().sort((a, b) => b.ataque + b.defensa - (a.ataque + a.defensa));
 // Ejemplo con cartas reales: alguien con Pintura tira contra alguien con Muro de otro equipo.
 const atacante = cartas.find((j) => j.icono === "Pintura" && j.ataque >= 4) ?? cartas[0];
 const defensor = cartas.find((j) => j.icono === "Muro" && j.franquicia !== atacante.franquicia) ?? cartas[1];
@@ -22,7 +23,7 @@ const enPista = CARTAS_POR_EQUIPO - 1;
 
 <Base titulo="Reglas">
   <section class="portada">
-    <div class="sobre">Reglas · versión 0.3</div>
+    <div class="sobre">Reglas · versión 0.4</div>
     <h1>Cómo se juega</h1>
     <p class="entradilla">
       La Liga Nimbo es baloncesto 3x3 con <strong>cartas y dos dados</strong>. Es un juego de mesa: se aprende en un minuto,
@@ -168,6 +169,16 @@ const enPista = CARTAS_POR_EQUIPO - 1;
     <div class="tarjeta"><strong>¿A quién marcas?</strong><span class="apagado">Tu mejor defensa sobre su mejor tirador… o sobre quien aún tiene fichas.</span></div>
     <div class="tarjeta"><strong>¿Dentro o fuera?</strong><span class="apagado">Ir a lo seguro o leerle la mente al rival. Ahí está el juego.</span></div>
   </div>
+
+  <h2>Entre temporadas: el verano</h2>
+  <p>Al acabar las Finales, las cartas cambian y los clubes se mueven. Todo se resuelve con un dado:</p>
+  <div class="consejos">
+    <div class="tarjeta"><strong>Evolución</strong><span class="apagado">Cada carta tira un dado. Las jóvenes (hasta {VERANO.edadJoven}) mejoran con 5-6; las de plenitud suben o bajan; las veteranas (desde {VERANO.edadVeterana}) se desgastan. Todas tienen un techo secreto.</span></div>
+    <div class="tarjeta"><strong>Presupuesto y sueldos</strong><span class="apagado">Cada club ingresa {VERANO.presupuestoBase}, más según su mercado y sus rondas de playoffs ganadas. Cada carta cobra de 1 a 5 según su valor, fijo mientras dure su contrato.</span></div>
+    <div class="tarjeta"><strong>Draft</strong><span class="apagado">{VERANO.promesas} promesas de 19 a 21 años. Elige primero el último de la liga; con ojeadores se ve mejor su potencial.</span></div>
+    <div class="tarjeta"><strong>Instalaciones</strong><span class="apagado">Lo que sobra se invierte ({VERANO.costeNivel} por nivel) en ojeadores o en el centro de entrenamiento, o se ahorra.</span></div>
+  </div>
+  <p><a href={url("verano")}>Qué pasó en el último verano →</a></p>
 
   <h2>Juégalo en tu mesa</h2>
   <div class="tarjeta mesa">

@@ -38,7 +38,14 @@ const rondas = Map.groupBy(elecciones, (e) => e.ronda);
               <div class="apagado">
                 #{e.numero} · {franquicias[e.franquicia].nombre}
               </div>
-              <Carta j={jugadores[e.jugador]} mini />
+              {franquicias[jugadores[e.jugador].franquicia] ? (
+                <Carta j={jugadores[e.jugador]} mini />
+              ) : (
+                <div class="tarjeta fuera">
+                  {jugadores[e.jugador].nombre}
+                  <span class="apagado">{jugadores[e.jugador].estado === "retirada" ? "Retirada" : "Sin equipo"}</span>
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -65,6 +72,13 @@ const rondas = Map.groupBy(elecciones, (e) => e.ronda);
     font-size: 1.2rem;
     width: 1.4em;
     color: var(--texto-3);
+  }
+  .fuera {
+    width: 132px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-weight: 600;
   }
   .pick {
     display: flex;

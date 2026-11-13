@@ -2,7 +2,7 @@
 // Carrusel de Instagram que explica las reglas. Los números salen de REGLAS, así que siempre coinciden con el motor.
 import Instagram from "../../../layouts/Instagram.astro";
 import CartaGrande from "../../../components/ig/CartaGrande.astro";
-import { franquicias, jugadores } from "../../../lib/liga";
+import { activas, franquicias, jugadores } from "../../../lib/liga";
 import { DESCRIPCION_ICONO, REGLAS, necesita, valorAtaque, valorDefensa } from "../../../motor/reglas.ts";
 
 export function getStaticPaths() {
@@ -12,7 +12,7 @@ export function getStaticPaths() {
 const TOTAL = 8;
 
 const n = Number(Astro.params.n);
-const cartas = Object.values(jugadores);
+const cartas = activas();
 const mejores = [...cartas].sort((a, b) => b.ataque + b.defensa - (a.ataque + a.defensa));
 
 // Ejemplo real: una carta con Pintura ataca a alguien con Muro de otro equipo.

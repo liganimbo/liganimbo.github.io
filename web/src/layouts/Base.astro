@@ -1,6 +1,6 @@
 ---
 import Emblema from "../components/Emblema.astro";
-import { url } from "../lib/liga";
+import { mundo, url } from "../lib/liga";
 
 interface Props {
   titulo: string;
@@ -17,6 +17,7 @@ const secciones = [
   ["franquicias", "Franquicias"],
   ["jugadores", "Jugadores"],
   ["draft", "Draft"],
+  ["verano", "Verano"],
 ];
 const actual = Astro.url.pathname.replace(import.meta.env.BASE_URL, "").split("/")[0] ?? "";
 ---
@@ -57,7 +58,7 @@ const actual = Astro.url.pathname.replace(import.meta.env.BASE_URL, "").split("/
       <slot />
     </main>
     <footer class="contenedor pie">
-      Liga Nimbo · liga mixta de baloncesto 3x3, ficticia y jugada con cartas y dados · Temporada 1
+      Liga Nimbo · liga mixta de baloncesto 3x3, ficticia y jugada con cartas y dados · Temporada {mundo.temporada}
     </footer>
   </body>
 </html>

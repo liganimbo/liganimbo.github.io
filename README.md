@@ -31,6 +31,7 @@ npm run liga -- nueva          # crea la liga en pretemporada (mundo y calendari
 npm run liga -- siguiente      # juega la siguiente Noche Nimbo (una jornada o una noche de playoffs)
 npm run liga -- hasta 10       # juega hasta completar la jornada 10
 npm run liga -- todo           # juega lo que quede, playoffs incluidos (útil para ver la temporada entera)
+npm run liga -- verano         # tras las Finales: evolución, contratos, draft, fichajes… y crea la siguiente temporada
 npm run liga -- estilo VLU 0.7 # estilo de juego de una franquicia: 0 = todo dentro, 1 = todo fuera
 npm run liga -- estado         # en qué punto está la temporada
 
@@ -38,7 +39,9 @@ npm run instagram              # exporta a ../instagram/ las publicaciones del p
 npm run build                  # web estática en web/dist
 ```
 
-Cada Noche Nimbo: `npm run liga -- siguiente`, revisar la web, `npm run instagram` y publicar.
+Cada Noche Nimbo: `npm run liga -- siguiente`, revisar la web, `npm run instagram` y publicar. Al acabar la temporada, `npm run liga -- verano`.
+
+El potencial secreto de cada carta está en `datos/potenciales.json`, que no se sube al repositorio. **No lo borres**: sin él no se puede jugar el verano.
 
 ## Publicación
 

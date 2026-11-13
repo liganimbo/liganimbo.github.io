@@ -4,21 +4,43 @@ import path from "node:path";
 import { REGLAS, type Jugada } from "../motor/reglas.ts";
 import type { Franquicia, Jugador, Mundo } from "../motor/mundo.ts";
 import type { Acumulado, PartidoGuardado, Temporada } from "../motor/temporada.ts";
+import type { Informe } from "../motor/verano.ts";
 
 const DATOS = path.resolve(process.cwd(), "../datos");
 const leer = (ruta: string) => JSON.parse(fs.readFileSync(path.join(DATOS, ruta), "utf-8"));
 
 export const mundo: Mundo = leer("mundo.json");
-export const temporada: Omit<Temporada, "partidos"> = leer(`temporada-${1}/temporada.json`);
+// La web muestra la temporada en curso (la última creada).
+export const temporada: Omit<Temporada, "partidos"> = leer(`temporada-${mundo.temporada}/temporada.json`);
 
 export const franquicias: Record<string, Franquicia> = Object.fromEntries(mundo.franquicias.map((f) => [f.id, f]));
+/** Todas las cartas que han existido (también libres y retiradas). */
 export const jugadores: Record<string, Jugador> = mundo.jugadores;
+/** Las cartas que están ahora en una franquicia. */
+export const activas = () => Object.values(jugadores).filter((j) => j.estado === "activa" && franquicias[j.franquicia]);
 
 const cache = new Map<string, PartidoGuardado>();
 export function partido(id: string): PartidoGuardado {
-  if (!cache.has(id)) cache.set(id, leer(`temporada-1/partidos/${id}.json`));
+  const t = id.match(/^T(\d+)-/)?.[1] ?? String(mundo.temporada);
+  if (!cache.has(id)) cache.set(id, leer(`temporada-${t}/partidos/${id}.json`));
   return cache.get(id)!;
 }
+
+/** Informe del último verano (el que dio paso a la temporada en curso), si lo hay. */
+export const verano: Informe | null = fs.existsSync(path.join(DATOS, `temporada-${mundo.temporada}/verano.json`))
+  ? leer(`temporada-${mundo.temporada}/verano.json`)
+  : null;
+
+/** Campeones y finalistas de las temporadas terminadas. */
+export const palmares = Array.from({ length: mundo.temporada }, (_, i) => i + 1)
+  .map((n) => {
+    const t: Omit<Temporada, "partidos"> = n === mundo.temporada ? temporada : leer(`temporada-${n}/temporada.json`);
+    const final = t.playoffs.rondas.find((r) => r.ronda === "final")?.series[0];
+    if (!t.playoffs.campeon || !final) return null;
+    return { temporada: n, campeon: t.playoffs.campeon, finalista: final.ganador === final.alto ? final.bajo : final.alto, resultado: [...final.victorias].sort((a, b) => b - a).join("-") };
+  })
+  .filter((x) => x !== null)
+  .reverse();
 
 export const NOMBRES_RONDA: Record<string, string> = {
   cuartos: "Cuartos de final",

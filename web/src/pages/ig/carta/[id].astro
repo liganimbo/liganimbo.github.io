@@ -1,12 +1,12 @@
 ---
 import Instagram from "../../../layouts/Instagram.astro";
 import CartaGrande from "../../../components/ig/CartaGrande.astro";
-import { dec, franquicias, jugadores, mundo } from "../../../lib/liga";
+import { activas, dec, franquicias, jugadores, mundo } from "../../../lib/liga";
 import { statsDe } from "../../../lib/instagram";
 import { DESCRIPCION_ICONO } from "../../../motor/reglas.ts";
 
 export function getStaticPaths() {
-  return Object.keys(mundo.jugadores).map((id) => ({ params: { id } }));
+  return activas().map((j) => ({ params: { id: j.id } }));
 }
 
 const { id } = Astro.params as { id: string };

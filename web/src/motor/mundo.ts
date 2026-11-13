@@ -25,6 +25,19 @@ export interface Franquicia {
   filosofia: Filosofia;
   estilo: Estilo;
   plantilla: string[];
+  /** Economía del club (ver verano.ts). */
+  club: Club;
+}
+
+export interface Club {
+  /** Ahorro que pasa de un verano al siguiente. */
+  ahorro: number;
+  /** Nivel de ojeadores (0-3): ver el potencial de las cartas del draft. */
+  ojeadores: number;
+  /** Nivel del centro de entrenamiento (0-3): +1 al dado de evolución de las jóvenes por nivel. */
+  entrenamiento: number;
+  /** Presupuesto de la última temporada, cuando ya ha habido un verano. */
+  presupuesto: number | null;
 }
 
 export interface Jugador extends Carta {
@@ -33,13 +46,18 @@ export interface Jugador extends Carta {
   origen: string;
   historia: string;
   rasgo: string | null;
-  salario: number;
+  /** Sueldo de 1 a 5, según el valor de la carta. */
+  sueldo: number;
+  /** Temporadas de contrato que le quedan. */
+  contrato: number;
+  estado: "activa" | "libre" | "retirada";
+  /** Franquicia actual ("" si está libre o retirada). */
   franquicia: string;
 }
 
 // Nombres provisionales: la identidad definitiva la votarán los socios.
 // Cada ciudad tiene un carácter y una filosofía que guían su draft y su estilo de juego.
-export const FRANQUICIAS: Omit<Franquicia, "plantilla">[] = [
+export const FRANQUICIAS: Omit<Franquicia, "plantilla" | "club">[] = [
   { id: "PAL", ciudad: "Puerto Albar", nombre: "Albatros", mercado: "mediano", colores: ["#1D3557", "#E9C46A"],
     caracter: "Ciudad portuaria y obrera. Aquí se gana trabajando atrás.", filosofia: { defensa: 1 }, estilo: { fuera: 0.4 } },
   { id: "VAL", ciudad: "Valcierzo", nombre: "Vendaval", mercado: "mediano", colores: ["#2A9D8F", "#F1FAEE"],
@@ -82,12 +100,13 @@ const limitar = (v: number, min: number, max: number) => Math.max(min, Math.min(
 /** Valor de una carta para comparar y para el salario: un icono vale más o menos un punto. */
 export const valorCarta = (c: Carta) => c.ataque + c.defensa + (c.icono ? 1 : 0);
 
-function salario(c: Carta): number {
-  const v = Math.max(0, valorCarta(c) - 4);
-  return Math.round((0.6 + 0.12 * v ** 2) * 10) / 10;
+/** Sueldo según el valor de la carta: hasta 6, 1; 7, 2; 8, 3; 9, 4; 10 o más, 5. */
+export function sueldoDe(c: Carta): number {
+  const v = valorCarta(c);
+  return v <= 6 ? 1 : v >= 10 ? 5 : v - 5;
 }
 
-function generarJugador(azar: Azar, id: string, genero: "f" | "m", total: number, usados: Set<string>): Jugador {
+export function generarJugador(azar: Azar, id: string, genero: "f" | "m", total: number, usados: Set<string>, edad?: number): Jugador {
   const local = azar() < 0.7;
   const procedencia = local ? "local" : "extranjero";
   let nombre: string;
@@ -112,11 +131,13 @@ function generarJugador(azar: Azar, id: string, genero: "f" | "m", total: number
   return {
     ...carta,
     genero,
-    edad: Math.round(19 + azar() * 16),
+    edad: edad ?? Math.round(19 + azar() * 16),
     origen,
     historia: elegir(azar, HISTORIAS).replace("{origen}", origen).replace("{negocio}", elegir(azar, NEGOCIOS)),
     rasgo: azar() < 0.45 ? elegir(azar, Object.keys(RASGOS)) : null,
-    salario: salario(carta),
+    sueldo: sueldoDe(carta),
+    contrato: 1,
+    estado: "activa",
     franquicia: "",
   };
 }
@@ -138,20 +159,39 @@ export function generarMundo(semilla: string) {
     ...f,
     estilo: { ...f.estilo },
     plantilla: elecciones.filter((e) => e.franquicia === f.id).map((e) => e.jugador),
+    club: { ahorro: 0, ojeadores: 0, entrenamiento: 0, presupuesto: null },
   }));
+  // Contratos con su propia secuencia aleatoria, para no cambiar las cartas ya generadas.
+  const azarContratos = crearAzar(`contratos-${semilla}`);
+  for (const j of jugadores) j.contrato = 1 + Math.floor(azarContratos() * 3);
   return {
     semilla,
+    temporada: 1,
     franquicias,
     jugadores: Object.fromEntries(jugadores.map((j) => [j.id, j])),
+    /** Cartas sin equipo, disponibles en la agencia libre. */
+    libres: [] as string[],
     draftFundacion: { orden, elecciones },
     rasgos: RASGOS,
   };
 }
 
+/** Techo secreto de una carta: lo máximo que pueden sumar su Ataque y su Defensa. Las jóvenes tienen margen. */
+export function techo(azar: Azar, j: Jugador): number {
+  const margen = j.edad <= 21 ? 1 + Math.floor(azar() * 5) : j.edad <= 23 ? Math.floor(azar() * 5) : j.edad <= 26 ? Math.floor(azar() * 3) : 0;
+  return Math.min(12, j.ataque + j.defensa + margen);
+}
+
+/** Potenciales secretos (no se publican: se guardan en datos/potenciales.json, fuera del repositorio). */
+export function generarPotenciales(mundo: { semilla: string; jugadores: Record<string, Jugador> }): Record<string, number> {
+  const azar = crearAzar(`potencial-${mundo.semilla}`);
+  return Object.fromEntries(Object.values(mundo.jugadores).map((j) => [j.id, techo(azar, j)]));
+}
+
 export type Mundo = ReturnType<typeof generarMundo>;
 
 /** Cuánto le gusta una carta a una franquicia según su filosofía. */
-function afinidad(f: Filosofia, j: Jugador): number {
+export function afinidad(f: Filosofia, j: Jugador): number {
   return (
     (f.ataque ?? 0) * (j.ataque - 3.5) * 0.6 +
     (f.defensa ?? 0) * (j.defensa - 3.5) * 0.6 +

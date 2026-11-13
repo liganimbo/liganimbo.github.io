@@ -1,9 +1,9 @@
 ---
 import Base from "../../layouts/Base.astro";
 import Carta from "../../components/Carta.astro";
-import { dec, jugadores, statsRegular } from "../../lib/liga";
+import { activas, dec, statsRegular } from "../../lib/liga";
 
-const lista = Object.values(jugadores);
+const lista = activas();
 const ordenes = [
   ["valor", "Mejores cartas"],
   ["ataque", "Ataque"],
