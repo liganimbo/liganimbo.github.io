@@ -1,0 +1,343 @@
+---
+// Cómo se juega: el reglamento explicado para la web. Los números salen de REGLAS, así que siempre coinciden con el motor.
+import Base from "../layouts/Base.astro";
+import Carta from "../components/Carta.astro";
+import { jugadores, url } from "../lib/liga";
+import { DESCRIPCION_ICONO, REGLAS, valorAtaque, valorDefensa } from "../motor/reglas.ts";
+import { CARTAS_POR_EQUIPO } from "../motor/mundo.ts";
+
+const cartas = Object.values(jugadores).sort((a, b) => b.ataque + b.defensa - (a.ataque + a.defensa));
+// Ejemplo con cartas reales: alguien con Pintura tira contra alguien con Muro de otro equipo.
+const atacante = cartas.find((j) => j.icono === "Pintura" && j.ataque >= 4) ?? cartas[0];
+const defensor = cartas.find((j) => j.icono === "Muro" && j.franquicia !== atacante.franquicia) ?? cartas[1];
+const dados: [number, number] = [5, 4];
+const suma = dados[0] + dados[1];
+const ataqueDentro = suma + valorAtaque(atacante, "dentro");
+const defensaDentro = valorDefensa(defensor, "dentro", "dentro");
+const ataqueFuera = suma + valorAtaque(atacante, "fuera");
+const defensaFuera = valorDefensa(defensor, "fuera", "dentro");
+const nombre = (n: string) => n.split(" ")[0];
+const enPista = CARTAS_POR_EQUIPO - 1;
+---
+
+<Base titulo="Reglas">
+  <section class="portada">
+    <div class="sobre">Reglas · versión 0.3</div>
+    <h1>Cómo se juega</h1>
+    <p class="entradilla">
+      La Liga Nimbo es baloncesto 3x3 con <strong>cartas y dos dados</strong>. Es un juego de mesa: se aprende en un minuto,
+      un partido dura entre 5 y 10 minutos y se juega entre dos personas. Los partidos oficiales de la liga se juegan exactamente
+      con estas reglas.
+    </p>
+  </section>
+
+  <h2>Qué necesitas</h2>
+  <div class="material">
+    <div class="tarjeta">
+      <strong>{CARTAS_POR_EQUIPO} cartas por persona</strong>
+      <span class="apagado">Una franquicia cada una. <a href={url("reglas/cartas")}>Imprímelas aquí</a>.</span>
+    </div>
+    <div class="tarjeta">
+      <strong>Dos dados de seis caras</strong>
+      <span class="apagado">Los de cualquier juego de mesa.</span>
+    </div>
+    <div class="tarjeta">
+      <strong>{CARTAS_POR_EQUIPO * REGLAS.fichasPorCarta} fichas por persona</strong>
+      <span class="apagado">Monedas, garbanzos o lo que tengas: son los tiros.</span>
+    </div>
+    <div class="tarjeta">
+      <strong>Papel y lápiz</strong>
+      <span class="apagado">Para el marcador y para contar los ataques.</span>
+    </div>
+  </div>
+
+  <h2>Las cartas</h2>
+  <div class="dos">
+    <div>
+      <p>Cada carta es una jugadora o un jugador con dos números, del 2 al 6:</p>
+      <ul>
+        <li><strong>Ataque:</strong> lo que suma cuando tira.</li>
+        <li><strong>Defensa:</strong> lo que suma cuando marca a quien tira.</li>
+        <li><strong>Icono</strong> (algunas cartas, como mucho uno):</li>
+      </ul>
+      <div class="iconos">
+        {
+          (["Tiro", "Pintura", "Muro"] as const).map((i) => (
+            <div>
+              <span class="etiqueta">{i}</span> {DESCRIPCION_ICONO[i]}.
+            </div>
+          ))
+        }
+      </div>
+      <p>
+        Cada carta empieza el partido con <strong>{REGLAS.fichasPorCarta} fichas de tiro</strong>. Cada vez que tira, gasta una. Sin
+        fichas ya no puede tirar, pero sigue defendiendo mientras esté en pista.
+      </p>
+    </div>
+    <div class="mano"><Carta j={atacante} /><Carta j={defensor} /></div>
+  </div>
+
+  <h2>Preparación</h2>
+  <ol class="pasos">
+    <li>Cada equipo pone <strong>{enPista} cartas en pista</strong> y deja <strong>1 de suplente</strong>, con sus fichas al lado.</li>
+    <li><strong>Marcajes:</strong> cada equipo decide en secreto a qué rival marca cada uno de sus {enPista} jugadores, uno a uno. Se revelan a la vez.</li>
+    <li>Se sortea quién ataca primero. Los equipos atacan por turnos: <strong>{REGLAS.ataquesPorEquipo} ataques cada uno</strong>.</li>
+  </ol>
+
+  <h2>Cada ataque es un farol</h2>
+  <div class="duelo">
+    <div class="tarjeta">
+      <div class="etq">Quien ataca</div>
+      <p>Elige <strong>quién tira</strong> (de quienes tengan fichas) y gasta una. En secreto, elige:</p>
+      <div class="opcion">Dentro · <strong>{REGLAS.puntos.dentro} puntos</strong></div>
+      <div class="opcion">Fuera · <strong>{REGLAS.puntos.fuera} puntos</strong></div>
+    </div>
+    <div class="vs">vs</div>
+    <div class="tarjeta">
+      <div class="etq">Quien defiende</div>
+      <p>Elige en secreto <strong>qué cierra</strong>. Si lo adivina, suma +{REGLAS.bonusCierre}.</p>
+      <div class="opcion">Cierra dentro</div>
+      <div class="opcion">Cierra fuera</div>
+    </div>
+  </div>
+  <p class="apagado">
+    Para elegir en secreto basta con una moneda en la mano (cara dentro, cruz fuera) o dos papelitos boca abajo. Se revela a
+    la vez y se tiran los dados.
+  </p>
+
+  <h2>La cuenta</h2>
+  <div class="formulas">
+    <div class="tarjeta formula">
+      <div class="etq">Ataque</div>
+      <div>dos dados + <strong>Ataque</strong> de quien tira + su icono, si encaja</div>
+    </div>
+    <div class="tarjeta formula">
+      <div class="etq">Defensa</div>
+      <div>
+        {REGLAS.baseDefensa} + <strong>Defensa</strong> de quien le marca + Muro, si el tiro es de dentro + {REGLAS.bonusCierre}, si lo
+        ha adivinado
+      </div>
+    </div>
+  </div>
+  <ul class="resultado-reglas">
+    <li><span class="etiqueta">Dentro</span> entra si el ataque <strong>iguala o supera</strong> a la defensa: {REGLAS.puntos.dentro} puntos.</li>
+    <li><span class="etiqueta">Fuera</span> entra si el ataque <strong>supera a la defensa por {REGLAS.margenFuera} o más</strong>: {REGLAS.puntos.fuera} puntos.</li>
+  </ul>
+
+  <h2>Un ejemplo</h2>
+  <div class="tarjeta ejemplo">
+    <ol>
+      <li>{nombre(atacante.nombre)} tira <strong>dentro</strong>. La defensa lo lee y <strong>cierra dentro</strong>.</li>
+      <li>
+        Salen un <span class="dado">{dados[0]}</span> y un <span class="dado">{dados[1]}</span>. Ataque: {suma} + {atacante.ataque}
+        + {valorAtaque(atacante, "dentro") - atacante.ataque} (Pintura) = <strong>{ataqueDentro}</strong>.
+      </li>
+      <li>
+        Defensa de {nombre(defensor.nombre)}: {REGLAS.baseDefensa} + {defensor.defensa} + {REGLAS.bonusMuro} (Muro) + {REGLAS.bonusCierre}
+        (lo adivinó) = <strong>{defensaDentro}</strong>.
+      </li>
+    </ol>
+    <p class="final-ejemplo">
+      {ataqueDentro >= defensaDentro ? `${ataqueDentro} ≥ ${defensaDentro}: ¡canasta de 2!` : `${ataqueDentro} < ${defensaDentro}: no entra.`}
+    </p>
+    <p class="apagado">
+      ¿Y si hubiera tirado de fuera? Perdía la Pintura (ataque {ataqueFuera}), pero el Muro no frena los triples y la defensa
+      había cerrado dentro: se quedaba en {defensaFuera} y le bastaba con {defensaFuera + REGLAS.margenFuera}.{" "}
+      {ataqueFuera >= defensaFuera + REGLAS.margenFuera ? "Habría sido triple." : "Tampoco entraba."}
+    </p>
+  </div>
+
+  <h2>Descanso y final</h2>
+  <ul class="lista">
+    <li>
+      <strong>Descanso:</strong> cuando los dos equipos han hecho {REGLAS.descansoTras} ataques. <strong>El suplente entra
+      obligatoriamente</strong>, con sus fichas, por alguien que ya haya gastado las suyas. Después se rehacen los marcajes.
+    </li>
+    <li><strong>Tiempo muerto:</strong> una vez por partido, cada equipo puede repetir un tiro fallado.</li>
+    <li><strong>Final:</strong> gana quien más puntos tenga tras los {REGLAS.ataquesPorEquipo} ataques de cada equipo.</li>
+    <li>
+      <strong>Muerte súbita:</strong> si hay empate, un ataque más por equipo, siguiendo el turno. Puede tirar cualquiera de pista,
+      tenga fichas o no. Se repite hasta que alguien quede por delante.
+    </li>
+  </ul>
+
+  <h2>Las decisiones que importan</h2>
+  <div class="consejos">
+    <div class="tarjeta"><strong>¿Cuándo gastas a tu estrella?</strong><span class="apagado">Sus dos tiros al principio para coger ventaja, o guardados para el final.</span></div>
+    <div class="tarjeta"><strong>¿Quién sale en el descanso?</strong><span class="apagado">Solo sale quien ya no tiene tiros. Saca a quien peor defienda.</span></div>
+    <div class="tarjeta"><strong>¿A quién marcas?</strong><span class="apagado">Tu mejor defensa sobre su mejor tirador… o sobre quien aún tiene fichas.</span></div>
+    <div class="tarjeta"><strong>¿Dentro o fuera?</strong><span class="apagado">Ir a lo seguro o leerle la mente al rival. Ahí está el juego.</span></div>
+  </div>
+
+  <h2>Juégalo en tu mesa</h2>
+  <div class="tarjeta mesa">
+    <div>
+      <strong>Imprime las cartas de las 12 franquicias</strong>, coge dos dados y unas monedas, y juega cualquier partido de la
+      liga en casa. Cada franquicia tiene su forma de jugar: elige la tuya.
+    </div>
+    <a class="boton" href={url("reglas/cartas")}>Cartas para imprimir →</a>
+  </div>
+
+  <h2>Y así se juega la liga</h2>
+  <p>
+    Los partidos oficiales se juegan con estas mismas reglas y estas mismas cartas. Cada franquicia juega con su estilo (unas viven
+    del triple, otras de la pintura) y los dados tienen semilla pública: en el acta de cada partido están todas las tiradas, para
+    que cualquiera pueda comprobarlo.
+  </p>
+</Base>
+
+<style>
+  .portada {
+    padding: 28px;
+    border-radius: 16px;
+    background: var(--cabecera);
+    color: #f1f2f8;
+  }
+  .portada h1 {
+    margin: 4px 0 10px;
+  }
+  .sobre {
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #ffc83d;
+  }
+  .entradilla {
+    margin: 0;
+    max-width: 760px;
+    font-size: 1.05rem;
+    color: #d6d8f2;
+  }
+  .material,
+  .consejos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+    gap: 12px;
+  }
+  .material .tarjeta,
+  .consejos .tarjeta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .dos {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) auto;
+    gap: 24px;
+    align-items: start;
+  }
+  @media (max-width: 720px) {
+    .dos {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+  .iconos {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 4px 0 8px 18px;
+  }
+  .pasos li,
+  .lista li {
+    margin: 6px 0;
+  }
+  .duelo {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 12px;
+    align-items: center;
+  }
+  @media (max-width: 640px) {
+    .duelo {
+      grid-template-columns: 1fr;
+    }
+  }
+  .vs {
+    font-family: var(--titulo);
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--acento);
+    text-align: center;
+  }
+  .etq {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--acento);
+  }
+  .opcion {
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: var(--superficie-2);
+    margin-top: 6px;
+  }
+  .formulas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: 12px;
+  }
+  .formula div:last-child {
+    font-size: 1.1rem;
+    margin-top: 4px;
+  }
+  .resultado-reglas {
+    list-style: none;
+    padding: 0;
+  }
+  .resultado-reglas li {
+    margin: 8px 0;
+  }
+  .resultado-reglas .etiqueta {
+    min-width: 64px;
+    text-align: center;
+    margin-right: 8px;
+  }
+  .ejemplo ol {
+    margin: 0;
+    padding-left: 20px;
+  }
+  .ejemplo li {
+    margin: 6px 0;
+  }
+  .dado {
+    display: inline-grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    background: var(--texto);
+    color: var(--fondo);
+    font-family: var(--titulo);
+    font-weight: 800;
+  }
+  .final-ejemplo {
+    font-family: var(--titulo);
+    font-size: 1.6rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--victoria);
+    margin: 10px 0 4px;
+  }
+  .mesa {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    border-color: var(--acento);
+    background: var(--acento-suave);
+  }
+  .boton {
+    font-weight: 700;
+    color: var(--sobre-acento);
+    background: var(--acento);
+    padding: 9px 16px;
+    border-radius: 8px;
+    white-space: nowrap;
+  }
+  .boton:hover {
+    color: var(--sobre-acento);
+  }
+</style>
