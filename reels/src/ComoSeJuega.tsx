@@ -3,8 +3,11 @@ import { Audio } from "@remotion/media";
 import { staticFile, Track } from "remotion";
 import { Canasta, Cartas, Cierre, Dados, Gancho, Secreto } from "./escenas";
 import { fondo, NICO } from "./marca";
-import { GUION } from "./guion";
-import { FPS, RETRASO_VOZ, TIEMPOS as T } from "./tiempos";
+import { GUIONES } from "./guion";
+import { FPS, RETRASO_VOZ, tiempos } from "./tiempos";
+
+export const COMO_SE_JUEGA = tiempos("como-se-juega");
+const T = COMO_SE_JUEGA.T;
 
 export const ComoSeJuega = () => {
   return (
@@ -18,8 +21,8 @@ export const ComoSeJuega = () => {
         <Cierre name="Cierre" from={T.cierre.desde} durationInFrames={T.cierre.duracion} style={{ background: fondo() }} />
       </Track>
       <Track name="Voz">
-        {GUION.filter(({ id }) => T[id].voz).map(({ id }) => (
-          <Audio key={id} name={id} src={staticFile(`voz/${id}.mp3`)} from={T[id].desde + Math.round(RETRASO_VOZ * FPS)} />
+        {GUIONES["como-se-juega"].filter(({ id }) => T[id].voz).map(({ id }) => (
+          <Audio key={id} name={id} src={staticFile(`voz/como-se-juega/${id}.mp3`)} from={T[id].desde + Math.round(RETRASO_VOZ * FPS)} />
         ))}
       </Track>
     </>

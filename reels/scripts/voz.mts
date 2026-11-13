@@ -1,9 +1,9 @@
-// Genera la voz del Reel con ElevenLabs: una pista MP3 por escena en public/voz/ y sus duraciones en src/voz.json.
-// Uso: npm run voz            (necesita ELEVENLABS_API_KEY en reels/.env)
-//      npm run voz -- voces   (lista las voces disponibles en tu cuenta)
+// Genera la voz de un Reel con ElevenLabs: una pista MP3 por escena en public/voz/<reel>/ y sus duraciones en src/voz.json.
+// Uso: npm run voz -- amistoso       (necesita ELEVENLABS_API_KEY y ELEVENLABS_VOICE_ID en reels/.env)
+//      npm run voz -- voces          (lista las voces disponibles en tu cuenta)
 import { execFileSync } from "node:child_process";
-import { mkdirSync, writeFileSync } from "node:fs";
-import { GUION } from "../src/guion.ts";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { GUIONES, type Reel } from "../src/guion.ts";
 
 const clave = process.env.ELEVENLABS_API_KEY;
 if (!clave) throw new Error("Falta ELEVENLABS_API_KEY en reels/.env");
@@ -21,9 +21,11 @@ if (process.argv[2] === "voces") {
 const vozId = process.env.ELEVENLABS_VOICE_ID;
 if (!vozId) throw new Error("Falta ELEVENLABS_VOICE_ID en reels/.env (mira las voces con: npm run voz -- voces)");
 
-mkdirSync("public/voz", { recursive: true });
+const reel = process.argv[2] as Reel;
+if (!(reel in GUIONES)) throw new Error(`¿Qué Reel? Uno de: ${Object.keys(GUIONES).join(", ")}`);
+mkdirSync(`public/voz/${reel}`, { recursive: true });
 const duraciones: Record<string, number> = {};
-for (const { id, texto } of GUION) {
+for (const { id, texto } of GUIONES[reel]) {
   const r = await api(`text-to-speech/${vozId}`, {
     method: "POST",
     headers: { Accept: "audio/mpeg" },
@@ -34,10 +36,12 @@ for (const { id, texto } of GUION) {
     }),
   });
   if (!r.ok) throw new Error(`ElevenLabs (${id}): ${r.status} ${await r.text()}`);
-  const archivo = `public/voz/${id}.mp3`;
+  const archivo = `public/voz/${reel}/${id}.mp3`;
   writeFileSync(archivo, Buffer.from(await r.arrayBuffer()));
   const segundos = Number(execFileSync("ffprobe", ["-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", archivo]).toString());
   duraciones[id] = Math.round(segundos * 100) / 100;
   console.log(`✓ ${id}: ${duraciones[id]} s`);
 }
-writeFileSync("src/voz.json", JSON.stringify(duraciones, null, 2) + "\n");
+const todas = JSON.parse(readFileSync("src/voz.json", "utf8"));
+todas[reel] = duraciones;
+writeFileSync("src/voz.json", JSON.stringify(todas, null, 2) + "\n");

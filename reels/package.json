@@ -29,7 +29,7 @@
     "build": "remotion bundle",
     "upgrade": "remotion upgrade",
     "lint": "eslint src && tsc",
-    "video": "remotion render ComoSeJuega ../instagram/reel-como-se-juega.mp4 && remotion still ComoSeJuega ../instagram/reel-como-se-juega-portada.png --frame=70",
+    "video": "remotion render ComoSeJuega ../instagram/reel-como-se-juega.mp4 && remotion still ComoSeJuega ../instagram/reel-como-se-juega-portada.png --frame=70 && remotion render Amistoso ../instagram/reel-amistoso.mp4 && remotion still Amistoso ../instagram/reel-amistoso-portada.png --frame=60",
     "voz": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --env-file=.env scripts/voz.mts"
   },
   "allowScripts": {

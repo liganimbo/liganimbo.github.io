@@ -1,8 +1,19 @@
 {
-  "gancho": 2.93,
-  "cartas": 5.02,
-  "secreto": 5.57,
-  "dados": 4.5,
-  "canasta": 0.93,
-  "cierre": 5.15
+  "como-se-juega": {
+    "gancho": 2.93,
+    "cartas": 5.02,
+    "secreto": 5.57,
+    "dados": 4.5,
+    "canasta": 0.93,
+    "cierre": 5.15
+  },
+  "amistoso": {
+    "gancho": 3.62,
+    "partido": 3.39,
+    "lobos": 2.51,
+    "jugada": 5.85,
+    "dados": 1.21,
+    "final": 2.51,
+    "cierre": 3.9
+  }
 }

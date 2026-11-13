@@ -1,14 +1,15 @@
 import { Composition, Folder } from "remotion";
-import { ComoSeJuega } from "./ComoSeJuega";
+import { AMISTOSO, Amistoso } from "./Amistoso";
+import { COMO_SE_JUEGA, ComoSeJuega } from "./ComoSeJuega";
 import { Canasta, Cartas, Cierre, Dados, Gancho, Secreto } from "./escenas";
 import { fondo, NICO } from "./marca";
-import { TOTAL } from "./tiempos";
 
 // Reels de Instagram: 1080×1920 (9:16), 30 fps.
 export const RemotionRoot: React.FC = () => {
   return (
     <>
-      <Composition id="ComoSeJuega" component={ComoSeJuega} durationInFrames={TOTAL} fps={30} width={1080} height={1920} />
+      <Composition id="ComoSeJuega" component={ComoSeJuega} durationInFrames={COMO_SE_JUEGA.total} fps={30} width={1080} height={1920} />
+      <Composition id="Amistoso" component={Amistoso} durationInFrames={AMISTOSO.total} fps={30} width={1080} height={1920} />
       <Folder name="Escenas">
         <Composition id="Gancho" component={Gancho} durationInFrames={75} fps={30} width={1080} height={1920} defaultProps={{ style: { background: fondo() } }} />
         <Composition id="Cartas" component={Cartas} durationInFrames={135} fps={30} width={1080} height={1920} defaultProps={{ style: { background: fondo() } }} />

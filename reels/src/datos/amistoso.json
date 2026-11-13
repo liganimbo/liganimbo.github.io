@@ -1,0 +1,147 @@
+{
+  "semilla": "amistoso-TOR-SGR-18",
+  "equipos": [
+    {
+      "id": "TOR",
+      "nombre": "Gigantes",
+      "ciudad": "Torreal",
+      "c1": "#5C5C5C",
+      "c2": "#E63946"
+    },
+    {
+      "id": "SGR",
+      "nombre": "Lobos",
+      "ciudad": "Sierra Gris",
+      "c1": "#495867",
+      "c2": "#BDD5EA"
+    }
+  ],
+  "marcadores": [
+    [
+      0,
+      2
+    ],
+    [
+      0,
+      2
+    ],
+    [
+      0,
+      2
+    ],
+    [
+      0,
+      2
+    ],
+    [
+      0,
+      2
+    ],
+    [
+      0,
+      2
+    ],
+    [
+      0,
+      2
+    ],
+    [
+      3,
+      2
+    ],
+    [
+      3,
+      2
+    ],
+    [
+      5,
+      2
+    ],
+    [
+      5,
+      5
+    ],
+    [
+      7,
+      5
+    ],
+    [
+      7,
+      5
+    ],
+    [
+      7,
+      5
+    ],
+    [
+      7,
+      7
+    ],
+    [
+      7,
+      7
+    ],
+    [
+      7,
+      9
+    ],
+    [
+      10,
+      9
+    ]
+  ],
+  "final": [
+    10,
+    9
+  ],
+  "ganador": 0,
+  "muerteSubita": true,
+  "decisiva": {
+    "numero": 18,
+    "equipo": 0,
+    "antes": [
+      7,
+      9
+    ],
+    "despues": [
+      10,
+      9
+    ],
+    "tirador": {
+      "nombre": "Carla Echeverría",
+      "equipo": "TOR",
+      "meta": "23 años · Sierra Gris",
+      "ataque": 2,
+      "defensa": 4,
+      "icono": "Muro",
+      "c1": "#5C5C5C",
+      "c2": "#E63946"
+    },
+    "defensor": {
+      "nombre": "Ciro Vega",
+      "equipo": "SGR",
+      "meta": "27 años · Nuevo Ébano",
+      "ataque": 3,
+      "defensa": 2,
+      "icono": "Pintura",
+      "c1": "#495867",
+      "c2": "#BDD5EA"
+    },
+    "tipo": "fuera",
+    "cierra": "dentro",
+    "dados": [
+      3,
+      6
+    ],
+    "ataque": 2,
+    "defensa": 7,
+    "necesita": 7,
+    "anota": true,
+    "tiempoMuerto": false
+  },
+  "mejor": {
+    "nombre": "Emeka Udeh",
+    "pts": 5,
+    "paradas": 4
+  }
+}

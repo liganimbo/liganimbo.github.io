@@ -60,8 +60,11 @@ Los vídeos están en `reels/`, hechos con [Remotion](https://www.remotion.dev) 
 
 ```
 npm run dev     # Remotion Studio: ver y retocar los vídeos en el navegador
-npm run video   # genera ../instagram/reel-como-se-juega.mp4 y su portada
+npm run voz -- amistoso   # genera la voz de un Reel con ElevenLabs (clave en reels/.env)
+npm run video             # genera ../instagram/reel-*.mp4 y sus portadas
 ```
+
+Para un Reel de amistoso nuevo: `node scripts/amistoso.ts TOR SGR` (en `web/`) juega uno y guarda su jugada decisiva en `reels/src/datos/amistoso.json`; después se ajusta el guion en `reels/src/guion.ts`.
 
 Formato 1080×1920 a 30 fps y sin música: se añade en Instagram, desde su biblioteca, para evitar problemas de derechos.
 

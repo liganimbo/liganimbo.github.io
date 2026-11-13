@@ -5,10 +5,10 @@ import { Easing, Interactive, interpolate, useCurrentFrame, useVideoConfig } fro
 import { Carta, Dado, Logo } from "./elementos";
 import { COLOR, NICO, texto, titulo, ZOE } from "./marca";
 
-const fijo = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
-const suave = Easing.bezier(0.16, 1, 0.3, 1);
+export const fijo = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
+export const suave = Easing.bezier(0.16, 1, 0.3, 1);
 
-const titular: React.CSSProperties = {
+export const titular: React.CSSProperties = {
   fontFamily: titulo,
   fontWeight: 800,
   lineHeight: 0.95,
@@ -16,7 +16,7 @@ const titular: React.CSSProperties = {
   color: COLOR.texto,
   margin: 0,
 };
-const etiqueta: React.CSSProperties = {
+export const etiqueta: React.CSSProperties = {
   fontFamily: texto,
   fontWeight: 700,
   fontSize: 34,
@@ -26,7 +26,7 @@ const etiqueta: React.CSSProperties = {
 };
 
 /** Entrada desde abajo con fundido, empezando en el fotograma `desde`. */
-const entra = (frame: number, desde: number): React.CSSProperties => ({
+export const entra = (frame: number, desde: number): React.CSSProperties => ({
   opacity: interpolate(frame, [desde, desde + 8], [0, 1], fijo),
   translate: interpolate(frame, [desde, desde + 14], ["0px 60px", "0px 0px"], { ...fijo, easing: suave }),
 });
@@ -143,7 +143,7 @@ const SecretoInner = () => {
 export const Secreto = Interactive.create({ Component: SecretoInner, layout: "absolute-fill" });
 
 /** Fila de la cuenta: cada sumando aparece por turnos y al final el total. */
-const Cuenta = ({ nombre, sumandos, total, desde, color }: { nombre: string; sumandos: [string, string][]; total: number; desde: number; color: string }) => {
+export const Cuenta = ({ nombre, sumandos, total, desde, color }: { nombre: string; sumandos: [string, string][]; total: number; desde: number; color: string }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const paso = 0.35 * fps;

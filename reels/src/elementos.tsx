@@ -158,3 +158,24 @@ export const Dado = Interactive.create({
     cara: { type: "number", default: 6, min: 1, max: 6, step: 1, integer: true, description: "Cara", hiddenFromList: false },
   } as const satisfies InteractivitySchema,
 });
+
+/** Escudo provisional de una franquicia, como en la web (Escudo.astro). */
+const EscudoInner = ({
+  id,
+  c1,
+  c2,
+  tam = 200,
+  style,
+}: ConEstilo & { readonly id: string; readonly c1: string; readonly c2: string; readonly tam?: number }) => (
+  <svg width={tam} height={(tam * 44) / 40} viewBox="0 0 40 44" style={{ display: "block", filter: "drop-shadow(0 20px 40px rgb(0 0 0 / 40%))", ...style }}>
+    <path d="M20 1 L38 7 V22 C38 33 30 40 20 43 C10 40 2 33 2 22 V7 Z" fill={c1} stroke={c2} strokeWidth={2.5} />
+    <text x="20" y="27" textAnchor="middle" fill={c2} fontFamily={titulo} fontWeight={800} fontSize={14} letterSpacing={0.5}>
+      {id}
+    </text>
+  </svg>
+);
+
+export const Escudo = Interactive.create({
+  Component: EscudoInner,
+  layout: "none",
+});
