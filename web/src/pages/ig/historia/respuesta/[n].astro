@@ -1,0 +1,124 @@
+---
+// Story "¿Dentro o fuera?" (día 2): qué cerró la defensa, los dados y qué opción habría entrado.
+import Instagram from "../../../../layouts/Instagram.astro";
+import Dado from "../../../../components/ig/Dado.astro";
+import { franquicias } from "../../../../lib/liga";
+import { situaciones } from "../../../../lib/instagram";
+import { REGLAS } from "../../../../motor/reglas.ts";
+
+export function getStaticPaths() {
+  return situaciones().map((s) => ({ params: { n: String(s.n) } }));
+}
+
+const s = situaciones()[Number(Astro.params.n) - 1];
+const buena = s.entra.dentro ? "dentro" : "fuera";
+const suma = s.dados[0] + s.dados[1];
+const nombre = (j: { nombre: string }) => j.nombre.split(" ")[0];
+---
+
+<Instagram titulo={`¿Dentro o fuera? ${s.n} · respuesta`} etiqueta={`¿Dentro o fuera? · ${s.n}/3`} acento={franquicias[s.atacante.franquicia].colores[0]} historia>
+  <div class="antetitulo arriba">La respuesta</div>
+  <h1 class="titular">¡Era<br /><span class="oro">{buena}!</span></h1>
+  <p class="contexto">
+    {nombre(s.atacante)} tiraba y {nombre(s.defensor)} <strong>cerró {s.cierra}</strong>.
+  </p>
+
+  <div class="dados">
+    <Dado cara={s.dados[0]} giro={-8} />
+    <Dado cara={s.dados[1]} giro={6} />
+    <span class="suma">= {suma}</span>
+  </div>
+
+  <div class="opciones">
+    {
+      (["dentro", "fuera"] as const).map((t) => (
+        <div class:list={["opcion", { entra: s.entra[t] }]}>
+          <div class="tipo">{t === "dentro" ? "Dentro" : "Fuera"}</div>
+          <div class="falta">{s.necesita[t] > 12 ? "No podía entrar" : `Hacía falta ${Math.max(2, s.necesita[t])} o más`}</div>
+          <div class="resultado">{s.entra[t] ? `✓ Canasta de ${REGLAS.puntos[t]}` : "✗ No entra"}</div>
+        </div>
+      ))
+    }
+  </div>
+
+  <div class="siguiente">{s.n < 3 ? "Mañana, otra jugada" : "¿Lo jugamos en tu mesa? Cartas en la bio"}</div>
+</Instagram>
+
+<style>
+  .arriba {
+    margin-top: 40px;
+  }
+  .titular {
+    font-size: 190px;
+    margin-top: 12px;
+  }
+  .oro {
+    color: var(--oro);
+  }
+  .contexto {
+    font-size: 36px;
+    margin: 30px 0 0;
+    color: color-mix(in srgb, var(--texto) 75%, transparent);
+  }
+  .contexto strong {
+    color: var(--texto);
+  }
+  .dados {
+    display: flex;
+    align-items: center;
+    gap: 36px;
+    margin-top: 70px;
+  }
+  .suma {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 800;
+    font-size: 150px;
+    margin-left: 12px;
+  }
+  .opciones {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 80px;
+  }
+  .opcion {
+    padding: 30px 32px;
+    border-radius: 28px;
+    background: color-mix(in srgb, var(--texto) 8%, transparent);
+    border: 3px solid transparent;
+    opacity: 0.6;
+  }
+  .opcion.entra {
+    border-color: var(--oro);
+    background: color-mix(in srgb, var(--oro) 14%, transparent);
+    opacity: 1;
+  }
+  .tipo {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 800;
+    font-size: 80px;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+  .falta {
+    font-size: 26px;
+    margin-top: 10px;
+    color: color-mix(in srgb, var(--texto) 70%, transparent);
+  }
+  .resultado {
+    font-size: 34px;
+    font-weight: 700;
+    margin-top: 18px;
+  }
+  .entra .resultado {
+    color: var(--oro);
+  }
+  .siguiente {
+    margin-top: auto;
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 800;
+    font-size: 54px;
+    text-transform: uppercase;
+    color: var(--lila);
+  }
+</style>

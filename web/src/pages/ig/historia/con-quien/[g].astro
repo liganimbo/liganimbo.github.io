@@ -1,0 +1,83 @@
+---
+// Story "¿Con quién vas?": los 4 equipos del carrusel de franquicias del día. Encima va la encuesta de 4 opciones.
+import Instagram from "../../../../layouts/Instagram.astro";
+import Escudo from "../../../../components/Escudo.astro";
+import { mundo } from "../../../../lib/liga";
+
+export function getStaticPaths() {
+  return [1, 2, 3].map((g) => ({ params: { g: String(g) } }));
+}
+
+const g = Number(Astro.params.g);
+const grupo = mundo.franquicias.slice((g - 1) * 4, g * 4);
+---
+
+<Instagram titulo={`¿Con quién vas? ${g}`} etiqueta={`Franquicias · ${g}/3`} historia>
+  <div class="antetitulo arriba">Nuevo carrusel en el perfil</div>
+  <h1 class="titular">¿Con<br />quién vas?</h1>
+
+  <div class="equipos">
+    {
+      grupo.map((f) => (
+        <div class="equipo" style={`--c1:${f.colores[0]}`}>
+          <Escudo id={f.id} tam={150} />
+          <div>
+            <div class="nombre">{f.nombre}</div>
+            <div class="ciudad suave">{f.ciudad}</div>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+
+  <div class="encuesta" aria-hidden="true"></div>
+  <div class="pie-story">Vota y desliza el carrusel 👉</div>
+</Instagram>
+
+<style>
+  .arriba {
+    margin-top: 40px;
+  }
+  .titular {
+    font-size: 170px;
+    margin-top: 12px;
+  }
+  .equipos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+    margin-top: 60px;
+  }
+  .equipo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 16px;
+    padding: 30px 20px;
+    border-radius: 28px;
+    background: linear-gradient(160deg, color-mix(in srgb, var(--c1) 45%, transparent), color-mix(in srgb, var(--c1) 12%, transparent));
+    border: 2px solid color-mix(in srgb, var(--c1) 70%, white 10%);
+  }
+  .nombre {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 800;
+    font-size: 58px;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+  .ciudad {
+    font-size: 24px;
+    margin-top: 6px;
+  }
+  .encuesta {
+    flex: 1;
+  }
+  .pie-story {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 800;
+    font-size: 54px;
+    text-transform: uppercase;
+    color: var(--oro);
+  }
+</style>

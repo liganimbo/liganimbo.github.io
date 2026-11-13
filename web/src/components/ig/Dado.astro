@@ -1,0 +1,28 @@
+---
+// Dado blanco con puntos, para las publicaciones y stories.
+interface Props {
+  cara: number;
+  lado?: number;
+  giro?: number;
+}
+const { cara, lado = 180, giro = 0 } = Astro.props;
+const PUNTOS: Record<number, [number, number][]> = {
+  1: [[1, 1]],
+  2: [[0, 0], [2, 2]],
+  3: [[0, 0], [1, 1], [2, 2]],
+  4: [[0, 0], [2, 0], [0, 2], [2, 2]],
+  5: [[0, 0], [2, 0], [1, 1], [0, 2], [2, 2]],
+  6: [[0, 0], [2, 0], [0, 1], [2, 1], [0, 2], [2, 2]],
+};
+---
+
+<svg width={lado} height={lado} viewBox="0 0 100 100" style={`rotate:${giro}deg`} class="dado" role="img" aria-label={`Dado: ${cara}`}>
+  <rect x="2" y="2" width="96" height="96" rx="20" fill="#f7f7fb"></rect>
+  {PUNTOS[cara].map(([x, y]) => <circle cx={20 + x * 30} cy={20 + y * 30} r="9" fill="#151823" />)}
+</svg>
+
+<style>
+  .dado {
+    filter: drop-shadow(0 18px 40px rgb(0 0 0 / 40%));
+  }
+</style>

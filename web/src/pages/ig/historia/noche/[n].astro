@@ -1,0 +1,140 @@
+---
+// Story de cada Noche Nimbo: los resultados de la jornada, para compartir esa misma noche.
+import Instagram from "../../../../layouts/Instagram.astro";
+import Escudo from "../../../../components/Escudo.astro";
+import { fecha, jugadores, partido, temporada } from "../../../../lib/liga";
+import { mejorDeLaJornada } from "../../../../lib/instagram";
+
+export function getStaticPaths() {
+  return temporada.jornadas.map((j) => ({ params: { n: String(j.jornada) } }));
+}
+
+const n = Number(Astro.params.n);
+const jornada = temporada.jornadas[n - 1];
+const partidos = jornada.partidos.map(partido);
+const mejor = mejorDeLaJornada(n);
+---
+
+<Instagram titulo={`Noche Nimbo · Jornada ${n}`} etiqueta="Resultados" historia>
+  <div class="antetitulo arriba">Noche Nimbo · {fecha(jornada.fecha)}</div>
+  <h1 class="titular">Jornada {n}</h1>
+
+  <section class="lista">
+    {
+      partidos.map((p) => {
+        const gana = p.marcador[1] > p.marcador[0] ? 1 : 0;
+        return (
+          <div class="partido">
+            <div class:list={["eq", { pierde: gana !== 1 }]}>
+              <Escudo id={p.visitante} tam={70} />
+              <span class="id">{p.visitante}</span>
+            </div>
+            <div class="marcador">
+              <span class:list={{ pierde: gana !== 1 }}>{p.marcador[1]}</span>
+              <span class="guion">–</span>
+              <span class:list={{ pierde: gana !== 0 }}>{p.marcador[0]}</span>
+              {p.jugadas.length > 16 && <span class="ms">Muerte súbita</span>}
+            </div>
+            <div class:list={["eq", "der", { pierde: gana !== 0 }]}>
+              <span class="id">{p.local}</span>
+              <Escudo id={p.local} tam={70} />
+            </div>
+          </div>
+        );
+      })
+    }
+  </section>
+
+  <div class="mejor">
+    <span class="etq">★ Mejor de la noche</span>
+    <strong>{jugadores[mejor.jid].nombre}</strong>
+    <span class="suave">{mejor.l.pts} pts · {mejor.l.paradas} {mejor.l.paradas === 1 ? "parada" : "paradas"}</span>
+  </div>
+</Instagram>
+
+<style>
+  .arriba {
+    margin-top: 40px;
+  }
+  .antetitulo::first-letter {
+    text-transform: uppercase;
+  }
+  .titular {
+    font-size: 170px;
+    margin-top: 12px;
+  }
+  .lista {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin-top: 50px;
+  }
+  .partido {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    padding: 18px 28px;
+    border-radius: 24px;
+    background: color-mix(in srgb, var(--texto) 7%, transparent);
+    border: 1px solid color-mix(in srgb, var(--texto) 10%, transparent);
+  }
+  .eq {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  .eq.der {
+    justify-content: flex-end;
+  }
+  .id {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 800;
+    font-size: 52px;
+    letter-spacing: 0.04em;
+  }
+  .marcador {
+    position: relative;
+    display: flex;
+    gap: 14px;
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 800;
+    font-size: 76px;
+    line-height: 1;
+  }
+  .guion {
+    opacity: 0.4;
+  }
+  .pierde {
+    opacity: 0.45;
+  }
+  .ms {
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    translate: -50% 0;
+    white-space: nowrap;
+    font-family: Inter, sans-serif;
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: var(--oro);
+    color: var(--sobre-oro);
+  }
+  .mejor {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 40px;
+  }
+  .etq {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--oro);
+  }
+</style>

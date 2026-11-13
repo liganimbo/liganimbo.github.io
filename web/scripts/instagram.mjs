@@ -36,17 +36,21 @@ const plan = html.slice(html.indexOf('class="plan"'));
 const rutas = [...plan.matchAll(/href="([^"]*\/ig\/[^"]+)"/g)].map((m) => m[1]);
 const navegador = buscarNavegador();
 
-// Solo se borran las imágenes numeradas de una exportación anterior: los Reels y lo demás se quedan.
+// Solo se borran las imágenes numeradas y las stories de una exportación anterior: los Reels y lo demás se quedan.
 fs.mkdirSync(SALIDA, { recursive: true });
-for (const archivo of fs.readdirSync(SALIDA)) if (/^\d+-.*\.png$/.test(archivo)) fs.rmSync(path.join(SALIDA, archivo));
-rutas.forEach((ruta, i) => {
-  const nombre = `${String(i + 1).padStart(2, "0")}-${ruta.replace(/^.*\/ig\//, "").replaceAll("/", "-")}.png`;
+for (const archivo of fs.readdirSync(SALIDA)) if (/^(\d+|historia)-.*\.png$/.test(archivo)) fs.rmSync(path.join(SALIDA, archivo));
+const alto = (ruta) => (ruta.includes("/ig/historia/") ? 1920 : ruta.includes("/ig/apertura/") ? 1440 : 1350);
+let numero = 0;
+rutas.forEach((ruta) => {
+  // Las publicaciones van numeradas en orden; las stories, con su nombre (historia-...).
+  const base = ruta.replace(/^.*\/ig\//, "").replaceAll("/", "-");
+  const nombre = ruta.includes("/ig/historia/") ? `${base}.png` : `${String(++numero).padStart(2, "0")}-${base}.png`;
   execFileSync(navegador, [
     "--headless",
     "--disable-gpu",
     "--hide-scrollbars",
     "--force-device-scale-factor=1",
-    `--window-size=1080,${ruta.includes("/ig/apertura/") ? 1440 : 1350}`,
+    `--window-size=1080,${alto(ruta)}`,
     "--virtual-time-budget=5000",
     `--screenshot=${path.join(SALIDA, nombre)}`,
     new URL(ruta, WEB).href,

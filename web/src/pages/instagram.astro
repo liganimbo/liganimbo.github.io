@@ -40,6 +40,16 @@ for (let n = 1; n <= Math.min(3, temporada.jornadas.length); n++) {
   );
 }
 const feed = [...plan].reverse();
+
+// Stories con plantilla, en orden de uso. Las demás se hacen en la app compartiendo publicaciones.
+const historias: { ruta: string; texto: string }[] = [
+  ...[1, 2, 3].flatMap((n) => [
+    { ruta: `ig/historia/pregunta/${n}`, texto: `¿Dentro o fuera? ${n}: la pregunta (con encuesta Dentro / Fuera)` },
+    { ruta: `ig/historia/respuesta/${n}`, texto: `¿Dentro o fuera? ${n}: la respuesta, al día siguiente` },
+  ]),
+  ...[1, 2, 3].map((g) => ({ ruta: `ig/historia/con-quien/${g}`, texto: `¿Con quién vas? (franquicias ${g} de 3, encuesta de 4 opciones)` })),
+  ...temporada.jornadas.slice(0, 3).map((j) => ({ ruta: `ig/historia/noche/${j.jornada}`, texto: `Noche Nimbo: resultados de la jornada ${j.jornada}` })),
+];
 ---
 
 <Base titulo="Instagram">
@@ -96,6 +106,17 @@ const feed = [...plan].reverse();
               <a href={url(post.ruta)} target="_blank">{post.texto}</a> <span class="apagado">/{post.ruta}</span>
             </>
           )}
+        </li>
+      ))
+    }
+  </ol>
+
+  <h2>Stories</h2>
+  <ol class="historias">
+    {
+      historias.map((h) => (
+        <li>
+          <a href={url(h.ruta)} target="_blank">{h.texto}</a> <span class="apagado">/{h.ruta}</span>
         </li>
       ))
     }

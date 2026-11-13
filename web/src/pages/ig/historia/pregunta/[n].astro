@@ -1,0 +1,97 @@
+---
+// Story "¿Dentro o fuera?" (día 1): dos cartas reales y la pregunta. Encima se pone la encuesta de Instagram.
+import Instagram from "../../../../layouts/Instagram.astro";
+import CartaGrande from "../../../../components/ig/CartaGrande.astro";
+import { franquicias } from "../../../../lib/liga";
+import { situaciones } from "../../../../lib/instagram";
+import { DESCRIPCION_ICONO } from "../../../../motor/reglas.ts";
+
+export function getStaticPaths() {
+  return situaciones().map((s) => ({ params: { n: String(s.n) } }));
+}
+
+const s = situaciones()[Number(Astro.params.n) - 1];
+const iconos = [s.atacante, s.defensor].filter((j) => j.icono);
+---
+
+<Instagram titulo={`¿Dentro o fuera? ${s.n}`} etiqueta={`¿Dentro o fuera? · ${s.n}/3`} acento={franquicias[s.atacante.franquicia].colores[0]} historia>
+  <div class="antetitulo arriba">Atacas tú</div>
+  <h1 class="titular">¿Dentro<br />o fuera?</h1>
+
+  <div class="duelo">
+    <div class="lado">
+      <span class="papel">Tira</span>
+      <CartaGrande j={s.atacante} giro={-4} />
+    </div>
+    <div class="lado abajo">
+      <span class="papel">Le marca</span>
+      <CartaGrande j={s.defensor} giro={4} />
+    </div>
+  </div>
+
+  <ul class="reglas suave">
+    <li><strong>Dentro</strong> vale 2. <strong>Fuera</strong> vale 3, pero hay que superar la defensa por 2.</li>
+    {iconos.map((j) => <li><strong>{j.icono}:</strong> {DESCRIPCION_ICONO[j.icono!]}.</li>)}
+    <li>La defensa también elige: si cierra lo que tiras, suma +2.</li>
+  </ul>
+
+  <div class="encuesta" aria-hidden="true"></div>
+  <div class="manana">Mañana, los dados 🎲</div>
+</Instagram>
+
+<style>
+  .arriba {
+    margin-top: 40px;
+  }
+  .titular {
+    font-size: 170px;
+    margin-top: 12px;
+  }
+  .duelo {
+    display: flex;
+    gap: 24px;
+    margin-top: 40px;
+  }
+  .lado {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .lado.abajo {
+    margin-top: 50px;
+  }
+  .lado :global(.carta-ig) {
+    width: 440px;
+  }
+  .papel {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--lila);
+  }
+  .reglas {
+    margin: 48px 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 32px;
+    line-height: 1.35;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .reglas strong {
+    color: var(--texto);
+  }
+  /* Hueco para la pegatina de encuesta (Dentro / Fuera). */
+  .encuesta {
+    flex: 1;
+  }
+  .manana {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 800;
+    font-size: 54px;
+    text-transform: uppercase;
+    color: var(--oro);
+  }
+</style>

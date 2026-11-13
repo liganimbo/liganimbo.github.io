@@ -1,5 +1,5 @@
 ---
-// Lienzo de una publicación de Instagram (1080×1350, formato vertical del feed).
+// Lienzo de una publicación de Instagram (1080×1350, formato vertical del feed) o de una story (1080×1920).
 import Emblema from "../components/Emblema.astro";
 import "../styles/temas.css";
 import { USUARIO } from "../lib/instagram";
@@ -12,12 +12,14 @@ interface Props {
   etiqueta?: string;
   /** Tema visual de esta publicación (por defecto, degradado oscuro). Ver src/styles/temas.css. */
   tema?: string;
+  /** Story (1080×1920): deja libres arriba la barra de Instagram y abajo la de respuesta. */
+  historia?: boolean;
 }
-const { titulo, acento = "#4f46e5", etiqueta, tema } = Astro.props;
+const { titulo, acento = "#4f46e5", etiqueta, tema, historia = false } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="es" data-tema={tema}>
+<html lang="es" data-tema={tema} class:list={{ historia }}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=1080" />
@@ -42,7 +44,7 @@ const { titulo, acento = "#4f46e5", etiqueta, tema } = Astro.props;
         {etiqueta && <span class="etiqueta">{etiqueta}</span>}
       </header>
       <slot />
-      <footer class="pie">{USUARIO} · Liga mixta de baloncesto 3x3 · Cartas y dados</footer>
+      {!historia && <footer class="pie">{USUARIO} · Liga mixta de baloncesto 3x3 · Cartas y dados</footer>}
     </main>
   </body>
 </html>
@@ -73,6 +75,15 @@ const { titulo, acento = "#4f46e5", etiqueta, tema } = Astro.props;
     flex-direction: column;
     background: var(--lienzo);
     overflow: hidden;
+  }
+  /* Stories: 1080×1920, con unos 220 px libres arriba y 300 abajo para los controles de Instagram. */
+  .historia,
+  .historia body,
+  .historia .lienzo {
+    height: 1920px;
+  }
+  .historia .lienzo {
+    padding: 220px 72px 300px;
   }
   .marca {
     display: flex;
