@@ -1,5 +1,5 @@
 ---
-// Alternativa de foto de perfil (1080×1080): LIGA NIMBO apilado con el balón y su halo encima. Todo en flat.
+// Alternativa de foto de perfil (1080×1080): LIGA NIMBO apilado con el balón y su halo encima. Logo en flat, fondo con degradado.
 import Balon from "../../components/marca/Balon.astro";
 import "../../styles/temas.css";
 ---
@@ -30,6 +30,12 @@ import "../../styles/temas.css";
     width: 1080px;
     height: 1080px;
     overflow: hidden;
-    background: #1d2060;
+  }
+  body {
+    background:
+      radial-gradient(circle at 50% 32%, #5048c8 0%, transparent 52%),
+      radial-gradient(circle at 15% 90%, rgb(155 149 255 / 38%), transparent 50%),
+      radial-gradient(circle at 85% 12%, rgb(255 200 61 / 35%), transparent 42%),
+      #14163a;
   }
 </style>
