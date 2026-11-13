@@ -36,8 +36,9 @@ const plan = html.slice(html.indexOf('class="plan"'));
 const rutas = [...plan.matchAll(/href="([^"]*\/ig\/[^"]+)"/g)].map((m) => m[1]);
 const navegador = buscarNavegador();
 
-fs.rmSync(SALIDA, { recursive: true, force: true });
+// Solo se borran las imágenes numeradas de una exportación anterior: los Reels y lo demás se quedan.
 fs.mkdirSync(SALIDA, { recursive: true });
+for (const archivo of fs.readdirSync(SALIDA)) if (/^\d+-.*\.png$/.test(archivo)) fs.rmSync(path.join(SALIDA, archivo));
 rutas.forEach((ruta, i) => {
   const nombre = `${String(i + 1).padStart(2, "0")}-${ruta.replace(/^.*\/ig\//, "").replaceAll("/", "-")}.png`;
   execFileSync(navegador, [
