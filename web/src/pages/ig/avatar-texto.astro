@@ -1,0 +1,35 @@
+---
+// Alternativa de foto de perfil (1080×1080): LIGA NIMBO apilado con el balón y su halo encima. Todo en flat.
+import Balon from "../../components/marca/Balon.astro";
+import "../../styles/temas.css";
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <title>Avatar con texto · Liga Nimbo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,800;1,800&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <svg width="1080" height="1080" viewBox="0 0 1080 1080" role="img" aria-label="Liga Nimbo">
+      <ellipse cx="540" cy="232" rx="92" ry="22" fill="none" stroke="#ffc83d" stroke-width="16" transform="rotate(-8 540 232)"></ellipse>
+      <Balon id="avatar" cx={540} cy={370} r={105} />
+      <text x="540" y="590" text-anchor="middle" font-family="Barlow Condensed, sans-serif" font-weight="800" font-size="110" letter-spacing="46" fill="#ffc83d">LIGA</text>
+      <text x="540" y="830" text-anchor="middle" font-family="Barlow Condensed, sans-serif" font-weight="800" font-style="italic" font-size="290" fill="#f1f2f8">NIMBO</text>
+    </svg>
+  </body>
+</html>
+
+<style is:global>
+  html,
+  body {
+    margin: 0;
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    background: #1d2060;
+  }
+</style>

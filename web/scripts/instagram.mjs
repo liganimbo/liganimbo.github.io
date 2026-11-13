@@ -52,17 +52,19 @@ rutas.forEach((ruta, i) => {
   ], { stdio: "ignore" });
   console.log(`✓ ${nombre}`);
 });
-// Foto de perfil, cuadrada.
-execFileSync(navegador, [
-  "--headless",
-  "--disable-gpu",
-  "--hide-scrollbars",
-  "--force-device-scale-factor=1",
-  "--window-size=1080,1080",
-  "--virtual-time-budget=5000",
-  `--screenshot=${path.join(SALIDA, "00-avatar.png")}`,
-  new URL("/ig/avatar", WEB).href,
-], { stdio: "ignore" });
-console.log("✓ 00-avatar.png (foto de perfil)");
+// Foto de perfil, cuadrada: el escudo y la alternativa con texto.
+for (const [pagina, archivo] of [["avatar", "00-avatar.png"], ["avatar-texto", "00-avatar-texto.png"]]) {
+  execFileSync(navegador, [
+    "--headless",
+    "--disable-gpu",
+    "--hide-scrollbars",
+    "--force-device-scale-factor=1",
+    "--window-size=1080,1080",
+    "--virtual-time-budget=5000",
+    `--screenshot=${path.join(SALIDA, archivo)}`,
+    new URL(`/ig/${pagina}`, WEB).href,
+  ], { stdio: "ignore" });
+  console.log(`✓ ${archivo} (foto de perfil)`);
+}
 
-console.log(`\n${rutas.length + 1} imágenes en ${SALIDA}`);
+console.log(`\n${rutas.length + 2} imágenes en ${SALIDA}`);
