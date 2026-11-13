@@ -52,6 +52,7 @@ El potencial secreto de cada carta está en `datos/potenciales.json`, que no se 
 - `http://localhost:4321/instagram`: simulación del perfil con el plan de publicaciones (no aparece en el menú).
 - Cada publicación es una página de 1080×1350 en `/ig/...`: bienvenida, carta de cada jugador o jugadora, resultado de cada partido, resultados de cada jornada y clasificación tras cada jornada.
 - `npm run instagram` las convierte en PNG con el Chromium sin interfaz que haya en el equipo.
+- Las stories (1080×1920) están en `/ig/historia/...`: «¿Dentro o fuera?» (pregunta y respuesta), «¿Con quién vas?» y los resultados de cada Noche Nimbo. Se exportan como `historia-*.png`.
 
 ## Reels
 
