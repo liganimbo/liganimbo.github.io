@@ -53,4 +53,15 @@ El potencial secreto de cada carta está en `datos/potenciales.json`, que no se 
 - Cada publicación es una página de 1080×1350 en `/ig/...`: bienvenida, carta de cada jugador o jugadora, resultado de cada partido, resultados de cada jornada y clasificación tras cada jornada.
 - `npm run instagram` las convierte en PNG con el Chromium sin interfaz que haya en el equipo.
 
+## Reels
+
+Los vídeos están en `reels/`, hechos con [Remotion](https://www.remotion.dev) (gratis para equipos de hasta 3 personas). Primero `npm install` dentro de `reels/`.
+
+```
+npm run dev     # Remotion Studio: ver y retocar los vídeos en el navegador
+npm run video   # genera ../instagram/reel-como-se-juega.mp4 y su portada
+```
+
+Formato 1080×1920 a 30 fps y sin música: se añade en Instagram, desde su biblioteca, para evitar problemas de derechos.
+
 Tras volver a simular, recarga el navegador (o reinicia el servidor si no cambia).

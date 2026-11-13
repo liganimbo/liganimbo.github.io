@@ -1,0 +1,47 @@
+// Estilo de la Liga Nimbo para los vídeos: el mismo que las publicaciones de Instagram
+// (fondo azul noche con degradados, logotipo en flat). Ver web/src/styles/temas.css.
+import { loadFont as cargarBarlow } from "@remotion/google-fonts/BarlowCondensed";
+import { loadFont as cargarInter } from "@remotion/google-fonts/Inter";
+
+export const titulo = cargarBarlow("normal", { weights: ["700", "800"], subsets: ["latin"] }).fontFamily;
+export const texto = cargarInter("normal", { weights: ["500", "700"], subsets: ["latin"] }).fontFamily;
+
+export const COLOR = {
+  texto: "#f1f2f8",
+  apagado: "#a9adcf",
+  oro: "#ffc83d",
+  lila: "#9b95ff",
+  noche: "#0d0f1c",
+  verde: "#6ee7a8",
+};
+
+/** Fondo de las publicaciones: halos del color protagonista sobre azul noche. */
+export const fondo = (acento = "#4f46e5") =>
+  [
+    `radial-gradient(circle at 90% 0%, color-mix(in srgb, ${acento} 55%, transparent), transparent 55%)`,
+    `radial-gradient(circle at 0% 100%, color-mix(in srgb, ${acento} 30%, transparent), transparent 50%)`,
+    COLOR.noche,
+  ].join(", ");
+
+/** Las dos cartas del ejemplo, tal cual están en la liga (datos/mundo.json). */
+export const NICO = {
+  equipo: "EBA",
+  nombre: "Nico Serrano",
+  meta: "22 años · Nuevo Ébano",
+  ataque: 5,
+  defensa: 3,
+  icono: "Pintura",
+  c1: "#3C096C",
+  c2: "#00B4D8",
+};
+export const ZOE = {
+  equipo: "FER",
+  nombre: "Zoe Barrios",
+  meta: "32 años · Ostria",
+  ataque: 2,
+  defensa: 5,
+  icono: "Muro",
+  c1: "#8B2500",
+  c2: "#D9D9D9",
+};
+export type DatosCarta = typeof NICO;
