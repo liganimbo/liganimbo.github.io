@@ -11,6 +11,7 @@
   "dependencies": {
     "@remotion/cli": "4.0.543",
     "@remotion/google-fonts": "4.0.543",
+    "@remotion/media": "4.0.543",
     "react": "19.3.1",
     "react-dom": "19.3.1",
     "remotion": "4.0.543"
@@ -28,7 +29,8 @@
     "build": "remotion bundle",
     "upgrade": "remotion upgrade",
     "lint": "eslint src && tsc",
-    "video": "remotion render ComoSeJuega ../instagram/reel-como-se-juega.mp4 && remotion still ComoSeJuega ../instagram/reel-como-se-juega-portada.png --frame=70"
+    "video": "remotion render ComoSeJuega ../instagram/reel-como-se-juega.mp4 && remotion still ComoSeJuega ../instagram/reel-como-se-juega-portada.png --frame=70",
+    "voz": "node --env-file=.env scripts/voz.ts"
   },
   "allowScripts": {
     "esbuild": false
