@@ -1,6 +1,6 @@
 /* Temas visuales de las publicaciones de Instagram.
-   Por defecto: fondos con degradado oscuro (azul noche), con el escudo y el logotipo en flat.
-   "claro" (crema con halo naranja) se usa en las piezas especiales: la apertura y las Finales Nimbo.
+   Por defecto: fondos con degradado oscuro (azul noche); escudo y logotipo también con degradados.
+   "claro" (crema con halos naranja y lila) se usa en las piezas especiales: la apertura y las Finales Nimbo.
    Para previsualizar cualquier otro: ?tema=claro | flat | flat-claro | noche | vibrante en la URL.
    --acento lo fija cada publicación (normalmente el color de la franquicia protagonista). */
 
@@ -25,22 +25,22 @@ body {
   --carta-sombra: 0 30px 80px rgb(0 0 0 / 45%);
   --carta-radio: 34px;
 
-  /* Escudo y logotipo: siempre flat, sea cual sea el fondo. */
-  --emb-fondo-1: #1d2060;
-  --emb-fondo-2: #1d2060;
-  --emb-oro-1: #ffc83d;
-  --emb-oro-2: #ffc83d;
-  --emb-pliegue: #d9971c;
-  --emb-linea: #9b95ff;
-  --emb-rayos: 0;
-  --emb-brillo: 0;
+  /* Escudo y logotipo con degradados: índigo con reflejo, oro degradado y balón con volumen. */
+  --emb-fondo-1: #4146c4;
+  --emb-fondo-2: #14164a;
+  --emb-oro-1: #ffe08a;
+  --emb-oro-2: #f2a516;
+  --emb-pliegue: #b8740a;
+  --emb-linea: #8f8cff;
+  --emb-brillo: 0.45;
   --emb-texto-cinta: #12142a;
-  --emb-nimbo: #f1f2f8;
-  --balon-1: #f7a531;
-  --balon-2: #f7a531;
-  --balon-3: #f7a531;
+  --emb-nimbo-1: #ffffff;
+  --emb-nimbo-2: #b9b5ff;
+  --balon-1: #ffd27a;
+  --balon-2: #f5a524;
+  --balon-3: #c46a06;
   --costura: #12142a;
-  --balon-brillo: 0;
+  --balon-brillo: 0.38;
 }
 
 /* Claro: crema con un halo naranja, tinta oscura. Apertura y finales. Escudo y logotipo, flat. */
@@ -50,18 +50,23 @@ body {
   --lila: #3b3bd6;
   --sobre-oro: #ffffff;
   --lienzo:
-    radial-gradient(circle at 92% 0%, color-mix(in srgb, var(--acento, #e8590c) 20%, transparent), transparent 45%),
+    radial-gradient(circle at 92% 0%, color-mix(in srgb, var(--acento, #e8590c) 42%, transparent), transparent 55%),
+    radial-gradient(circle at 0% 100%, rgb(59 59 214 / 22%), transparent 50%),
+    linear-gradient(180deg, #f8f3e9, #efe5d3);
+  --apertura:
+    radial-gradient(circle at 50% 40%, rgb(232 89 12 / 32%), transparent 42%),
+    radial-gradient(circle at 8% 92%, rgb(59 59 214 / 20%), transparent 35%),
+    radial-gradient(circle at 92% 8%, rgb(255 154 77 / 30%), transparent 35%),
     #f4efe4;
-  --apertura: radial-gradient(circle at 50% 40%, rgb(232 89 12 / 16%), transparent 40%), #f4efe4;
   --carta-fondo: #ffffff;
   --carta-caja: #f1ece0;
   --carta-sombra: 0 14px 30px rgb(60 40 10 / 16%);
-  --emb-oro-1: #e8590c;
+  --emb-oro-1: #ff9a4d;
   --emb-oro-2: #e8590c;
-  --emb-pliegue: #b8430a;
-  --emb-linea: #8f95ff;
+  --emb-pliegue: #a8400a;
   --emb-texto-cinta: #ffffff;
-  --emb-nimbo: #16182e;
+  --emb-nimbo-1: #16182e;
+  --emb-nimbo-2: #3b3bd6;
 }
 
 /* Versiones totalmente planas (sin degradados ni sombras), para comparar con ?tema=. */
@@ -71,6 +76,19 @@ body {
   --apertura: #2b2f80;
   --carta-sombra: none;
   --carta-radio: 20px;
+  --emb-fondo-1: #1d2060;
+  --emb-fondo-2: #1d2060;
+  --emb-oro-1: #ffc83d;
+  --emb-oro-2: #ffc83d;
+  --emb-pliegue: #d9971c;
+  --emb-linea: #9b95ff;
+  --emb-brillo: 0;
+  --emb-nimbo-1: #f1f2f8;
+  --emb-nimbo-2: #f1f2f8;
+  --balon-1: #f7a531;
+  --balon-2: #f7a531;
+  --balon-3: #f7a531;
+  --balon-brillo: 0;
 }
 [data-tema="flat-claro"] body {
   --texto: #16182e;
@@ -84,9 +102,9 @@ body {
   --emb-oro-1: #e8590c;
   --emb-oro-2: #e8590c;
   --emb-pliegue: #b8430a;
-  --emb-linea: #8f95ff;
   --emb-texto-cinta: #ffffff;
-  --emb-nimbo: #16182e;
+  --emb-nimbo-1: #16182e;
+  --emb-nimbo-2: #16182e;
 }
 
 /* Estilos descartados, que se pueden seguir previsualizando con ?tema=. */

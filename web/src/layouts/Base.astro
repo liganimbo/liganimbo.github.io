@@ -64,8 +64,8 @@ const actual = Astro.url.pathname.replace(import.meta.env.BASE_URL, "").split("/
 </html>
 
 <style is:global>
-  /* Mismo estilo que Instagram: modo claro = crema con halo naranja, modo oscuro = azul noche con degradados.
-     El escudo y el logotipo siguen en flat. */
+  /* Mismo estilo que Instagram: modo claro = crema con halos naranja y lila, modo oscuro = azul noche con degradados.
+     El escudo y el logotipo también llevan degradados (Emblema.astro). */
   :root {
     --fondo: #f4efe4;
     --superficie: #fffdf8;
@@ -78,9 +78,9 @@ const actual = Astro.url.pathname.replace(import.meta.env.BASE_URL, "").split("/
     --acento-suave: #fde4d4;
     --sobre-acento: #ffffff;
     --lienzo-web:
-      radial-gradient(circle at 92% 0%, rgb(232 89 12 / 14%), transparent 40%),
-      radial-gradient(circle at 0% 100%, rgb(59 59 214 / 7%), transparent 45%),
-      #f4efe4;
+      radial-gradient(circle at 95% 0%, rgb(232 89 12 / 30%), transparent 45%),
+      radial-gradient(circle at 0% 100%, rgb(59 59 214 / 18%), transparent 50%),
+      linear-gradient(180deg, #f8f3e9, #efe5d3);
     --cabecera: linear-gradient(100deg, #12142a 0%, #2a2f6e 65%, #3a3590 100%);
     --victoria: #2f855a;
     --derrota: #c53030;

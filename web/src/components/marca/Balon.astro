@@ -1,6 +1,6 @@
 ---
 // Balón con volumen: degradado, costuras giradas y un brillo.
-// Los colores salen de variables de tema (src/styles/temas.css), con los del tema "flat" por defecto.
+// Los colores salen de variables de tema (src/styles/temas.css), con volumen por defecto.
 interface Props {
   id: string;
   cx: number;
@@ -17,9 +17,9 @@ const costuras = [
 ---
 
 <radialGradient id={`${id}-color`} cx="0.35" cy="0.3" r="0.8">
-  <stop offset="0" style="stop-color: var(--balon-1, #f7a531)"></stop>
-  <stop offset="0.45" style="stop-color: var(--balon-2, #f7a531)"></stop>
-  <stop offset="1" style="stop-color: var(--balon-3, #f7a531)"></stop>
+  <stop offset="0" style="stop-color: var(--balon-1, #ffd27a)"></stop>
+  <stop offset="0.45" style="stop-color: var(--balon-2, #f5a524)"></stop>
+  <stop offset="1" style="stop-color: var(--balon-3, #c46a06)"></stop>
 </radialGradient>
 <clipPath id={`${id}-recorte`}>
   <circle cx={cx} cy={cy} r={r}></circle>
@@ -41,6 +41,6 @@ const costuras = [
   rx={r * 0.28}
   ry={r * 0.15}
   fill="#fff"
-  style="opacity: var(--balon-brillo, 0)"
+  style="opacity: var(--balon-brillo, 0.38)"
   transform={`rotate(-30 ${cx - r * 0.34} ${cy - r * 0.42})`}
 ></ellipse>

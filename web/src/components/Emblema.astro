@@ -2,7 +2,8 @@
 // Marca de la Liga Nimbo: el balón con su halo (el nimbo). Dos piezas:
 //   escudo  → emblema principal (foto de perfil, avatar)
 //   palabra → logotipo horizontal: LIGA NIMBO, solo texto
-// Los colores salen de variables de tema (src/styles/temas.css); sin tema, los del tema "flat".
+// Estilo con degradados: escudo índigo con reflejo, oro degradado, balón con volumen y un resplandor detrás.
+// Los colores salen de variables de tema (src/styles/temas.css); sin tema, los valores por defecto de aquí.
 // Para tamaños diminutos (pestaña del navegador) está public/favicon.svg.
 import Balon from "./marca/Balon.astro";
 
@@ -16,29 +17,31 @@ const { variante, tam = 240, lema = true } = Astro.props;
 const uid = `${variante}-${tam}-${lema ? "l" : "s"}`;
 const [anchoVB, altoVB] = variante === "palabra" ? [300, lema ? 150 : 132] : [240, 240];
 const escudo = "M44 18 H196 Q204 18 204 26 V112 C204 170 166 208 120 228 C74 208 36 170 36 112 V26 Q36 18 44 18 Z";
-const estrella = (x: number, y: number, s: number) =>
-  `M${x} ${y - s} L${x + s * 0.3} ${y - s * 0.3} L${x + s} ${y} L${x + s * 0.3} ${y + s * 0.3} L${x} ${y + s} L${x - s * 0.3} ${y + s * 0.3} L${x - s} ${y} L${x - s * 0.3} ${y - s * 0.3} Z`;
-// Rayos de fondo para el halo.
-const rayos = (cx: number, cy: number, r1: number, r2: number, n: number) =>
-  Array.from({ length: n }, (_, i) => {
-    const a = (Math.PI * 2 * i) / n;
-    return `M${cx + Math.cos(a) * r1} ${cy + Math.sin(a) * r1} L${cx + Math.cos(a) * r2} ${cy + Math.sin(a) * r2}`;
-  });
+// Reflejo: la mitad superior del escudo, cortada en diagonal.
+const reflejo = "M44 18 H196 Q204 18 204 26 V70 C150 92 92 60 36 96 V26 Q36 18 44 18 Z";
 ---
 
 <svg width={tam} height={(tam * altoVB) / anchoVB} viewBox={`0 0 ${anchoVB} ${altoVB}`} role="img" aria-label="Liga Nimbo" class="emblema">
   <defs>
-    <radialGradient id={`cielo-${uid}`} cx="0.5" cy="0.25" r="0.9">
-      <stop offset="0" style="stop-color: var(--emb-fondo-1, #1d2060)"></stop>
-      <stop offset="1" style="stop-color: var(--emb-fondo-2, #1d2060)"></stop>
-    </radialGradient>
+    <linearGradient id={`cielo-${uid}`} x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" style="stop-color: var(--emb-fondo-1, #4146c4)"></stop>
+      <stop offset="1" style="stop-color: var(--emb-fondo-2, #14164a)"></stop>
+    </linearGradient>
     <linearGradient id={`oro-${uid}`} x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" style="stop-color: var(--emb-oro-1, #ffc83d)"></stop>
-      <stop offset="1" style="stop-color: var(--emb-oro-2, #ffc83d)"></stop>
+      <stop offset="0" style="stop-color: var(--emb-oro-1, #ffe08a)"></stop>
+      <stop offset="1" style="stop-color: var(--emb-oro-2, #f2a516)"></stop>
+    </linearGradient>
+    <linearGradient id={`nimbo-${uid}`} x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0.2" style="stop-color: var(--emb-nimbo-1, #ffffff)"></stop>
+      <stop offset="1" style="stop-color: var(--emb-nimbo-2, #b9b5ff)"></stop>
+    </linearGradient>
+    <linearGradient id={`reflejo-${uid}`} x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity="0.16"></stop>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"></stop>
     </linearGradient>
     <radialGradient id={`brillo-${uid}`}>
-      <stop offset="0" style="stop-color: var(--emb-linea, #9b95ff); stop-opacity: var(--emb-brillo, 0)"></stop>
-      <stop offset="1" style="stop-color: var(--emb-linea, #9b95ff); stop-opacity: 0"></stop>
+      <stop offset="0" style="stop-color: var(--emb-oro-1, #ffe08a); stop-opacity: var(--emb-brillo, 0.45)"></stop>
+      <stop offset="1" style="stop-color: var(--emb-oro-1, #ffe08a); stop-opacity: 0"></stop>
     </radialGradient>
     <clipPath id={`dentro-${uid}`}>
       <path d={escudo}></path>
@@ -49,29 +52,23 @@ const rayos = (cx: number, cy: number, r1: number, r2: number, n: number) =>
     variante === "escudo" && (
       <>
         <path d={escudo} fill={`url(#cielo-${uid})`} stroke={`url(#oro-${uid})`} stroke-width="6" stroke-linejoin="round" />
+        <g clip-path={`url(#dentro-${uid})`}>
+          <path d={reflejo} fill={`url(#reflejo-${uid})`} />
+          <circle cx="120" cy="80" r="62" fill={`url(#brillo-${uid})`} />
+          <Balon id={`b-${uid}`} cx={120} cy={86} r={31} />
+          <ellipse cx="120" cy="42" rx="27" ry="7" fill="none" stroke={`url(#oro-${uid})`} stroke-width="5" transform="rotate(-8 120 42)" />
+        </g>
         <path
           d={escudo}
           fill="none"
-          style="stroke: var(--emb-linea, #9b95ff)"
-          stroke-width="2"
+          style="stroke: var(--emb-linea, #8f8cff)"
+          stroke-width="1.5"
           transform="translate(120 123) scale(0.9) translate(-120 -123)"
-          opacity="0.7"
+          opacity="0.5"
         />
-        <g clip-path={`url(#dentro-${uid})`}>
-          <g style="stroke: var(--emb-linea, #9b95ff); opacity: var(--emb-rayos, 0)" stroke-width="2.5" stroke-linecap="round">
-            {rayos(120, 84, 44, 110, 16).map((d) => (
-              <path d={d} />
-            ))}
-          </g>
-          <circle cx="120" cy="84" r="56" fill={`url(#brillo-${uid})`} />
-          <Balon id={`b-${uid}`} cx={120} cy={86} r={31} />
-          <ellipse cx="120" cy="42" rx="27" ry="7" fill="none" stroke={`url(#oro-${uid})`} stroke-width="5" transform="rotate(-8 120 42)" />
-          <path d={estrella(70, 50, 5)} style="fill: var(--oro, #ffc83d)" />
-          <path d={estrella(172, 112, 4)} style="fill: var(--oro, #ffc83d)" opacity="0.8" />
-        </g>
         {/* Cinta con el nombre, que sobresale del escudo */}
-        <path d="M12 142 L30 134 V170 L12 178 L21 160 Z" style="fill: var(--emb-pliegue, #d9971c)" />
-        <path d="M228 142 L210 134 V170 L228 178 L219 160 Z" style="fill: var(--emb-pliegue, #d9971c)" />
+        <path d="M12 142 L30 134 V170 L12 178 L21 160 Z" style="fill: var(--emb-pliegue, #b8740a)" />
+        <path d="M228 142 L210 134 V170 L228 178 L219 160 Z" style="fill: var(--emb-pliegue, #b8740a)" />
         <rect x="24" y="130" width="192" height="40" rx="4" fill={`url(#oro-${uid})`} />
         <text
           x="120"
@@ -92,7 +89,7 @@ const rayos = (cx: number, cy: number, r1: number, r2: number, n: number) =>
               cx={108 + c * 12}
               cy={186 + f * 11}
               r="3.4"
-              style={f === 1 && c === 1 ? "fill: var(--oro, #ffc83d)" : "fill: var(--emb-linea, #9b95ff)"}
+              style={f === 1 && c === 1 ? "fill: var(--emb-oro-2, #f2a516)" : "fill: var(--emb-linea, #8f8cff)"}
             />
           )),
         )}
@@ -103,7 +100,7 @@ const rayos = (cx: number, cy: number, r1: number, r2: number, n: number) =>
   {
     variante === "palabra" && (
       <>
-        <text x="20" y="34" font-family="Barlow Condensed, sans-serif" font-weight="800" font-size="31" letter-spacing="11" style="fill: var(--oro, #ffc83d)">
+        <text x="20" y="34" font-family="Barlow Condensed, sans-serif" font-weight="800" font-size="31" letter-spacing="11" fill={`url(#oro-${uid})`}>
           LIGA
         </text>
         <text
@@ -114,7 +111,7 @@ const rayos = (cx: number, cy: number, r1: number, r2: number, n: number) =>
           font-style="italic"
           font-size="104"
           letter-spacing="1"
-          style="fill: var(--emb-nimbo, #f1f2f8)"
+          fill={`url(#nimbo-${uid})`}
         >
           NIMBO
         </text>

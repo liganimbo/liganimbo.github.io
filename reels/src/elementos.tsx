@@ -5,11 +5,19 @@ import { COLOR, texto, titulo, type DatosCarta } from "./marca";
 
 type ConEstilo = { readonly style?: React.CSSProperties };
 
-/** Logotipo LIGA NIMBO, solo texto y en flat. */
+/** Texto relleno con un degradado vertical, como el logotipo de la web. */
+const degradado = (arriba: string, abajo: string): React.CSSProperties => ({
+  backgroundImage: `linear-gradient(180deg, ${arriba} 20%, ${abajo})`,
+  backgroundClip: "text",
+  WebkitBackgroundClip: "text",
+  color: "transparent",
+});
+
+/** Logotipo LIGA NIMBO, solo texto, con degradados. */
 const LogoInner = ({ tam = 1, style }: ConEstilo & { readonly tam?: number }) => (
   <div style={{ fontFamily: titulo, fontWeight: 800, lineHeight: 1, color: COLOR.texto, ...style }}>
-    <div style={{ fontSize: 31 * tam, letterSpacing: 11 * tam, color: COLOR.oro, marginLeft: 4 * tam }}>LIGA</div>
-    <div style={{ fontSize: 104 * tam, fontStyle: "italic", marginTop: -6 * tam }}>NIMBO</div>
+    <div style={{ fontSize: 31 * tam, letterSpacing: 11 * tam, marginLeft: 4 * tam, ...degradado("#ffe08a", "#f2a516") }}>LIGA</div>
+    <div style={{ fontSize: 104 * tam, fontStyle: "italic", marginTop: -6 * tam, paddingRight: 24 * tam, ...degradado("#ffffff", "#b9b5ff") }}>NIMBO</div>
   </div>
 );
 
