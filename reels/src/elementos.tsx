@@ -14,10 +14,40 @@ const degradado = (arriba: string, abajo: string): React.CSSProperties => ({
 });
 
 /** Logotipo LIGA NIMBO, solo texto, con degradados. */
-const LogoInner = ({ tam = 1, style }: ConEstilo & { readonly tam?: number }) => (
-  <div style={{ fontFamily: titulo, fontWeight: 800, lineHeight: 1, color: COLOR.texto, ...style }}>
-    <div style={{ fontSize: 31 * tam, letterSpacing: 11 * tam, marginLeft: 4 * tam, ...degradado("#ffe08a", "#f2a516") }}>LIGA</div>
-    <div style={{ fontSize: 104 * tam, fontStyle: "italic", marginTop: -6 * tam, paddingRight: 24 * tam, ...degradado("#ffffff", "#b9b5ff") }}>NIMBO</div>
+const LogoInner = ({
+  tam = 1,
+  style,
+}: ConEstilo & { readonly tam?: number }) => (
+  <div
+    style={{
+      fontFamily: titulo,
+      fontWeight: 800,
+      lineHeight: 1,
+      color: COLOR.texto,
+      ...style,
+    }}
+  >
+    <div
+      style={{
+        fontSize: 31 * tam,
+        letterSpacing: 11 * tam,
+        marginLeft: 4 * tam,
+        ...degradado("#ffe08a", "#f2a516"),
+      }}
+    >
+      LIGA
+    </div>
+    <div
+      style={{
+        fontSize: 104 * tam,
+        fontStyle: "italic",
+        marginTop: -6 * tam,
+        paddingRight: 24 * tam,
+        ...degradado("#ffffff", "#b9b5ff"),
+      }}
+    >
+      NIMBO
+    </div>
   </div>
 );
 
@@ -25,7 +55,15 @@ export const Logo = Interactive.create({
   Component: LogoInner,
   layout: "none",
   schema: {
-    tam: { type: "number", default: 1, min: 0.3, max: 4, step: 0.1, description: "Tamaño", hiddenFromList: false },
+    tam: {
+      type: "number",
+      default: 1,
+      min: 0.3,
+      max: 4,
+      step: 0.1,
+      description: "Tamaño",
+      hiddenFromList: false,
+    },
   } as const satisfies InteractivitySchema,
 });
 
@@ -34,7 +72,10 @@ const CartaInner = ({
   carta,
   resalta,
   style,
-}: ConEstilo & { readonly carta: DatosCarta; readonly resalta?: "ataque" | "defensa" }) => {
+}: ConEstilo & {
+  readonly carta: DatosCarta;
+  readonly resalta?: "ataque" | "defensa";
+}) => {
   const numero = (valor: number, etiqueta: string, activo: boolean) => (
     <div
       style={{
@@ -48,8 +89,27 @@ const CartaInner = ({
         opacity: resalta && !activo ? 0.45 : 1,
       }}
     >
-      <span style={{ fontFamily: titulo, fontWeight: 800, fontSize: 110, lineHeight: 1 }}>{valor}</span>
-      <span style={{ fontFamily: texto, fontWeight: 700, fontSize: 22, letterSpacing: 3, textTransform: "uppercase" }}>{etiqueta}</span>
+      <span
+        style={{
+          fontFamily: titulo,
+          fontWeight: 800,
+          fontSize: 110,
+          lineHeight: 1,
+        }}
+      >
+        {valor}
+      </span>
+      <span
+        style={{
+          fontFamily: texto,
+          fontWeight: 700,
+          fontSize: 22,
+          letterSpacing: 3,
+          textTransform: "uppercase",
+        }}
+      >
+        {etiqueta}
+      </span>
     </div>
   );
   return (
@@ -80,25 +140,46 @@ const CartaInner = ({
         }}
       >
         <span>{carta.equipo}</span>
-        <span
-          style={{
-            fontFamily: texto,
-            fontSize: 24,
-            letterSpacing: 1,
-            textTransform: "uppercase",
-            padding: "6px 16px",
-            borderRadius: 999,
-            background: carta.c2,
-            color: carta.c1,
-          }}
-        >
-          {carta.icono}
-        </span>
+        {carta.icono && (
+          <span
+            style={{
+              fontFamily: texto,
+              fontSize: 24,
+              letterSpacing: 1,
+              textTransform: "uppercase",
+              padding: "6px 16px",
+              borderRadius: 999,
+              background: carta.c2,
+              color: carta.c1,
+            }}
+          >
+            {carta.icono}
+          </span>
+        )}
       </div>
-      <div style={{ fontFamily: titulo, fontWeight: 800, fontSize: 58, lineHeight: 1, padding: "22px 24px 0", textTransform: "uppercase" }}>
+      <div
+        style={{
+          fontFamily: titulo,
+          fontWeight: 800,
+          fontSize: 58,
+          lineHeight: 1,
+          padding: "22px 24px 0",
+          textTransform: "uppercase",
+        }}
+      >
         {carta.nombre}
       </div>
-      <div style={{ fontFamily: texto, fontWeight: 500, fontSize: 24, color: "#6b7084", padding: "6px 24px 0" }}>{carta.meta}</div>
+      <div
+        style={{
+          fontFamily: texto,
+          fontWeight: 500,
+          fontSize: 24,
+          color: "#6b7084",
+          padding: "6px 24px 0",
+        }}
+      >
+        {carta.meta}
+      </div>
       <div style={{ display: "flex", gap: 14, padding: 22 }}>
         {numero(carta.ataque, "Ataque", resalta === "ataque")}
         {numero(carta.defensa, "Defensa", resalta === "defensa")}
@@ -114,15 +195,44 @@ export const Carta = Interactive.create({
 
 const PUNTOS: Record<number, [number, number][]> = {
   1: [[1, 1]],
-  2: [[0, 0], [2, 2]],
-  3: [[0, 0], [1, 1], [2, 2]],
-  4: [[0, 0], [2, 0], [0, 2], [2, 2]],
-  5: [[0, 0], [2, 0], [1, 1], [0, 2], [2, 2]],
-  6: [[0, 0], [2, 0], [0, 1], [2, 1], [0, 2], [2, 2]],
+  2: [
+    [0, 0],
+    [2, 2],
+  ],
+  3: [
+    [0, 0],
+    [1, 1],
+    [2, 2],
+  ],
+  4: [
+    [0, 0],
+    [2, 0],
+    [0, 2],
+    [2, 2],
+  ],
+  5: [
+    [0, 0],
+    [2, 0],
+    [1, 1],
+    [0, 2],
+    [2, 2],
+  ],
+  6: [
+    [0, 0],
+    [2, 0],
+    [0, 1],
+    [2, 1],
+    [0, 2],
+    [2, 2],
+  ],
 };
 
 /** Dado blanco con puntos oscuros. */
-const DadoInner = ({ cara, lado = 190, style }: ConEstilo & { readonly cara: number; readonly lado?: number }) => (
+const DadoInner = ({
+  cara,
+  lado = 190,
+  style,
+}: ConEstilo & { readonly cara: number; readonly lado?: number }) => (
   <div
     style={{
       position: "relative",
@@ -155,7 +265,16 @@ export const Dado = Interactive.create({
   Component: DadoInner,
   layout: "none",
   schema: {
-    cara: { type: "number", default: 6, min: 1, max: 6, step: 1, integer: true, description: "Cara", hiddenFromList: false },
+    cara: {
+      type: "number",
+      default: 6,
+      min: 1,
+      max: 6,
+      step: 1,
+      integer: true,
+      description: "Cara",
+      hiddenFromList: false,
+    },
   } as const satisfies InteractivitySchema,
 });
 
@@ -166,10 +285,38 @@ const EscudoInner = ({
   c2,
   tam = 200,
   style,
-}: ConEstilo & { readonly id: string; readonly c1: string; readonly c2: string; readonly tam?: number }) => (
-  <svg width={tam} height={(tam * 44) / 40} viewBox="0 0 40 44" style={{ display: "block", filter: "drop-shadow(0 20px 40px rgb(0 0 0 / 40%))", ...style }}>
-    <path d="M20 1 L38 7 V22 C38 33 30 40 20 43 C10 40 2 33 2 22 V7 Z" fill={c1} stroke={c2} strokeWidth={2.5} />
-    <text x="20" y="27" textAnchor="middle" fill={c2} fontFamily={titulo} fontWeight={800} fontSize={14} letterSpacing={0.5}>
+}: ConEstilo & {
+  readonly id: string;
+  readonly c1: string;
+  readonly c2: string;
+  readonly tam?: number;
+}) => (
+  <svg
+    width={tam}
+    height={(tam * 44) / 40}
+    viewBox="0 0 40 44"
+    style={{
+      display: "block",
+      filter: "drop-shadow(0 20px 40px rgb(0 0 0 / 40%))",
+      ...style,
+    }}
+  >
+    <path
+      d="M20 1 L38 7 V22 C38 33 30 40 20 43 C10 40 2 33 2 22 V7 Z"
+      fill={c1}
+      stroke={c2}
+      strokeWidth={2.5}
+    />
+    <text
+      x="20"
+      y="27"
+      textAnchor="middle"
+      fill={c2}
+      fontFamily={titulo}
+      fontWeight={800}
+      fontSize={14}
+      letterSpacing={0.5}
+    >
       {id}
     </text>
   </svg>

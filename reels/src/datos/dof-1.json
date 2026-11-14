@@ -1,0 +1,72 @@
+{
+  "semilla": "dof-PAL-VAL-21",
+  "jugada": 15,
+  "equipos": [
+    {
+      "id": "PAL",
+      "nombre": "Albatros",
+      "ciudad": "Puerto Albar",
+      "c1": "#1D3557",
+      "c2": "#E9C46A"
+    },
+    {
+      "id": "VAL",
+      "nombre": "Vendaval",
+      "ciudad": "Valcierzo",
+      "c1": "#2A9D8F",
+      "c2": "#F1FAEE"
+    }
+  ],
+  "ataca": 1,
+  "antes": [
+    15,
+    14
+  ],
+  "despues": [
+    15,
+    16
+  ],
+  "pierde": 1,
+  "muerteSubita": false,
+  "tirador": {
+    "nombre": "Nia Falk",
+    "equipo": "VAL",
+    "meta": "23 años · Norhelm",
+    "ataque": 4,
+    "defensa": 2,
+    "icono": "Tiro",
+    "c1": "#2A9D8F",
+    "c2": "#F1FAEE"
+  },
+  "defensor": {
+    "nombre": "Kenna Coulibaly",
+    "equipo": "PAL",
+    "meta": "34 años · Port Ashby",
+    "ataque": 2,
+    "defensa": 6,
+    "icono": null,
+    "c1": "#1D3557",
+    "c2": "#E9C46A"
+  },
+  "tabla": {
+    "dentro": {
+      "dentro": 9,
+      "fuera": 7
+    },
+    "fuera": {
+      "dentro": 8,
+      "fuera": 10
+    }
+  },
+  "tipo": "dentro",
+  "cierra": "fuera",
+  "dados": [
+    4,
+    3
+  ],
+  "ataque": 4,
+  "defensa": 11,
+  "necesita": 7,
+  "anota": true,
+  "tiempoMuerto": false
+}

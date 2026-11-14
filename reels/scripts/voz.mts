@@ -28,7 +28,7 @@ mkdirSync(`public/voz/${reel}`, { recursive: true });
 const todas = JSON.parse(readFileSync("src/voz.json", "utf8"));
 const soloEstas = process.argv.slice(3);
 const duraciones: Record<string, number> = soloEstas.length ? { ...todas[reel] } : {};
-for (const { id, texto } of GUIONES[reel].filter(({ id }) => !soloEstas.length || soloEstas.includes(id))) {
+for (const { id, texto } of GUIONES[reel].filter(({ id, texto }) => texto && (!soloEstas.length || soloEstas.includes(id)))) {
   const r = await api(`text-to-speech/${vozId}`, {
     method: "POST",
     headers: { Accept: "audio/mpeg" },

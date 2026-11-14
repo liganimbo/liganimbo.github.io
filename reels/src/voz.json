@@ -16,5 +16,19 @@
     "dados": 2.04,
     "final": 2.6,
     "cierre": 3.58
+  },
+  "dentro-o-fuera-1": {
+    "gancho": 2.97,
+    "revela": 3.99,
+    "dados": 2.51,
+    "final": 2.04,
+    "cierre": 2.74
+  },
+  "dentro-o-fuera-2": {
+    "gancho": 2.79,
+    "revela": 3.72,
+    "dados": 2.55,
+    "final": 1.86,
+    "cierre": 2.37
   }
 }

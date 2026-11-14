@@ -2,7 +2,7 @@
 // Nico Serrano (Ataque 5, Pintura) tira dentro; Zoe Barrios (Defensa 5, Muro) cierra dentro; dados 6 y 5.
 import type React from "react";
 import { Easing, Interactive, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
-import { Carta, Dado, Logo } from "./elementos";
+import { Carta, Dado, Escudo, Logo } from "./elementos";
 import { COLOR, NICO, texto, titulo, ZOE } from "./marca";
 
 export const fijo = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
@@ -24,6 +24,22 @@ export const etiqueta: React.CSSProperties = {
   textTransform: "uppercase",
   color: COLOR.oro,
 };
+
+type Equipo = { id: string; nombre: string; c1: string; c2: string };
+
+/** Marcador grande: escudo y puntos de cada equipo. */
+export const Marcador = ({ equipos, puntos, resalta, tam = 1, style }: { equipos: Equipo[]; puntos: number[]; resalta?: number; tam?: number; style?: React.CSSProperties }) => (
+  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 40 * tam, ...style }}>
+    {equipos.map((e, lado) => (
+      <div key={e.id} style={{ display: "flex", flexDirection: lado ? "row-reverse" : "row", alignItems: "center", gap: 30 * tam }}>
+        <Escudo name={e.nombre} id={e.id} c1={e.c1} c2={e.c2} tam={170 * tam} />
+        <span style={{ ...titular, fontSize: 230 * tam, minWidth: 150 * tam, textAlign: "center", color: resalta === lado ? COLOR.oro : COLOR.texto }}>
+          {puntos[lado]}
+        </span>
+      </div>
+    ))}
+  </div>
+);
 
 /** Entrada desde abajo con fundido, empezando en el fotograma `desde`. */
 export const entra = (frame: number, desde: number): React.CSSProperties => ({

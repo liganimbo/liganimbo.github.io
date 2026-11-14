@@ -2,8 +2,8 @@
 // Los datos salen de src/datos/amistoso.json (web/scripts/amistoso.ts).
 import { Easing, Interactive, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
 import datos from "./datos/amistoso.json";
-import { Carta, Dado, Escudo, Logo } from "./elementos";
-import { Cuenta, Eleccion, entra, etiqueta, fijo, suave, titular } from "./escenas";
+import { Carta, Dado, Logo } from "./elementos";
+import { Cuenta, Eleccion, entra, etiqueta, fijo, Marcador as MarcadorBase, suave, titular } from "./escenas";
 import { COLOR, texto } from "./marca";
 
 const [LOCAL, VISITANTE] = datos.equipos;
@@ -12,27 +12,7 @@ const nombre = (n: string) => n.split(" ")[0];
 /** Lo que pondría el marcador con una canasta de 2 en vez del triple. */
 const EMPATE = D.antes.map((p, i) => (i === D.equipo ? p + 2 : p));
 
-/** Marcador grande: escudo y puntos de cada equipo. */
-const Marcador = ({ puntos, resalta, tam = 1, style }: { puntos: number[]; resalta?: 0 | 1; tam?: number; style?: React.CSSProperties }) => (
-  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 40 * tam, ...style }}>
-    {[LOCAL, VISITANTE].map((e, lado) => (
-      <div key={e.id} style={{ display: "flex", flexDirection: lado ? "row-reverse" : "row", alignItems: "center", gap: 30 * tam }}>
-        <Escudo name={e.nombre} id={e.id} c1={e.c1} c2={e.c2} tam={170 * tam} />
-        <span
-          style={{
-            ...titular,
-            fontSize: 230 * tam,
-            minWidth: 150 * tam,
-            textAlign: "center",
-            color: resalta === lado ? COLOR.oro : COLOR.texto,
-          }}
-        >
-          {puntos[lado]}
-        </span>
-      </div>
-    ))}
-  </div>
-);
+const Marcador = (props: Omit<React.ComponentProps<typeof MarcadorBase>, "equipos">) => <MarcadorBase equipos={[LOCAL, VISITANTE]} {...props} />;
 
 /** Sello de color que aparece de golpe. */
 const sello = (frame: number, desde: number, color: string): React.CSSProperties => ({

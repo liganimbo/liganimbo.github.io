@@ -44,4 +44,4 @@ export const ZOE = {
   c1: "#8B2500",
   c2: "#D9D9D9",
 };
-export type DatosCarta = typeof NICO;
+export type DatosCarta = Omit<typeof NICO, "icono"> & { icono: string | null };
