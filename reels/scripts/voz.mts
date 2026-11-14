@@ -1,5 +1,6 @@
 // Genera la voz de un Reel con ElevenLabs: una pista MP3 por escena en public/voz/<reel>/ y sus duraciones en src/voz.json.
 // Uso: npm run voz -- amistoso       (necesita ELEVENLABS_API_KEY y ELEVENLABS_VOICE_ID en reels/.env)
+//      npm run voz -- amistoso necesita   (solo esas escenas; las demás se quedan como están)
 //      npm run voz -- voces          (lista las voces disponibles en tu cuenta)
 import { execFileSync } from "node:child_process";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
@@ -24,8 +25,10 @@ if (!vozId) throw new Error("Falta ELEVENLABS_VOICE_ID en reels/.env (mira las v
 const reel = process.argv[2] as Reel;
 if (!(reel in GUIONES)) throw new Error(`¿Qué Reel? Uno de: ${Object.keys(GUIONES).join(", ")}`);
 mkdirSync(`public/voz/${reel}`, { recursive: true });
-const duraciones: Record<string, number> = {};
-for (const { id, texto } of GUIONES[reel]) {
+const todas = JSON.parse(readFileSync("src/voz.json", "utf8"));
+const soloEstas = process.argv.slice(3);
+const duraciones: Record<string, number> = soloEstas.length ? { ...todas[reel] } : {};
+for (const { id, texto } of GUIONES[reel].filter(({ id }) => !soloEstas.length || soloEstas.includes(id))) {
   const r = await api(`text-to-speech/${vozId}`, {
     method: "POST",
     headers: { Accept: "audio/mpeg" },
@@ -42,6 +45,5 @@ for (const { id, texto } of GUIONES[reel]) {
   duraciones[id] = Math.round(segundos * 100) / 100;
   console.log(`✓ ${id}: ${duraciones[id]} s`);
 }
-const todas = JSON.parse(readFileSync("src/voz.json", "utf8"));
 todas[reel] = duraciones;
 writeFileSync("src/voz.json", JSON.stringify(todas, null, 2) + "\n");

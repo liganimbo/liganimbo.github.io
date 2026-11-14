@@ -3,7 +3,7 @@
 import { Easing, Interactive, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
 import datos from "./datos/amistoso.json";
 import { Carta, Dado, Escudo, Logo } from "./elementos";
-import { Eleccion, entra, etiqueta, fijo, suave, titular } from "./escenas";
+import { Cuenta, Eleccion, entra, etiqueta, fijo, suave, titular } from "./escenas";
 import { COLOR, texto } from "./marca";
 
 const [LOCAL, VISITANTE] = datos.equipos;
@@ -172,39 +172,57 @@ const FarolInner = () => {
 };
 export const AmistosoFarol = Interactive.create({ Component: FarolInner, layout: "absolute-fill" });
 
-// 5. Lo que necesita en los dados
+// 5. Lo que necesita en los dados: la cuenta paso a paso, al ritmo de la voz
 const NecesitaInner = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
+  const triple = D.defensa + 2;
   return (
     <>
-      <div style={{ ...titular, position: "absolute", top: 300, left: 80, right: 80, fontSize: 96, ...entra(frame, 0) }}>
-        Para el triple
-        <br />
-        <span style={{ color: COLOR.lila }}>necesita sacar</span>
+      <div style={{ ...titular, position: "absolute", top: 300, left: 80, right: 80, fontSize: 104, ...entra(frame, 0) }}>
+        ¿Qué necesita?
+      </div>
+      <div style={{ position: "absolute", top: 520, left: 80, right: 80, display: "flex", flexDirection: "column", gap: 70 }}>
+        <Cuenta
+          nombre={`Defensa de ${nombre(D.defensor.nombre)}`}
+          sumandos={[["5", "base"], [`+${D.defensa - 5}`, "su defensa"]]}
+          total={D.defensa}
+          desde={0.3 * fps}
+          color={COLOR.lila}
+        />
+        <Cuenta
+          nombre="Un triple tiene que superarla por 2"
+          sumandos={[[String(D.defensa), "defensa"], ["+2", "por ser triple"]]}
+          total={triple}
+          desde={2.6 * fps}
+          color={COLOR.texto}
+        />
+        <Cuenta
+          nombre={`${nombre(D.tirador.nombre)} pone su ataque`}
+          sumandos={[[String(triple), "para el triple"], [`−${D.ataque}`, "su ataque"]]}
+          total={D.necesita}
+          desde={6.5 * fps}
+          color={COLOR.oro}
+        />
       </div>
       <div
         style={{
           ...titular,
           position: "absolute",
-          top: 620,
-          left: 0,
-          right: 0,
+          top: 1420,
+          left: 80,
+          right: 80,
+          fontSize: 120,
+          color: COLOR.noche,
+          background: COLOR.oro,
+          padding: "20px 36px",
+          borderRadius: 28,
           textAlign: "center",
-          fontSize: 520,
-          color: COLOR.oro,
-          opacity: interpolate(frame, [0.8 * fps, 0.8 * fps + 4], [0, 1], fijo),
-          scale: interpolate(frame, [0.8 * fps, 1.3 * fps], [1.5, 1], { ...fijo, easing: Easing.out(Easing.back(2)) }),
+          opacity: interpolate(frame, [8.4 * fps, 8.4 * fps + 4], [0, 1], fijo),
+          scale: interpolate(frame, [8.4 * fps, 8.9 * fps], [1.4, 1], { ...fijo, easing: Easing.out(Easing.back(2)) }),
         }}
       >
-        {D.necesita}+
-      </div>
-      <div style={{ ...etiqueta, position: "absolute", top: 1180, left: 0, right: 0, textAlign: "center", ...entra(frame, 1.3 * fps) }}>
-        sumando los dos dados
-      </div>
-      <div style={{ position: "absolute", top: 1400, left: 80, right: 80, fontFamily: texto, fontWeight: 500, fontSize: 42, lineHeight: 1.35, color: COLOR.apagado, ...entra(frame, 2.6 * fps) }}>
-        Si los {VISITANTE.nombre} hubieran cerrado fuera, le habría hecho falta un{" "}
-        <span style={{ color: COLOR.texto, fontWeight: 700 }}>{D.necesita + 2}</span>.
+        Dados: {D.necesita} o más
       </div>
     </>
   );

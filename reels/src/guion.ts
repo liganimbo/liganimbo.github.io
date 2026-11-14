@@ -14,7 +14,7 @@ export const GUIONES = {
     { id: "reto", minimo: 5, texto: "Último ataque de los Gigantes. Una canasta de dos solo les da el empate. Para ganar, necesitan un triple." },
     { id: "tiradora", minimo: 4, texto: "Tira Carla Echeverría. Ataque: dos. No es una tiradora." },
     { id: "farol", minimo: 5, texto: "Los Lobos esperan que vaya a lo seguro, y cierran dentro. Pero Carla… tira de tres." },
-    { id: "necesita", minimo: 5, texto: "Como la defensa ha fallado, le basta con sacar siete o más entre los dos dados." },
+    { id: "necesita", minimo: 10, texto: "La defensa de Ciro vale siete. Para meter un triple, hay que superarla por dos: nueve. Carla pone dos de ataque… así que los dados tienen que sumar siete o más." },
     { id: "dados", minimo: 4, texto: "Tres… y seis. ¡Nueve!" },
     { id: "final", minimo: 3.5, texto: "¡Triple! Los Gigantes ganan diez a nueve." },
     { id: "cierre", minimo: 3.5, texto: "La Temporada 1 empieza el doce de enero. ¿Con quién vas?" },
