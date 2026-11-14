@@ -1,7 +1,7 @@
-// Reel: un amistoso de pretemporada contado por su jugada decisiva. Las escenas se ajustan a la voz (tiempos.ts).
+// Reel: un amistoso de pretemporada contado solo por su jugada decisiva. Las escenas se ajustan a la voz (tiempos.ts).
 import { Audio } from "@remotion/media";
 import { staticFile, Track } from "remotion";
-import { AmistosoCierre, AmistosoDados, AmistosoFinal, AmistosoGancho, AmistosoJugada, AmistosoLobos, AmistosoPartido } from "./escenas-amistoso";
+import { AmistosoCierre, AmistosoDados, AmistosoFarol, AmistosoFinal, AmistosoGancho, AmistosoNecesita, AmistosoReto, AmistosoTiradora } from "./escenas-amistoso";
 import datos from "./datos/amistoso.json";
 import { fondo } from "./marca";
 import { GUIONES } from "./guion";
@@ -15,10 +15,11 @@ export const Amistoso = () => {
   return (
     <>
       <Track name="Escenas">
-        <AmistosoGancho name="Gancho" from={T.gancho.desde} durationInFrames={T.gancho.duracion} style={{ background: fondo() }} />
-        <AmistosoPartido name="Partido" from={T.partido.desde} durationInFrames={T.partido.duracion} style={{ background: fondo() }} />
-        <AmistosoLobos name="Lobos" from={T.lobos.desde} durationInFrames={T.lobos.duracion} style={{ background: fondo(VISITANTE.c2) }} />
-        <AmistosoJugada name="Jugada" from={T.jugada.desde} durationInFrames={T.jugada.duracion} style={{ background: fondo(LOCAL.c2) }} />
+        <AmistosoGancho name="Gancho" from={T.gancho.desde} durationInFrames={T.gancho.duracion} style={{ background: fondo(VISITANTE.c2) }} />
+        <AmistosoReto name="Reto" from={T.reto.desde} durationInFrames={T.reto.duracion} style={{ background: fondo() }} />
+        <AmistosoTiradora name="Tiradora" from={T.tiradora.desde} durationInFrames={T.tiradora.duracion} style={{ background: fondo(LOCAL.c2) }} />
+        <AmistosoFarol name="Farol" from={T.farol.desde} durationInFrames={T.farol.duracion} style={{ background: fondo() }} />
+        <AmistosoNecesita name="Necesita" from={T.necesita.desde} durationInFrames={T.necesita.duracion} style={{ background: fondo(LOCAL.c2) }} />
         <AmistosoDados name="Dados" from={T.dados.desde} durationInFrames={T.dados.duracion} style={{ background: fondo() }} />
         <AmistosoFinal name="Final" from={T.final.desde} durationInFrames={T.final.duracion} style={{ background: fondo(LOCAL.c2) }} />
         <AmistosoCierre name="Cierre" from={T.cierre.desde} durationInFrames={T.cierre.duracion} style={{ background: fondo() }} />

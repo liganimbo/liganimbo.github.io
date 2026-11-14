@@ -91,7 +91,7 @@ const CartasInner = () => {
 export const Cartas = Interactive.create({ Component: CartasInner, layout: "absolute-fill" });
 
 /** Carta boca abajo que se da la vuelta en el fotograma `gira`. */
-const Eleccion = ({ quien, revela, gira, color }: { quien: string; revela: string; gira: number; color: string }) => {
+export const Eleccion = ({ quien, revela, gira, color }: { quien: string; revela: string; gira: number; color: string }) => {
   const frame = useCurrentFrame();
   const giro = interpolate(frame, [gira, gira + 12], [0, 1], fijo);
   const delante = giro > 0.5;
@@ -263,7 +263,7 @@ const CierreInner = () => {
           <br />
           <span style={{ color: COLOR.lila }}>Gana quien más anote.</span>
         </div>
-        <div style={{ ...etiqueta, ...entra(frame, 0.6 * fps) }}>Un juego de mesa para jugar en casa</div>
+        <div style={{ ...etiqueta, ...entra(frame, 0.6 * fps) }}>Una liga que también puedes jugar tú</div>
       </div>
       <Logo name="Logo" tam={2.6} style={{ position: "absolute", top: 960, left: 80, ...entra(frame, 1 * fps) }} />
       <div style={{ position: "absolute", top: 1330, left: 80, right: 80, fontFamily: texto, fontWeight: 500, fontSize: 40, color: COLOR.apagado, ...entra(frame, 1.4 * fps) }}>

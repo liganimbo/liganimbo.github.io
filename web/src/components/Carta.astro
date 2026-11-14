@@ -12,6 +12,8 @@ interface Props {
 const { j, mini = false, enlace = true } = Astro.props;
 const f = franquicias[j.franquicia];
 const Etiqueta = enlace ? "a" : "div";
+/** Lo que le queda por crecer: solo se enseña si tiene margen. */
+const margen = j.techo - j.ataque - j.defensa;
 ---
 
 <Etiqueta
@@ -25,6 +27,7 @@ const Etiqueta = enlace ? "a" : "div";
   </div>
   <div class="carta-nombre">{j.nombre}</div>
   {!mini && <div class="carta-meta">{j.edad} años · {j.origen}</div>}
+  {!mini && margen > 0 && <div class="carta-techo" title="Lo máximo que pueden llegar a sumar su Ataque y su Defensa">Techo {j.techo} · puede crecer +{margen}</div>}
   <div class="carta-numeros">
     <div><span>{j.ataque}</span><small>Ataque</small></div>
     <div><span>{j.defensa}</span><small>Defensa</small></div>

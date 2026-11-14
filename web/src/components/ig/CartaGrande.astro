@@ -8,6 +8,7 @@ interface Props {
 }
 const { j, giro = 0 } = Astro.props;
 const f = franquicias[j.franquicia];
+const margen = j.techo - j.ataque - j.defensa;
 ---
 
 <div class="carta-ig" style={`--c1:${f.colores[0]};--c2:${f.colores[1]};transform:rotate(${giro}deg)`}>
@@ -17,6 +18,7 @@ const f = franquicias[j.franquicia];
   </div>
   <div class="nombre">{j.nombre}</div>
   <div class="meta">{j.edad} años · {j.origen}</div>
+  {margen > 0 && <div class="techo">Techo {j.techo} · puede crecer +{margen}</div>}
   <div class="numeros">
     <div><span>{j.ataque}</span><small>Ataque</small></div>
     <div><span>{j.defensa}</span><small>Defensa</small></div>

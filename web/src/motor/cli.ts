@@ -9,14 +9,12 @@
 //   estado            muestra en qué punto está la temporada
 import fs from "node:fs";
 import path from "node:path";
-import { generarMundo, generarPotenciales, type Mundo } from "./mundo.ts";
+import { generarMundo, type Mundo } from "./mundo.ts";
 import { type Estado, type PartidoGuardado, crearTemporada, inicioSiguiente, jugarNoche, siguienteNoche, terminada, vista } from "./temporada.ts";
 import { jugarVerano } from "./verano.ts";
 
 const DATOS = path.resolve(import.meta.dirname, "../../../datos");
 const RUTA_MUNDO = path.join(DATOS, "mundo.json");
-// Potenciales secretos: este archivo no se sube al repositorio (ver .gitignore).
-const RUTA_POTENCIALES = path.join(DATOS, "potenciales.json");
 const carpeta = (t: number) => path.join(DATOS, `temporada-${t}`);
 
 const leer = <T>(ruta: string): T => JSON.parse(fs.readFileSync(ruta, "utf-8"));
@@ -75,7 +73,6 @@ switch (orden) {
     const mundo = generarMundo(semilla);
     const estado = crearTemporada(mundo);
     guardar(mundo, estado, []);
-    escribir(RUTA_POTENCIALES, generarPotenciales(mundo));
     console.log(`Liga creada con la semilla "${semilla}": ${Object.keys(mundo.jugadores).length} cartas, ${estado.calendario.length} jornadas. Pretemporada.`);
     resumen(mundo, estado);
     break;
@@ -102,13 +99,11 @@ switch (orden) {
       console.error(`La Temporada ${estado.temporada} aún no ha terminado: el verano llega después de las Finales.`);
       process.exit(1);
     }
-    const potenciales = leer<Record<string, number>>(RUTA_POTENCIALES);
     const tabla = vista(mundo, estado, partidos).clasificacion;
-    const informe = jugarVerano(mundo, potenciales, tabla, estado.playoffs);
+    const informe = jugarVerano(mundo, tabla, estado.playoffs);
     const nueva = crearTemporada(mundo, mundo.temporada, inicioSiguiente(estado));
     guardar(mundo, nueva, []);
     escribir(path.join(carpeta(nueva.temporada), "verano.json"), informe);
-    escribir(RUTA_POTENCIALES, potenciales);
     const n = (id: string) => mundo.jugadores[id].nombre;
     console.log(`Verano de la Temporada ${informe.temporada}:`);
     console.log(`  Retiradas: ${informe.retiradas.map((r) => n(r.jugador)).join(", ") || "ninguna"}`);

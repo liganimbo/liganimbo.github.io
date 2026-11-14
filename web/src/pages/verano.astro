@@ -57,10 +57,11 @@ const enEquipo = (id: string) => !!franquicias[jugadores[id]?.franquicia];
         <h2>Qué pasa en verano</h2>
         <ol class="pasos">
           <li><strong>Presupuesto.</strong> Cada club ingresa {VERANO.presupuestoBase} (+1 si su mercado es mediano, +2 si es grande) y +1 por cada ronda de playoffs ganada.</li>
-          <li><strong>Evolución.</strong> Cada carta tira un dado: las jóvenes mejoran, las de plenitud se mantienen y las veteranas se desgastan. Cada carta tiene un techo secreto.</li>
+          <li><strong>Evolución.</strong> Cada carta tira un dado: las jóvenes mejoran, las de plenitud se mantienen y las veteranas se desgastan. Ninguna pasa de su techo, que está a la vista en cada carta (como mucho, 10).</li>
           <li><strong>Retiradas.</strong> Desde los {VERANO.edadRetiro} años, una carta puede colgar las botas.</li>
           <li><strong>Contratos.</strong> Las que acaban contrato renuevan con su sueldo nuevo… o se van.</li>
-          <li><strong>Draft.</strong> {VERANO.promesas} promesas de 19 a 21 años. Elige primero el último de la liga; los ojeadores ayudan a ver su potencial.</li>
+          <li><strong>Draft.</strong> {VERANO.promesas} promesas de 19 a 21 años. Elige primero el último de la liga.</li>
+          <li><strong>Ojeo.</strong> Cada nivel de ojeadores descubre una promesa más, que el club puede fichar por el sueldo mínimo.</li>
           <li><strong>Agencia libre.</strong> Las cartas sin equipo, a disposición de quien pueda pagarlas.</li>
           <li><strong>Instalaciones.</strong> Lo que sobra se invierte en ojeadores o en el centro de entrenamiento.</li>
         </ol>
@@ -73,7 +74,7 @@ const enEquipo = (id: string) => !!franquicias[jugadores[id]?.franquicia];
     verano && (
       <>
         <h2>Draft</h2>
-        <p class="apagado">Las promesas eligen en orden inverso a la clasificación. Su potencial es secreto: se descubrirá jugando.</p>
+        <p class="apagado">Las promesas eligen en orden inverso a la clasificación. Su techo está a la vista; llegar a él depende de los dados.</p>
         <div class="mano">
           {verano.draft.map((d) => (
             <div class="pick">

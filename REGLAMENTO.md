@@ -137,7 +137,7 @@ Cada carta tira **un dado**:
 
 - Bonus al dado: *Esfuerzo* +1. Las jóvenes suman además +1 por cada nivel de **entrenamiento** de su club y +1 si en su equipo hay una carta con *Veteranía*.
 - El club reparte los puntos entre Ataque y Defensa (ninguno pasa de 6 ni baja de 2).
-- **Potencial:** cada carta tiene un **techo secreto**: lo máximo que pueden sumar su Ataque y su Defensa. Nunca se publica.
+- **Techo:** cada carta tiene un **techo**, a la vista de todos: lo máximo que pueden llegar a sumar su Ataque y su Defensa. Ninguna carta pasa de **10**. Las jóvenes suelen tener margen para crecer; las demás casi siempre están ya en su techo.
 - Después, todas cumplen un año.
 
 ### 8.3 Retiradas
@@ -149,24 +149,28 @@ Desde los **34 años**, una carta se retira si saca **1 o 2**. Las cartas libres
 - *Corazón del club* renueva cobrando 1 menos. *A sueldo* se marcha si su equipo no ha jugado playoffs.
 
 ### 8.5 Draft
-- **12 promesas** de 19 a 21 años. Se ve su Ataque y su Defensa, pero no su techo.
+- **12 promesas** de 19 a 21 años. Se ve todo: Ataque, Defensa y techo.
 - Elige primero el **último** de la liga regular, y así hasta el primero.
-- Los **ojeadores** ayudan a intuir el techo: sin ojeadores es casi una apuesta; con nivel 3 se ve exacto.
 - La promesa elegida entra siempre en la plantilla.
 
-### 8.6 Plantilla y agencia libre
+### 8.6 Ojeo
+- Los **ojeadores** encuentran promesas que no han pasado por el draft: **una por cada nivel** (nivel 1, una; nivel 3, tres).
+- El club puede fichar **una** de ellas con **sueldo 1**, sea cual sea su valor, y contrato de 3 temporadas. Es la forma barata de conseguir talento joven.
+- La que ficha compite por una plaza como las demás; las que no, se quedan fuera de la liga.
+
+### 8.7 Plantilla y agencia libre
 - Cada club se queda con **4 cartas** cuyos sueldos quepan en su presupuesto. Las que no entran, a la **agencia libre**.
 - En orden inverso a la clasificación, cada club puede fichar una carta libre si le cabe en el presupuesto, o cambiarla por su peor carta.
 - Si a un club le falta alguien, sube una carta de su **cantera** (valor 5, sueldo 1).
 
-### 8.7 Instalaciones
+### 8.8 Instalaciones
 Lo que sobra del presupuesto se invierte (**3 por nivel**, hasta nivel 3) o se ahorra (**como mucho 3**):
-- **Ojeadores:** ven mejor el potencial de las promesas.
+- **Ojeadores:** cada nivel descubre una promesa más en el ojeo (§8.6).
 - **Centro de entrenamiento:** +1 al dado de evolución de las cartas jóvenes por nivel.
 
 El dilema de cada verano: estrellas hoy o estructura para mañana.
 
-### 8.8 Quién decide
+### 8.9 Quién decide
 Mientras no haya dirección deportiva elegida por la afición, las decisiones las toma la Oficina de la Liga según la filosofía de cada franquicia. Las aficiones que desbloqueen su dirección deportiva podrán decidir renovaciones, draft y fichajes.
 
 ---

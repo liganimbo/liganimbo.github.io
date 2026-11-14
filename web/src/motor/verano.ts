@@ -1,5 +1,5 @@
 // El verano Nimbo: lo que pasa entre una temporada y la siguiente (REGLAMENTO.md, «Fuera de la pista»).
-// Evolución, retiradas, presupuesto, contratos, draft, agencia libre e instalaciones. Las decisiones de cada club las toma la IA según su filosofía.
+// Evolución, retiradas, presupuesto, contratos, draft, ojeo, agencia libre e instalaciones. Las decisiones de cada club las toma la IA según su filosofía.
 import { type Azar, crearAzar, dado, gauss } from "./azar.ts";
 import { type Franquicia, type Jugador, type Mundo, CARTAS_POR_EQUIPO, afinidad, generarJugador, sueldoDe, techo, valorCarta } from "./mundo.ts";
 import type { FilaClasificacion, Serie } from "./temporada.ts";
@@ -42,13 +42,14 @@ export interface Informe {
   renovaciones: { jugador: string; franquicia: string; sueldo: number; anios: number }[];
   salidas: { jugador: string; franquicia: string; motivo: string }[];
   draft: { numero: number; franquicia: string; jugador: string }[];
+  /** Promesas que descubren los ojeadores de cada club: cuántas vio y a cuál ficha (si ficha). */
+  ojeo: { franquicia: string; vistas: number; jugador: string | null }[];
   fichajes: { jugador: string; franquicia: string; desde: string }[];
   instalaciones: { franquicia: string; tipo: "ojeadores" | "entrenamiento"; nivel: number }[];
 }
 
 export function jugarVerano(
   mundo: Mundo,
-  potenciales: Record<string, number>,
   tabla: FilaClasificacion[],
   playoffs: { ronda: string; series: Serie[] }[],
 ): Informe {
@@ -65,6 +66,7 @@ export function jugarVerano(
     renovaciones: [],
     salidas: [],
     draft: [],
+    ojeo: [],
     fichajes: [],
     instalaciones: [],
   };
@@ -86,7 +88,7 @@ export function jugarVerano(
     informe.presupuestos[f.id] = { ingresos, ahorroPrevio: f.club.ahorro, total: caja[f.id], sueldos: 0, inversion: 0, ahorro: 0 };
   }
 
-  // 2. Evolución: un dado por carta según su etapa, hasta su techo secreto. Después, un año más.
+  // 2. Evolución: un dado por carta según su etapa, hasta su techo. Después, un año más.
   for (const f of mundo.franquicias) {
     const veterania = f.plantilla.some((id) => J[id].rasgo === "Veteranía");
     for (const id of f.plantilla) {
@@ -97,7 +99,7 @@ export function jugarVerano(
         (e === "joven" ? f.club.entrenamiento + (veterania && j.rasgo !== "Veteranía" ? 1 : 0) : 0);
       const tirada = dado(azar) + mods;
       const antes: [number, number] = [j.ataque, j.defensa];
-      const cambio = ajustar(j, cambioPorTirada(j.edad, tirada), potenciales[id] ?? j.ataque + j.defensa, f);
+      const cambio = ajustar(j, cambioPorTirada(j.edad, tirada), j.techo, f);
       informe.evoluciones.push({ jugador: id, franquicia: f.id, edad: j.edad, tirada, cambio, antes, despues: [j.ataque, j.defensa] });
       // El sueldo no cambia mientras dure el contrato: se recalcula al renovar.
     }
@@ -130,29 +132,30 @@ export function jugarVerano(
     }
   }
 
-  // 5. Draft: 12 promesas. El último de la liga elige primero; los ojeadores ven mejor su potencial.
+  // 5. Draft: 12 promesas. El último de la liga elige primero. Su techo está a la vista de todos.
   const usados = new Set(Object.values(J).map((j) => j.nombre));
   let siguienteId = Math.max(...Object.keys(J).map((id) => Number(id.slice(1)))) + 1;
-  const nuevaCarta = (total: number, edad: number) => {
-    const id = `J${String(siguienteId++).padStart(2, "0")}`;
-    const j = generarJugador(azar, id, azar() < 0.5 ? "f" : "m", total, usados, edad);
-    J[id] = j;
-    potenciales[id] = techo(azar, j);
+  /** Una carta nueva que todavía no está en la liga (se registra con `registrar`). */
+  const cartaNueva = (total: number, edad: number) => {
+    const j = generarJugador(azar, "", azar() < 0.5 ? "f" : "m", total, usados, edad);
+    j.techo = techo(azar, j);
     return j;
   };
-  const promesas = Array.from({ length: VERANO.promesas }, () =>
-    nuevaCarta(Math.round(Math.min(9, Math.max(4, gauss(azar, 5.5, 1)))), 19 + Math.floor(azar() * 3)),
-  );
-  // Lo que cada club cree que puede llegar a mejorar una carta joven (con ruido según sus ojeadores).
-  const estimarMargen = (f: Franquicia, j: Jugador) => {
-    const real = (potenciales[j.id] ?? j.ataque + j.defensa) - (j.ataque + j.defensa);
-    const ruido = [1.6, 1, 0.5, 0][f.club.ojeadores];
-    return Math.max(0, real + gauss(azar, 0, ruido));
+  const registrar = (j: Jugador) => {
+    j.id = `J${String(siguienteId++).padStart(2, "0")}`;
+    J[j.id] = j;
+    return j;
   };
+  const nuevaCarta = (total: number, edad: number) => registrar(cartaNueva(total, edad));
+  const nuevaPromesa = () => cartaNueva(Math.round(Math.min(9, Math.max(4, gauss(azar, 5.5, 1)))), 19 + Math.floor(azar() * 3));
+  const promesas = Array.from({ length: VERANO.promesas }, () => registrar(nuevaPromesa()));
+  /** Lo que vale una promesa para un club: lo que es hoy, lo que puede llegar a ser y si encaja en su filosofía. */
+  const puntosPromesa = (f: Franquicia, j: Jugador) =>
+    valorCarta(j) + 0.6 * (j.techo - j.ataque - j.defensa) + afinidad(f.filosofia, j) * 0.5;
   const disponibles = new Set(promesas.map((j) => j.id));
   inverso.forEach((fid, i) => {
     const f = F[fid];
-    const puntos = (id: string) => valorCarta(J[id]) + 0.6 * estimarMargen(f, J[id]) + afinidad(f.filosofia, J[id]) * 0.5;
+    const puntos = (id: string) => puntosPromesa(f, J[id]);
     const elegido = [...disponibles].sort((a, b) => puntos(b) - puntos(a))[0];
     disponibles.delete(elegido);
     const j = J[elegido];
@@ -163,9 +166,31 @@ export function jugarVerano(
     informe.draft.push({ numero: i + 1, franquicia: fid, jugador: elegido });
   });
 
-  // 6. Plantilla de 4 que quepa en el presupuesto. Quien no entra y tenía el contrato acabado, no se renueva.
   const valorPara = (f: Franquicia, j: Jugador) =>
-    valorCarta(j) + afinidad(f.filosofia, j) * 0.4 + (etapa(j.edad) === "joven" ? 0.5 : etapa(j.edad) === "veterana" ? -0.5 : 0);
+    valorCarta(j) +
+    afinidad(f.filosofia, j) * 0.4 +
+    0.3 * (j.techo - j.ataque - j.defensa) +
+    (etapa(j.edad) === "joven" ? 0.5 : etapa(j.edad) === "veterana" ? -0.5 : 0);
+
+  // 6. Ojeo: cada nivel de ojeadores descubre una promesa que no ha pasado por el draft. El club puede fichar
+  //    la que más le guste por el sueldo mínimo si mejora a su peor carta (luego compite por plaza como las demás).
+  for (const fid of inverso) {
+    const f = F[fid];
+    if (!f.club.ojeadores) continue;
+    const vistas = Array.from({ length: f.club.ojeadores }, nuevaPromesa).sort((a, b) => puntosPromesa(f, b) - puntosPromesa(f, a));
+    const peor = Math.min(...f.plantilla.map((id) => valorPara(f, J[id])));
+    const mejor = vistas[0];
+    if (puntosPromesa(f, mejor) > peor) {
+      registrar(mejor);
+      mejor.franquicia = fid;
+      mejor.contrato = 3;
+      mejor.sueldo = 1;
+      f.plantilla.push(mejor.id);
+    }
+    informe.ojeo.push({ franquicia: fid, vistas: vistas.length, jugador: f.plantilla.includes(mejor.id) ? mejor.id : null });
+  }
+
+  // 7. Plantilla de 4 que quepa en el presupuesto. Quien no entra y tenía el contrato acabado, no se renueva.
   const sueldoRenovado = (j: Jugador) => Math.max(1, sueldoDe(j) - (j.rasgo === "Corazón del club" ? 1 : 0));
   const elegidas = new Set(informe.draft.map((d) => d.jugador));
   for (const fid of inverso) {
@@ -194,7 +219,7 @@ export function jugarVerano(
     }
   }
 
-  // 7. Agencia libre: en orden inverso, cada club completa su plantilla o mejora su peor carta si le cabe.
+  // 8. Agencia libre: en orden inverso, cada club completa su plantilla o mejora su peor carta si le cabe.
   const sueldos = (f: Franquicia) => f.plantilla.reduce((s, id) => s + J[id].sueldo, 0);
   const fichar = (f: Franquicia, j: Jugador) => {
     const desde = informe.salidas.find((s) => s.jugador === j.id)?.franquicia ?? "";
@@ -243,7 +268,7 @@ export function jugarVerano(
     }
   }
 
-  // 8. Lo que sobra: instalaciones (3 por nivel) y, como mucho, 3 de ahorro.
+  // 9. Lo que sobra: instalaciones (3 por nivel) y, como mucho, 3 de ahorro.
   for (const f of mundo.franquicias) {
     let resto = caja[f.id] - sueldos(f);
     const p = informe.presupuestos[f.id];

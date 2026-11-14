@@ -65,7 +65,7 @@ const iconos = [...new Set(perfil.iconos)].map((i) => `${perfil.iconos.filter((x
   <h2>El club</h2>
   <div class="ficha-equipo">
     <div class="dato"><span class="etq">Presupuesto</span><strong>{f.club.presupuesto ?? "—"}</strong><span class="apagado">{f.club.presupuesto === null ? "Se fija en el primer verano" : `Sueldos ${sueldos} · ahorro ${f.club.ahorro}`}</span></div>
-    <div class="dato"><span class="etq">Ojeadores</span><strong class="nivel">{nivel(f.club.ojeadores)}</strong><span class="apagado">Ven el potencial de las promesas del draft</span></div>
+    <div class="dato"><span class="etq">Ojeadores</span><strong class="nivel">{nivel(f.club.ojeadores)}</strong><span class="apagado">Descubren promesas que se fichan por el sueldo mínimo</span></div>
     <div class="dato"><span class="etq">Entrenamiento</span><strong class="nivel">{nivel(f.club.entrenamiento)}</strong><span class="apagado">Hace crecer más a las cartas jóvenes</span></div>
   </div>
 

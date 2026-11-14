@@ -5,6 +5,8 @@ import type { Carta, Icono } from "./reglas.ts";
 import type { Estilo } from "./ia.ts";
 
 export const CARTAS_POR_EQUIPO = 4;
+/** Lo máximo que puede sumar cualquier carta entre Ataque y Defensa. */
+export const TECHO_MAXIMO = 10;
 
 /** Lo que busca una franquicia en el draft: da forma a su plantilla. */
 export interface Filosofia {
@@ -32,7 +34,7 @@ export interface Franquicia {
 export interface Club {
   /** Ahorro que pasa de un verano al siguiente. */
   ahorro: number;
-  /** Nivel de ojeadores (0-3): ver el potencial de las cartas del draft. */
+  /** Nivel de ojeadores (0-3): cuántas promesas descubre el club cada verano para ficharlas por sueldo mínimo. */
   ojeadores: number;
   /** Nivel del centro de entrenamiento (0-3): +1 al dado de evolución de las jóvenes por nivel. */
   entrenamiento: number;
@@ -46,6 +48,8 @@ export interface Jugador extends Carta {
   origen: string;
   historia: string;
   rasgo: string | null;
+  /** Techo, a la vista de todos: lo máximo que pueden llegar a sumar su Ataque y su Defensa. */
+  techo: number;
   /** Sueldo de 1 a 5, según el valor de la carta. */
   sueldo: number;
   /** Temporadas de contrato que le quedan. */
@@ -135,6 +139,7 @@ export function generarJugador(azar: Azar, id: string, genero: "f" | "m", total:
     origen,
     historia: elegir(azar, HISTORIAS).replace("{origen}", origen).replace("{negocio}", elegir(azar, NEGOCIOS)),
     rasgo: azar() < 0.45 ? elegir(azar, Object.keys(RASGOS)) : null,
+    techo: ataque + defensa, // provisional: lo fija quien crea la carta (techo())
     sueldo: sueldoDe(carta),
     contrato: 1,
     estado: "activa",
@@ -148,8 +153,8 @@ export function generarMundo(semilla: string) {
   // Mitad y mitad, en orden aleatorio.
   const generos = barajar(azar, Array.from({ length: cantidad }, (_, i) => (i % 2 ? "f" : "m") as "f" | "m"));
   // Suma de ataque y defensa: casi todos entre 5 y 8; unas pocas estrellas por encima.
-  const totales = Array.from({ length: cantidad }, () => limitar(gauss(azar, 6.3, 1.2), 3, 10));
-  for (const i of barajar(azar, [...totales.keys()]).slice(0, 6)) totales[i] = Math.min(11, totales[i] + 2);
+  const totales = Array.from({ length: cantidad }, () => limitar(gauss(azar, 6.3, 1.2), 3, TECHO_MAXIMO));
+  for (const i of barajar(azar, [...totales.keys()]).slice(0, 6)) totales[i] = Math.min(TECHO_MAXIMO, totales[i] + 2);
 
   const usados = new Set<string>();
   const jugadores = totales.map((t, i) => generarJugador(azar, `J${String(i + 1).padStart(2, "0")}`, generos[i], t, usados));
@@ -164,6 +169,9 @@ export function generarMundo(semilla: string) {
   // Contratos con su propia secuencia aleatoria, para no cambiar las cartas ya generadas.
   const azarContratos = crearAzar(`contratos-${semilla}`);
   for (const j of jugadores) j.contrato = 1 + Math.floor(azarContratos() * 3);
+  // Techos con su propia secuencia aleatoria, por la misma razón.
+  const azarTechos = crearAzar(`potencial-${semilla}`);
+  for (const j of jugadores) j.techo = techo(azarTechos, j);
   return {
     semilla,
     temporada: 1,
@@ -176,16 +184,10 @@ export function generarMundo(semilla: string) {
   };
 }
 
-/** Techo secreto de una carta: lo máximo que pueden sumar su Ataque y su Defensa. Las jóvenes tienen margen. */
-export function techo(azar: Azar, j: Jugador): number {
-  const margen = j.edad <= 21 ? 1 + Math.floor(azar() * 5) : j.edad <= 23 ? Math.floor(azar() * 5) : j.edad <= 26 ? Math.floor(azar() * 3) : 0;
-  return Math.min(12, j.ataque + j.defensa + margen);
-}
-
-/** Potenciales secretos (no se publican: se guardan en datos/potenciales.json, fuera del repositorio). */
-export function generarPotenciales(mundo: { semilla: string; jugadores: Record<string, Jugador> }): Record<string, number> {
-  const azar = crearAzar(`potencial-${mundo.semilla}`);
-  return Object.fromEntries(Object.values(mundo.jugadores).map((j) => [j.id, techo(azar, j)]));
+/** Techo de una carta: lo máximo que pueden sumar su Ataque y su Defensa. Las jóvenes tienen margen. */
+export function techo(azar: Azar, j: Pick<Jugador, "ataque" | "defensa" | "edad">): number {
+  const margen = j.edad <= 21 ? 1 + Math.floor(azar() * 4) : j.edad <= 23 ? Math.floor(azar() * 5) : j.edad <= 26 ? Math.floor(azar() * 3) : 0;
+  return Math.max(j.ataque + j.defensa, Math.min(TECHO_MAXIMO, j.ataque + j.defensa + margen));
 }
 
 export type Mundo = ReturnType<typeof generarMundo>;
