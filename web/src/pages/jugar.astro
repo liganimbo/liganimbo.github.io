@@ -22,7 +22,7 @@ const datos = { franquicias: mundo.franquicias, jugadores: mundo.jugadores };
       <li>La defensa elige en secreto qué cierra. Si lo adivina, suma +2.</li>
       <li><strong>Ataque</strong> = dos dados + Ataque de quien tira + su icono si encaja.</li>
       <li><strong>Defensa</strong> = 5 + Defensa de quien marca + su icono si encaja + 2 si ha cerrado lo que era.</li>
-      <li>Iconos: <strong>Tiro</strong> +1 al tirar de fuera · <strong>Pintura</strong> +2 al tirar de dentro · <strong>Muro</strong> +2 al defender tiros de dentro.</li>
+      <li>Iconos: <strong>Tiro</strong> +1 al tirar de fuera · <strong>Aro</strong> +2 al tirar de dentro · <strong>Muro</strong> +2 al defender tiros de dentro.</li>
       <li>Dentro entra si el ataque iguala o supera a la defensa. Fuera hay que superarla por 2.</li>
       <li>Tras 4 ataques de cada equipo hay descanso: <strong>el suplente entra obligatoriamente</strong> por alguien que ya haya gastado sus dos tiros, y se rehacen los marcajes.</li>
       <li>Un tiempo muerto por partido para repetir un tiro fallado.</li>
@@ -165,7 +165,7 @@ const datos = { franquicias: mundo.franquicias, jugadores: mundo.jugadores };
             .join("");
           const rj = J[r];
           return `<div class="par">${carta(r)}<div class="flecha">marcado por</div><select data-rival="${r}">${opciones}</select>
-            <div class="apagado peligro">Ataque ${rj.ataque}${rj.icono === "Tiro" || rj.icono === "Pintura" ? ` · ${rj.icono} (${R.DESCRIPCION_ICONO[rj.icono]})` : ""}</div></div>`;
+            <div class="apagado peligro">Ataque ${rj.ataque}${rj.icono === "Tiro" || rj.icono === "Aro" ? ` · ${rj.icono} (${R.DESCRIPCION_ICONO[rj.icono]})` : ""}</div></div>`;
         })
         .join("")}</div>
       <div class="acciones">
@@ -213,7 +213,11 @@ const datos = { franquicias: mundo.franquicias, jugadores: mundo.jugadores };
     const at = J[j.tirador];
     const de = J[j.defensor];
     const mio = j.equipo === YO;
-    const titulo = j.anota
+    const titulo = j.mate
+      ? `${mio ? "¡" : ""}Mate de ${nombre(j.tirador)}${mio ? "!" : ""} +${j.puntos}`
+      : j.tapon
+      ? `Tapón de ${nombre(j.defensor)} a ${nombre(j.tirador)}`
+      : j.anota
       ? `${mio ? "¡" : ""}${nombre(j.tirador)} anota ${j.tipo === "fuera" ? "un triple" : "dentro"}${mio ? "!" : ""} +${j.puntos}`
       : `${nombre(j.tirador)} falla ${TIPO[j.tipo]}`;
     const adivina = j.cierra === j.tipo;
@@ -271,7 +275,11 @@ const datos = { franquicias: mundo.franquicias, jugadores: mundo.jugadores };
       .reverse()
       .slice(0, 12)
       .map((j) => {
-        const txt = j.anota ? `${nombre(j.tirador)} anota ${j.tipo === "fuera" ? "de 3" : "de 2"}` : `${nombre(j.tirador)} falla ${TIPO[j.tipo]}`;
+        const txt = j.mate
+          ? `Mate de ${nombre(j.tirador)}`
+          : j.tapon
+          ? `Tapón de ${nombre(j.defensor)}`
+          : j.anota ? `${nombre(j.tirador)} anota ${j.tipo === "fuera" ? "de 3" : "de 2"}` : `${nombre(j.tirador)} falla ${TIPO[j.tipo]}`;
         return `<li class="${j.anota ? "" : "apagado"}">${escudo(p.equipos[j.equipo].franquicia, 18)} ${txt}${j.tiempoMuerto ? " (tras tiempo muerto)" : ""}<span class="reg-m">${j.marcador[YO]}-${j.marcador[RIVAL]}</span></li>`;
       })
       .join("");

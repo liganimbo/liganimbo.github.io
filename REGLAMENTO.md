@@ -1,4 +1,4 @@
-# Nimbo · Reglamento v0.4
+# Nimbo · Reglamento v0.5
 
 > El juego con el que se deciden los partidos de la Liga Nimbo: baloncesto 3x3 con cartas y dos dados.
 > Se puede jugar en la web, con papel o dejar que el motor lo juegue con el plan de cada equipo.
@@ -31,7 +31,7 @@ Un partido son unas 16 tiradas: entre 5 y 10 minutos.
 │                          │
 │   ATAQUE 5   DEFENSA 3   │
 │                          │
-│   ◆ Pintura        ●●    │
+│   ◆ Aro            ●●    │
 └──────────────────────────┘
 ```
 
@@ -40,7 +40,7 @@ Un partido son unas 16 tiradas: entre 5 y 10 minutos.
 | Icono | Efecto |
 |---|---|
 | **Tiro** | +1 al tirar de fuera. |
-| **Pintura** | +2 al tirar de dentro. |
+| **Aro** | +2 al tirar de dentro. |
 | **Muro** | +2 al defender tiros de dentro. Contra los de fuera no suma. |
 
 Los tres valen más o menos lo mismo que un punto de Ataque o de Defensa (medido con simulaciones). El Tiro suma menos porque el triple ya vale más.
@@ -80,6 +80,12 @@ DEFENSA = 5 + Defensa de quien le marca (+2 si es Muro y el tiro es de dentro) (
    - Si no, no entra.
 5. Ataca el otro equipo.
 
+**Mates y tapones.** No cambian nada en el marcador: se cantan, se apuntan y salen en los vídeos.
+- **Mate:** canasta de dentro que supera a la defensa por **6 o más**.
+- **Tapón:** tiro de dentro que se queda corto por **4 o más**. Lo pone quien marcaba.
+
+Salen unos 3 mates y unos 3 tapones por jornada. Los mates son cosa sobre todo de las cartas con Aro, y de las defensas que cierran lo que no era.
+
 ---
 
 ## 5. Descanso, tiempo muerto y final
@@ -108,14 +114,14 @@ DEFENSA = 5 + Defensa de quien le marca (+2 si es Muro y el tiro es de dentro) (
 
 Los Forjadores atacan. Les marcan así: Sekou (Defensa 5, Muro) a Inés, Lucía (Defensa 4) a Finn y Gerard (Defensa 2) a Rhys.
 
-1. Forjadores elige a **Inés** (Ataque 5, Pintura, ●●), aunque la marca Sekou. Gasta una ficha (●○).
-2. Forjadores elige en secreto **dentro**. Búhos, que espera que Inés vaya a la pintura, **cierra dentro**.
+1. Forjadores elige a **Inés** (Ataque 5, Aro, ●●), aunque la marca Sekou. Gasta una ficha (●○).
+2. Forjadores elige en secreto **dentro**. Búhos, que espera que Inés vaya dentro, **cierra dentro**.
 3. Salen un 6 y un 5:
-   - ATAQUE: 11 + 5 + 2 (Pintura, tira dentro) = **18**
+   - ATAQUE: 11 + 5 + 2 (Aro, tira dentro) = **18**
    - DEFENSA: 5 + 5 + 2 (Muro) + 2 (ha cerrado dentro) = **14**
-   - 18 ≥ 14: **canasta de 2** para Inés.
+   - 18 ≥ 14: **canasta de 2** para Inés. Por 4: le faltaron 2 para que fuera mate.
 
-Si Búhos hubiera cerrado fuera, la defensa habría sido 12. Y si Forjadores hubiera tirado de fuera, Inés perdía el +2 de Pintura (su ataque se quedaba en 16), pero la defensa bajaba mucho más: el Muro de Sekou no cuenta contra los triples y Búhos había cerrado dentro, así que la defensa era 10 y le bastaba con 12. **Triple.**
+Si Búhos hubiera cerrado fuera, la defensa habría sido 12. Y si Forjadores hubiera tirado de fuera, Inés perdía el +2 de Aro (su ataque se quedaba en 16), pero la defensa bajaba mucho más: el Muro de Sekou no cuenta contra los triples y Búhos había cerrado dentro, así que la defensa era 10 y le bastaba con 12. **Triple.**
 
 ---
 
@@ -195,7 +201,7 @@ Para jugar en papel con dos dados y algo para marcar las fichas.
 
 | Jugador | Edad | Ataque | Defensa | Icono |
 |---|---|---|---|---|
-| Inés Salinas | 29 | 5 | 3 | Pintura |
+| Inés Salinas | 29 | 5 | 3 | Aro |
 | Finn Ivanov | 29 | 4 | 3 | Tiro |
 | Rhys Ashworth | 32 | 2 | 5 | Muro |
 | Leo Lozano *(suplente)* | 21 | 3 | 3 | — |
@@ -207,7 +213,7 @@ Para jugar en papel con dos dados y algo para marcar las fichas.
 | Gerard Ibarra | 30 | 5 | 2 | Tiro |
 | Lucía Domínguez | 26 | 4 | 4 | — |
 | Sekou Ortega | 24 | 2 | 5 | Muro |
-| Maite Pacheco *(suplente)* | 34 | 3 | 3 | Pintura |
+| Maite Pacheco *(suplente)* | 34 | 3 | 3 | Aro |
 
 ---
 

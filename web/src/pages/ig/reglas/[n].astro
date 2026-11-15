@@ -15,8 +15,8 @@ const n = Number(Astro.params.n);
 const cartas = activas();
 const mejores = [...cartas].sort((a, b) => b.ataque + b.defensa - (a.ataque + a.defensa));
 
-// Ejemplo real: una carta con Pintura ataca a alguien con Muro de otro equipo.
-const atacante = mejores.find((j) => j.icono === "Pintura" && j.ataque >= 4) ?? mejores[0];
+// Ejemplo real: una carta con Aro ataca a alguien con Muro de otro equipo.
+const atacante = mejores.find((j) => j.icono === "Aro" && j.ataque >= 4) ?? mejores[0];
 const defensor = mejores.find((j) => j.icono === "Muro" && j.franquicia !== atacante.franquicia) ?? mejores[1];
 const dados: [number, number] = [5, 4];
 const ejAtaque = dados[0] + dados[1] + valorAtaque(atacante, "dentro");
@@ -79,14 +79,14 @@ const acento = n === 6 ? franquicias[atacante.franquicia].colores[0] : "#4f46e5"
         <h1 class="titular">Los iconos</h1>
         <p class="entradilla">Algunas cartas tienen una especialidad. Como mucho, una.</p>
         <div class="iconos">
-          {(["Tiro", "Pintura", "Muro"] as const).map((icono) => (
+          {(["Tiro", "Aro", "Muro"] as const).map((icono) => (
             <div class="icono-fila">
               <span class="pastilla">{icono}</span>
               <span>{DESCRIPCION_ICONO[icono]}</span>
             </div>
           ))}
         </div>
-        <p class="nota">El Tiro suma menos porque el triple ya vale más. El Muro manda en la zona, pero no frena los triples.</p>
+        <p class="nota">El Tiro suma menos porque el triple ya vale más. El Muro manda cerca del aro, pero no frena los triples.</p>
       </section>
     )
   }
@@ -152,7 +152,7 @@ const acento = n === 6 ? franquicias[atacante.franquicia].colores[0] : "#4f46e5"
         <ol class="pasos">
           <li>{nombreCorto(atacante.nombre)} tira <strong>dentro</strong>. La defensa lo lee y <strong>cierra dentro</strong>.</li>
           <li>
-            Dados <span class="dado">{dados[0]}</span><span class="dado">{dados[1]}</span> → ataque {dados[0] + dados[1]} + {atacante.ataque} + {valorAtaque(atacante, "dentro") - atacante.ataque} (Pintura) = <strong>{ejAtaque}</strong>
+            Dados <span class="dado">{dados[0]}</span><span class="dado">{dados[1]}</span> → ataque {dados[0] + dados[1]} + {atacante.ataque} + {valorAtaque(atacante, "dentro") - atacante.ataque} (Aro) = <strong>{ejAtaque}</strong>
           </li>
           <li>
             Defensa: {REGLAS.baseDefensa} + {defensor.defensa} + {REGLAS.bonusMuro} (Muro) + {REGLAS.bonusCierre} (lo adivinó) = <strong>{ejDefensa}</strong>
@@ -160,7 +160,7 @@ const acento = n === 6 ? franquicias[atacante.franquicia].colores[0] : "#4f46e5"
           <li class:list={["resultado", { falla: ejAtaque < ejDefensa }]}>{ejAtaque >= ejDefensa ? `${ejAtaque} ≥ ${ejDefensa}: ¡canasta de 2!` : `${ejAtaque} < ${ejDefensa}: no entra.`}</li>
         </ol>
         <p class="nota">
-          ¿Y si hubiera tirado de fuera? Perdía la Pintura ({ejAtaqueFuera}), pero la defensa se quedaba en {ejDefensaFuera}: necesitaba {ejDefensaFuera + REGLAS.margenFuera}.{" "}
+          ¿Y si hubiera tirado de fuera? Perdía el Aro ({ejAtaqueFuera}), pero la defensa se quedaba en {ejDefensaFuera}: necesitaba {ejDefensaFuera + REGLAS.margenFuera}.{" "}
           {ejAtaqueFuera >= ejDefensaFuera + REGLAS.margenFuera ? "Habría sido triple." : "Tampoco entraba."}
         </p>
       </section>

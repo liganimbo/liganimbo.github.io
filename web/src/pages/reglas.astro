@@ -8,8 +8,8 @@ import { CARTAS_POR_EQUIPO, TECHO_MAXIMO } from "../motor/mundo.ts";
 import { VERANO } from "../motor/verano.ts";
 
 const cartas = activas().sort((a, b) => b.ataque + b.defensa - (a.ataque + a.defensa));
-// Ejemplo con cartas reales: alguien con Pintura tira contra alguien con Muro de otro equipo.
-const atacante = cartas.find((j) => j.icono === "Pintura" && j.ataque >= 4) ?? cartas[0];
+// Ejemplo con cartas reales: alguien con Aro tira contra alguien con Muro de otro equipo.
+const atacante = cartas.find((j) => j.icono === "Aro" && j.ataque >= 4) ?? cartas[0];
 const defensor = cartas.find((j) => j.icono === "Muro" && j.franquicia !== atacante.franquicia) ?? cartas[1];
 const dados: [number, number] = [5, 4];
 const suma = dados[0] + dados[1];
@@ -62,7 +62,7 @@ const enPista = CARTAS_POR_EQUIPO - 1;
       </ul>
       <div class="iconos">
         {
-          (["Tiro", "Pintura", "Muro"] as const).map((i) => (
+          (["Tiro", "Aro", "Muro"] as const).map((i) => (
             <div>
               <span class="etiqueta">{i}</span> {DESCRIPCION_ICONO[i]}.
             </div>
@@ -123,6 +123,11 @@ const enPista = CARTAS_POR_EQUIPO - 1;
     <li><span class="etiqueta">Dentro</span> entra si el ataque <strong>iguala o supera</strong> a la defensa: {REGLAS.puntos.dentro} puntos.</li>
     <li><span class="etiqueta">Fuera</span> entra si el ataque <strong>supera a la defensa por {REGLAS.margenFuera} o más</strong>: {REGLAS.puntos.fuera} puntos.</li>
   </ul>
+  <p>
+    <strong>Mates y tapones</strong> no cambian el marcador, pero se cantan: una canasta de dentro que supera a la defensa por
+    {REGLAS.margenMate} o más es un <strong>mate</strong>, y un tiro de dentro que se queda corto por {REGLAS.margenTapon} o más es un
+    <strong>tapón</strong> de quien marcaba.
+  </p>
 
   <h2>Un ejemplo</h2>
   <div class="tarjeta ejemplo">
@@ -130,7 +135,7 @@ const enPista = CARTAS_POR_EQUIPO - 1;
       <li>{nombre(atacante.nombre)} tira <strong>dentro</strong>. La defensa lo lee y <strong>cierra dentro</strong>.</li>
       <li>
         Salen un <span class="dado">{dados[0]}</span> y un <span class="dado">{dados[1]}</span>. Ataque: {suma} + {atacante.ataque}
-        + {valorAtaque(atacante, "dentro") - atacante.ataque} (Pintura) = <strong>{ataqueDentro}</strong>.
+        + {valorAtaque(atacante, "dentro") - atacante.ataque} (Aro) = <strong>{ataqueDentro}</strong>.
       </li>
       <li>
         Defensa de {nombre(defensor.nombre)}: {REGLAS.baseDefensa} + {defensor.defensa} + {REGLAS.bonusMuro} (Muro) + {REGLAS.bonusCierre}
@@ -141,7 +146,7 @@ const enPista = CARTAS_POR_EQUIPO - 1;
       {ataqueDentro >= defensaDentro ? `${ataqueDentro} ≥ ${defensaDentro}: ¡canasta de 2!` : `${ataqueDentro} < ${defensaDentro}: no entra.`}
     </p>
     <p class="apagado">
-      ¿Y si hubiera tirado de fuera? Perdía la Pintura (ataque {ataqueFuera}), pero el Muro no frena los triples y la defensa
+      ¿Y si hubiera tirado de fuera? Perdía el Aro (ataque {ataqueFuera}), pero el Muro no frena los triples y la defensa
       había cerrado dentro: se quedaba en {defensaFuera} y le bastaba con {defensaFuera + REGLAS.margenFuera}.{" "}
       {ataqueFuera >= defensaFuera + REGLAS.margenFuera ? "Habría sido triple." : "Tampoco entraba."}
     </p>
@@ -192,7 +197,7 @@ const enPista = CARTAS_POR_EQUIPO - 1;
   <h2>Y así se juega la liga</h2>
   <p>
     Los partidos oficiales se juegan con estas mismas reglas y estas mismas cartas. Cada franquicia juega con su estilo (unas viven
-    del triple, otras de la pintura) y los dados tienen semilla pública: en el acta de cada partido están todas las tiradas, para
+    del triple, otras del juego cerca del aro) y los dados tienen semilla pública: en el acta de cada partido están todas las tiradas, para
     que cualquiera pueda comprobarlo.
   </p>
 </Base>

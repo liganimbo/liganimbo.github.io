@@ -286,6 +286,8 @@ export function acumular(mundo: Mundo, partidos: PartidoGuardado[]): Record<stri
       acc.pts += l.pts;
       acc.paradas += l.paradas;
       acc.marcados += l.marcados;
+      acc.mates += l.mates ?? 0;
+      acc.tapones += l.tapones ?? 0;
       for (const k of ["dentro", "fuera"] as const) acc[k] = [acc[k][0] + l[k][0], acc[k][1] + l[k][1]];
       if (p.mejor === jid) acc.mejor++;
     }

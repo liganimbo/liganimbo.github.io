@@ -71,7 +71,7 @@ const TIPOS: Tipo[] = ["dentro", "fuera"];
 const valor = (j: Jugador) => j.ataque + j.defensa + (j.icono ? 1 : 0);
 
 /** Tres situaciones fijas, con la respuesta buena alternando:
- *  1. Pintura contra Muro (gana dentro), 2. Tiro contra la mejor defensa (gana fuera),
+ *  1. Aro contra Muro (gana dentro), 2. Tiro contra la mejor defensa (gana fuera),
  *  3. el mejor ataque sin icono contra otro Muro (gana fuera: el Muro no frena los triples). */
 export function situaciones(): Situacion[] {
   const usadas = new Set<string>();
@@ -83,7 +83,7 @@ export function situaciones(): Situacion[] {
     return j;
   };
   const parejas: [Jugador, Jugador, Tipo][] = [];
-  const a1 = elegir((j) => j.icono === "Pintura", (j) => j.ataque);
+  const a1 = elegir((j) => j.icono === "Aro", (j) => j.ataque);
   parejas.push([a1, elegir((j) => j.icono === "Muro" && j.franquicia !== a1.franquicia, (j) => j.defensa), "dentro"]);
   const a2 = elegir((j) => j.icono === "Tiro", (j) => j.ataque);
   parejas.push([a2, elegir((j) => j.franquicia !== a2.franquicia, (j) => j.defensa), "fuera"]);

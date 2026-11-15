@@ -1,5 +1,5 @@
 // Escenas del Reel "Cómo se juega". El ejemplo es el del reglamento (§7) con dos cartas reales:
-// Nico Serrano (Ataque 5, Pintura) tira dentro; Zoe Barrios (Defensa 5, Muro) cierra dentro; dados 6 y 5.
+// Nico Serrano (Ataque 5, Aro) tira dentro; Zoe Barrios (Defensa 5, Muro) cierra dentro; dados 6 y 5.
 import type React from "react";
 import { Easing, Interactive, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
 import { Carta, Dado, Escudo, Logo } from "./elementos";
@@ -99,7 +99,7 @@ const CartasInner = () => {
         }}
       />
       <div style={{ position: "absolute", top: 1440, left: 80, right: 80, fontFamily: texto, fontWeight: 500, fontSize: 40, lineHeight: 1.3, color: COLOR.apagado, ...entra(frame, 2.2 * fps) }}>
-        Los iconos suman <span style={{ color: COLOR.texto, fontWeight: 700 }}>+2</span>: Pintura al tirar dentro, Muro al defenderlo.
+        Los iconos suman <span style={{ color: COLOR.texto, fontWeight: 700 }}>+2</span>: Aro al tirar dentro, Muro al defenderlo.
       </div>
     </>
   );
@@ -215,7 +215,7 @@ const DadosInner = () => {
       <div style={{ position: "absolute", top: 880, left: 80, right: 80, display: "flex", flexDirection: "column", gap: 90 }}>
         <Cuenta
           nombre="Ataque de Nico"
-          sumandos={[["11", "dados"], ["+5", "ataque"], ["+2", "pintura"]]}
+          sumandos={[["11", "dados"], ["+5", "ataque"], ["+2", "aro"]]}
           total={18}
           desde={1.4 * fps}
           color={COLOR.oro}

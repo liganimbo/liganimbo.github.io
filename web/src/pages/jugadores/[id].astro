@@ -45,12 +45,12 @@ const tiros = ([a, i]: [number, number]) => (i ? `${a}/${i}` : "–");
   <div class="tabla-envoltorio">
     <table>
       <thead>
-        <tr><th>Fase</th><th>PJ</th><th>Pts</th><th>Pts/P</th><th>Dentro</th><th>Fuera</th><th>Acierto</th><th>Paradas/P</th><th>Mejor del partido</th></tr>
+        <tr><th>Fase</th><th>PJ</th><th>Pts</th><th>Pts/P</th><th>Dentro</th><th>Fuera</th><th>Acierto</th><th>Paradas/P</th><th>Mates</th><th>Tapones</th><th>Mejor del partido</th></tr>
       </thead>
       <tbody>
         {
           fases.length === 0 ? (
-            <tr><td colspan="9" class="apagado">Sin jugar esta temporada.</td></tr>
+            <tr><td colspan="11" class="apagado">Sin jugar esta temporada.</td></tr>
           ) : (
             fases.map(([nombre, s]) => (
               <tr>
@@ -62,6 +62,8 @@ const tiros = ([a, i]: [number, number]) => (i ? `${a}/${i}` : "–");
                 <td>{tiros(s.fuera)} <span class="apagado">({pct(s.medias.fuera)})</span></td>
                 <td>{pct(s.medias.acierto)}</td>
                 <td>{dec(s.medias.paradas)}</td>
+                <td>{s.mates}</td>
+                <td>{s.tapones}</td>
                 <td>{s.mejor}</td>
               </tr>
             ))

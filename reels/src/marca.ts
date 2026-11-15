@@ -30,7 +30,7 @@ export const NICO = {
   meta: "22 años · Nuevo Ébano",
   ataque: 5,
   defensa: 3,
-  icono: "Pintura",
+  icono: "Aro",
   c1: "#3C096C",
   c2: "#00B4D8",
 };

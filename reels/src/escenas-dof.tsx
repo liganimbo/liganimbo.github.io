@@ -15,7 +15,7 @@ const FORMAS_DE_SUMAR = [0, 0, 1, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1];
 const probabilidad = (n: number) => (n <= 2 ? 1 : n > 12 ? 0 : FORMAS_DE_SUMAR.slice(n).reduce((s, x) => s + x, 0) / 36);
 const ICONO: Record<string, string> = {
   Tiro: "Tiro: +1 al tirar de fuera",
-  Pintura: "Pintura: +2 al tirar de dentro",
+  Aro: "Aro: +2 al tirar de dentro",
   Muro: "Muro: +2 contra tiros de dentro",
 };
 

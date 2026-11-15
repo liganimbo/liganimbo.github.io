@@ -1,6 +1,6 @@
-// Reglas del partido de Nimbo (REGLAMENTO.md v0.3). Sin decisiones: eso es cosa de quien juega o de la IA.
+// Reglas del partido de Nimbo (REGLAMENTO.md v0.5). Sin decisiones: eso es cosa de quien juega o de la IA.
 
-export type Icono = "Tiro" | "Pintura" | "Muro";
+export type Icono = "Tiro" | "Aro" | "Muro";
 export type Tipo = "dentro" | "fuera";
 export type Lado = 0 | 1;
 
@@ -18,12 +18,16 @@ export const REGLAS = {
   descansoTras: 4,
   baseDefensa: 5,
   bonusTiro: 1,
-  bonusPintura: 2,
+  bonusAro: 2,
   bonusMuro: 2,
   /** El Muro solo suma contra los tiros de dentro. */
   muroSoloDentro: true,
   bonusCierre: 2,
   margenFuera: 2,
+  /** Canasta de dentro que supera a la defensa por esto o más: mate. Solo se cuenta, no cambia nada. */
+  margenMate: 6,
+  /** Tiro de dentro que se queda corto por esto o más: tapón. Solo se cuenta, no cambia nada. */
+  margenTapon: 4,
   puntos: { dentro: 2, fuera: 3 } as Record<Tipo, number>,
 };
 
@@ -32,8 +36,8 @@ export const DESCRIPCION_ICONO: Record<Icono, string> = {
   get Tiro() {
     return `+${REGLAS.bonusTiro} al tirar de fuera`;
   },
-  get Pintura() {
-    return `+${REGLAS.bonusPintura} al tirar de dentro`;
+  get Aro() {
+    return `+${REGLAS.bonusAro} al tirar de dentro`;
   },
   get Muro() {
     return `+${REGLAS.bonusMuro} al defender ${REGLAS.muroSoloDentro ? "tiros de dentro" : "cualquier tiro"}`;
@@ -65,6 +69,8 @@ export interface Jugada {
   necesita: number;
   anota: boolean;
   puntos: number;
+  mate: boolean;
+  tapon: boolean;
   marcador: [number, number];
   tiempoMuerto?: { dadosAnteriores: [number, number] };
 }
@@ -147,7 +153,7 @@ export function tiradoresDisponibles(p: Partido): string[] {
 
 export function valorAtaque(c: Carta, tipo: Tipo): number {
   if (c.icono === "Tiro" && tipo === "fuera") return c.ataque + REGLAS.bonusTiro;
-  if (c.icono === "Pintura" && tipo === "dentro") return c.ataque + REGLAS.bonusPintura;
+  if (c.icono === "Aro" && tipo === "dentro") return c.ataque + REGLAS.bonusAro;
   return c.ataque;
 }
 
@@ -211,6 +217,8 @@ function resolver(p: Partido, lado: Lado, tirador: string, defensor: string, tip
     necesita: necesita(at, de, tipo, cierra),
     anota,
     puntos,
+    mate: tipo === "dentro" && anota && ataque - defensa >= REGLAS.margenMate,
+    tapon: tipo === "dentro" && !anota && defensa - ataque >= REGLAS.margenTapon,
     marcador: [p.puntos[0], p.puntos[1]],
   };
 }
@@ -289,9 +297,11 @@ export interface LineaJugador {
   fuera: [number, number];
   paradas: number;
   marcados: number;
+  mates: number;
+  tapones: number;
 }
 
-export const lineaVacia = (): LineaJugador => ({ pts: 0, dentro: [0, 0], fuera: [0, 0], paradas: 0, marcados: 0 });
+export const lineaVacia = (): LineaJugador => ({ pts: 0, dentro: [0, 0], fuera: [0, 0], paradas: 0, marcados: 0, mates: 0, tapones: 0 });
 
 export function estadisticas(p: Partido): Record<string, LineaJugador> {
   const stats: Record<string, LineaJugador> = {};
@@ -305,6 +315,8 @@ export function estadisticas(p: Partido): Record<string, LineaJugador> {
     if (j.anota) casilla[0] += 1;
     de.marcados += 1;
     if (!j.anota) de.paradas += 1;
+    if (j.mate) at.mates += 1;
+    if (j.tapon) de.tapones += 1;
   }
   return stats;
 }

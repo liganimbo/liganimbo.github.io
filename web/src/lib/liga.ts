@@ -116,6 +116,8 @@ export const TIPO = { dentro: "dentro", fuera: "de fuera" } as const;
 
 export function describirJugada(j: Jugada): string {
   const tirador = jugadores[j.tirador].nombre;
+  if (j.mate) return `¡Mate de ${tirador}!`;
+  if (j.tapon) return `Tapón de ${jugadores[j.defensor].nombre} a ${tirador}`;
   if (j.anota) return `${tirador} anota ${j.tipo === "fuera" ? "un triple" : "dentro"}`;
   return `${tirador} falla ${TIPO[j.tipo]}`;
 }

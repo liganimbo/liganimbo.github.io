@@ -109,7 +109,11 @@ const tiros = ([a, i]: [number, number]) => (i ? `${a}/${i}` : "–");
                   )}
                 </td>
                 <td class="apagado">{j.necesita <= 2 ? "Siempre" : j.necesita > 12 ? "Imposible" : `${j.necesita}+`}</td>
-                <td class="izq">{j.anota ? <strong>+{j.puntos}</strong> : <span class="apagado">Fallo</span>}</td>
+                <td class="izq">
+                  {j.anota ? <strong>+{j.puntos}</strong> : <span class="apagado">Fallo</span>}
+                  {j.mate && <span class="etiqueta">Mate</span>}
+                  {j.tapon && <span class="etiqueta">Tapón</span>}
+                </td>
                 <td class:list={{ fuerte: j.equipo === 1 }}>{j.marcador[1]}</td>
                 <td class:list={{ fuerte: j.equipo === 0 }}>{j.marcador[0]}</td>
               </tr>
@@ -121,7 +125,8 @@ const tiros = ([a, i]: [number, number]) => (i ? `${a}/${i}` : "–");
   </div>
   <p class="apagado nota">
     "Necesita" es lo que tenían que sumar los dos dados para que entrara. Dentro basta con igualar la defensa; fuera hay que
-    superarla por 2.
+    superarla por 2. Una canasta de dentro que la supera por {REGLAS.margenMate} o más es un mate; un tiro de dentro que se queda
+    corto por {REGLAS.margenTapon} o más, un tapón.
   </p>
 
   {
@@ -141,6 +146,8 @@ const tiros = ([a, i]: [number, number]) => (i ? `${a}/${i}` : "–");
                   <div><dt>Dentro</dt><dd>{tiros(l.dentro)}</dd></div>
                   <div><dt>Fuera</dt><dd>{tiros(l.fuera)}</dd></div>
                   <div><dt>Paradas</dt><dd>{l.paradas}/{l.marcados}</dd></div>
+                  {l.mates > 0 && <div><dt>Mates</dt><dd>{l.mates}</dd></div>}
+                  {l.tapones > 0 && <div><dt>Tapones</dt><dd>{l.tapones}</dd></div>}
                 </dl>
               </div>
             );

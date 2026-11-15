@@ -85,7 +85,7 @@ export const FRANQUICIAS: Omit<Franquicia, "plantilla" | "club">[] = [
   { id: "SGR", ciudad: "Sierra Gris", nombre: "Lobos", mercado: "pequeño", colores: ["#495867", "#BDD5EA"],
     caracter: "Montaña y frío. El pabellón más temido de la liga.", filosofia: { defensa: 0.8, icono: "Muro" }, estilo: { fuera: 0.35 } },
   { id: "VLU", ciudad: "Valdelaluna", nombre: "Búhos", mercado: "pequeño", colores: ["#1B1B3A", "#E0AFA0"],
-    caracter: "Ciudad nocturna y afición ruidosa. Todo pasa cerca del aro.", filosofia: { ataque: 0.4, icono: "Pintura" }, estilo: { fuera: 0.3 } },
+    caracter: "Ciudad nocturna y afición ruidosa. Todo pasa cerca del aro.", filosofia: { ataque: 0.4, icono: "Aro" }, estilo: { fuera: 0.3 } },
 ];
 
 // Solo afectan a la gestión del club, nunca al partido.
@@ -98,7 +98,7 @@ export const RASGOS: Record<string, string> = {
   "Imán de prensa": "Todo lo que hace es noticia.",
 };
 
-const ICONOS: Icono[] = ["Tiro", "Pintura", "Muro"];
+const ICONOS: Icono[] = ["Tiro", "Aro", "Muro"];
 const limitar = (v: number, min: number, max: number) => Math.max(min, Math.min(max, Math.round(v)));
 
 /** Valor de una carta para comparar y para el salario: un icono vale más o menos un punto. */
@@ -126,7 +126,7 @@ export function generarJugador(azar: Azar, id: string, genero: "f" | "m", total:
   const defensa = limitar(total - ataque, 2, 6);
   let icono: Icono | null = null;
   if (azar() < 0.55) {
-    if (ataque >= defensa + 2) icono = azar() < 0.5 ? "Tiro" : "Pintura";
+    if (ataque >= defensa + 2) icono = azar() < 0.5 ? "Tiro" : "Aro";
     else if (defensa >= ataque + 2) icono = "Muro";
     else icono = elegir(azar, ICONOS);
   }
