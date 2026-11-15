@@ -29,7 +29,7 @@
     "build": "remotion bundle",
     "upgrade": "remotion upgrade",
     "lint": "eslint src && tsc",
-    "video": "remotion render ComoSeJuega ../instagram/reel-como-se-juega.mp4 && remotion still ComoSeJuega ../instagram/reel-como-se-juega-portada.png --frame=70 && remotion render Amistoso ../instagram/reel-amistoso.mp4 && remotion still Amistoso ../instagram/reel-amistoso-portada.png --frame=100 && remotion render DentroOFuera1 ../instagram/reel-dentro-o-fuera-1.mp4 && remotion still DentroOFuera1 ../instagram/reel-dentro-o-fuera-1-portada.png --frame=75 && remotion render DentroOFuera2 ../instagram/reel-dentro-o-fuera-2.mp4 && remotion still DentroOFuera2 ../instagram/reel-dentro-o-fuera-2-portada.png --frame=75",
+    "video": "remotion render ComoSeJuega ../instagram/reel-como-se-juega.mp4 && remotion still ComoSeJuega ../instagram/reel-como-se-juega-portada.png --frame=70 && remotion render Amistoso ../instagram/reel-amistoso.mp4 && remotion still Amistoso ../instagram/reel-amistoso-portada.png --frame=100 && remotion render DentroOFuera1 ../instagram/reel-dentro-o-fuera-1.mp4 && remotion still DentroOFuera1 ../instagram/reel-dentro-o-fuera-1-portada.png --frame=75 && remotion render DentroOFuera2 ../instagram/reel-dentro-o-fuera-2.mp4 && remotion still DentroOFuera2 ../instagram/reel-dentro-o-fuera-2-portada.png --frame=75 && remotion render Cronica ../instagram/reel-cronica.mp4 && remotion still Cronica ../instagram/reel-cronica-portada.png --frame=75",
     "voz": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --env-file=.env scripts/voz.mts"
   },
   "allowScripts": {

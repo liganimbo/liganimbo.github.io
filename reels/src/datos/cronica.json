@@ -1,0 +1,429 @@
+{
+  "id": "EXHIBICION-424",
+  "contexto": "Partido de exhibición",
+  "fecha": "2027-01-08",
+  "equipos": [
+    {
+      "id": "VLU",
+      "nombre": "Búhos",
+      "ciudad": "Valdelaluna",
+      "c1": "#1B1B3A",
+      "c2": "#E0AFA0",
+      "estilo": "Juega dentro"
+    },
+    {
+      "id": "VAL",
+      "nombre": "Vendaval",
+      "ciudad": "Valcierzo",
+      "c1": "#2A9D8F",
+      "c2": "#F1FAEE",
+      "estilo": "Vive del triple"
+    }
+  ],
+  "jugadas": [
+    {
+      "equipo": 1,
+      "tirador": "Nia Falk",
+      "defensor": "Carlos Campos",
+      "tipo": "dentro",
+      "cierra": "fuera",
+      "dados": [
+        5,
+        6
+      ],
+      "ataque": 15,
+      "defensa": 8,
+      "necesita": 4,
+      "anota": true,
+      "puntos": 2,
+      "mate": true,
+      "tapon": false,
+      "marcador": [
+        0,
+        2
+      ]
+    },
+    {
+      "equipo": 0,
+      "tirador": "Ximena Cuesta",
+      "defensor": "Nia Falk",
+      "tipo": "fuera",
+      "cierra": "dentro",
+      "dados": [
+        6,
+        4
+      ],
+      "ataque": 14,
+      "defensa": 7,
+      "necesita": 5,
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+        3,
+        2
+      ]
+    },
+    {
+      "equipo": 1,
+      "tirador": "Dalia Okafor",
+      "defensor": "Iker Valverde",
+      "tipo": "fuera",
+      "cierra": "fuera",
+      "dados": [
+        5,
+        5
+      ],
+      "ataque": 15,
+      "defensa": 9,
+      "necesita": 6,
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+        3,
+        5
+      ]
+    },
+    {
+      "equipo": 0,
+      "tirador": "Ximena Cuesta",
+      "defensor": "Nia Falk",
+      "tipo": "dentro",
+      "cierra": "fuera",
+      "dados": [
+        1,
+        5
+      ],
+      "ataque": 12,
+      "defensa": 7,
+      "necesita": 1,
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+        5,
+        5
+      ]
+    },
+    {
+      "equipo": 1,
+      "tirador": "Dalia Okafor",
+      "defensor": "Iker Valverde",
+      "tipo": "fuera",
+      "cierra": "dentro",
+      "dados": [
+        6,
+        5
+      ],
+      "ataque": 16,
+      "defensa": 7,
+      "necesita": 4,
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+        5,
+        8
+      ]
+    },
+    {
+      "equipo": 0,
+      "tirador": "Iker Valverde",
+      "defensor": "Marta Urrutia",
+      "tipo": "fuera",
+      "cierra": "dentro",
+      "dados": [
+        6,
+        2
+      ],
+      "ataque": 13,
+      "defensa": 8,
+      "necesita": 5,
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+        8,
+        8
+      ]
+    },
+    {
+      "equipo": 1,
+      "tirador": "Nia Falk",
+      "defensor": "Carlos Campos",
+      "tipo": "fuera",
+      "cierra": "fuera",
+      "dados": [
+        4,
+        4
+      ],
+      "ataque": 13,
+      "defensa": 10,
+      "necesita": 7,
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+        8,
+        11
+      ]
+    },
+    {
+      "equipo": 0,
+      "tirador": "Iker Valverde",
+      "defensor": "Marta Urrutia",
+      "tipo": "dentro",
+      "cierra": "dentro",
+      "dados": [
+        4,
+        4
+      ],
+      "ataque": 15,
+      "defensa": 10,
+      "necesita": 3,
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+        10,
+        11
+      ]
+    },
+    {
+      "equipo": 1,
+      "tirador": "Marta Urrutia",
+      "defensor": "Ximena Cuesta",
+      "tipo": "dentro",
+      "cierra": "fuera",
+      "dados": [
+        4,
+        4
+      ],
+      "ataque": 11,
+      "defensa": 7,
+      "necesita": 4,
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+        10,
+        13
+      ]
+    },
+    {
+      "equipo": 0,
+      "tirador": "Carlos Campos",
+      "defensor": "Dalia Okafor",
+      "tipo": "dentro",
+      "cierra": "dentro",
+      "dados": [
+        4,
+        2
+      ],
+      "ataque": 11,
+      "defensa": 9,
+      "necesita": 4,
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+        12,
+        13
+      ]
+    },
+    {
+      "equipo": 1,
+      "tirador": "Marta Urrutia",
+      "defensor": "Ximena Cuesta",
+      "tipo": "fuera",
+      "cierra": "dentro",
+      "dados": [
+        4,
+        4
+      ],
+      "ataque": 12,
+      "defensa": 7,
+      "necesita": 5,
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+        12,
+        16
+      ]
+    },
+    {
+      "equipo": 0,
+      "tirador": "Noa Quintana",
+      "defensor": "Marta Urrutia",
+      "tipo": "dentro",
+      "cierra": "dentro",
+      "dados": [
+        1,
+        6
+      ],
+      "ataque": 13,
+      "defensa": 10,
+      "necesita": 4,
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+        14,
+        16
+      ]
+    },
+    {
+      "equipo": 1,
+      "tirador": "Vera Robles",
+      "defensor": "Noa Quintana",
+      "tipo": "dentro",
+      "cierra": "dentro",
+      "dados": [
+        1,
+        1
+      ],
+      "ataque": 5,
+      "defensa": 9,
+      "necesita": 6,
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": true,
+      "marcador": [
+        14,
+        16
+      ]
+    },
+    {
+      "equipo": 0,
+      "tirador": "Noa Quintana",
+      "defensor": "Marta Urrutia",
+      "tipo": "dentro",
+      "cierra": "dentro",
+      "dados": [
+        2,
+        6
+      ],
+      "ataque": 14,
+      "defensa": 10,
+      "necesita": 4,
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+        16,
+        16
+      ]
+    },
+    {
+      "equipo": 1,
+      "tirador": "Vera Robles",
+      "defensor": "Noa Quintana",
+      "tipo": "fuera",
+      "cierra": "fuera",
+      "dados": [
+        1,
+        2
+      ],
+      "ataque": 7,
+      "defensa": 9,
+      "necesita": 7,
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+        16,
+        16
+      ]
+    },
+    {
+      "equipo": 0,
+      "tirador": "Carlos Campos",
+      "defensor": "Dalia Okafor",
+      "tipo": "dentro",
+      "cierra": "fuera",
+      "dados": [
+        6,
+        2
+      ],
+      "ataque": 13,
+      "defensa": 7,
+      "necesita": 2,
+      "anota": true,
+      "puntos": 2,
+      "mate": true,
+      "tapon": false,
+      "marcador": [
+        18,
+        16
+      ]
+    }
+  ],
+  "descanso": 8,
+  "cambios": [
+    {
+      "equipo": 0,
+      "entra": "Noa Quintana",
+      "sale": "Iker Valverde"
+    },
+    {
+      "equipo": 1,
+      "entra": "Vera Robles",
+      "sale": "Nia Falk"
+    }
+  ],
+  "final": [
+    18,
+    16
+  ],
+  "ganador": 0,
+  "muerteSubita": false,
+  "maxVentaja": {
+    "puntos": 4,
+    "lado": 1,
+    "tras": 11
+  },
+  "decisiva": {
+    "indice": 15,
+    "tirador": {
+      "nombre": "Carlos Campos",
+      "equipo": "VLU",
+      "meta": "31 años · Ostria",
+      "ataque": 3,
+      "defensa": 3,
+      "icono": "Aro",
+      "c1": "#1B1B3A",
+      "c2": "#E0AFA0"
+    },
+    "defensor": {
+      "nombre": "Dalia Okafor",
+      "equipo": "VAL",
+      "meta": "20 años · Cabo Seren",
+      "ataque": 4,
+      "defensa": 2,
+      "icono": "Tiro",
+      "c1": "#2A9D8F",
+      "c2": "#F1FAEE"
+    }
+  },
+  "mejor": {
+    "nombre": "Dalia Okafor",
+    "pts": 6,
+    "paradas": 0
+  }
+}

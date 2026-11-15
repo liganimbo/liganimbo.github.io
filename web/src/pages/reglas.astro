@@ -184,13 +184,13 @@ const enPista = CARTAS_POR_EQUIPO - 1;
 
   <h2>Entre temporadas: el verano</h2>
   <p>Al acabar las Finales, las cartas cambian y los clubes se mueven. Todo se resuelve con un dado:</p>
-  <div class="consejos">
-    <div class="tarjeta"><strong>Evolución</strong><span class="apagado">Cada carta tira un dado. Las jóvenes (hasta {VERANO.edadJoven}) mejoran con 5-6; las de plenitud suben o bajan; las veteranas (desde {VERANO.edadVeterana}) se desgastan. Ninguna pasa de su techo, que se ve en la carta (como mucho, {TECHO_MAXIMO}).</span></div>
-    <div class="tarjeta"><strong>Presupuesto y sueldos</strong><span class="apagado">Cada club ingresa {VERANO.presupuestoBase}, más según su mercado y sus rondas de playoffs ganadas. Cada carta cobra de 1 a 5 según su valor, fijo mientras dure su contrato.</span></div>
-    <div class="tarjeta"><strong>Draft</strong><span class="apagado">{VERANO.promesas} promesas de 19 a 21 años. Elige primero el último de la liga. Todas enseñan su techo.</span></div>
-    <div class="tarjeta"><strong>Ojeo</strong><span class="apagado">Cada nivel de ojeadores descubre una promesa más fuera del draft, que el club puede fichar por el sueldo mínimo.</span></div>
-    <div class="tarjeta"><strong>Instalaciones</strong><span class="apagado">Lo que sobra se invierte ({VERANO.costeNivel} por nivel) en ojeadores o en el centro de entrenamiento, o se ahorra.</span></div>
-  </div>
+  <ol class="verano">
+    <li><strong>Presupuesto</strong><span class="apagado">Cada club ingresa {VERANO.presupuestoBase}, más según su mercado y sus rondas de playoffs ganadas. Cada carta cobra de 1 a 5 según su valor, fijo mientras dure su contrato.</span></li>
+    <li><strong>Evolución</strong><span class="apagado">Cada carta tira un dado. Las jóvenes (hasta {VERANO.edadJoven}) mejoran con 5-6; las de plenitud suben o bajan; las veteranas (desde {VERANO.edadVeterana}) se desgastan. Ninguna pasa de su techo, que se ve en la carta (como mucho, {TECHO_MAXIMO}).</span></li>
+    <li><strong>Draft</strong><span class="apagado">{VERANO.promesas} promesas de 19 a 21 años. Elige primero el último de la liga. Todas enseñan su techo.</span></li>
+    <li><strong>Ojeo</strong><span class="apagado">Cada nivel de ojeadores descubre una promesa más fuera del draft, que el club puede fichar por el sueldo mínimo.</span></li>
+    <li><strong>Instalaciones</strong><span class="apagado">Lo que sobra se invierte ({VERANO.costeNivel} por nivel) en ojeadores o en el centro de entrenamiento, o se ahorra.</span></li>
+  </ol>
   <p><a href={url("verano")}>Qué pasó en el último verano →</a></p>
 
   <h2>Juega tú</h2>
@@ -247,6 +247,55 @@ const enPista = CARTAS_POR_EQUIPO - 1;
     display: flex;
     flex-direction: column;
     gap: 4px;
+  }
+  /* El verano: pasos en orden, unidos por una línea. */
+  .verano {
+    list-style: none;
+    counter-reset: paso;
+    margin: 0;
+    padding: 0;
+  }
+  .verano li {
+    counter-increment: paso;
+    position: relative;
+    display: grid;
+    grid-template-columns: 9rem minmax(0, 1fr);
+    gap: 4px 16px;
+    padding: 0 0 18px 48px;
+  }
+  .verano li::before {
+    content: counter(paso);
+    position: absolute;
+    left: 0;
+    top: -2px;
+    width: 32px;
+    height: 32px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    font-family: var(--titulo);
+    font-weight: 800;
+    color: #16182e;
+    background: linear-gradient(180deg, #ffe08a, #f2a516);
+  }
+  .verano li:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    left: 15px;
+    top: 34px;
+    bottom: 2px;
+    width: 2px;
+    background: var(--borde);
+  }
+  .verano strong {
+    font-family: var(--titulo);
+    font-size: 1.15rem;
+    text-transform: uppercase;
+  }
+  @media (max-width: 640px) {
+    .verano li {
+      grid-template-columns: minmax(0, 1fr);
+    }
   }
   .dos {
     display: grid;
