@@ -189,7 +189,7 @@ const HOJAS = 6;
         </li>
       </ol>
       <p class="ej-final">
-        {ataqueDentro >= defensaDentro ? `${ataqueDentro} ≥ ${defensaDentro}: canasta de 2.` : `${ataqueDentro} < ${defensaDentro}: no entra.`}
+        {ataqueDentro >= defensaDentro ? `${ataqueDentro} contra ${defensaDentro}: canasta de 2.` : `${ataqueDentro} contra ${defensaDentro}: no entra.`}
         {ataqueDentro - defensaDentro >= R.margenMate && " ¡Y es mate!"}
         {defensaDentro - ataqueDentro >= R.margenTapon && " ¡Tapón!"}
       </p>
@@ -288,7 +288,7 @@ const HOJAS = 6;
   <section class="pagina interior">
     <header class="cinta"><span>Liga Nimbo · Reglamento v{VERSION_REGLAMENTO}</span><span>6 / {HOJAS}</span></header>
 
-    <h2><span class="num">★</span> Referencia rápida</h2>
+    <h2><span class="num"><svg viewBox="0 0 24 24" width="3.6mm" height="3.6mm"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7L12 17.3 5.8 20.9l1.6-7L2 9.2l7.1-.6z" fill="#16182e" /></svg></span> Referencia rápida</h2>
     <div class="referencia">
       <div>
         <div class="etq">Ataque</div>
@@ -302,8 +302,8 @@ const HOJAS = 6;
       </div>
       <div>
         <div class="etq">¿Entra?</div>
-        <div>Dentro: igualar → <b>{R.puntos.dentro}</b></div>
-        <div>Fuera: superar por {R.margenFuera} → <b>{R.puntos.fuera}</b></div>
+        <div>Dentro, igualar: <b>{R.puntos.dentro} puntos</b></div>
+        <div>Fuera, superar por {R.margenFuera}: <b>{R.puntos.fuera} puntos</b></div>
       </div>
       <div>
         <div class="etq">Partido</div>
@@ -344,7 +344,7 @@ const HOJAS = 6;
             </tbody>
           </table>
           <div class="hp-notas">
-            <span>Tiempo muerto: ☐ ☐</span>
+            <span class="hp-tm">Tiempo muerto <i /> <i /></span>
             <span>Mates ____________________</span>
             <span>Tapones ____________________</span>
             <span>Mejor del partido ____________________</span>
@@ -363,11 +363,7 @@ const HOJAS = 6;
     flex-direction: column;
     padding: 14mm 16mm 12mm;
     color: #f1f2f8;
-    background:
-      radial-gradient(circle at 50% 36%, #3a3590 0%, transparent 42%),
-      radial-gradient(circle at 8% 92%, rgb(155 149 255 / 25%), transparent 35%),
-      radial-gradient(circle at 92% 8%, rgb(255 200 61 / 20%), transparent 35%),
-      #0d0f1c;
+    background: radial-gradient(circle at 50% 33%, #3a3590 0%, #1f1d5a 28%, #0d0f1c 62%);
   }
   .p-arriba {
     display: flex;
@@ -407,7 +403,7 @@ const HOJAS = 6;
   .p-datos span {
     padding: 2mm 5mm;
     border-radius: 999px;
-    background: rgb(255 255 255 / 10%);
+    background: #262857;
     font-size: 3.6mm;
   }
   .p-datos strong {
@@ -423,16 +419,13 @@ const HOJAS = 6;
   .p-pie {
     font-size: 2.9mm;
     text-align: center;
-    color: rgb(241 242 248 / 55%);
+    color: #8d8fae;
   }
 
   /* Hojas interiores: crema con halos, como el tema claro. */
   .interior {
     padding: 0 16mm 12mm;
-    background:
-      radial-gradient(circle at 100% 0%, rgb(232 89 12 / 13%), transparent 38%),
-      radial-gradient(circle at 0% 100%, rgb(59 59 214 / 9%), transparent 40%),
-      linear-gradient(180deg, #fbf7ef, #f3ebdc);
+    background: radial-gradient(ellipse at 100% 0%, #f8dcc4 0%, #faf2e6 38%, #f3ebdc 100%);
   }
   .cinta {
     display: flex;
@@ -518,7 +511,7 @@ const HOJAS = 6;
   .referencia > div,
   .liga > div,
   .ejemplo {
-    background: rgb(255 253 248 / 85%);
+    background: #fffdf8;
     border: 0.3mm solid var(--linea);
     border-radius: 3mm;
   }
@@ -684,9 +677,7 @@ const HOJAS = 6;
     border-radius: 3mm;
     color: #f1f2f8;
     font-size: 3.2mm;
-    background:
-      radial-gradient(circle at 100% 0%, rgb(255 200 61 / 22%), transparent 45%),
-      linear-gradient(120deg, #12142a, #2a2f6e 70%, #3a3590);
+    background: radial-gradient(circle at 100% 0%, #5b5288 0%, #2a2f6e 40%, #12142a 100%);
   }
   .caja-mates h3 {
     color: #ffc83d;
@@ -810,9 +801,7 @@ const HOJAS = 6;
     padding: 5mm 6mm;
     border-radius: 3mm;
     color: #f1f2f8;
-    background:
-      radial-gradient(circle at 100% 0%, rgb(79 70 229 / 55%), transparent 55%),
-      #0d0f1c;
+    background: radial-gradient(circle at 100% 0%, #3d39a8 0%, #1a1a4a 45%, #0d0f1c 85%);
   }
   .oficial .emblema {
     width: 28mm;
@@ -884,6 +873,17 @@ const HOJAS = 6;
   }
   th.hp-total {
     background: none;
+  }
+  .hp-tm {
+    display: flex;
+    align-items: center;
+    gap: 1.5mm;
+  }
+  .hp-tm i {
+    width: 3.4mm;
+    height: 3.4mm;
+    border: 0.3mm solid var(--tinta-2);
+    border-radius: 0.6mm;
   }
   .hp-notas {
     display: grid;

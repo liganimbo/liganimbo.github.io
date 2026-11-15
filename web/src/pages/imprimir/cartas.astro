@@ -101,7 +101,7 @@ const R = REGLAS;
                 </div>
                 <div class="naipe-pie">
                   <span>Liga Nimbo</span>
-                  <span>Ataque + Defensa ≤ 10</span>
+                  <span>Ataque + Defensa: máx. 10</span>
                 </div>
               </div>
             ),
@@ -172,10 +172,10 @@ const R = REGLAS;
             <div class="ch-bloque">
               <small>¿Entra?</small>
               <div>
-                Dentro: igualar → <strong>{R.puntos.dentro}</strong>
+                Dentro, igualar: <strong>{R.puntos.dentro} puntos</strong>
               </div>
               <div>
-                Fuera: superar por {R.margenFuera} → <strong>{R.puntos.fuera}</strong>
+                Fuera, superar por {R.margenFuera}: <strong>{R.puntos.fuera} puntos</strong>
               </div>
             </div>
           </div>
@@ -220,10 +220,7 @@ const R = REGLAS;
     display: flex;
     flex-direction: column;
     padding: 0;
-    background:
-      radial-gradient(circle at 100% 0%, rgb(232 89 12 / 22%), transparent 45%),
-      radial-gradient(circle at 0% 100%, rgb(59 59 214 / 14%), transparent 45%),
-      linear-gradient(180deg, #f8f3e9, #efe5d3);
+    background: radial-gradient(ellipse at 100% 0%, #f8d6bc 0%, #f6efe3 40%, #efe5d3 100%);
   }
   .pc-cabeza {
     display: flex;
@@ -231,10 +228,7 @@ const R = REGLAS;
     gap: 8mm;
     padding: 16mm 16mm 10mm;
     color: #f1f2f8;
-    background:
-      radial-gradient(circle at 90% 0%, rgb(79 70 229 / 55%), transparent 55%),
-      radial-gradient(circle at 0% 100%, rgb(255 200 61 / 14%), transparent 45%),
-      #0d0f1c;
+    background: radial-gradient(circle at 90% 0%, #3d39a8 0%, #1a1a4a 45%, #0d0f1c 85%);
   }
   .pc-cabeza .emblema {
     width: 46mm;
@@ -283,7 +277,7 @@ const R = REGLAS;
     margin-top: 6mm;
     padding: 3mm 4mm;
     border-left: 1mm solid var(--naranja);
-    background: rgb(255 255 255 / 60%);
+    background: #fbf7f0;
     color: var(--tinta-2);
   }
   .franquicias {
@@ -402,7 +396,7 @@ const R = REGLAS;
   }
   .el-lineas div {
     padding-top: 2mm;
-    border-top: 0.3mm solid rgb(255 255 255 / 30%);
+    border-top: 0.3mm solid color-mix(in srgb, #fff 30%, var(--fondo-2));
   }
   .el-lineas small,
   .ch-bloque small {
@@ -411,7 +405,7 @@ const R = REGLAS;
     font-weight: 800;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: rgb(255 255 255 / 65%);
+    color: color-mix(in srgb, #fff 65%, var(--fondo-2));
   }
   .el-lineas .ch-extra {
     border: 0;
@@ -420,7 +414,7 @@ const R = REGLAS;
   .ch-bloque {
     margin-top: 3mm;
     padding-top: 2mm;
-    border-top: 0.3mm solid rgb(255 255 255 / 30%);
+    border-top: 0.3mm solid color-mix(in srgb, #fff 30%, var(--fondo-2));
     font-size: 3mm;
     line-height: 1.35;
   }
@@ -429,7 +423,7 @@ const R = REGLAS;
   }
   .ch-extra {
     font-size: 2.4mm;
-    color: rgb(255 255 255 / 70%);
+    color: color-mix(in srgb, #fff 70%, var(--fondo-2));
   }
 
   /* Dorso */
