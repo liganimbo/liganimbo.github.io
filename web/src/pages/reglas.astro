@@ -3,7 +3,7 @@
 import Base from "../layouts/Base.astro";
 import Carta from "../components/Carta.astro";
 import { activas, url } from "../lib/liga";
-import { DESCRIPCION_ICONO, REGLAS, valorAtaque, valorDefensa } from "../motor/reglas.ts";
+import { DESCRIPCION_ICONO, REGLAS, VERSION_REGLAMENTO, valorAtaque, valorDefensa } from "../motor/reglas.ts";
 import { CARTAS_POR_EQUIPO, TECHO_MAXIMO } from "../motor/mundo.ts";
 import { VERANO } from "../motor/verano.ts";
 
@@ -23,19 +23,27 @@ const enPista = CARTAS_POR_EQUIPO - 1;
 
 <Base titulo="Reglas">
   <section class="portada">
-    <div class="sobre">Reglas · versión 0.4</div>
+    <div class="sobre">Reglas · versión {VERSION_REGLAMENTO}</div>
     <h1>Cómo se juega</h1>
     <p class="entradilla">
       Los partidos de la Liga Nimbo se deciden con <strong>cartas y dos dados</strong>, y con estas mismas reglas puedes jugarlos
       tú: se aprenden en un minuto, un partido dura entre 5 y 10 minutos y se juega entre dos personas.
     </p>
+    <div class="descargas">
+      <a class="descarga" href={url("descargas/liga-nimbo-reglamento.pdf")} download>
+        <strong>Reglamento en PDF</strong><span>6 hojas A4, con chuleta y hoja de partido</span>
+      </a>
+      <a class="descarga" href={url("descargas/liga-nimbo-cartas.pdf")} download>
+        <strong>Cartas en PDF</strong><span>Las 48 de la liga, cartas de partido y dorsos</span>
+      </a>
+    </div>
   </section>
 
   <h2>Qué necesitas</h2>
   <div class="material">
     <div class="tarjeta">
       <strong>{CARTAS_POR_EQUIPO} cartas por persona</strong>
-      <span class="apagado">Una franquicia cada una. <a href={url("reglas/cartas")}>Imprímelas aquí</a>.</span>
+      <span class="apagado">Una franquicia cada una. <a href={url("descargas/liga-nimbo-cartas.pdf")} download>Descárgalas en PDF</a>.</span>
     </div>
     <div class="tarjeta">
       <strong>Dos dados de seis caras</strong>
@@ -191,7 +199,10 @@ const enPista = CARTAS_POR_EQUIPO - 1;
       <strong>Imprime las cartas de las 12 franquicias</strong>, coge dos dados y unas monedas, y juega cualquier partido de la
       liga en casa. Cada franquicia tiene su forma de jugar: elige la tuya.
     </div>
-    <a class="boton" href={url("reglas/cartas")}>Cartas para imprimir →</a>
+    <div class="botones">
+      <a class="boton" href={url("descargas/liga-nimbo-cartas.pdf")} download>Cartas (PDF)</a>
+      <a class="boton" href={url("descargas/liga-nimbo-reglamento.pdf")} download>Reglamento (PDF)</a>
+    </div>
   </div>
 
   <h2>Y así se juega la liga</h2>
@@ -355,5 +366,36 @@ const enPista = CARTAS_POR_EQUIPO - 1;
   }
   .boton:hover {
     color: var(--sobre-acento);
+  }
+  .botones {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .descargas {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 18px;
+  }
+  .descarga {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 10px 16px;
+    border-radius: 10px;
+    background: linear-gradient(180deg, #ffe08a, #f2a516);
+    color: #16182e;
+  }
+  .descarga:hover {
+    color: #16182e;
+    filter: brightness(1.05);
+  }
+  .descarga strong::before {
+    content: "↓ ";
+  }
+  .descarga span {
+    font-size: 0.8rem;
+    color: #4a3a12;
   }
 </style>

@@ -16,8 +16,14 @@ const fichas = "○".repeat(REGLAS.fichasPorCarta);
       Las 48 cartas de la liga a tamaño de carta de juego (63×88 mm). Imprime en A4, recorta y juega con dos dados. Las reglas,
       <a href={url("reglas")}>aquí</a>.
     </p>
-    <button class="boton" onclick="window.print()">Imprimir</button>
-    <p class="apagado nota">Consejo: en el diálogo de impresión activa «Gráficos de fondo» para que salgan los colores.</p>
+    <p>
+      <a class="boton" href={url("descargas/liga-nimbo-cartas.pdf")} download>Descargar el PDF maquetado</a>
+      <button class="boton secundario" onclick="window.print()">Imprimir esta página</button>
+    </p>
+    <p class="apagado nota">
+      El PDF trae las cartas de partido, cartas en blanco y los dorsos. Si imprimes esta página, activa «Gráficos de fondo» para que
+      salgan los colores.
+    </p>
   </div>
 
   {
@@ -117,6 +123,13 @@ const fichas = "○".repeat(REGLAS.fichasPorCarta);
     padding: 9px 16px;
     border-radius: 8px;
     cursor: pointer;
+  }
+  a.boton {
+    display: inline-block;
+  }
+  .boton.secundario {
+    color: var(--texto);
+    background: var(--superficie-2);
   }
   .nota {
     font-size: 0.85rem;

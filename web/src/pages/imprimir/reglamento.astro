@@ -1,0 +1,896 @@
+---
+// Reglamento para imprimir (A4, 6 hojas): portada, reglas, ejemplo, decisiones, liga en casa y una hoja de referencia con
+// marcador. Los números salen de REGLAS, como en la página de reglas. Se exporta a PDF con npm run pdf.
+import Impresion from "../../layouts/Impresion.astro";
+import Emblema from "../../components/Emblema.astro";
+import Naipe from "../../components/Naipe.astro";
+import { activas, mundo } from "../../lib/liga";
+import { DESCRIPCION_ICONO, REGLAS, VERSION_REGLAMENTO, valorAtaque, valorDefensa } from "../../motor/reglas.ts";
+import { CARTAS_POR_EQUIPO, TECHO_MAXIMO } from "../../motor/mundo.ts";
+import { CONFIG } from "../../motor/temporada.ts";
+import { VERANO } from "../../motor/verano.ts";
+
+const R = REGLAS;
+const cartas = activas().sort((a, b) => b.ataque + b.defensa - (a.ataque + a.defensa));
+// Ejemplo con cartas reales: alguien con Aro tira contra alguien con Muro de otro equipo.
+const atacante = cartas.find((j) => j.icono === "Aro" && j.ataque >= 4) ?? cartas[0];
+const defensor = cartas.find((j) => j.icono === "Muro" && j.franquicia !== atacante.franquicia) ?? cartas[1];
+const dados: [number, number] = [5, 4];
+const suma = dados[0] + dados[1];
+const ataqueDentro = suma + valorAtaque(atacante, "dentro");
+const defensaDentro = valorDefensa(defensor, "dentro", "dentro");
+const ataqueFuera = suma + valorAtaque(atacante, "fuera");
+const defensaFuera = valorDefensa(defensor, "fuera", "dentro");
+const nombre = (n: string) => n.split(" ")[0];
+const enPista = CARTAS_POR_EQUIPO - 1;
+const mejorDe = (victorias: number) => 2 * victorias - 1;
+const HOJAS = 6;
+---
+
+<Impresion titulo="Reglamento para imprimir">
+  <!-- 1. Portada -->
+  <section class="pagina portada">
+    <div class="p-arriba">
+      <span>Reglamento · v{VERSION_REGLAMENTO}</span>
+      <span>Temporada {mundo.temporada}</span>
+    </div>
+    <div class="p-centro">
+      <Emblema variante="escudo" tam={300} />
+      <h1>Reglamento</h1>
+      <p class="p-lema">Baloncesto 3x3 con cartas y dos dados</p>
+      <div class="p-datos">
+        <span><strong>2</strong> personas</span>
+        <span><strong>5-10</strong> minutos</span>
+        <span><strong>2</strong> dados</span>
+        <span><strong>{CARTAS_POR_EQUIPO}</strong> cartas por equipo</span>
+      </div>
+    </div>
+    <p class="p-texto">
+      Los partidos de la Liga Nimbo se deciden con estas reglas. Con ellas puedes jugarlos tú: se aprenden en un minuto y cada
+      ataque es un pulso de ingenio entre quien tira y quien defiende.
+    </p>
+    <div class="p-pie">liganimbo.github.io · @liganimbo · Liga mixta de baloncesto 3x3, ficticia, jugada con cartas y dados</div>
+  </section>
+
+  <!-- 2. Lo esencial y las cartas -->
+  <section class="pagina interior">
+    <header class="cinta"><span>Liga Nimbo · Reglamento v{VERSION_REGLAMENTO}</span><span>2 / {HOJAS}</span></header>
+
+    <h2><span class="num">1</span> Lo esencial</h2>
+    <div class="esencial">
+      <ul>
+        <li>Cada equipo tiene <strong>{CARTAS_POR_EQUIPO} cartas</strong>: {enPista} en pista y 1 suplente.</li>
+        <li>Cada carta tiene <strong>Ataque</strong> y <strong>Defensa</strong>, y a veces un <strong>icono</strong>.</li>
+        <li>Cada carta tiene <strong>{R.fichasPorCarta} tiros</strong>. Cada equipo ataca <strong>{R.ataquesPorEquipo} veces</strong>, por turnos.</li>
+        <li>En cada ataque, quien ataca elige en secreto <strong>dentro</strong> ({R.puntos.dentro} puntos) o <strong>fuera</strong> ({R.puntos.fuera}), y quien defiende, qué <strong>cierra</strong>.</li>
+        <li>Se revela, se tiran <strong>dos dados</strong> y se mira si entra.</li>
+        <li>A mitad de partido <strong>el suplente entra</strong> obligatoriamente.</li>
+      </ul>
+      <div class="gana">Gana quien más puntos tenga tras los {R.ataquesPorEquipo} ataques de cada equipo.</div>
+    </div>
+
+    <h2><span class="num">2</span> Qué necesitas</h2>
+    <div class="material">
+      <div><strong>{CARTAS_POR_EQUIPO} cartas por persona</strong><span>Una franquicia cada una. Están en el PDF de las cartas.</span></div>
+      <div><strong>Dos dados</strong><span>De seis caras, los de toda la vida.</span></div>
+      <div><strong>{CARTAS_POR_EQUIPO * R.fichasPorCarta} fichas por persona</strong><span>Monedas o garbanzos: son los tiros.</span></div>
+      <div><strong>Papel y lápiz</strong><span>Para el marcador. Hay una hoja al final.</span></div>
+    </div>
+
+    <h2><span class="num">3</span> Las cartas</h2>
+    <div class="cartas-explicadas">
+      <Naipe j={atacante} />
+      <div>
+        <p>Cada carta es una jugadora o un jugador. En la pista solo cuentan cuatro cosas:</p>
+        <dl class="partes">
+          <div><dt>Ataque</dt><dd>Lo que suma cuando tira. Del 2 al 6.</dd></div>
+          <div><dt>Defensa</dt><dd>Lo que suma cuando marca a quien tira. Del 2 al 6.</dd></div>
+          <div><dt>Icono</dt><dd>Algunas cartas, como mucho uno. Valen más o menos un punto de Ataque o de Defensa.</dd></div>
+          <div><dt>Tiros</dt><dd>Cada carta empieza con {R.fichasPorCarta} fichas y gasta una cada vez que tira. Sin fichas ya no tira, pero sigue defendiendo mientras esté en pista.</dd></div>
+        </dl>
+        <div class="iconos">
+          {
+            (["Tiro", "Aro", "Muro"] as const).map((i) => (
+              <div>
+                <span class="pastilla">{i}</span>
+                {DESCRIPCION_ICONO[i]}.
+              </div>
+            ))
+          }
+        </div>
+        <p class="pequeño">
+          Edad, origen, historia y techo son de la liga: sirven entre temporadas. La liga es mixta y el género nunca interviene en
+          los números.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Cada ataque -->
+  <section class="pagina interior">
+    <header class="cinta"><span>Liga Nimbo · Reglamento v{VERSION_REGLAMENTO}</span><span>3 / {HOJAS}</span></header>
+
+    <h2><span class="num">4</span> Preparación</h2>
+    <ol class="pasos">
+      <li>Cada equipo pone <strong>{enPista} cartas en pista</strong> y deja <strong>1 de suplente</strong>, con sus fichas al lado.</li>
+      <li><strong>Marcajes:</strong> cada equipo decide en secreto a qué rival marca cada uno de sus {enPista} jugadores, uno a uno. Se revelan a la vez. Lo más cómodo: colocar cada carta enfrente de la que marca.</li>
+      <li>Se sortea quién ataca primero.</li>
+    </ol>
+
+    <h2><span class="num">5</span> Cada ataque es un farol</h2>
+    <div class="duelo">
+      <div class="lado ataca">
+        <div class="etq">Quien ataca</div>
+        <p>Elige <strong>quién tira</strong> entre sus cartas en pista con fichas, y gasta una. En secreto elige:</p>
+        <div class="opcion">Dentro <span>{R.puntos.dentro} puntos</span></div>
+        <div class="opcion">Fuera <span>{R.puntos.fuera} puntos</span></div>
+      </div>
+      <div class="vs">VS</div>
+      <div class="lado defiende">
+        <div class="etq">Quien defiende</div>
+        <p>Elige en secreto <strong>qué cierra</strong>. Si acierta, su defensa suma +{R.bonusCierre}.</p>
+        <div class="opcion">Cierra dentro</div>
+        <div class="opcion">Cierra fuera</div>
+      </div>
+    </div>
+    <p class="pequeño centrado">
+      Para elegir en secreto: las cartas Dentro y Fuera boca abajo, o una moneda en la mano (cara dentro, cruz fuera). Se revela a
+      la vez y se tiran los dados.
+    </p>
+
+    <h2><span class="num">6</span> La cuenta</h2>
+    <div class="formulas">
+      <div class="formula">
+        <div class="etq">Ataque</div>
+        <div class="f-linea"><b>dos dados</b> + <b>Ataque</b> de quien tira</div>
+        <div class="f-extra">+{R.bonusAro} si es Aro y tira dentro · +{R.bonusTiro} si es Tiro y tira fuera</div>
+      </div>
+      <div class="formula">
+        <div class="etq">Defensa</div>
+        <div class="f-linea"><b>{R.baseDefensa}</b> + <b>Defensa</b> de quien le marca</div>
+        <div class="f-extra">+{R.bonusMuro} si es Muro y el tiro es de dentro · +{R.bonusCierre} si ha cerrado lo que era</div>
+      </div>
+    </div>
+    <div class="entra">
+      <div><span class="pastilla naranja">Dentro</span> entra si el ataque <strong>iguala o supera</strong> a la defensa: <strong>{R.puntos.dentro} puntos</strong>.</div>
+      <div><span class="pastilla indigo">Fuera</span> entra si el ataque <strong>supera a la defensa por {R.margenFuera} o más</strong>: <strong>{R.puntos.fuera} puntos</strong>.</div>
+    </div>
+
+    <div class="caja-mates">
+      <div>
+        <h3>Mates y tapones</h3>
+        <p>No cambian el marcador, pero se cantan y se apuntan.</p>
+      </div>
+      <div><strong>Mate:</strong> canasta de dentro que supera a la defensa por <strong>{R.margenMate} o más</strong>.</div>
+      <div><strong>Tapón:</strong> tiro de dentro que se queda corto por <strong>{R.margenTapon} o más</strong>. Lo pone quien marcaba.</div>
+    </div>
+  </section>
+
+  <!-- 4. Ejemplo y final -->
+  <section class="pagina interior">
+    <header class="cinta"><span>Liga Nimbo · Reglamento v{VERSION_REGLAMENTO}</span><span>4 / {HOJAS}</span></header>
+
+    <h2><span class="num">7</span> Un ejemplo</h2>
+    <div class="ejemplo">
+      <div class="ej-cartas">
+        <Naipe j={atacante} />
+        <div class="vs pequeño-vs">VS</div>
+        <Naipe j={defensor} />
+      </div>
+      <ol>
+        <li>{nombre(atacante.nombre)} tira <strong>dentro</strong>. La defensa lo lee y <strong>cierra dentro</strong>.</li>
+        <li>
+          Salen un <span class="dado">{dados[0]}</span> y un <span class="dado">{dados[1]}</span>.<br />
+          Ataque: {suma} + {atacante.ataque} + {valorAtaque(atacante, "dentro") - atacante.ataque} (Aro) = <strong>{ataqueDentro}</strong>.
+        </li>
+        <li>
+          Defensa de {nombre(defensor.nombre)}: {R.baseDefensa} + {defensor.defensa} + {R.bonusMuro} (Muro) + {R.bonusCierre} (lo adivinó) =
+          <strong>{defensaDentro}</strong>.
+        </li>
+      </ol>
+      <p class="ej-final">
+        {ataqueDentro >= defensaDentro ? `${ataqueDentro} ≥ ${defensaDentro}: canasta de 2.` : `${ataqueDentro} < ${defensaDentro}: no entra.`}
+        {ataqueDentro - defensaDentro >= R.margenMate && " ¡Y es mate!"}
+        {defensaDentro - ataqueDentro >= R.margenTapon && " ¡Tapón!"}
+      </p>
+      <p class="pequeño">
+        ¿Y si hubiera tirado de fuera? Perdía el Aro (ataque {ataqueFuera}), pero el Muro no frena los triples y la defensa había
+        cerrado dentro: se quedaba en {defensaFuera} y le bastaba con {defensaFuera + R.margenFuera}.{" "}
+        {ataqueFuera >= defensaFuera + R.margenFuera ? "Habría sido triple." : "Tampoco entraba."}
+      </p>
+    </div>
+
+    <h2><span class="num">8</span> Descanso, tiempo muerto y final</h2>
+    <dl class="final">
+      <div>
+        <dt>Descanso</dt>
+        <dd>
+          Cuando los dos equipos han hecho {R.descansoTras} ataques. <strong>El suplente entra obligatoriamente</strong>, con sus
+          {R.fichasPorCarta} fichas. Sale quien tú elijas, pero <strong>solo puede salir quien ya haya gastado sus fichas</strong>: siempre
+          hay alguien, porque {R.descansoTras} tiros entre {enPista} obligan a que alguien repita. Después se rehacen los marcajes.
+        </dd>
+      </div>
+      <div>
+        <dt>Tiempo muerto</dt>
+        <dd>Una vez por partido, cada equipo puede repetir una tirada de ataque propia que haya fallado.</dd>
+      </div>
+      <div>
+        <dt>Final</dt>
+        <dd>Gana quien más puntos tenga cuando los dos equipos han hecho sus {R.ataquesPorEquipo} ataques.</dd>
+      </div>
+      <div>
+        <dt>Muerte súbita</dt>
+        <dd>
+          Si hay empate, un ataque más por equipo, siguiendo el turno (empieza quien empezó el partido). Puede tirar cualquiera de
+          pista, tenga fichas o no. Se repite hasta que, tras un ataque de cada uno, alguien vaya por delante.
+        </dd>
+      </div>
+      <div>
+        <dt>Mejor del partido</dt>
+        <dd>Más puntos anotados, más 1 por cada ataque rival que no entre estando marcado por esa carta.</dd>
+      </div>
+    </dl>
+  </section>
+
+  <!-- 5. Decisiones y liga en casa -->
+  <section class="pagina interior">
+    <header class="cinta"><span>Liga Nimbo · Reglamento v{VERSION_REGLAMENTO}</span><span>5 / {HOJAS}</span></header>
+
+    <h2><span class="num">9</span> Las decisiones que importan</h2>
+    <div class="decisiones">
+      <div><strong>¿Cuándo gastas a tu estrella?</strong><span>Sus dos tiros al principio, para coger ventaja, o guardados para el final, cuando más pesan.</span></div>
+      <div><strong>¿Quién sale en el descanso?</strong><span>Solo sale quien ya no tiene tiros. Si tu mejor atacante defiende mal, gasta pronto sus fichas y sácalo.</span></div>
+      <div><strong>¿A quién marcas?</strong><span>Tu mejor defensa sobre su mejor tirador… o sobre quien todavía tiene fichas.</span></div>
+      <div><strong>¿Dentro o fuera?</strong><span>Ir a lo seguro o leerle la mente al rival. Ahí está el juego.</span></div>
+    </div>
+
+    <h2><span class="num">10</span> Tu propia liga</h2>
+    <div class="liga">
+      <div>
+        <p>
+          Con las cartas de las 12 franquicias puedes jugar la temporada entera, como la liga oficial:
+        </p>
+        <ul>
+          <li><strong>Liga regular</strong> a ida y vuelta: {2 * (mundo.franquicias.length - 1)} jornadas de 6 partidos.</li>
+          <li><strong>Clasificación</strong> por victorias. Empates: duelos directos y luego diferencia de puntos.</li>
+          <li>
+            <strong>Playoffs</strong> para las {CONFIG.playoffs} mejores: {`cuartos y semifinales al mejor de ${mejorDe(CONFIG.victoriasPorRonda.cuartos)}, la Final al mejor de ${mejorDe(CONFIG.victoriasPorRonda.final)}`}.
+          </li>
+        </ul>
+        <p class="pequeño">Si no hay tiempo para todo, jugad solo vuestros partidos y resolved el resto con un dado.</p>
+      </div>
+      <div class="verano">
+        <h3>El verano</h3>
+        <p class="pequeño">Al acabar, las cartas cambian. Todo se resuelve con un dado:</p>
+        <ul>
+          <li><strong>Evolución:</strong> las jóvenes (hasta {VERANO.edadJoven}) mejoran con 5-6; las de plenitud suben o bajan; las veteranas (desde {VERANO.edadVeterana}) se desgastan. Nadie pasa de su techo (como mucho, {TECHO_MAXIMO}).</li>
+          <li><strong>Retiradas:</strong> desde los {VERANO.edadRetiro}, con 1 o 2.</li>
+          <li><strong>Draft:</strong> {VERANO.promesas} promesas. Elige primero el último.</li>
+        </ul>
+        <p class="pequeño">El verano completo (presupuesto, contratos, ojeo, fichajes) está en la web.</p>
+      </div>
+    </div>
+
+    <div class="oficial">
+      <Emblema variante="escudo" tam={110} />
+      <div>
+        <h3>Y así se juega la liga oficial</h3>
+        <p>
+          Los partidos de la Liga Nimbo se juegan con estas mismas reglas y estas mismas cartas. Cada franquicia tiene su plan de
+          partido, el motor lo juega con una semilla pública, y en el acta de cada partido están todas las tiradas para que
+          cualquiera pueda comprobarlo. Resultados, estadísticas y cartas al día en <strong>liganimbo.github.io</strong>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Referencia rápida y hoja de partido -->
+  <section class="pagina interior">
+    <header class="cinta"><span>Liga Nimbo · Reglamento v{VERSION_REGLAMENTO}</span><span>6 / {HOJAS}</span></header>
+
+    <h2><span class="num">★</span> Referencia rápida</h2>
+    <div class="referencia">
+      <div>
+        <div class="etq">Ataque</div>
+        <div><b>2 dados + Ataque</b></div>
+        <div class="f-extra">+{R.bonusAro} Aro (dentro) · +{R.bonusTiro} Tiro (fuera)</div>
+      </div>
+      <div>
+        <div class="etq">Defensa</div>
+        <div><b>{R.baseDefensa} + Defensa</b></div>
+        <div class="f-extra">+{R.bonusMuro} Muro (dentro) · +{R.bonusCierre} si cerró lo que era</div>
+      </div>
+      <div>
+        <div class="etq">¿Entra?</div>
+        <div>Dentro: igualar → <b>{R.puntos.dentro}</b></div>
+        <div>Fuera: superar por {R.margenFuera} → <b>{R.puntos.fuera}</b></div>
+      </div>
+      <div>
+        <div class="etq">Partido</div>
+        <div>{R.ataquesPorEquipo} ataques por equipo · {R.fichasPorCarta} tiros por carta</div>
+        <div class="f-extra">Descanso tras {R.descansoTras}: entra el suplente · 1 tiempo muerto</div>
+      </div>
+    </div>
+
+    {
+      [1, 2, 3].map((n) => (
+        <div class="hoja-partido">
+          <div class="hp-cabeza">
+            <h3>Partido {n}</h3>
+            <span>Fecha ______________</span>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th class="hp-equipo">Equipo</th>
+                {Array.from({ length: R.ataquesPorEquipo }, (_, i) => (
+                  <th class:list={{ descanso: i === R.descansoTras }}>{i + 1}</th>
+                ))}
+                <th>Extra</th>
+                <th class="hp-total">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[0, 1].map(() => (
+                <tr>
+                  <td class="hp-equipo" />
+                  {Array.from({ length: R.ataquesPorEquipo }, (_, i) => (
+                    <td class:list={{ descanso: i === R.descansoTras }} />
+                  ))}
+                  <td />
+                  <td class="hp-total" />
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div class="hp-notas">
+            <span>Tiempo muerto: ☐ ☐</span>
+            <span>Mates ____________________</span>
+            <span>Tapones ____________________</span>
+            <span>Mejor del partido ____________________</span>
+          </div>
+        </div>
+      ))
+    }
+    <p class="pequeño">La línea gruesa marca el descanso: después del ataque {R.descansoTras} de cada equipo entra el suplente.</p>
+  </section>
+</Impresion>
+
+<style>
+  /* Portada: el degradado de noche de Instagram, a sangre. */
+  .portada {
+    display: flex;
+    flex-direction: column;
+    padding: 14mm 16mm 12mm;
+    color: #f1f2f8;
+    background:
+      radial-gradient(circle at 50% 36%, #3a3590 0%, transparent 42%),
+      radial-gradient(circle at 8% 92%, rgb(155 149 255 / 25%), transparent 35%),
+      radial-gradient(circle at 92% 8%, rgb(255 200 61 / 20%), transparent 35%),
+      #0d0f1c;
+  }
+  .p-arriba {
+    display: flex;
+    justify-content: space-between;
+    font-size: 3.2mm;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #ffc83d;
+  }
+  .p-centro {
+    margin-top: 22mm;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .p-centro .emblema {
+    width: 92mm;
+    height: auto;
+  }
+  .portada h1 {
+    font-size: 34mm;
+    margin-top: 8mm;
+  }
+  .p-lema {
+    font-size: 6mm;
+    color: #d6d8f2;
+    margin: 2mm 0 10mm;
+  }
+  .p-datos {
+    display: flex;
+    gap: 3mm;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .p-datos span {
+    padding: 2mm 5mm;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 10%);
+    font-size: 3.6mm;
+  }
+  .p-datos strong {
+    color: #ffc83d;
+  }
+  .p-texto {
+    margin: auto auto 8mm;
+    max-width: 140mm;
+    text-align: center;
+    font-size: 4mm;
+    color: #b9b5ff;
+  }
+  .p-pie {
+    font-size: 2.9mm;
+    text-align: center;
+    color: rgb(241 242 248 / 55%);
+  }
+
+  /* Hojas interiores: crema con halos, como el tema claro. */
+  .interior {
+    padding: 0 16mm 12mm;
+    background:
+      radial-gradient(circle at 100% 0%, rgb(232 89 12 / 13%), transparent 38%),
+      radial-gradient(circle at 0% 100%, rgb(59 59 214 / 9%), transparent 40%),
+      linear-gradient(180deg, #fbf7ef, #f3ebdc);
+  }
+  .cinta {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 -16mm 7mm;
+    padding: 4mm 16mm;
+    font-family: var(--titulo);
+    font-weight: 700;
+    font-size: 3.6mm;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #ffc83d;
+    background: linear-gradient(100deg, #12142a 0%, #2a2f6e 65%, #3a3590 100%);
+  }
+  h2 {
+    display: flex;
+    align-items: center;
+    gap: 3mm;
+    font-size: 9mm;
+    margin: 7mm 0 4mm;
+  }
+  .cinta + h2 {
+    margin-top: 0;
+  }
+  .num {
+    display: inline-grid;
+    place-items: center;
+    width: 8.5mm;
+    height: 8.5mm;
+    border-radius: 50%;
+    background: linear-gradient(180deg, #ffe08a, #f2a516);
+    color: #16182e;
+    font-size: 5mm;
+  }
+  h3 {
+    font-size: 5.5mm;
+    margin-bottom: 2mm;
+  }
+  .pequeño {
+    font-size: 3.05mm;
+    color: var(--tinta-2);
+  }
+  .centrado {
+    text-align: center;
+  }
+  .etq {
+    font-size: 2.7mm;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--naranja);
+    margin-bottom: 1mm;
+  }
+  .pastilla {
+    display: inline-block;
+    min-width: 13mm;
+    margin-right: 1.5mm;
+    padding: 0.4mm 2.5mm;
+    border-radius: 999px;
+    font-size: 2.6mm;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-align: center;
+    text-transform: uppercase;
+    background: linear-gradient(180deg, #ffe08a, #f2a516);
+    color: #16182e;
+  }
+  .pastilla.naranja {
+    background: linear-gradient(180deg, #f47a2c, #c94d0b);
+    color: #fff;
+  }
+  .pastilla.indigo {
+    background: linear-gradient(180deg, #4b4fe0, #2a2f8e);
+    color: #fff;
+  }
+  .caja,
+  .esencial,
+  .material > div,
+  .formula,
+  .decisiones > div,
+  .lado,
+  .final > div,
+  .referencia > div,
+  .liga > div,
+  .ejemplo {
+    background: rgb(255 253 248 / 85%);
+    border: 0.3mm solid var(--linea);
+    border-radius: 3mm;
+  }
+
+  /* 1. Lo esencial */
+  .esencial {
+    padding: 4mm 6mm;
+  }
+  .esencial ul {
+    margin: 0;
+    padding-left: 5mm;
+  }
+  .esencial li {
+    margin-bottom: 1.2mm;
+  }
+  .gana {
+    margin-top: 3mm;
+    padding: 2.5mm 4mm;
+    border-radius: 2mm;
+    font-family: var(--titulo);
+    font-weight: 800;
+    font-size: 5mm;
+    text-transform: uppercase;
+    color: #fff;
+    background: linear-gradient(100deg, #e8590c, #f2a516);
+  }
+  .material {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 3mm;
+  }
+  .material > div {
+    display: flex;
+    flex-direction: column;
+    gap: 1mm;
+    padding: 3mm;
+    font-size: 3.1mm;
+  }
+  .material span {
+    color: var(--tinta-2);
+  }
+  .cartas-explicadas {
+    display: grid;
+    grid-template-columns: 63mm 1fr;
+    gap: 7mm;
+    align-items: start;
+  }
+  .partes {
+    margin: 0 0 3mm;
+  }
+  .partes div {
+    display: grid;
+    grid-template-columns: 17mm 1fr;
+    gap: 2mm;
+    padding: 1.4mm 0;
+    border-bottom: 0.25mm solid var(--linea);
+  }
+  .partes dt {
+    font-family: var(--titulo);
+    font-weight: 800;
+    font-size: 4.2mm;
+    text-transform: uppercase;
+  }
+  .partes dd {
+    margin: 0;
+  }
+  .iconos {
+    display: flex;
+    flex-direction: column;
+    gap: 1.6mm;
+    margin-bottom: 3mm;
+  }
+
+  /* 2. Cada ataque */
+  .pasos {
+    margin: 0;
+    padding-left: 6mm;
+  }
+  .pasos li {
+    margin-bottom: 1.6mm;
+  }
+  .duelo {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 4mm;
+    align-items: center;
+  }
+  .lado {
+    padding: 4mm 5mm;
+  }
+  .lado p {
+    font-size: 3.3mm;
+  }
+  .opcion {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2mm;
+    padding: 2mm 4mm;
+    border-radius: 2mm;
+    font-family: var(--titulo);
+    font-weight: 800;
+    font-size: 5.5mm;
+    text-transform: uppercase;
+    color: #fff;
+  }
+  .opcion span {
+    font-family: Inter, sans-serif;
+    font-size: 3mm;
+    font-weight: 600;
+    text-transform: none;
+    align-self: center;
+  }
+  .ataca .opcion {
+    background: linear-gradient(100deg, #f47a2c, #c94d0b);
+  }
+  .defiende .opcion {
+    background: linear-gradient(100deg, #4b4fe0, #1d2060);
+  }
+  .vs {
+    font-family: var(--titulo);
+    font-weight: 800;
+    font-size: 9mm;
+    color: var(--naranja);
+  }
+  .duelo + .pequeño {
+    margin-top: 3mm;
+  }
+  .formulas {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4mm;
+  }
+  .formula {
+    padding: 4mm 5mm;
+  }
+  .f-linea {
+    font-size: 4.6mm;
+  }
+  .f-linea b,
+  .referencia b {
+    font-family: var(--titulo);
+    font-weight: 800;
+    font-size: 1.25em;
+    text-transform: uppercase;
+  }
+  .f-extra {
+    margin-top: 1.5mm;
+    font-size: 2.9mm;
+    color: var(--tinta-2);
+  }
+  .entra {
+    display: flex;
+    flex-direction: column;
+    gap: 2mm;
+    margin: 4mm 0 0;
+  }
+  .caja-mates {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 5mm;
+    margin-top: 7mm;
+    padding: 5mm 6mm;
+    border-radius: 3mm;
+    color: #f1f2f8;
+    font-size: 3.2mm;
+    background:
+      radial-gradient(circle at 100% 0%, rgb(255 200 61 / 22%), transparent 45%),
+      linear-gradient(120deg, #12142a, #2a2f6e 70%, #3a3590);
+  }
+  .caja-mates h3 {
+    color: #ffc83d;
+  }
+  .caja-mates p {
+    margin: 0;
+    color: #d6d8f2;
+  }
+  .caja-mates strong {
+    color: #ffc83d;
+  }
+
+  /* 3. Ejemplo y final */
+  .ejemplo {
+    padding: 5mm 6mm;
+  }
+  .ej-cartas {
+    zoom: 0.8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6mm;
+    margin-bottom: 4mm;
+  }
+  .pequeño-vs {
+    font-size: 8mm;
+  }
+  .ejemplo ol {
+    margin: 0;
+    padding-left: 5mm;
+  }
+  .ejemplo li {
+    margin-bottom: 1.5mm;
+  }
+  .dado {
+    display: inline-grid;
+    place-items: center;
+    width: 5.2mm;
+    height: 5.2mm;
+    border-radius: 1.2mm;
+    background: #fff;
+    border: 0.35mm solid var(--tinta);
+    font-weight: 800;
+    font-size: 3.2mm;
+  }
+  .ej-final {
+    margin: 3mm 0 2mm;
+    font-family: var(--titulo);
+    font-weight: 800;
+    font-size: 6mm;
+    text-transform: uppercase;
+    color: var(--naranja);
+  }
+  .final {
+    display: flex;
+    flex-direction: column;
+    gap: 2.4mm;
+    margin: 0;
+  }
+  .final > div {
+    display: grid;
+    grid-template-columns: 34mm 1fr;
+    gap: 4mm;
+    padding: 2.2mm 5mm;
+  }
+  .final dt {
+    font-family: var(--titulo);
+    font-weight: 800;
+    font-size: 4.6mm;
+    text-transform: uppercase;
+  }
+  .final dd {
+    margin: 0;
+    font-size: 3.3mm;
+  }
+
+  /* 4. Decisiones y liga */
+  .decisiones {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3mm;
+  }
+  .decisiones > div {
+    display: flex;
+    flex-direction: column;
+    gap: 1mm;
+    padding: 4mm 5mm;
+  }
+  .decisiones strong {
+    font-family: var(--titulo);
+    font-weight: 800;
+    font-size: 5mm;
+    text-transform: uppercase;
+  }
+  .decisiones span {
+    color: var(--tinta-2);
+  }
+  .liga {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4mm;
+  }
+  .liga > div {
+    padding: 4mm 5mm;
+  }
+  .liga ul {
+    margin: 0 0 3mm;
+    padding-left: 5mm;
+  }
+  .liga li {
+    margin-bottom: 1.4mm;
+  }
+  .verano {
+    font-size: 3.2mm;
+  }
+  .oficial {
+    display: flex;
+    align-items: center;
+    gap: 6mm;
+    margin-top: 7mm;
+    padding: 5mm 6mm;
+    border-radius: 3mm;
+    color: #f1f2f8;
+    background:
+      radial-gradient(circle at 100% 0%, rgb(79 70 229 / 55%), transparent 55%),
+      #0d0f1c;
+  }
+  .oficial .emblema {
+    width: 28mm;
+    height: auto;
+    flex: none;
+  }
+  .oficial h3 {
+    color: #ffc83d;
+  }
+  .oficial p {
+    margin: 0;
+    font-size: 3.3mm;
+    color: #d6d8f2;
+  }
+
+  /* 5. Referencia y hoja de partido */
+  .referencia {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3mm;
+  }
+  .referencia > div {
+    padding: 3.5mm 5mm;
+  }
+  .hoja-partido {
+    margin-top: 4.5mm;
+    padding: 4mm 5mm;
+    border-radius: 3mm;
+    background: #fff;
+    border: 0.3mm solid var(--linea);
+  }
+  .hp-cabeza {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 2mm;
+  }
+  .hp-cabeza span {
+    font-size: 3mm;
+    color: var(--tinta-3);
+  }
+  .hoja-partido table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .hoja-partido th {
+    font-size: 2.8mm;
+    font-weight: 700;
+    color: var(--tinta-3);
+    padding-bottom: 1mm;
+  }
+  .hoja-partido td {
+    height: 10mm;
+    border: 0.3mm solid #c9c2b3;
+  }
+  .hoja-partido .descanso {
+    border-left: 0.9mm solid var(--tinta);
+  }
+  th.descanso {
+    border-left: 0;
+  }
+  .hp-equipo {
+    width: 42mm;
+    text-align: left;
+  }
+  .hp-total {
+    width: 16mm;
+    background: #f6f1e6;
+  }
+  th.hp-total {
+    background: none;
+  }
+  .hp-notas {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5mm 6mm;
+    margin-top: 2.5mm;
+    font-size: 3mm;
+    color: var(--tinta-2);
+  }
+</style>

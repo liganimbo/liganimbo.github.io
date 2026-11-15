@@ -1,0 +1,453 @@
+---
+// Cartas para imprimir en A4: 9 por hoja (63×88 mm). Primero las 48 de la liga, por franquicias, y cartas en blanco;
+// luego las de partido (Dentro, Fuera, Tiempo muerto, la cuenta) y una hoja de dorsos. Se exporta a PDF con npm run pdf.
+import Impresion from "../../layouts/Impresion.astro";
+import Emblema from "../../components/Emblema.astro";
+import Escudo from "../../components/Escudo.astro";
+import Naipe from "../../components/Naipe.astro";
+import { jugadores, mundo } from "../../lib/liga";
+import { REGLAS, VERSION_REGLAMENTO } from "../../motor/reglas.ts";
+import { perfilEquipo } from "../../motor/mundo.ts";
+
+const POR_HOJA = 9;
+const ids = mundo.franquicias.flatMap((f) => f.plantilla);
+const enBlanco = (POR_HOJA - (ids.length % POR_HOJA)) % POR_HOJA;
+const huecos: (string | null)[] = [...ids, ...Array(enBlanco).fill(null)];
+const hojas = Array.from({ length: huecos.length / POR_HOJA }, (_, i) => huecos.slice(i * POR_HOJA, (i + 1) * POR_HOJA));
+const total = hojas.length + 3;
+const R = REGLAS;
+---
+
+<Impresion titulo="Cartas para imprimir">
+  <section class="pagina portada-cartas">
+    <div class="pc-cabeza">
+      <Emblema variante="escudo" tam={190} />
+      <div>
+        <div class="antetitulo">Temporada {mundo.temporada} · Reglamento v{VERSION_REGLAMENTO}</div>
+        <h1>Las cartas</h1>
+        <p class="entradilla">Las {ids.length} cartas de las 12 franquicias, las cartas de partido y los dorsos. Recorta, coge dos dados y juega.</p>
+      </div>
+    </div>
+
+    <div class="pc-columnas">
+      <div>
+        <h2>Cómo imprimirlas</h2>
+        <ol>
+          <li>Imprime en <strong>A4, a tamaño real</strong> (100 %, sin «ajustar a la página»). Mejor en cartulina de 200-250 g.</li>
+          <li>Para que lleven dorso, imprime la <strong>última hoja</strong> por detrás de cada hoja de cartas, volteando por el lado largo. Todos los dorsos son iguales.</li>
+          <li>Recorta por el borde de color de cada carta. Miden <strong>63×88 mm</strong>, lo que una carta de juego: caben en fundas estándar.</li>
+        </ol>
+        <h2>Qué hay</h2>
+        <ul>
+          <li><strong>Hojas 2 a {hojas.length + 1}:</strong> las cartas de la liga, por franquicias, y {enBlanco} en blanco para crear las tuyas.</li>
+          <li><strong>Hoja {hojas.length + 2}:</strong> cartas de partido: Dentro y Fuera para elegir en secreto, Tiempo muerto y dos chuletas.</li>
+          <li><strong>Hoja {total}:</strong> los dorsos.</li>
+        </ul>
+        <p class="nota">
+          Las cartas cambian cada verano (evolución, retiradas, fichajes). Este PDF es el de la Temporada {mundo.temporada}: en la web
+          está siempre la versión al día.
+        </p>
+      </div>
+      <div>
+        <h2>Las franquicias</h2>
+        <ul class="franquicias">
+          {
+            mundo.franquicias.map((f) => {
+              const p = perfilEquipo(f, jugadores);
+              return (
+                <li>
+                  <Escudo id={f.id} tam={30} />
+                  <div>
+                    <strong>{f.nombre} de {f.ciudad}</strong>
+                    <span>{p.perfil} · {p.estilo}</span>
+                  </div>
+                </li>
+              );
+            })
+          }
+        </ul>
+      </div>
+    </div>
+    <div class="pc-pie">liganimbo.github.io · @liganimbo · Liga mixta de baloncesto 3x3 · Cartas y dados</div>
+  </section>
+
+  {
+    hojas.map((hoja, n) => (
+      <section class="pagina hoja-cartas">
+        <div class="hoja-titulo">Liga Nimbo · Cartas · Hoja {n + 2} de {total}</div>
+        <div class="rejilla">
+          {hoja.map((id) =>
+            id ? (
+              <Naipe j={jugadores[id]} />
+            ) : (
+              <div class="naipe blanca" style="--c1:#3b3bd6;--c2:#ffffff">
+                <div class="naipe-cab">
+                  <span class="naipe-club">Tu carta</span>
+                </div>
+                <div class="naipe-cuerpo">
+                  <div class="raya" />
+                  <div class="naipe-meta">Nombre</div>
+                  <div class="raya" />
+                  <div class="naipe-meta">Edad · Origen · Franquicia</div>
+                  <div class="naipe-numeros">
+                    <div><span>&nbsp;</span><small>Ataque</small></div>
+                    <div><span>&nbsp;</span><small>Defensa</small></div>
+                  </div>
+                  <div class="naipe-regla">Icono: Tiro · Aro · Muro · ninguno</div>
+                  <div class="naipe-tiros">
+                    <span>Tiros</span>
+                    {Array.from({ length: R.fichasPorCarta }, () => <i />)}
+                  </div>
+                </div>
+                <div class="naipe-pie">
+                  <span>Liga Nimbo</span>
+                  <span>Ataque + Defensa ≤ 10</span>
+                </div>
+              </div>
+            ),
+          )}
+        </div>
+      </section>
+    ))
+  }
+
+  <section class="pagina hoja-cartas">
+    <div class="hoja-titulo">Liga Nimbo · Cartas de partido · Hoja {total - 1} de {total}</div>
+    <div class="rejilla">
+      {
+        (["dentro", "fuera"] as const).flatMap((t) =>
+          [0, 1].map(() => (
+            <div class={`naipe eleccion ${t}`}>
+              <div class="el-sobre">Elección secreta</div>
+              <div class="el-palabra">{t}</div>
+              <div class="el-lineas">
+                <div>
+                  <small>Si atacas</small>
+                  {t === "dentro"
+                    ? `Tiro de ${R.puntos.dentro}. Entra si igualas la defensa.`
+                    : `Tiro de ${R.puntos.fuera}. Entra si superas la defensa por ${R.margenFuera}.`}
+                </div>
+                <div>
+                  <small>Si defiendes</small>
+                  Cierras {t}: +{R.bonusCierre} a la defensa si aciertas.
+                </div>
+              </div>
+            </div>
+          )),
+        )
+      }
+      {
+        [0, 1].map(() => (
+          <div class="naipe especial tiempo">
+            <div class="el-sobre">Una vez por partido</div>
+            <div class="el-palabra pequeña">Tiempo muerto</div>
+            <div class="el-lineas">
+              <div>Repite una tirada de ataque propia que haya fallado.</div>
+              <div>
+                <small>Después</small>
+                Dale la vuelta: ya está gastado.
+              </div>
+            </div>
+          </div>
+        ))
+      }
+      {
+        [0, 1].map(() => (
+          <div class="naipe especial chuleta">
+            <div class="el-sobre">La cuenta</div>
+            <div class="ch-bloque">
+              <small>Ataque</small>
+              <div>
+                <strong>2 dados</strong> + Ataque de quien tira
+              </div>
+              <div class="ch-extra">+{R.bonusAro} Aro si tira dentro · +{R.bonusTiro} Tiro si tira fuera</div>
+            </div>
+            <div class="ch-bloque">
+              <small>Defensa</small>
+              <div>
+                <strong>{R.baseDefensa}</strong> + Defensa de quien marca
+              </div>
+              <div class="ch-extra">+{R.bonusMuro} Muro si es dentro · +{R.bonusCierre} si cerró lo que era</div>
+            </div>
+            <div class="ch-bloque">
+              <small>¿Entra?</small>
+              <div>
+                Dentro: igualar → <strong>{R.puntos.dentro}</strong>
+              </div>
+              <div>
+                Fuera: superar por {R.margenFuera} → <strong>{R.puntos.fuera}</strong>
+              </div>
+            </div>
+          </div>
+        ))
+      }
+      <div class="naipe especial mates">
+        <div class="el-sobre">Para cantarlos</div>
+        <div class="el-palabra pequeña">Mates y tapones</div>
+        <div class="el-lineas">
+          <div>
+            <small>Mate</small>
+            Canasta de dentro que supera la defensa por {R.margenMate} o más.
+          </div>
+          <div>
+            <small>Tapón</small>
+            Tiro de dentro que se queda corto por {R.margenTapon} o más. Lo pone quien marcaba.
+          </div>
+          <div class="ch-extra">No cambian el marcador. Se celebran.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pagina hoja-cartas">
+    <div class="hoja-titulo">Liga Nimbo · Dorsos · Hoja {total} de {total} · Imprímela por detrás de cada hoja de cartas</div>
+    <div class="rejilla">
+      {
+        Array.from({ length: POR_HOJA }, () => (
+          <div class="naipe dorso">
+            <Emblema variante="escudo" tam={150} />
+            <div class="dorso-sub">Baloncesto 3x3 · Cartas y dados</div>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+</Impresion>
+
+<style>
+  /* Portada */
+  .portada-cartas {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    background:
+      radial-gradient(circle at 100% 0%, rgb(232 89 12 / 22%), transparent 45%),
+      radial-gradient(circle at 0% 100%, rgb(59 59 214 / 14%), transparent 45%),
+      linear-gradient(180deg, #f8f3e9, #efe5d3);
+  }
+  .pc-cabeza {
+    display: flex;
+    align-items: center;
+    gap: 8mm;
+    padding: 16mm 16mm 10mm;
+    color: #f1f2f8;
+    background:
+      radial-gradient(circle at 90% 0%, rgb(79 70 229 / 55%), transparent 55%),
+      radial-gradient(circle at 0% 100%, rgb(255 200 61 / 14%), transparent 45%),
+      #0d0f1c;
+  }
+  .pc-cabeza .emblema {
+    width: 46mm;
+    height: auto;
+    flex: none;
+  }
+  .antetitulo {
+    font-size: 3.2mm;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #ffc83d;
+  }
+  .pc-cabeza h1 {
+    font-size: 22mm;
+    margin: 2mm 0 3mm;
+  }
+  .entradilla {
+    font-size: 4.2mm;
+    color: #d6d8f2;
+    margin: 0;
+  }
+  .pc-columnas {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 10mm;
+    padding: 10mm 16mm 0;
+  }
+  .pc-columnas h2 {
+    font-size: 7mm;
+    margin: 0 0 3mm;
+    color: var(--naranja);
+  }
+  .pc-columnas h2:not(:first-child) {
+    margin-top: 7mm;
+  }
+  .pc-columnas ol,
+  .pc-columnas ul {
+    margin: 0;
+    padding-left: 5mm;
+  }
+  .pc-columnas li {
+    margin-bottom: 2mm;
+  }
+  .nota {
+    margin-top: 6mm;
+    padding: 3mm 4mm;
+    border-left: 1mm solid var(--naranja);
+    background: rgb(255 255 255 / 60%);
+    color: var(--tinta-2);
+  }
+  .franquicias {
+    list-style: none;
+    padding: 0 !important;
+  }
+  .franquicias li {
+    display: flex;
+    align-items: center;
+    gap: 3mm;
+    padding: 1.6mm 0;
+    margin: 0 !important;
+    border-bottom: 0.25mm solid var(--linea);
+  }
+  .franquicias .escudo {
+    width: 8mm;
+    height: auto;
+  }
+  .franquicias div {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.25;
+  }
+  .franquicias span {
+    font-size: 2.9mm;
+    color: var(--tinta-3);
+  }
+  .pc-pie {
+    margin-top: auto;
+    padding: 6mm 16mm;
+    font-size: 3mm;
+    color: var(--tinta-3);
+  }
+
+  /* Hojas de cartas: 3×3 centradas en el A4. */
+  .hoja-cartas {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #fff;
+  }
+  .hoja-titulo {
+    height: 14.5mm;
+    display: flex;
+    align-items: center;
+    font-size: 2.8mm;
+    letter-spacing: 0.06em;
+    color: #9a98a3;
+  }
+  .rejilla {
+    display: grid;
+    grid-template-columns: repeat(3, 63mm);
+    grid-auto-rows: 88mm;
+    gap: 2mm;
+  }
+
+  /* Carta en blanco */
+  .blanca .raya {
+    height: 7mm;
+    border-bottom: 0.3mm solid #c9c2b3;
+  }
+  .blanca .naipe-meta {
+    margin-top: 0.6mm;
+    font-size: 2.2mm;
+  }
+
+  /* Cartas de partido */
+  .eleccion,
+  .especial {
+    padding: 4mm 4mm 3.5mm;
+    color: #f1f2f8;
+    border: 0;
+    background: radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--fondo-1) 80%, #fff 20%), var(--fondo-1) 30%, var(--fondo-2) 95%);
+  }
+  .dentro {
+    --fondo-1: #f47a2c;
+    --fondo-2: #b8430a;
+  }
+  .fuera {
+    --fondo-1: #4b4fe0;
+    --fondo-2: #1d2060;
+  }
+  .tiempo {
+    --fondo-1: #2f3c68;
+    --fondo-2: #0d0f1c;
+  }
+  .chuleta,
+  .mates {
+    --fondo-1: #3a3590;
+    --fondo-2: #12142a;
+  }
+  .el-sobre {
+    font-size: 2.4mm;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #ffc83d;
+  }
+  .el-palabra {
+    font-family: var(--titulo);
+    font-weight: 800;
+    font-size: 17mm;
+    line-height: 0.9;
+    text-transform: uppercase;
+    margin: 3mm 0 auto;
+  }
+  .el-palabra.pequeña {
+    font-size: 11mm;
+  }
+  .el-lineas {
+    display: flex;
+    flex-direction: column;
+    gap: 2.4mm;
+    font-size: 2.9mm;
+    line-height: 1.35;
+  }
+  .el-lineas div {
+    padding-top: 2mm;
+    border-top: 0.3mm solid rgb(255 255 255 / 30%);
+  }
+  .el-lineas small,
+  .ch-bloque small {
+    display: block;
+    font-size: 2.1mm;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgb(255 255 255 / 65%);
+  }
+  .el-lineas .ch-extra {
+    border: 0;
+    padding: 0;
+  }
+  .ch-bloque {
+    margin-top: 3mm;
+    padding-top: 2mm;
+    border-top: 0.3mm solid rgb(255 255 255 / 30%);
+    font-size: 3mm;
+    line-height: 1.35;
+  }
+  .ch-bloque strong {
+    color: #ffc83d;
+  }
+  .ch-extra {
+    font-size: 2.4mm;
+    color: rgb(255 255 255 / 70%);
+  }
+
+  /* Dorso */
+  .dorso {
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    color: #f1f2f8;
+    background: radial-gradient(circle at 50% 38%, #3a3590 0%, #1c1b52 40%, #0d0f1c 75%);
+  }
+  .dorso .emblema {
+    width: 46mm;
+    height: auto;
+  }
+  .dorso-sub {
+    margin-top: 5mm;
+    font-size: 2.6mm;
+    letter-spacing: 0.08em;
+    color: #b9b5ff;
+  }
+</style>

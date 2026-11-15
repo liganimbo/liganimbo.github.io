@@ -1,0 +1,101 @@
+---
+// Documentos para imprimir en A4 (reglamento y cartas). Cada <section class="pagina"> es una hoja.
+// Se exportan a PDF con npm run pdf (scripts/pdf.mjs), que los deja en public/descargas.
+import "../styles/temas.css";
+
+interface Props {
+  titulo: string;
+}
+const { titulo } = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>{titulo} · Liga Nimbo</title>
+    <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL.replace(/\/$/, "")}/favicon.svg`} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
+
+<style is:global>
+  @page {
+    size: A4;
+    margin: 0;
+  }
+  * {
+    box-sizing: border-box;
+  }
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    background: #8d8a84;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  body {
+    /* Tinta: la del tema claro de la web. */
+    --tinta: #16182e;
+    --tinta-2: #4a4c63;
+    --tinta-3: #85838f;
+    --papel: #fffdf8;
+    --crema: #f4efe4;
+    --crema-2: #efe8da;
+    --linea: #e0d6c3;
+    --naranja: #e8590c;
+    --indigo: #3b3bd6;
+    --noche: #0d0f1c;
+    --titulo: "Barlow Condensed", system-ui, sans-serif;
+    color: var(--tinta);
+    font-family: Inter, system-ui, sans-serif;
+    font-size: 3.55mm;
+    line-height: 1.45;
+    font-variant-numeric: tabular-nums;
+  }
+  .pagina {
+    position: relative;
+    width: 210mm;
+    height: 297mm;
+    margin: 0 auto;
+    overflow: hidden;
+    background: var(--papel);
+    break-after: page;
+  }
+  .pagina:last-child {
+    break-after: auto;
+  }
+  @media screen {
+    .pagina {
+      margin: 8mm auto;
+      box-shadow: 0 2mm 8mm rgb(0 0 0 / 25%);
+    }
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--titulo);
+    font-weight: 800;
+    text-transform: uppercase;
+    line-height: 0.95;
+    letter-spacing: 0.01em;
+    margin: 0;
+  }
+  p {
+    margin: 0 0 2.5mm;
+  }
+  strong {
+    font-weight: 700;
+  }
+</style>

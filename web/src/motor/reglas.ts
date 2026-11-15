@@ -12,6 +12,9 @@ export interface Carta {
   icono: Icono | null;
 }
 
+/** Versión del reglamento (REGLAMENTO.md). */
+export const VERSION_REGLAMENTO = "0.5";
+
 export const REGLAS = {
   fichasPorCarta: 2,
   ataquesPorEquipo: 8,

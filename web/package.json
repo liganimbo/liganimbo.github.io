@@ -5,6 +5,7 @@
   "scripts": {
     "liga": "node src/motor/cli.ts",
     "instagram": "node scripts/instagram.mjs",
+    "pdf": "node scripts/pdf.mjs",
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview"

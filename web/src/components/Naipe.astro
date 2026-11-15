@@ -1,0 +1,182 @@
+---
+// Carta de jugador para imprimir (63×88 mm, tamaño de carta de juego). Misma familia que la carta de la web e Instagram:
+// cabecera con los colores de la franquicia, nombre en Barlow Condensed y Ataque y Defensa en grande.
+import Escudo from "./Escudo.astro";
+import { franquicias, mundo } from "../lib/liga";
+import type { Jugador } from "../motor/mundo.ts";
+import { DESCRIPCION_ICONO, REGLAS } from "../motor/reglas.ts";
+
+interface Props {
+  j: Jugador;
+}
+const { j } = Astro.props;
+const f = franquicias[j.franquicia];
+---
+
+<div class="naipe" style={`--c1:${f.colores[0]};--c2:${f.colores[1]}`}>
+  <div class="naipe-cab">
+    <Escudo id={f.id} tam={26} />
+    <span class="naipe-club">{f.nombre}</span>
+    {j.icono && <span class="naipe-icono">{j.icono}</span>}
+  </div>
+  <div class="naipe-cuerpo">
+    <div class="naipe-nombre">{j.nombre}</div>
+    <div class="naipe-meta">{j.edad} años · {j.origen}</div>
+    <div class="naipe-historia">{j.historia}</div>
+    <div class="naipe-numeros">
+      <div><span>{j.ataque}</span><small>Ataque</small></div>
+      <div><span>{j.defensa}</span><small>Defensa</small></div>
+    </div>
+    <div class="naipe-regla">{j.icono ? <><strong>{j.icono}:</strong> {DESCRIPCION_ICONO[j.icono]}</> : "Sin icono"}</div>
+    <div class="naipe-tiros">
+      <span>Tiros</span>
+      {Array.from({ length: REGLAS.fichasPorCarta }, () => <i />)}
+    </div>
+  </div>
+  <div class="naipe-pie">
+    <span>Liga Nimbo</span>
+    <span>Techo {j.techo} · T{mundo.temporada}</span>
+  </div>
+</div>
+
+<style is:global>
+  .naipe {
+    width: 63mm;
+    height: 88mm;
+    display: flex;
+    flex-direction: column;
+    border-radius: 3mm;
+    background: #fffdf8;
+    color: #16182e;
+    overflow: hidden;
+    border: 0.5mm solid var(--c1);
+  }
+  .naipe-cab {
+    display: flex;
+    align-items: center;
+    gap: 1.8mm;
+    padding: 2mm 2.6mm;
+    background: linear-gradient(135deg, var(--c1), color-mix(in srgb, var(--c1) 65%, #000));
+    color: var(--c2);
+  }
+  .naipe-cab .escudo {
+    width: 6.8mm;
+    height: auto;
+  }
+  .naipe-club {
+    font-family: var(--titulo);
+    font-weight: 800;
+    font-size: 4.4mm;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .naipe-icono {
+    margin-left: auto;
+    font-size: 2.3mm;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.6mm 2mm;
+    border-radius: 999px;
+    background: var(--c2);
+    color: var(--c1);
+  }
+  .naipe-cuerpo {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 2.6mm 3mm 0;
+    background: linear-gradient(180deg, color-mix(in srgb, var(--c1) 7%, #fffdf8), #fffdf8 45%);
+  }
+  .naipe-nombre {
+    font-family: var(--titulo);
+    font-weight: 800;
+    font-size: 6.4mm;
+    line-height: 0.95;
+    text-transform: uppercase;
+  }
+  .naipe-meta {
+    font-size: 2.5mm;
+    color: #6b7084;
+    margin-top: 1mm;
+  }
+  .naipe-historia {
+    margin-top: 3mm;
+    padding-left: 2mm;
+    border-left: 0.5mm solid var(--c1);
+    font-size: 2.45mm;
+    font-style: italic;
+    line-height: 1.35;
+    color: #4a4c63;
+  }
+  .naipe-numeros {
+    margin-top: auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2mm;
+  }
+  .naipe-numeros div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 2mm;
+    padding: 1mm 0 1.2mm;
+    background: linear-gradient(180deg, #f6f1e6, #ebe3d2);
+  }
+  .naipe-numeros span {
+    font-family: var(--titulo);
+    font-weight: 800;
+    font-size: 13mm;
+    line-height: 1;
+  }
+  .naipe-numeros small {
+    font-size: 2.1mm;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #6b7084;
+  }
+  .naipe-regla {
+    margin-top: 2mm;
+    font-size: 2.45mm;
+    color: #4a4c63;
+    min-height: 3.4mm;
+  }
+  .naipe-tiros {
+    display: flex;
+    align-items: center;
+    gap: 1.4mm;
+    margin: 1.4mm 0 2.2mm;
+    font-size: 2.1mm;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #6b7084;
+  }
+  .naipe-tiros span {
+    margin-right: auto;
+  }
+  .naipe-tiros i {
+    width: 5.2mm;
+    height: 5.2mm;
+    border-radius: 50%;
+    border: 0.45mm solid #e8590c;
+    background: #fff;
+  }
+  .naipe-pie {
+    display: flex;
+    justify-content: space-between;
+    padding: 1.1mm 3mm;
+    font-family: var(--titulo);
+    font-weight: 700;
+    font-size: 2.5mm;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: linear-gradient(100deg, #12142a, #2a2f6e 65%, #3a3590);
+    color: #ffc83d;
+  }
+  .naipe-pie span:last-child {
+    color: #d6d8f2;
+  }
+</style>

@@ -36,10 +36,11 @@ npm run liga -- estilo VLU 0.7 # estilo de juego de una franquicia: 0 = todo den
 npm run liga -- estado         # en qué punto está la temporada
 
 npm run instagram              # exporta a ../instagram/ las publicaciones del plan (con la web en marcha)
+npm run pdf                    # reglamento y cartas para imprimir en web/public/descargas/ (con la web en marcha)
 npm run build                  # web estática en web/dist
 ```
 
-Cada Noche Nimbo: `npm run liga -- siguiente`, revisar la web, `npm run instagram` y publicar. Al acabar la temporada, `npm run liga -- verano`.
+Cada Noche Nimbo: `npm run liga -- siguiente`, revisar la web, `npm run instagram` y publicar. Al acabar la temporada, `npm run liga -- verano` y después `npm run pdf`, para que las cartas para imprimir sean las de la nueva temporada (también al cambiar el reglamento).
 
 El potencial secreto de cada carta está en `datos/potenciales.json`, que no se sube al repositorio. **No lo borres**: sin él no se puede jugar el verano.
 
