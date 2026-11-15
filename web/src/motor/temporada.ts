@@ -54,7 +54,8 @@ export interface PartidoGuardado {
   mejor: string;
 }
 
-function jugar(mundo: Mundo, id: string, local: string, visitante: string, fecha: string, semilla: string): PartidoGuardado {
+/** Juega un partido con las plantillas del mundo y lo deja listo para guardar. La semilla del partido es `${semilla}-${id}`. */
+export function jugarPartido(mundo: Mundo, id: string, local: string, visitante: string, fecha: string, semilla: string): PartidoGuardado {
   const franquicias = Object.fromEntries(mundo.franquicias.map((f) => [f.id, f]));
   const equipo = (fid: string) => ({
     franquicia: fid,
@@ -156,7 +157,7 @@ export function jugarNoche(mundo: Mundo, e: Estado, partidosPrevios: PartidoGuar
   // Liga regular.
   if (e.jugadas < e.calendario.length) {
     const j = e.calendario[e.jugadas];
-    const jugados = j.cruces.map(([loc, vis], n) => jugar(mundo, `T${t}-J${String(j.jornada).padStart(2, "0")}-${n + 1}`, loc, vis, j.fecha, e.semilla));
+    const jugados = j.cruces.map(([loc, vis], n) => jugarPartido(mundo, `T${t}-J${String(j.jornada).padStart(2, "0")}-${n + 1}`, loc, vis, j.fecha, e.semilla));
     e.jugadas += 1;
     e.noches += 1;
     return jugados;
@@ -178,7 +179,7 @@ export function jugarNoche(mundo: Mundo, e: Estado, partidosPrevios: PartidoGuar
   for (const s of ronda.series.filter((s) => !s.ganador)) {
     const n = s.partidos.length;
     const [loc, vis] = campos[n] ? [s.alto, s.bajo] : [s.bajo, s.alto];
-    const p = jugar(mundo, `T${t}-PO-${s.codigo}-${n + 1}`, loc, vis, fecha, e.semilla);
+    const p = jugarPartido(mundo, `T${t}-PO-${s.codigo}-${n + 1}`, loc, vis, fecha, e.semilla);
     const ganador = p.marcador[0] > p.marcador[1] ? loc : vis;
     s.victorias[ganador === s.alto ? 0 : 1]++;
     s.partidos.push(p.id);

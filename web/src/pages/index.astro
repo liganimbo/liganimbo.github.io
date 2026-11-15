@@ -4,6 +4,7 @@ import Clasificacion from "../components/Clasificacion.astro";
 import Emblema from "../components/Emblema.astro";
 import Escudo from "../components/Escudo.astro";
 import Resultado from "../components/Resultado.astro";
+import { EXHIBICION } from "../lib/exhibicion";
 import { dec, carreraMvp, fecha, franquicias, jugadores, lideres, pct, resumen, temporada, url } from "../lib/liga";
 
 // Tres momentos: pretemporada, temporada en juego y temporada terminada.
@@ -52,6 +53,12 @@ const destacados = [
           <p>
             {proxima && `Próxima Noche Nimbo: ${proxima.descripcion}, ${fecha(proxima.fecha)}. `}
             <a href={url("calendario")}>Ver el calendario →</a>
+            {enPretemporada && (
+              <>
+                {" "}
+                · <a href={url("partidos/exhibicion")}>Así se cuenta cada partido: la exhibición {franquicias[EXHIBICION.visitante].nombre}-{franquicias[EXHIBICION.local].nombre} →</a>
+              </>
+            )}
           </p>
         </div>
       </section>

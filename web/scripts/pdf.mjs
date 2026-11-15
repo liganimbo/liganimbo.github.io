@@ -1,4 +1,4 @@
-// Exporta a PDF los documentos para imprimir (reglamento, reglamento para el móvil y cartas) y los deja en public/descargas, que se publica con la web.
+// Exporta a PDF los documentos para imprimir (reglamento y cartas) y los deja en public/descargas, que se publica con la web.
 // Uso: npm run pdf            (con la web en marcha: npm run dev)
 //      WEB=http://localhost:4321 npm run pdf
 // Hay que repetirlo cuando cambien las reglas o las cartas (cada verano).
@@ -11,7 +11,6 @@ const WEB = process.env.WEB ?? "http://localhost:4321";
 const SALIDA = path.resolve(import.meta.dirname, "../public/descargas");
 const DOCUMENTOS = [
   ["imprimir/reglamento", "liga-nimbo-reglamento.pdf"],
-  ["imprimir/reglamento-movil", "liga-nimbo-reglamento-movil.pdf"],
   ["imprimir/cartas", "liga-nimbo-cartas.pdf"],
 ];
 

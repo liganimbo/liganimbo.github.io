@@ -1,0 +1,635 @@
+---
+// Crónica completa de un partido: marcador, lo más destacado, evolución, quintetos y cada ataque con sus dados, la cuenta y
+// el marcador; al final, las estadísticas de cada carta. La usa la página de cada partido y la del partido de exhibición.
+import Carta from "./Carta.astro";
+import Escudo from "./Escudo.astro";
+import Evolucion from "./Evolucion.astro";
+import { TIPO, franquicias, jugadores, url } from "../lib/liga";
+import { REGLAS, type Jugada } from "../motor/reglas.ts";
+import type { PartidoGuardado } from "../motor/temporada.ts";
+
+interface Props {
+  p: PartidoGuardado;
+  /** Texto sobre el marcador: jornada, ronda de playoffs… */
+  contexto: string;
+}
+const { p, contexto } = Astro.props;
+const lados = [p.local, p.visitante];
+const nombreEq = (lado: number) => franquicias[lados[lado]].nombre;
+const nombre = (id: string) => jugadores[id].nombre;
+const ganador = p.marcador[0] > p.marcador[1] ? 0 : 1;
+const regulares = 2 * REGLAS.ataquesPorEquipo;
+const prorroga = p.jugadas.length > regulares;
+const descanso = p.cambios[0]?.tras ?? 2 * REGLAS.descansoTras;
+const mejor = p.estadisticas[p.mejor];
+
+// Lo que hay que saber de cada ataque: número de ataque de su equipo, tiros que le quedan a quien tira y el líder.
+const fichas = new Map<string, number>();
+const ataquesDe = [0, 0];
+let maxVentaja = { puntos: 0, lado: 0, tras: 0 };
+let lider = 0;
+let cambiosDeLider = 0;
+const pasos = p.jugadas.map((j: Jugada, i) => {
+  ataquesDe[j.equipo]++;
+  let quedan: number | null = null;
+  if (i < regulares) {
+    quedan = (fichas.get(j.tirador) ?? REGLAS.fichasPorCarta) - 1;
+    fichas.set(j.tirador, quedan);
+  }
+  const dif = j.marcador[0] - j.marcador[1];
+  if (Math.abs(dif) > maxVentaja.puntos) maxVentaja = { puntos: Math.abs(dif), lado: dif > 0 ? 0 : 1, tras: i + 1 };
+  const ahora = Math.sign(dif);
+  const cambiaLider = ahora !== 0 && lider !== 0 && ahora !== lider;
+  if (cambiaLider) cambiosDeLider++;
+  if (ahora !== 0) lider = ahora;
+  return { j, i, n: ataquesDe[j.equipo], quedan, cambiaLider };
+});
+
+// La canasta decisiva: la que puso al ganador por delante para no volver a ir por detrás.
+let decisiva: number | null = null;
+p.jugadas.forEach((j, i) => {
+  const delante = j.marcador[ganador] > j.marcador[1 - ganador];
+  if (!delante) decisiva = null;
+  else if (decisiva === null) decisiva = i;
+});
+
+const mates = p.jugadas.filter((j) => j.mate);
+const tapones = p.jugadas.filter((j) => j.tapon);
+const partes = [
+  { titulo: "Primera parte", desde: 0, hasta: descanso },
+  { titulo: "Segunda parte", desde: descanso, hasta: Math.min(regulares, p.jugadas.length) },
+  ...(prorroga ? [{ titulo: "Muerte súbita", desde: regulares, hasta: p.jugadas.length }] : []),
+];
+const alineacion = (lado: number) => p.alineaciones[lado];
+const plantilla = (lado: number) => franquicias[lados[lado]].plantilla.filter((id) => p.estadisticas[id]);
+const tiros = ([a, i]: [number, number]) => (i ? `${a}/${i}` : "–");
+
+const PUNTOS: Record<number, [number, number][]> = {
+  1: [[1, 1]],
+  2: [[0, 0], [2, 2]],
+  3: [[0, 0], [1, 1], [2, 2]],
+  4: [[0, 0], [2, 0], [0, 2], [2, 2]],
+  5: [[0, 0], [2, 0], [1, 1], [0, 2], [2, 2]],
+  6: [[0, 0], [2, 0], [0, 1], [2, 1], [0, 2], [2, 2]],
+};
+const resultado = (j: Jugada) =>
+  j.mate ? "¡Mate!" : j.tapon ? "¡Tapón!" : j.anota ? (j.tipo === "fuera" ? "Triple" : "Canasta") : "Fallo";
+---
+
+<p class="apagado contexto">{contexto}</p>
+
+<section class="marcador tarjeta">
+  {
+    [1, 0].map((lado) => (
+      <a href={url(`franquicias/${lados[lado]}`)} class:list={["lado", { ganador: ganador === lado }]}>
+        <Escudo id={lados[lado]} tam={64} />
+        <div class="ciudad apagado">{franquicias[lados[lado]].ciudad}</div>
+        <div class="nombre">{nombreEq(lado)}</div>
+        <div class="pts">{p.marcador[lado]}</div>
+      </a>
+    ))
+  }
+  <div class="centro">
+    <div class="final">Final</div>
+    <div class="apagado como">{prorroga ? "Decidido en muerte súbita" : `Tras ${REGLAS.ataquesPorEquipo} ataques por equipo`}</div>
+  </div>
+</section>
+
+<div class="claves">
+  <a class="tarjeta clave" href={url(`jugadores/${p.mejor}`)}>
+    <span class="etq">★ Mejor del partido</span>
+    <strong>{nombre(p.mejor)}</strong>
+    <span class="apagado">{mejor.pts} puntos · {mejor.paradas} {mejor.paradas === 1 ? "parada" : "paradas"}</span>
+  </a>
+  <div class="tarjeta clave">
+    <span class="etq">Máxima ventaja</span>
+    <strong>{maxVentaja.puntos ? `+${maxVentaja.puntos} ${nombreEq(maxVentaja.lado)}` : "Nadie"}</strong>
+    <span class="apagado">{cambiosDeLider === 0 ? "Sin cambios de líder" : cambiosDeLider === 1 ? "1 cambio de líder" : `${cambiosDeLider} cambios de líder`}</span>
+  </div>
+  <div class="tarjeta clave">
+    <span class="etq">Mates</span>
+    <strong>{mates.length || "Ninguno"}</strong>
+    <span class="apagado">{mates.map((j) => nombre(j.tirador)).join(", ") || "Ninguna canasta por 6 o más"}</span>
+  </div>
+  <div class="tarjeta clave">
+    <span class="etq">Tapones</span>
+    <strong>{tapones.length || "Ninguno"}</strong>
+    <span class="apagado">{tapones.map((j) => nombre(j.defensor)).join(", ") || "Ningún tiro corto por 4 o más"}</span>
+  </div>
+</div>
+
+<h2>Cómo fue</h2>
+<Evolucion p={p} />
+
+<h2>Quintetos</h2>
+<div class="quintetos">
+  {
+    [1, 0].map((lado) => (
+      <div class="tarjeta quinteto">
+        <div class="cab-equipo">
+          <Escudo id={lados[lado]} tam={26} /> <strong>{nombreEq(lado)}</strong>
+        </div>
+        <div class="mano">
+          {alineacion(lado).pista.map((id) => <Carta j={jugadores[id]} mini />)}
+        </div>
+        {alineacion(lado).suplente && (
+          <p class="apagado banquillo">Suplente: <strong>{nombre(alineacion(lado).suplente!)}</strong></p>
+        )}
+      </div>
+    ))
+  }
+</div>
+
+<h2>Jugada a jugada</h2>
+<p class="apagado explica">
+  Cada ataque: quién tira y quién le marca, el farol (qué tira y qué cierra la defensa), los dos dados y la cuenta. Dentro basta
+  con igualar la defensa; fuera hay que superarla por {REGLAS.margenFuera}.
+</p>
+
+{
+  partes.map((parte) => (
+    <section class="parte">
+      <h3 class="titulo-parte">{parte.titulo}</h3>
+      {parte.titulo === "Muerte súbita" && <p class="apagado">Empate tras {REGLAS.ataquesPorEquipo} ataques: un ataque más cada uno, y puede tirar cualquiera.</p>}
+      <ol class="jugadas">
+        {pasos.slice(parte.desde, parte.hasta).map(({ j, i, n, quedan, cambiaLider }) => {
+          const suma = j.dados[0] + j.dados[1];
+          const adivina = j.cierra === j.tipo;
+          return (
+            <li
+              id={`jugada-${i + 1}`}
+              class:list={["jugada", { anota: j.anota, mate: j.mate, tapon: j.tapon, decisiva: i === decisiva }]}
+              style={`--c1:${franquicias[lados[j.equipo]].colores[0]}`}
+            >
+              <div class="j-cab">
+                <Escudo id={lados[j.equipo]} tam={22} />
+                <span class="j-num">Ataque {n} · {nombreEq(j.equipo)}</span>
+                {i === decisiva && <span class="etiqueta destacada">Canasta decisiva</span>}
+                {cambiaLider && i !== decisiva && <span class="etiqueta">Cambio de líder</span>}
+                <span class="j-marcador">
+                  <span class:list={{ fuerte: j.equipo === 1 }}>{j.marcador[1]}</span>-<span class:list={{ fuerte: j.equipo === 0 }}>{j.marcador[0]}</span>
+                </span>
+              </div>
+              <div class="j-cuerpo">
+                <div class="j-quien">
+                  <a href={url(`jugadores/${j.tirador}`)}><strong>{nombre(j.tirador)}</strong></a>
+                  <span class="apagado"> ante {nombre(j.defensor)}</span>
+                  {quedan !== null && (
+                    <div class="j-fichas" title="Tiros que le quedan">
+                      {Array.from({ length: REGLAS.fichasPorCarta }, (_, k) => <i class:list={{ gastada: k >= quedan }} />)}
+                      <span class="apagado">{quedan === 0 ? "sin tiros" : quedan === 1 ? "le queda 1 tiro" : `le quedan ${quedan}`}</span>
+                    </div>
+                  )}
+                </div>
+                <div class="j-farol">
+                  <span class:list={["eleccion", j.tipo]}>Tira {TIPO[j.tipo]}</span>
+                  <span class:list={["cierre", { adivina }]}>{adivina ? `Cierran ${j.cierra} y aciertan` : `Cierran ${j.cierra}`}</span>
+                </div>
+                <div class="j-dados" aria-label={`Dados: ${j.dados[0]} y ${j.dados[1]}`}>
+                  {j.dados.map((cara) => (
+                    <svg viewBox="0 0 100 100" class="dado" aria-hidden="true">
+                      <rect x="3" y="3" width="94" height="94" rx="20" />
+                      {PUNTOS[cara].map(([x, y]) => <circle cx={22 + x * 28} cy={22 + y * 28} r="9" />)}
+                    </svg>
+                  ))}
+                </div>
+                <div class="j-cuenta">
+                  <div>Ataque <strong>{j.ataque}</strong> <span class="apagado">({suma} de dados + {j.ataque - suma})</span></div>
+                  <div>Defensa <strong>{j.defensa}</strong> <span class="apagado">{adivina ? `(con +${REGLAS.bonusCierre} por adivinarlo)` : ""}</span></div>
+                  <div class="apagado">{j.necesita <= 2 ? "Entraba con cualquier tirada" : j.necesita > 12 ? "No podía entrar" : `Necesitaba sacar ${j.necesita} o más`}</div>
+                </div>
+                <div class="j-resultado">
+                  <span class="r-texto">{resultado(j)}</span>
+                  {j.anota && <span class="r-puntos">+{j.puntos}</span>}
+                </div>
+              </div>
+              {j.tiempoMuerto && (
+                <p class="j-nota">
+                  Tiempo muerto: la primera tirada ({j.tiempoMuerto.dadosAnteriores.join(" y ")}) no entraba, y {nombreEq(j.equipo)} la repite.
+                </p>
+              )}
+            </li>
+          );
+        })}
+      </ol>
+      {parte.titulo === "Primera parte" && p.cambios.length > 0 && (
+        <div class="tarjeta descanso">
+          <strong>Descanso</strong>
+          <span>
+            {p.jugadas[descanso - 1] && `${nombreEq(1)} ${p.jugadas[descanso - 1].marcador[1]}-${p.jugadas[descanso - 1].marcador[0]} ${nombreEq(0)}. `}
+            {p.cambios.map((c) => `${nombreEq(c.equipo)}: entra ${nombre(c.entra)} por ${nombre(c.sale)}.`).join(" ")}
+          </span>
+        </div>
+      )}
+    </section>
+  ))
+}
+
+<h2>Las cartas</h2>
+<div class="estadisticas">
+  {
+    [1, 0].map((lado) => (
+      <section>
+        <h3 class="cab-equipo">
+          <Escudo id={lados[lado]} tam={24} /> {nombreEq(lado)}
+        </h3>
+        <div class="equipo">
+          {plantilla(lado).map((id) => {
+            const l = p.estadisticas[id];
+            return (
+              <div class="jugador">
+                <Carta j={jugadores[id]} mini />
+                <dl>
+                  <div><dt>Puntos</dt><dd>{l.pts}</dd></div>
+                  <div><dt>Dentro</dt><dd>{tiros(l.dentro)}</dd></div>
+                  <div><dt>Fuera</dt><dd>{tiros(l.fuera)}</dd></div>
+                  <div><dt>Paradas</dt><dd>{l.paradas}/{l.marcados}</dd></div>
+                  {l.mates > 0 && <div><dt>Mates</dt><dd>{l.mates}</dd></div>}
+                  {l.tapones > 0 && <div><dt>Tapones</dt><dd>{l.tapones}</dd></div>}
+                </dl>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+    ))
+  }
+</div>
+<p class="apagado semilla">Semilla: {p.semilla}. Con ella, el motor repite el partido tirada a tirada.</p>
+
+<style>
+  .contexto {
+    margin: 0 0 8px;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .marcador {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    grid-template-areas: "vis centro loc";
+    align-items: center;
+    gap: 16px;
+    padding: 24px;
+  }
+  .lado {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    color: var(--texto-3);
+  }
+  .lado:first-child {
+    grid-area: vis;
+  }
+  .lado:nth-child(2) {
+    grid-area: loc;
+  }
+  .lado.ganador {
+    color: var(--texto);
+  }
+  .centro {
+    grid-area: centro;
+    text-align: center;
+  }
+  .nombre {
+    font-family: var(--titulo);
+    font-size: 1.4rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .ciudad {
+    font-size: 0.8rem;
+    margin-top: 6px;
+  }
+  .pts {
+    font-family: var(--titulo);
+    font-size: 3.4rem;
+    font-weight: 800;
+    line-height: 1;
+  }
+  .final {
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    color: var(--acento);
+  }
+  .como {
+    font-size: 0.85rem;
+  }
+  @media (max-width: 640px) {
+    .marcador {
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas: "vis loc" "centro centro";
+      padding: 16px;
+    }
+    .pts {
+      font-size: 2.6rem;
+    }
+  }
+
+  /* Lo más destacado */
+  .claves {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .clave {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    color: var(--texto);
+  }
+  .clave strong {
+    font-family: var(--titulo);
+    font-size: 1.35rem;
+    text-transform: uppercase;
+    line-height: 1.1;
+  }
+  .clave .apagado {
+    font-size: 0.85rem;
+  }
+  .etq {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--acento);
+  }
+
+  /* Quintetos */
+  .quintetos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr));
+    gap: 12px;
+  }
+  .quinteto .mano {
+    margin-top: 10px;
+  }
+  .banquillo {
+    margin: 10px 0 0;
+    font-size: 0.85rem;
+  }
+  .cab-equipo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* Jugada a jugada */
+  .explica {
+    margin-top: -6px;
+    font-size: 0.9rem;
+  }
+  .titulo-parte {
+    margin: 22px 0 10px;
+    font-size: 1.1rem;
+    letter-spacing: 0.04em;
+    color: var(--texto-2);
+  }
+  .jugadas {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .jugada {
+    background: var(--superficie);
+    border: 1px solid var(--borde);
+    border-left: 4px solid var(--c1);
+    border-radius: 12px;
+    padding: 12px 14px;
+    scroll-margin-top: 80px;
+  }
+  .jugada.decisiva {
+    border-color: var(--acento);
+    border-left-color: var(--c1);
+    box-shadow: 0 0 0 2px var(--acento-suave);
+  }
+  .j-cab {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .j-num {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--texto-3);
+  }
+  .destacada {
+    background: var(--acento);
+    color: var(--sobre-acento);
+  }
+  .j-marcador {
+    margin-left: auto;
+    font-family: var(--titulo);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--texto-3);
+  }
+  .j-marcador .fuerte {
+    color: var(--texto);
+  }
+  .j-cuerpo {
+    display: grid;
+    grid-template-columns: minmax(150px, 1.2fr) minmax(150px, 1fr) auto minmax(190px, 1.3fr) 92px;
+    gap: 14px;
+    align-items: center;
+  }
+  @media (max-width: 860px) {
+    .j-cuerpo {
+      grid-template-columns: 1fr auto;
+      grid-template-areas: "quien resultado" "farol farol" "dados cuenta";
+      gap: 10px 14px;
+    }
+    .j-quien {
+      grid-area: quien;
+    }
+    .j-farol {
+      grid-area: farol;
+      flex-direction: row !important;
+      flex-wrap: wrap;
+    }
+    .j-dados {
+      grid-area: dados;
+    }
+    .j-cuenta {
+      grid-area: cuenta;
+    }
+    .j-resultado {
+      grid-area: resultado;
+    }
+  }
+  .j-quien a {
+    color: var(--texto);
+  }
+  .j-fichas {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 4px;
+    font-size: 0.78rem;
+  }
+  .j-fichas i {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: var(--acento);
+  }
+  .j-fichas i.gastada {
+    background: transparent;
+    box-shadow: inset 0 0 0 1.5px var(--texto-3);
+  }
+  .j-fichas span {
+    margin-left: 4px;
+  }
+  .j-farol {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+  .eleccion,
+  .cierre {
+    padding: 3px 10px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .eleccion {
+    color: #fff;
+    background: linear-gradient(100deg, #f47a2c, #c94d0b);
+  }
+  .eleccion.fuera {
+    background: linear-gradient(100deg, #4b4fe0, #2a2f8e);
+  }
+  .cierre {
+    color: var(--texto-2);
+    background: var(--superficie-2);
+  }
+  .cierre.adivina {
+    color: var(--derrota);
+    box-shadow: inset 0 0 0 1.5px var(--derrota);
+    background: transparent;
+  }
+  .j-dados {
+    display: flex;
+    gap: 6px;
+  }
+  .dado {
+    width: 40px;
+    height: 40px;
+  }
+  .dado rect {
+    fill: #fffdf8;
+    stroke: #16182e;
+    stroke-width: 4;
+  }
+  .dado circle {
+    fill: #16182e;
+  }
+  .j-cuenta {
+    font-size: 0.85rem;
+    line-height: 1.45;
+  }
+  .j-resultado {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+  }
+  .r-texto {
+    font-family: var(--titulo);
+    font-size: 1.2rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--texto-3);
+  }
+  .anota .r-texto {
+    color: var(--victoria);
+  }
+  .mate .r-texto,
+  .tapon .r-texto {
+    color: var(--acento);
+  }
+  .r-puntos {
+    font-family: var(--titulo);
+    font-size: 1.7rem;
+    font-weight: 800;
+    line-height: 1;
+  }
+  .j-nota {
+    margin: 10px 0 0;
+    font-size: 0.82rem;
+    color: var(--texto-2);
+  }
+  .descanso {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 12px;
+    align-items: baseline;
+    margin-top: 12px;
+    background: var(--acento-suave);
+    border-color: var(--acento);
+  }
+  .descanso strong {
+    font-family: var(--titulo);
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    color: var(--acento);
+  }
+
+  /* Las cartas */
+  .estadisticas {
+    display: grid;
+    gap: 8px;
+  }
+  .estadisticas h3 {
+    margin: 12px 0 10px;
+  }
+  .equipo {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .jugador {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  dl {
+    margin: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px 10px;
+    font-size: 0.8rem;
+  }
+  dl div {
+    display: flex;
+    justify-content: space-between;
+    gap: 6px;
+  }
+  dt {
+    color: var(--texto-3);
+  }
+  dd {
+    margin: 0;
+    font-weight: 700;
+  }
+  .fuerte {
+    font-weight: 700;
+  }
+  .semilla {
+    font-size: 0.75rem;
+    margin-top: 24px;
+  }
+</style>

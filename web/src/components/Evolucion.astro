@@ -1,5 +1,5 @@
 ---
-// Carrera hacia 21: diferencia en el marcador tras cada ataque (positivo = va ganando el local).
+// Evolución del marcador: diferencia en el marcador tras cada ataque (positivo = va ganando el local).
 import { describirJugada, franquicias } from "../lib/liga";
 import type { PartidoGuardado } from "../motor/temporada.ts";
 
@@ -32,7 +32,7 @@ const descanso = p.cambios[0]?.tras;
 
 <figure class="evolucion tarjeta" data-puntos={JSON.stringify(puntos)} data-loc={loc} data-vis={vis}>
   <figcaption>
-    <strong>Carrera hacia 21</strong>
+    <strong>Evolución del marcador</strong>
     <span class="apagado">Diferencia en el marcador tras cada ataque.</span>
   </figcaption>
   <div class="lienzo">

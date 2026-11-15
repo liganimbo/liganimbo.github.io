@@ -1,0 +1,23 @@
+---
+// Partido de exhibición: así es la crónica de cada partido de la liga, antes de que empiece la temporada.
+import Base from "../../layouts/Base.astro";
+import Cronica from "../../components/Cronica.astro";
+import { exhibicion as p } from "../../lib/exhibicion";
+import { fecha, franquicias, url } from "../../lib/liga";
+---
+
+<Base titulo={`Exhibición: ${franquicias[p.visitante].nombre} ${p.marcador[1]}-${p.marcador[0]} ${franquicias[p.local].nombre}`}>
+  <div class="aviso tarjeta">
+    <strong>Partido de exhibición.</strong> No cuenta para la liga: lo ha jugado el motor con las cartas de hoy para que veas
+    cómo es la crónica de un partido. Cada partido de la temporada tendrá una página así. <a href={url("reglas")}>Las reglas, aquí</a>.
+  </div>
+  <Cronica p={p} contexto={`Partido de exhibición · ${fecha(p.fecha)} · Pista de ${franquicias[p.local].ciudad}`} />
+</Base>
+
+<style>
+  .aviso {
+    margin-bottom: 16px;
+    background: var(--acento-suave);
+    border-color: var(--acento);
+  }
+</style>
