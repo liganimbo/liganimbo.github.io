@@ -36,7 +36,7 @@ npm run liga -- estilo VLU 0.7 # estilo de juego de una franquicia: 0 = todo den
 npm run liga -- estado         # en qué punto está la temporada
 
 npm run instagram              # exporta a ../instagram/ las publicaciones del plan (con la web en marcha)
-npm run pdf                    # reglamento y cartas para imprimir en web/public/descargas/ (con la web en marcha)
+npm run pdf                    # reglamento (A4 y móvil) y cartas en PDF en web/public/descargas/ (con la web en marcha)
 npm run build                  # web estática en web/dist
 ```
 
