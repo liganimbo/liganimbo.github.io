@@ -60,32 +60,32 @@ export interface Jugador extends Carta {
 }
 
 // Nombres provisionales: la identidad definitiva la votarán los socios.
-// Cada ciudad tiene un carácter y una filosofía que guían su draft y su estilo de juego.
+// Cada ciudad tiene un carácter y una filosofía que guían su draft, y unas manías de juego (estilo y firma en el final apretado).
 export const FRANQUICIAS: Omit<Franquicia, "plantilla" | "club">[] = [
   { id: "PAL", ciudad: "Puerto Albar", nombre: "Albatros", mercado: "mediano", colores: ["#1D3557", "#E9C46A"],
-    caracter: "Ciudad portuaria y obrera. Aquí se gana trabajando atrás.", filosofia: { defensa: 1 }, estilo: { fuera: 0.4 } },
+    caracter: "Ciudad portuaria y obrera. Aquí se gana trabajando atrás.", filosofia: { defensa: 1 }, estilo: { fuera: 0.4, firma: { tipo: "cierre", cierra: "fuera" } } },
   { id: "VAL", ciudad: "Valcierzo", nombre: "Vendaval", mercado: "mediano", colores: ["#2A9D8F", "#F1FAEE"],
-    caracter: "La ciudad del viento. Juego rápido y triples a la mínima.", filosofia: { ataque: 0.6, icono: "Tiro" }, estilo: { fuera: 0.7 } },
+    caracter: "La ciudad del viento. Juego rápido y triples a la mínima.", filosofia: { ataque: 0.6, icono: "Tiro" }, estilo: { fuera: 0.7, firma: { tipo: "tiro", va: "fuera" } } },
   { id: "OST", ciudad: "Ostria", nombre: "Coronas", mercado: "grande", colores: ["#6A0DAD", "#FFD166"],
-    caracter: "La capital. Dinero, focos y estrellas que tienen que ganar ya.", filosofia: { ataque: 1 }, estilo: { fuera: 0.5 } },
+    caracter: "La capital. Dinero, focos y estrellas que tienen que ganar ya.", filosofia: { ataque: 1 }, estilo: { fuera: null, firma: { tipo: "estrella", cuando: "final" } } },
   { id: "MIR", ciudad: "Mirasol", nombre: "Halcones", mercado: "grande", colores: ["#F4A261", "#264653"],
-    caracter: "Costa y glamour. Su afición quiere espectáculo de fuera.", filosofia: { ataque: 0.6, icono: "Tiro" }, estilo: { fuera: 0.65 } },
+    caracter: "Costa y glamour. Su afición quiere espectáculo de fuera.", filosofia: { ataque: 0.6, icono: "Tiro" }, estilo: { fuera: 0.65, firma: { tipo: "tiro", va: "fuera" } } },
   { id: "TOR", ciudad: "Torreal", nombre: "Gigantes", mercado: "mediano", colores: ["#5C5C5C", "#E63946"],
-    caracter: "Ciudad industrial. Defensa, dureza y nada de florituras.", filosofia: { defensa: 1, icono: "Muro" }, estilo: { fuera: 0.3 } },
+    caracter: "Ciudad industrial. Defensa, dureza y nada de florituras.", filosofia: { defensa: 1, icono: "Muro" }, estilo: { fuera: 0.4, firma: { tipo: "tiro", va: "dentro" } } },
   { id: "BRE", ciudad: "Las Brezas", nombre: "Corsarios", mercado: "pequeño", colores: ["#0B6E4F", "#FAF3DD"],
-    caracter: "La más pequeña. Nadie cuenta con ellos, y eso les encanta.", filosofia: { defensa: 0.6, edad: "joven" }, estilo: { fuera: 0.45 } },
+    caracter: "La más pequeña. Nadie cuenta con ellos, y eso les encanta.", filosofia: { defensa: 0.6, edad: "joven" }, estilo: { fuera: null, firma: { tipo: "contraria" } } },
   { id: "FER", ciudad: "Ciudad Ferro", nombre: "Forjadores", mercado: "mediano", colores: ["#8B2500", "#D9D9D9"],
-    caracter: "La franquicia con más tradición. Confía en la veteranía.", filosofia: { edad: "veterana" }, estilo: { fuera: 0.45 } },
+    caracter: "La franquicia con más tradición. Confía en la veteranía.", filosofia: { edad: "veterana" }, estilo: { fuera: null, firma: { tipo: "estrella", cuando: "segunda" } } },
   { id: "ALC", ciudad: "Alcorva", nombre: "Cuervos", mercado: "pequeño", colores: ["#111111", "#C1121F"],
-    caracter: "Ciudad universitaria. Cantera, juventud y paciencia.", filosofia: { edad: "joven" }, estilo: { fuera: 0.5 } },
+    caracter: "Ciudad universitaria. Cantera, juventud y paciencia.", filosofia: { edad: "joven" }, estilo: { fuera: null, firma: { tipo: "tiro", va: "dentro" } } },
   { id: "STE", ciudad: "San Telmar", nombre: "Relámpagos", mercado: "grande", colores: ["#003F88", "#FDC500"],
-    caracter: "El eterno rival de Ostria. Orgullo y tiradores.", filosofia: { ataque: 0.5, icono: "Tiro" }, estilo: { fuera: 0.6 } },
+    caracter: "El eterno rival de Ostria. Orgullo y tiradores.", filosofia: { ataque: 0.5, icono: "Tiro" }, estilo: { fuera: 0.65, firma: { tipo: "tiro", va: "fuera" } } },
   { id: "EBA", ciudad: "Nuevo Ébano", nombre: "Panteras", mercado: "grande", colores: ["#3C096C", "#00B4D8"],
-    caracter: "Ciudad nueva y con prisa. Atacar, atacar y atacar.", filosofia: { ataque: 1 }, estilo: { fuera: 0.55 } },
+    caracter: "Ciudad nueva y con prisa. Atacar, atacar y atacar.", filosofia: { ataque: 1 }, estilo: { fuera: null, firma: { tipo: "estrella", cuando: "pronto" } } },
   { id: "SGR", ciudad: "Sierra Gris", nombre: "Lobos", mercado: "pequeño", colores: ["#495867", "#BDD5EA"],
-    caracter: "Montaña y frío. El pabellón más temido de la liga.", filosofia: { defensa: 0.8, icono: "Muro" }, estilo: { fuera: 0.35 } },
+    caracter: "Montaña y frío. El pabellón más temido de la liga.", filosofia: { defensa: 0.8, icono: "Muro" }, estilo: { fuera: 0.4, firma: { tipo: "cierre", cierra: "dentro" } } },
   { id: "VLU", ciudad: "Valdelaluna", nombre: "Búhos", mercado: "pequeño", colores: ["#1B1B3A", "#E0AFA0"],
-    caracter: "Ciudad nocturna y afición ruidosa. Todo pasa cerca del aro.", filosofia: { ataque: 0.4, icono: "Aro" }, estilo: { fuera: 0.3 } },
+    caracter: "Ciudad nocturna y afición ruidosa. Todo pasa cerca del aro.", filosofia: { ataque: 0.4, icono: "Aro" }, estilo: { fuera: 0.35, firma: { tipo: "tiro", va: "dentro" } } },
 ];
 
 // Solo afectan a la gestión del club, nunca al partido.
@@ -240,6 +240,6 @@ export function perfilEquipo(f: Franquicia, jugadores: Record<string, Jugador>) 
     edadMedia,
     estrella,
     perfil: balance >= 3 ? "Ofensivo" : balance <= -3 ? "Defensivo" : "Equilibrado",
-    estilo: f.estilo.fuera >= 0.6 ? "Vive del triple" : f.estilo.fuera <= 0.4 ? "Juega dentro" : "Dentro y fuera",
+    estilo: f.estilo.fuera === null ? "Según el rival" : f.estilo.fuera >= 0.6 ? "Vive del triple" : f.estilo.fuera <= 0.4 ? "Juega dentro" : "Dentro y fuera",
   };
 }

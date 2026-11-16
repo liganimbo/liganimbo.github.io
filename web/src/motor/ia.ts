@@ -21,17 +21,54 @@ import {
   terminarDescanso,
   tiempoMuerto,
   tiradoresDisponibles,
+  valorAtaque,
   VISITANTE,
 } from "./reglas.ts";
 
-/** Carácter de juego de un equipo. `fuera`: cuánto le gusta tirar de 3 (0-1). */
+/**
+ * Lo que una franquicia hace siempre en el final apretado: sus dos últimos ataques con el marcador a 3 o menos, y la muerte
+ * súbita. Las manías no las aprende nadie: están para que se vean y se cuenten.
+ */
+export type Firma =
+  /** Tira siempre dentro, o siempre de fuera. */
+  | { tipo: "tiro"; va: Tipo }
+  /** Cuando ataca el rival, cierra siempre lo mismo. */
+  | { tipo: "cierre"; cierra: Tipo }
+  /** Su estrella (la carta con más Ataque) se guarda un tiro para el final, tira en cuanto puede o espera a la 2.ª parte. */
+  | { tipo: "estrella"; cuando: "final" | "pronto" | "segunda" }
+  /** Tira lo que menos le conviene: lo que nadie espera. */
+  | { tipo: "contraria" };
+
+/** Manías de juego de un equipo. `fuera`: parte de sus tiros que van de fuera (0-1), o null para lo que digan las cartas. */
 export interface Estilo {
-  fuera: number;
+  fuera: number | null;
+  firma: Firma | null;
 }
-export const ESTILO_NEUTRO: Estilo = { fuera: 0.5 };
+export const ESTILO_NEUTRO: Estilo = { fuera: null, firma: null };
+
+export function describirFirma(f: Firma): string {
+  if (f.tipo === "tiro") return f.va === "fuera" ? "En el final apretado, siempre de 3." : "En el final apretado, siempre dentro.";
+  if (f.tipo === "cierre") return `Cuando el rival se la juega al final, cierra ${f.cierra}.`;
+  if (f.tipo === "contraria") return "En el final apretado, lo que nadie espera.";
+  if (f.cuando === "final") return "El último tiro es para su estrella.";
+  if (f.cuando === "pronto") return "Su estrella tira en cuanto puede.";
+  return "Su estrella no tira hasta la 2.ª parte.";
+}
+
+/** Los dos últimos ataques de `lado` con el marcador a 3 o menos, y la muerte súbita. */
+export function finalApretado(p: Partido, lado: Lado): boolean {
+  return p.ataques[lado] >= REGLAS.ataquesPorEquipo - 2 && Math.abs(p.puntos[lado] - p.puntos[rival(lado)]) <= 3;
+}
+
+/** La carta del equipo con más Ataque (contando su icono). */
+export function estrella(p: Partido, lado: Lado): string {
+  const cartas = Object.values(p.equipos[lado].cartas);
+  return cartas.sort((a, b) => amenaza(b) - amenaza(a))[0].id;
+}
 
 const TIPOS: Tipo[] = ["dentro", "fuera"];
 const valorCarta = (c: Carta) => c.ataque + c.defensa + (c.icono ? 1 : 0);
+const amenaza = (c: Carta) => Math.max(...TIPOS.map((tipo) => valorAtaque(c, tipo)));
 const muralla = (c: Carta) => c.defensa + (c.icono === "Muro" ? REGLAS.bonusMuro / 2 : 0);
 
 export function alinear(cartas: Carta[]): { pista: string[]; suplente: string | null } {
@@ -78,21 +115,51 @@ export function opcionesDeAtaque(p: Partido) {
 
 export function decidirAtaque(p: Partido, azar: Azar, estilo = ESTILO_NEUTRO): { tirador: string; tipo: Tipo } {
   const lado = p.turno;
-  const opciones = opcionesDeAtaque(p).map((o) => {
-    // Antes del descanso conviene gastar los tiros de quien peor defiende: será quien salga.
-    const flojo = p.descansoHecho ? 1 : 1 + 0.12 * (6 - muralla(carta(p, lado, o.tirador)));
-    return {
-      valor: o,
+  const final = finalApretado(p, lado);
+  const firma = estilo.firma;
+  let opciones = opcionesDeAtaque(p);
+  const mejor = (lista: typeof opciones) => lista.reduce((a, b) => (b.esperado > a.esperado ? b : a));
+
+  // La estrella: se reserva o se fuerza según su firma. Si es la única que puede tirar, tira.
+  if (firma?.tipo === "estrella") {
+    const id = estrella(p, lado);
+    const suyas = opciones.filter((o) => o.tirador === id);
+    const otras = opciones.filter((o) => o.tirador !== id);
+    if (suyas.length) {
+      const fichas = p.equipos[lado].fichas[id];
+      if ((firma.cuando === "final" && final) || (firma.cuando === "pronto" && !p.descansoHecho)) opciones = suyas;
+      else if (otras.length && ((firma.cuando === "final" && fichas <= 1) || (firma.cuando === "segunda" && !p.descansoHecho))) opciones = otras;
+    }
+  }
+  if (final && firma?.tipo === "tiro") {
+    const { tirador, tipo } = mejor(opciones.filter((o) => o.tipo === firma.va));
+    return { tirador, tipo };
+  }
+  if (final && firma?.tipo === "contraria") {
+    const { tirador, tipo } = mejor(opciones);
+    return { tirador, tipo: tipo === "dentro" ? "fuera" : "dentro" };
+  }
+
+  // Dentro o fuera según su estilo; si no tiene, lo que digan las cartas.
+  if (estilo.fuera !== null) {
+    const tipo: Tipo = azar() < estilo.fuera ? "fuera" : "dentro";
+    opciones = opciones.filter((o) => o.tipo === tipo);
+  }
+  const { tirador, tipo } = ponderado(
+    azar,
+    opciones.map((o) => {
+      // Antes del descanso conviene gastar los tiros de quien peor defiende: será quien salga.
+      const flojo = p.descansoHecho ? 1 : 1 + 0.12 * (6 - muralla(carta(p, lado, o.tirador)));
       // Las mejores opciones pesan mucho más, pero nunca es del todo previsible.
-      peso: Math.exp(o.esperado / 0.3) * (o.tipo === "fuera" ? 0.5 + estilo.fuera : 1.5 - estilo.fuera) * flojo,
-    };
-  });
-  const { tirador, tipo } = ponderado(azar, opciones);
+      return { valor: o, peso: Math.exp(o.esperado / 0.3) * flojo };
+    }),
+  );
   return { tirador, tipo };
 }
 
-/** Cierra lo que más daño puede hacer el rival, con algo de farol. */
-export function decidirCierre(p: Partido, azar: Azar): Tipo {
+/** Cierra lo que más daño puede hacer el rival, con algo de farol; en el final apretado, lo que diga su firma. */
+export function decidirCierre(p: Partido, azar: Azar, estilo = ESTILO_NEUTRO): Tipo {
+  if (estilo.firma?.tipo === "cierre" && finalApretado(p, p.turno)) return estilo.firma.cierra;
   const amenazaPorTipo = { dentro: 0, fuera: 0 };
   for (const o of opcionesDeAtaque(p)) amenazaPorTipo[o.tipo] = Math.max(amenazaPorTipo[o.tipo], o.esperado);
   const principal: Tipo = amenazaPorTipo.fuera > amenazaPorTipo.dentro ? "fuera" : "dentro";
@@ -138,7 +205,7 @@ export function jugarAutomatico(local: EquipoAutomatico, visitante: EquipoAutoma
     }
     const lado = p.turno;
     const { tirador, tipo } = decidirAtaque(p, azar, equipos[lado].estilo);
-    const cierra = decidirCierre(p, azar);
+    const cierra = decidirCierre(p, azar, equipos[rival(lado)].estilo);
     atacar(p, tirador, tipo, cierra, dosDados(azar));
     if (decidirTiempoMuerto(p, lado)) tiempoMuerto(p, lado, dosDados(azar));
   }

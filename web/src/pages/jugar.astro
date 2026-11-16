@@ -458,7 +458,7 @@ const datos = { franquicias: mundo.franquicias, jugadores: mundo.jugadores };
         st.tirador = id!;
         break;
       case "tirar": {
-        const cierra = IA.decidirCierre(p!, azar);
+        const cierra = IA.decidirCierre(p!, azar, F[st.rival].estilo);
         const jugada = R.atacar(p!, st.tirador!, tipo as R.Tipo, cierra, dosDados(azar));
         mostrarTirada({ jugada });
         return;

@@ -3,6 +3,7 @@ import Base from "../../layouts/Base.astro";
 import Carta from "../../components/Carta.astro";
 import Escudo from "../../components/Escudo.astro";
 import { perfilEquipo } from "../../motor/mundo.ts";
+import { describirFirma } from "../../motor/ia.ts";
 import { dec, NOMBRES_RONDA, fecha, franquicias, jugadores, mundo, partidosDe, pct, statsRegular, temporada, url } from "../../lib/liga";
 
 export function getStaticPaths() {
@@ -57,7 +58,8 @@ const iconos = [...new Set(perfil.iconos)].map((i) => `${perfil.iconos.filter((x
   <h2>Cómo juega</h2>
   <div class="ficha-equipo">
     <div class="dato"><span class="etq">Perfil</span><strong>{perfil.perfil}</strong><span class="apagado">Ataque {perfil.ataque} · Defensa {perfil.defensa}</span></div>
-    <div class="dato"><span class="etq">Estilo</span><strong>{perfil.estilo}</strong><span class="apagado">{Math.round(f.estilo.fuera * 100)}% de tiros de fuera, aprox.</span></div>
+    <div class="dato"><span class="etq">Estilo</span><strong>{perfil.estilo}</strong><span class="apagado">{f.estilo.fuera === null ? "Sin preferencia: lo que pidan las cartas" : `${Math.round(f.estilo.fuera * 100)}% de tiros de fuera, aprox.`}</span></div>
+    {f.estilo.firma && <div class="dato"><span class="etq">Su firma</span><strong>{describirFirma(f.estilo.firma)}</strong><span class="apagado">Lo hace siempre: el rival lo sabe… y tú también</span></div>}
     <div class="dato"><span class="etq">Iconos</span><strong>{iconos}</strong><span class="apagado">Especialidades de su plantilla</span></div>
     <div class="dato"><span class="etq">Plantilla</span><strong>{perfil.edadMedia} años de media</strong><span class="apagado">Estrella: {perfil.estrella.nombre}</span></div>
   </div>

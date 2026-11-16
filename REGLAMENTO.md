@@ -191,6 +191,12 @@ Antes de cada Noche Nimbo, la dirección deportiva de cada franquicia entrega un
 - La preferencia de tiro: cuánto ir dentro o fuera y en qué orden gastar los tiros.
 - Qué suele cerrar en defensa.
 
+Cada franquicia tiene además sus **manías**, que salen de su carácter y se ven en su ficha:
+- **Estilo:** la parte de sus tiros que van de fuera (Vendaval, un 70 %; Búhos, un 35 %), o ninguno, y entonces tira lo que pidan las cartas.
+- **Firma:** lo que hace siempre en el **final apretado** (sus dos últimos ataques con el marcador a 3 puntos o menos, y la muerte súbita). Por ejemplo: Vendaval tira siempre de 3; Lobos cierra siempre dentro; en Coronas, el último tiro es para la estrella.
+
+Los rivales no las aprenden: están para que se vean y se cuenten. Ninguna cambia más de 3 puntos el porcentaje de victorias de su equipo (simulado en la v0.6), y cada equipo hace de media 1,3 ataques por partido en final apretado, así que casi siempre se ven.
+
 El motor juega el partido con el plan y estas reglas, con una semilla pública para que cualquiera pueda comprobarlo. El **partido estelar** de la semana se puede jugar en directo entre las dos direcciones deportivas, con las tiradas en stories.
 
 ---

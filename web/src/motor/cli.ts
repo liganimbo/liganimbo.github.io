@@ -5,7 +5,7 @@
 //   hasta <n>         juega hasta completar la jornada n de liga
 //   todo              juega lo que quede de temporada, playoffs incluidos
 //   verano            al acabar la temporada: evolución, contratos, draft, fichajes… y crea la siguiente
-//   estilo <ID> <x>   cambia el estilo de juego de una franquicia (0 = todo dentro, 1 = todo fuera)
+//   estilo <ID> <x>   cambia el estilo de juego de una franquicia (0 = todo dentro, 1 = todo fuera, cartas = lo que digan las cartas)
 //   estado            muestra en qué punto está la temporada
 import fs from "node:fs";
 import path from "node:path";
@@ -115,15 +115,15 @@ switch (orden) {
   }
   case "estilo": {
     const { mundo, estado, partidos } = cargar();
-    const [id, valor] = [args[0]?.toUpperCase(), Number(args[1])];
+    const [id, valor] = [args[0]?.toUpperCase(), args[1] === "cartas" ? null : Number(args[1])];
     const f = mundo.franquicias.find((x) => x.id === id);
-    if (!f || !(valor >= 0 && valor <= 1)) {
-      console.error("Uso: npm run liga -- estilo <ID> <0..1>   (0 = todo dentro, 1 = todo fuera)");
+    if (!f || !(valor === null || (valor >= 0 && valor <= 1))) {
+      console.error("Uso: npm run liga -- estilo <ID> <0..1 | cartas>   (0 = todo dentro, 1 = todo fuera, cartas = lo que digan las cartas)");
       process.exit(1);
     }
     f.estilo.fuera = valor;
     guardar(mundo, estado, partidos);
-    console.log(`${nombre(mundo, f.id)}: estilo de tiro exterior = ${valor}`);
+    console.log(`${nombre(mundo, f.id)}: estilo de tiro exterior = ${valor ?? "lo que digan las cartas"}`);
     break;
   }
   case "estado": {
