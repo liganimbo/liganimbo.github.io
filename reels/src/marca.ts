@@ -23,25 +23,5 @@ export const fondo = (acento = "#4f46e5") =>
     COLOR.noche,
   ].join(", ");
 
-/** Las dos cartas del ejemplo, tal cual están en la liga (datos/mundo.json). */
-export const NICO = {
-  equipo: "EBA",
-  nombre: "Nico Serrano",
-  meta: "22 años · Nuevo Ébano",
-  ataque: 5,
-  defensa: 3,
-  icono: "Aro",
-  c1: "#3C096C",
-  c2: "#00B4D8",
-};
-export const ZOE = {
-  equipo: "FER",
-  nombre: "Zoe Barrios",
-  meta: "32 años · Ostria",
-  ataque: 2,
-  defensa: 5,
-  icono: "Muro",
-  c1: "#8B2500",
-  c2: "#D9D9D9",
-};
-export type DatosCarta = Omit<typeof NICO, "icono"> & { icono: string | null };
+/** Lo que pinta una carta (los datos salen de datos/mundo.json a través de web/scripts/reels.ts). */
+export type DatosCarta = { equipo: string; nombre: string; meta: string; ataque: number; defensa: number; icono: string | null; c1: string; c2: string };

@@ -60,12 +60,13 @@ El potencial secreto de cada carta está en `datos/potenciales.json`, que no se 
 Los vídeos están en `reels/`, hechos con [Remotion](https://www.remotion.dev) (gratis para equipos de hasta 3 personas). Primero `npm install` dentro de `reels/`.
 
 ```
-npm run dev     # Remotion Studio: ver y retocar los vídeos en el navegador
-npm run voz -- amistoso   # genera la voz de un Reel con ElevenLabs (clave en reels/.env)
-npm run video             # genera ../instagram/reel-*.mp4 y sus portadas
+node scripts/reels.ts          # (en web/) escribe los guiones de los Reels desde el motor: reels/src/datos/diciembre.json
+npm run dev                    # (en reels/) Remotion Studio: ver los Reels en el navegador
+npm run video                  # (en reels/) exporta todos a ../instagram/reel-<fecha>-<id>.mp4, con portada y texto
+npm run video -- T DF1         # solo esos
 ```
 
-Para un Reel de amistoso nuevo: `node scripts/amistoso.ts TOR SGR` (en `web/`) juega uno y guarda su jugada decisiva en `reels/src/datos/amistoso.json`; después se ajusta el guion en `reels/src/guion.ts`.
+Los Reels van **sin voz y en bucle**: texto que se lee con calma (3 palabras por segundo) y el último fotograma igual que el primero. Cada guion es una lista de escenas (titular, cartas, marcador, tabla, pregunta, revelación, dados, resultado, lista y carta) que pinta `reels/src/reel/`. Para cambiar un Reel se cambia su guion en `web/scripts/reels.ts` y se vuelve a generar.
 
 Formato 1080×1920 a 30 fps y sin música: se añade en Instagram, desde su biblioteca, para evitar problemas de derechos.
 
