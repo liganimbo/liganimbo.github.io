@@ -34,7 +34,7 @@ type Escena = { segundos?: number; acento?: string } & (
   | { tipo: "marcador"; etiqueta: string; equipos: Equipo[]; puntos: number[]; resalta?: number; titulo?: string; pie?: string }
   | { tipo: "tabla"; titulo: string; tirador: string; tabla: Record<Tipo, Record<Tipo, number>> }
   | { tipo: "pregunta"; lineas: string[]; pie: string }
-  | { tipo: "revela"; titulo: string; tira: { quien: string; tipo: Tipo }; cierra: { quien: string; tipo: Tipo }; pie: string }
+  | { tipo: "revela"; titulo: string; tira: { quien: string; tipo: Tipo }; cierra: { quien: string; tipo: Tipo }; pie: string; cuenta: ReturnType<typeof cuentaDe> }
   | { tipo: "dados"; necesita: number; dados: number[]; pie?: string }
   | { tipo: "resultado"; titulo: string; bien: boolean; equipos?: Equipo[]; puntos?: number[]; resalta?: number; pie?: string }
   | { tipo: "lista"; titulo: string; items: { escudo?: Equipo; carta?: Ficha; titulo: string; texto: string }[] }
@@ -42,8 +42,8 @@ type Escena = { segundos?: number; acento?: string } & (
 );
 type Reel = { id: string; formato: string; fecha: string; titulo: string; texto: string; escenas: Escena[] };
 
-/** Segundos para leer con calma (3 palabras por segundo) lo que pone en pantalla, con un mínimo por tipo para que se vea lo que pasa. */
-const MINIMO: Record<Escena["tipo"], number> = { titular: 2, cartas: 3, marcador: 2.5, tabla: 5, pregunta: 4, revela: 3.8, dados: 3.2, resultado: 2.5, lista: 1.5, carta: 2.6 };
+/** Segundos para leer con calma (algo más de 2 palabras por segundo) lo que pone en pantalla, con un mínimo por tipo para que se vea lo que pasa. */
+const MINIMO: Record<Escena["tipo"], number> = { titular: 3, cartas: 4.5, marcador: 3.5, tabla: 7.5, pregunta: 4.5, revela: 10, dados: 6, resultado: 3.5, lista: 2, carta: 3.8 };
 function aLeer(e: Escena): string[] {
   const comunes = [("titulo" in e && e.titulo) || "", ("etiqueta" in e && e.etiqueta) || "", ("pie" in e && e.pie) || ""];
   if (e.tipo === "titular" || e.tipo === "pregunta") return [...e.lineas, ...comunes];
@@ -53,8 +53,8 @@ function aLeer(e: Escena): string[] {
 }
 function duracion(e: Escena): number {
   const palabras = aLeer(e).join(" ").split(/\s+/).filter((w) => /\p{L}/u.test(w)).length;
-  const extra = e.tipo === "lista" ? 1.2 * e.items.length : 0;
-  return Math.round(Math.max(MINIMO[e.tipo], 0.8 + palabras / 3) * 10 + extra * 10) / 10;
+  const extra = e.tipo === "lista" ? 1.8 * e.items.length : 0;
+  return Math.round(Math.max(MINIMO[e.tipo], 1.5 + palabras / 2.2) * 10 + extra * 10) / 10;
 }
 
 // «los Búhos», «el Vendaval»: el artículo y el verbo dependen de si el nombre es plural.
@@ -85,7 +85,28 @@ function todasLasParejas(): [string, string][] {
   return IDS.flatMap((a) => IDS.filter((b) => b !== a).map((b) => [a, b] as [string, string]));
 }
 
-/** Escenas de una jugada: quién tira y contra quién, qué eligieron, los dados y lo que pasó. */
+/** La cuenta antes de tirar: la defensa total, lo que suma el ataque y lo que tienen que sacar los dados. */
+function cuentaDe(j: Jugada) {
+  const at = mundo.jugadores[j.tirador];
+  const de = mundo.jugadores[j.defensor];
+  const ataque = valorAtaque(at, j.tipo);
+  return {
+    tirador: nombre(j.tirador),
+    defensor: nombre(j.defensor),
+    ataque: at.ataque,
+    icono: ataque > at.ataque ? at.icono : null,
+    bonus: ataque - at.ataque,
+    base: REGLAS.baseDefensa,
+    defensa: de.defensa,
+    muro: de.icono === "Muro" && (!REGLAS.muroSoloDentro || j.tipo === "dentro") ? REGLAS.bonusMuro : 0,
+    cierre: j.cierra === j.tipo ? REGLAS.bonusCierre : 0,
+    total: j.defensa,
+    margen: j.tipo === "fuera" ? REGLAS.margenFuera : 0,
+    necesita: j.necesita,
+  };
+}
+
+/** Escenas de una jugada: quién tira y contra quién, qué eligieron con su cuenta, y los dados. */
 function escenasJugada(p: Partido, i: number, opciones: { titulo?: string; pieCartas?: string } = {}): Escena[] {
   const j = p.jugadas[i];
   const fa = p.equipos[j.equipo].franquicia;
@@ -98,8 +119,9 @@ function escenasJugada(p: Partido, i: number, opciones: { titulo?: string; pieCa
       tira: { quien: `${nombre(j.tirador)} tira`, tipo: j.tipo },
       cierra: { quien: `${franquicias[fd].nombre} cierra${plural(fd) ? "n" : ""}`, tipo: j.cierra },
       pie: j.cierra === j.tipo ? "La defensa acierta: +2" : "La defensa falla",
+      cuenta: cuentaDe(j),
     },
-    { tipo: "dados", necesita: j.necesita, dados: j.dados, pie: `${j.dados[0]} + ${j.dados[1]} + ${valorAtaque(mundo.jugadores[j.tirador], j.tipo)} de ataque contra ${j.defensa} de defensa${j.tipo === "fuera" ? ", que de fuera hay que superar por 2" : ""}` },
+    { tipo: "dados", necesita: j.necesita, dados: j.dados },
   ];
 }
 
@@ -306,6 +328,7 @@ function dentroOFuera(p: Partido, i: number, contexto: string, conFirma: boolean
       tira: { quien: `${nombre(j.tirador)} tira`, tipo: j.tipo },
       cierra: { quien: `${franquicias[fd].nombre} cierra${plural(fd) ? "n" : ""}`, tipo: j.cierra },
       pie: j.cierra === j.tipo ? "La defensa acierta: +2" : "La defensa falla",
+      cuenta: cuentaDe(j),
     },
     { tipo: "dados", necesita: j.necesita, dados: j.dados },
     {

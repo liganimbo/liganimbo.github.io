@@ -12,8 +12,8 @@ const palabra = (t: Tipo) => (t === "fuera" ? "Fuera" : "Dentro");
 
 /** Cuándo entra cada parte de un titular (en segundos). */
 const tiemposTitular = (e: Extract<Escena, { tipo: "titular" }>) => {
-  const lineas = e.lineas.map((_, n) => 0.2 + 0.25 * n);
-  return { lineas, pie: lineas[lineas.length - 1] + 0.35 };
+  const lineas = e.lineas.map((_, n) => 0.3 + 0.4 * n);
+  return { lineas, pie: lineas[lineas.length - 1] + 0.6 };
 };
 /** Fotogramas hasta que el titular está completo: lo que dura la vuelta al principio en el bucle. */
 export const entradaTitular = (e: Extract<Escena, { tipo: "titular" }>, fps: number) => finEntrada(tiemposTitular(e).pie * fps);
@@ -187,47 +187,72 @@ export const Pregunta = ({ e }: De<"pregunta">) => {
   );
 };
 
-// --- Revela: qué tiró y qué cerraron ---------------------------------------------------------------
+// --- Revela: qué tiró y qué cerraron, y la cuenta antes de tirar ---------------------------------
+
+/** Una línea de la cuenta: qué es, de dónde sale y cuánto da. */
+const LineaCuenta = ({ que, suma, da, colorDa, desde }: { que: string; suma: string; da: string; colorDa: string; desde: number }) => {
+  const frame = useCurrentFrame();
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: "250px 1fr auto", alignItems: "center", gap: 24, ...entra(frame, desde) }}>
+      <span style={{ ...etiqueta, fontSize: 30, letterSpacing: 4, color: COLOR.apagado }}>{que}</span>
+      <span style={{ fontFamily: texto, fontWeight: 500, fontSize: 38, lineHeight: 1.25, color: COLOR.texto }}>{suma}</span>
+      <span style={{ ...titular, fontSize: 96, color: colorDa }}>{da}</span>
+    </div>
+  );
+};
 
 export const Revela = ({ e }: De<"revela">) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const acierta = e.tira.tipo === e.cierra.tipo;
+  const c = e.cuenta;
+  const defensa = [`${c.base}`, `${c.defensa} de ${c.defensor}`, c.muro ? `${c.muro} de Muro` : "", c.cierre ? `${c.cierre} por acertar` : ""].filter(Boolean).join(" + ");
+  const ataque = [`dados`, `${c.ataque} de ${c.tirador}`, c.bonus ? `${c.bonus} de ${c.icono}` : ""].filter(Boolean).join(" + ");
+  const necesita = c.margen ? `${c.total} + ${c.margen} por tirar de fuera − ${c.ataque + c.bonus}` : `${c.total} − ${c.ataque + c.bonus}`;
   return (
-    <Zona gap={60}>
-      <div style={{ ...titular, fontSize: 104, ...entra(frame, 0) }}>{e.titulo}</div>
-      <div style={{ display: "flex", justifyContent: "center", gap: 60 }}>
-        <Eleccion quien={e.tira.quien} revela={palabra(e.tira.tipo)} gira={0.8 * fps} color={COLOR.oro} />
-        <Eleccion quien={e.cierra.quien} revela={palabra(e.cierra.tipo)} gira={2 * fps} color={COLOR.lila} />
+    <Zona gap={36}>
+      <div style={{ ...titular, fontSize: 96, ...entra(frame, 0) }}>{e.titulo}</div>
+      <div style={{ display: "flex", justifyContent: "center", gap: 40, height: 400 }}>
+        <div style={{ scale: 0.68, transformOrigin: "top center" }}>
+          <Eleccion quien={e.tira.quien} revela={palabra(e.tira.tipo)} gira={0.8 * fps} color={COLOR.oro} />
+        </div>
+        <div style={{ scale: 0.68, transformOrigin: "top center" }}>
+          <Eleccion quien={e.cierra.quien} revela={palabra(e.cierra.tipo)} gira={2 * fps} color={COLOR.lila} />
+        </div>
       </div>
-      <div style={{ ...titular, textAlign: "center", fontSize: 92, color: acierta ? COLOR.lila : COLOR.oro, ...entra(frame, 2.6 * fps) }}>{e.pie}</div>
+      <div style={{ ...titular, textAlign: "center", fontSize: 80, color: acierta ? COLOR.lila : COLOR.oro, ...entra(frame, 2.7 * fps) }}>{e.pie}</div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 22, marginTop: 10 }}>
+        <LineaCuenta que="Defensa" suma={defensa} da={`${c.total}`} colorDa={COLOR.lila} desde={4 * fps} />
+        <LineaCuenta que="Ataque" suma={ataque} da={`+${c.ataque + c.bonus}`} colorDa={COLOR.oro} desde={5.5 * fps} />
+        <LineaCuenta que="Necesita" suma={necesita} da={c.necesita <= 2 ? "✓" : c.necesita > 12 ? "✗" : `${c.necesita}+`} colorDa={COLOR.oro} desde={7 * fps} />
+      </div>
     </Zona>
   );
 };
 
-// --- Dados ----------------------------------------------------------------------------------------
+// --- Dados: ruedan, se para uno, luego el otro, y la suma ------------------------------------------
 
 export const Dados = ({ e }: De<"dados">) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const lanza = 0.5 * fps;
-  const cae = lanza + 1 * fps;
-  const rodando = frame < cae;
-  const cara = (semilla: number, final: number) => (rodando ? ((Math.floor(frame / 3) * 7 + semilla) % 6) + 1 : final);
-  const caida = (desde: string) => interpolate(frame, [lanza, cae], [desde, "0px 0px"], { ...fijo, easing: Easing.out(Easing.cubic) });
-  const vuelta = (sentido: number) => `${interpolate(frame, [lanza, cae], [sentido * 540, 0], { ...fijo, easing: Easing.out(Easing.cubic) })}deg`;
+  const para = [2.3 * fps, 3.1 * fps];
+  const cara = (n: number, semilla: number) => (frame < para[n] ? ((Math.floor(frame / 3) * 7 + semilla) % 6) + 1 : e.dados[n]);
+  const caida = (n: number, desde: string) => interpolate(frame, [lanza, para[n]], [desde, "0px 0px"], { ...fijo, easing: Easing.out(Easing.cubic) });
+  const vuelta = (n: number, sentido: number) => `${interpolate(frame, [lanza, para[n]], [sentido * 900, 0], { ...fijo, easing: Easing.out(Easing.cubic) })}deg`;
+  const golpe = (n: number) => interpolate(frame, [para[n], para[n] + 4, para[n] + 10], [1, 1.12, 1], fijo);
   const suma = e.dados[0] + e.dados[1];
-  const muestra = cae + 0.3 * fps;
+  const muestra = para[1] + 0.5 * fps;
   return (
     <Zona gap={60}>
       <div style={{ display: "flex", justifyContent: "center", ...entra(frame, 0) }}>
         <span style={{ ...titular, fontSize: 104, color: COLOR.noche, background: COLOR.oro, padding: "16px 40px", borderRadius: 24 }}>
-          {e.necesita <= 2 ? "Entra seguro" : `Necesita ${e.necesita} o más`}
+          {e.necesita <= 2 ? "Entra seguro" : e.necesita > 12 ? "No puede entrar" : `Necesita ${e.necesita} o más`}
         </span>
       </div>
       <div style={{ display: "flex", justifyContent: "center", gap: 80, opacity: frame >= lanza ? 1 : 0 }}>
-        <Dado name="Dado 1" lado={250} cara={cara(2, e.dados[0])} style={{ rotate: vuelta(-1), translate: caida("-400px -300px") }} />
-        <Dado name="Dado 2" lado={250} cara={cara(5, e.dados[1])} style={{ rotate: vuelta(1), translate: caida("400px -360px") }} />
+        <Dado name="Dado 1" lado={250} cara={cara(0, 2)} style={{ rotate: vuelta(0, -1), translate: caida(0, "-400px -300px"), scale: golpe(0) }} />
+        <Dado name="Dado 2" lado={250} cara={cara(1, 5)} style={{ rotate: vuelta(1, 1), translate: caida(1, "400px -360px"), scale: golpe(1) }} />
       </div>
       <div
         style={{
@@ -241,7 +266,7 @@ export const Dados = ({ e }: De<"dados">) => {
       >
         = {suma}
       </div>
-      {e.pie && <div style={{ ...pie, fontSize: 38, textAlign: "center", ...entra(frame, muestra + 0.4 * fps) }}>{e.pie}</div>}
+      {e.pie && <div style={{ ...pie, fontSize: 38, textAlign: "center", ...entra(frame, muestra + 0.5 * fps) }}>{e.pie}</div>}
     </Zona>
   );
 };

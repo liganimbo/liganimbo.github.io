@@ -16,7 +16,7 @@
      "texto",
      "lila"
     ],
-    "segundos": 2.1
+    "segundos": 3.3
    },
    {
     "tipo": "cartas",
@@ -49,7 +49,7 @@
     ],
     "pie": "48 cartas · 12 ciudades · una liga mixta de 3x3",
     "acento": "#2A9D8F",
-    "segundos": 4.1
+    "segundos": 6
    },
    {
     "tipo": "revela",
@@ -63,7 +63,21 @@
      "tipo": "dentro"
     },
     "pie": "La defensa falla",
-    "segundos": 4.1
+    "cuenta": {
+     "tirador": "Nia",
+     "defensor": "Kenna",
+     "ataque": 4,
+     "icono": "Tiro",
+     "bonus": 1,
+     "base": 5,
+     "defensa": 6,
+     "muro": 0,
+     "cierre": 0,
+     "total": 11,
+     "margen": 2,
+     "necesita": 8
+    },
+    "segundos": 10
    },
    {
     "tipo": "dados",
@@ -72,14 +86,13 @@
      5,
      6
     ],
-    "pie": "5 + 6 + 5 de ataque contra 11 de defensa, que de fuera hay que superar por 2",
-    "segundos": 4.8
+    "segundos": 6
    },
    {
     "tipo": "resultado",
     "titulo": "¡Triple!",
     "bien": true,
-    "segundos": 2.5
+    "segundos": 3.5
    },
    {
     "tipo": "titular",
@@ -92,7 +105,7 @@
      "oro"
     ],
     "etiqueta": "Liga Nimbo · Temporada 1 · 12 de enero",
-    "segundos": 3.8
+    "segundos": 5.6
    }
   ]
  },
@@ -113,7 +126,7 @@
      "texto",
      "lila"
     ],
-    "segundos": 2.5
+    "segundos": 3.8
    },
    {
     "tipo": "titular",
@@ -122,7 +135,7 @@
      "en secreto:"
     ],
     "pie": "dentro, que vale 2… o fuera, que vale 3.",
-    "segundos": 4.8
+    "segundos": 7
    },
    {
     "tipo": "titular",
@@ -135,7 +148,7 @@
      "lila"
     ],
     "pie": "Si acierta, su defensa suma +2.",
-    "segundos": 4.1
+    "segundos": 6
    },
    {
     "tipo": "cartas",
@@ -167,7 +180,7 @@
      "Contra"
     ],
     "acento": "#2A9D8F",
-    "segundos": 3
+    "segundos": 4.5
    },
    {
     "tipo": "revela",
@@ -181,7 +194,21 @@
      "tipo": "fuera"
     },
     "pie": "La defensa acierta: +2",
-    "segundos": 4.8
+    "cuenta": {
+     "tirador": "Dalia",
+     "defensor": "Goran",
+     "ataque": 4,
+     "icono": "Tiro",
+     "bonus": 1,
+     "base": 5,
+     "defensa": 3,
+     "muro": 0,
+     "cierre": 2,
+     "total": 10,
+     "margen": 2,
+     "necesita": 7
+    },
+    "segundos": 10
    },
    {
     "tipo": "dados",
@@ -190,15 +217,14 @@
      3,
      2
     ],
-    "pie": "3 + 2 + 5 de ataque contra 10 de defensa, que de fuera hay que superar por 2",
-    "segundos": 4.8
+    "segundos": 6
    },
    {
     "tipo": "resultado",
     "titulo": "¡No entra!",
     "bien": false,
     "pie": "Los Albatros lo vieron venir.",
-    "segundos": 3.1
+    "segundos": 4.7
    },
    {
     "tipo": "titular",
@@ -210,7 +236,7 @@
      "texto",
      "oro"
     ],
-    "segundos": 3.8
+    "segundos": 5.6
    }
   ]
  },
@@ -231,7 +257,7 @@
      "texto",
      "lila"
     ],
-    "segundos": 2.5
+    "segundos": 3.8
    },
    {
     "tipo": "cartas",
@@ -262,7 +288,7 @@
      "Tira",
      "Contra"
     ],
-    "segundos": 3
+    "segundos": 4.5
    },
    {
     "tipo": "titular",
@@ -275,7 +301,7 @@
      "texto"
     ],
     "pie": "Andrei: dados + 2",
-    "segundos": 3.1
+    "segundos": 4.7
    },
    {
     "tipo": "titular",
@@ -288,7 +314,7 @@
      "texto"
     ],
     "pie": "Vera: 5 + 2 + 2 porque ha cerrado dentro = 9",
-    "segundos": 3.5
+    "segundos": 5.1
    },
    {
     "tipo": "dados",
@@ -298,14 +324,14 @@
      1
     ],
     "pie": "Necesita 7. Saca justo 7.",
-    "segundos": 3.2
+    "segundos": 6
    },
    {
     "tipo": "resultado",
     "titulo": "¡Entra!",
     "bien": true,
     "pie": "Dentro entra si iguala la defensa. Fuera, si la supera por 2.",
-    "segundos": 4.8
+    "segundos": 7
    },
    {
     "tipo": "titular",
@@ -317,7 +343,7 @@
      "texto",
      "oro"
     ],
-    "segundos": 2.8
+    "segundos": 4.2
    }
   ]
  },
@@ -340,7 +366,7 @@
     ],
     "etiqueta": "Partido de prueba",
     "pie": "Defiendes tú.",
-    "segundos": 3.5
+    "segundos": 5.1
    },
    {
     "tipo": "marcador",
@@ -367,7 +393,7 @@
     "titulo": "Atacan los Albatros",
     "pie": "Pierden de 2: dentro empatan; de 3, ganan.",
     "acento": "#1D3557",
-    "segundos": 4.5
+    "segundos": 6.5
    },
    {
     "tipo": "cartas",
@@ -399,7 +425,7 @@
      "Tú le defiendes"
     ],
     "pie": "Aro: +2 dentro",
-    "segundos": 3
+    "segundos": 4.5
    },
    {
     "tipo": "tabla",
@@ -415,7 +441,7 @@
       "fuera": 9
      }
     },
-    "segundos": 5
+    "segundos": 7.5
    },
    {
     "tipo": "pregunta",
@@ -425,7 +451,7 @@
     ],
     "pie": "Comenta DENTRO o FUERA",
     "acento": "#1B1B3A",
-    "segundos": 4
+    "segundos": 4.5
    },
    {
     "tipo": "revela",
@@ -439,7 +465,21 @@
      "tipo": "fuera"
     },
     "pie": "La defensa acierta: +2",
-    "segundos": 4.1
+    "cuenta": {
+     "tirador": "Andrei",
+     "defensor": "Noa",
+     "ataque": 2,
+     "icono": null,
+     "bonus": 0,
+     "base": 5,
+     "defensa": 2,
+     "muro": 0,
+     "cierre": 2,
+     "total": 9,
+     "margen": 2,
+     "necesita": 9
+    },
+    "segundos": 10
    },
    {
     "tipo": "dados",
@@ -448,7 +488,7 @@
      1,
      5
     ],
-    "segundos": 3.2
+    "segundos": 6
    },
    {
     "tipo": "resultado",
@@ -475,7 +515,7 @@
     "resalta": 1,
     "pie": "Ganan los Búhos",
     "acento": "#1B1B3A",
-    "segundos": 2.5
+    "segundos": 3.8
    },
    {
     "tipo": "titular",
@@ -487,7 +527,7 @@
      "texto",
      "lila"
     ],
-    "segundos": 2
+    "segundos": 3
    }
   ]
  },
@@ -508,7 +548,7 @@
      "texto",
      "lila"
     ],
-    "segundos": 2.5
+    "segundos": 3.8
    },
    {
     "tipo": "titular",
@@ -521,7 +561,7 @@
      "oro"
     ],
     "pie": "Cada equipo ataca 8 veces: no puedes tirar siempre con la misma.",
-    "segundos": 5.1
+    "segundos": 7.4
    },
    {
     "tipo": "titular",
@@ -533,7 +573,7 @@
      "texto",
      "lila"
     ],
-    "segundos": 3.5
+    "segundos": 5.1
    },
    {
     "tipo": "lista",
@@ -570,7 +610,7 @@
       "texto": "Su estrella no tira hasta la 2.ª parte."
      }
     ],
-    "segundos": 14.1
+    "segundos": 20.1
    },
    {
     "tipo": "titular",
@@ -582,7 +622,7 @@
      "texto",
      "oro"
     ],
-    "segundos": 2.5
+    "segundos": 3.8
    }
   ]
  },
@@ -603,7 +643,7 @@
      "texto",
      "lila"
     ],
-    "segundos": 2.1
+    "segundos": 3.3
    },
    {
     "tipo": "lista",
@@ -652,7 +692,7 @@
       "texto": "+2 al defender tiros de dentro"
      }
     ],
-    "segundos": 11.1
+    "segundos": 16
    },
    {
     "tipo": "titular",
@@ -665,7 +705,7 @@
      "lila"
     ],
     "pie": "Medido con miles de partidos simulados.",
-    "segundos": 5.5
+    "segundos": 7.9
    },
    {
     "tipo": "titular",
@@ -677,7 +717,7 @@
      "texto",
      "oro"
     ],
-    "segundos": 2.8
+    "segundos": 4.2
    }
   ]
  },
@@ -700,7 +740,7 @@
     ],
     "etiqueta": "Partido de prueba",
     "pie": "Defiendes tú.",
-    "segundos": 3.5
+    "segundos": 5.1
    },
    {
     "tipo": "marcador",
@@ -727,7 +767,7 @@
     "titulo": "Ataca el Vendaval",
     "pie": "Pierden de 1: cualquier canasta les da la victoria.",
     "acento": "#2A9D8F",
-    "segundos": 5.1
+    "segundos": 7.4
    },
    {
     "tipo": "cartas",
@@ -759,7 +799,7 @@
      "Tú le defiendes"
     ],
     "pie": "Tiro: +1 de fuera",
-    "segundos": 3
+    "segundos": 4.5
    },
    {
     "tipo": "tabla",
@@ -775,7 +815,7 @@
       "fuera": 7
      }
     },
-    "segundos": 5
+    "segundos": 7.5
    },
    {
     "tipo": "pregunta",
@@ -785,7 +825,7 @@
     ],
     "pie": "Comenta DENTRO o FUERA",
     "acento": "#6A0DAD",
-    "segundos": 4
+    "segundos": 4.5
    },
    {
     "tipo": "revela",
@@ -799,7 +839,21 @@
      "tipo": "fuera"
     },
     "pie": "La defensa acierta: +2",
-    "segundos": 4.1
+    "cuenta": {
+     "tirador": "Marta",
+     "defensor": "Celia",
+     "ataque": 3,
+     "icono": "Tiro",
+     "bonus": 1,
+     "base": 5,
+     "defensa": 2,
+     "muro": 0,
+     "cierre": 2,
+     "total": 9,
+     "margen": 2,
+     "necesita": 7
+    },
+    "segundos": 10
    },
    {
     "tipo": "dados",
@@ -808,7 +862,7 @@
      2,
      5
     ],
-    "segundos": 3.2
+    "segundos": 6
    },
    {
     "tipo": "resultado",
@@ -835,7 +889,7 @@
     "resalta": 0,
     "pie": "Gana el Vendaval",
     "acento": "#2A9D8F",
-    "segundos": 2.5
+    "segundos": 3.5
    },
    {
     "tipo": "titular",
@@ -847,7 +901,7 @@
      "texto",
      "lila"
     ],
-    "segundos": 2
+    "segundos": 3
    }
   ]
  },
@@ -868,7 +922,7 @@
      "texto",
      "lila"
     ],
-    "segundos": 2.5
+    "segundos": 3.8
    },
    {
     "tipo": "titular",
@@ -881,7 +935,7 @@
      "oro"
     ],
     "pie": "Los dos últimos ataques con el marcador a 3 o menos, y la muerte súbita.",
-    "segundos": 6.8
+    "segundos": 9.7
    },
    {
     "tipo": "titular",
@@ -903,7 +957,7 @@
     ],
     "pie": "El Vendaval ataca al final con 10-12. Cierran fuera… y Vera falla.",
     "acento": "#1D3557",
-    "segundos": 8.1
+    "segundos": 11.5
    },
    {
     "tipo": "titular",
@@ -925,7 +979,7 @@
     ],
     "pie": "Contra los Coronas, 17-14 y su último ataque: Marta tira de 3… y entra.",
     "acento": "#2A9D8F",
-    "segundos": 7.1
+    "segundos": 10.1
    },
    {
     "tipo": "titular",
@@ -947,7 +1001,7 @@
     ],
     "pie": "Finn Diallo se guarda un tiro. Ataque 7: no entra.",
     "acento": "#6A0DAD",
-    "segundos": 6.5
+    "segundos": 9.2
    },
    {
     "tipo": "titular",
@@ -969,7 +1023,7 @@
     ],
     "pie": "Contra el Vendaval, 17-14 y su último ataque: Vera tira de 3… y entra.",
     "acento": "#F4A261",
-    "segundos": 7.1
+    "segundos": 10.1
    },
    {
     "tipo": "titular",
@@ -981,7 +1035,7 @@
      "texto",
      "lila"
     ],
-    "segundos": 2.5
+    "segundos": 3.8
    }
   ]
  },
@@ -1002,7 +1056,7 @@
      "texto",
      "lila"
     ],
-    "segundos": 2.5
+    "segundos": 3.8
    },
    {
     "tipo": "titular",
@@ -1011,7 +1065,7 @@
      "a los seis de pista."
     ],
     "pie": "Cada uno marca a su pareja, y su pareja le marca a su vez.",
-    "segundos": 8.1
+    "segundos": 11.5
    },
    {
     "tipo": "cartas",
@@ -1043,7 +1097,7 @@
      "Coronas"
     ],
     "pie": "Yago defiende a Joel, y Joel defiende a Yago.",
-    "segundos": 5.1
+    "segundos": 7.4
    },
    {
     "tipo": "titular",
@@ -1056,7 +1110,7 @@
      "lila"
     ],
     "pie": "Y ya sabe a quién le quedan tiros.",
-    "segundos": 5.5
+    "segundos": 7.9
    },
    {
     "tipo": "titular",
@@ -1069,7 +1123,7 @@
      "oro"
     ],
     "pie": "Atacar primero no da nada: el visitante empieza.",
-    "segundos": 5.5
+    "segundos": 7.9
    }
   ]
  },
@@ -1090,7 +1144,7 @@
      "texto",
      "lila"
     ],
-    "segundos": 2.5
+    "segundos": 3.8
    },
    {
     "tipo": "titular",
@@ -1103,7 +1157,7 @@
      "oro"
     ],
     "pie": "Los dos últimos ataques con el marcador a 3 o menos, y la muerte súbita.",
-    "segundos": 6.8
+    "segundos": 9.7
    },
    {
     "tipo": "titular",
@@ -1125,7 +1179,7 @@
     ],
     "pie": "Contra los Coronas, 10-12 y su último ataque: Nico tira dentro… y entra.",
     "acento": "#5C5C5C",
-    "segundos": 7.1
+    "segundos": 10.1
    },
    {
     "tipo": "titular",
@@ -1147,7 +1201,7 @@
     ],
     "pie": "Contra los Coronas, 15-18. Todos esperaban lo otro: Lucía tira dentro… y entra.",
     "acento": "#0B6E4F",
-    "segundos": 7.8
+    "segundos": 11
    },
    {
     "tipo": "titular",
@@ -1169,7 +1223,7 @@
     ],
     "pie": "Astrid Abara no tira hasta el ataque 5. Paciencia.",
     "acento": "#8B2500",
-    "segundos": 6.5
+    "segundos": 9.2
    },
    {
     "tipo": "titular",
@@ -1191,7 +1245,7 @@
     ],
     "pie": "Contra los Albatros, 10-10 y su último ataque: Andrea tira dentro… y entra.",
     "acento": "#111111",
-    "segundos": 7.1
+    "segundos": 10.1
    },
    {
     "tipo": "titular",
@@ -1203,7 +1257,7 @@
      "texto",
      "lila"
     ],
-    "segundos": 2.5
+    "segundos": 3.8
    }
   ]
  },
@@ -1226,7 +1280,7 @@
     ],
     "etiqueta": "Partido de prueba",
     "pie": "Defiendes tú.",
-    "segundos": 3.5
+    "segundos": 5.1
    },
    {
     "tipo": "marcador",
@@ -1253,7 +1307,7 @@
     "titulo": "Atacan los Halcones",
     "pie": "Pierden de 2: dentro empatan; de 3, ganan.",
     "acento": "#F4A261",
-    "segundos": 4.5
+    "segundos": 6.5
    },
    {
     "tipo": "cartas",
@@ -1285,7 +1339,7 @@
      "Tú le defiendes"
     ],
     "pie": "Halcones: «En el final apretado, siempre de 3.»",
-    "segundos": 3.8
+    "segundos": 5.6
    },
    {
     "tipo": "tabla",
@@ -1301,7 +1355,7 @@
       "fuera": 9
      }
     },
-    "segundos": 5
+    "segundos": 7.5
    },
    {
     "tipo": "pregunta",
@@ -1311,7 +1365,7 @@
     ],
     "pie": "Comenta DENTRO o FUERA",
     "acento": "#2A9D8F",
-    "segundos": 4
+    "segundos": 4.5
    },
    {
     "tipo": "revela",
@@ -1325,7 +1379,21 @@
      "tipo": "fuera"
     },
     "pie": "La defensa acierta: +2",
-    "segundos": 4.1
+    "cuenta": {
+     "tirador": "Vera",
+     "defensor": "Dalia",
+     "ataque": 2,
+     "icono": null,
+     "bonus": 0,
+     "base": 5,
+     "defensa": 2,
+     "muro": 0,
+     "cierre": 2,
+     "total": 9,
+     "margen": 2,
+     "necesita": 9
+    },
+    "segundos": 10
    },
    {
     "tipo": "dados",
@@ -1334,7 +1402,7 @@
      6,
      4
     ],
-    "segundos": 3.2
+    "segundos": 6
    },
    {
     "tipo": "resultado",
@@ -1361,7 +1429,7 @@
     "resalta": 0,
     "pie": "Ganan los Halcones",
     "acento": "#F4A261",
-    "segundos": 2.5
+    "segundos": 3.5
    },
    {
     "tipo": "titular",
@@ -1373,7 +1441,7 @@
      "texto",
      "lila"
     ],
-    "segundos": 2
+    "segundos": 3
    }
   ]
  },
@@ -1394,7 +1462,7 @@
      "texto",
      "lila"
     ],
-    "segundos": 2.5
+    "segundos": 3.8
    },
    {
     "tipo": "titular",
@@ -1407,7 +1475,7 @@
      "oro"
     ],
     "pie": "Los dos últimos ataques con el marcador a 3 o menos, y la muerte súbita.",
-    "segundos": 6.8
+    "segundos": 9.7
    },
    {
     "tipo": "titular",
@@ -1429,7 +1497,7 @@
     ],
     "pie": "Contra los Panteras, 10-11 y su último ataque: Kai tira de 3… y entra.",
     "acento": "#003F88",
-    "segundos": 7.1
+    "segundos": 10.1
    },
    {
     "tipo": "titular",
@@ -1451,7 +1519,7 @@
     ],
     "pie": "Nico Serrano tira en los ataques 1 y 2. Sin esperar.",
     "acento": "#3C096C",
-    "segundos": 6.1
+    "segundos": 8.8
    },
    {
     "tipo": "titular",
@@ -1473,7 +1541,7 @@
     ],
     "pie": "Los Albatros atacan al final con 13-13. Cierran dentro… y Ainhoa falla.",
     "acento": "#495867",
-    "segundos": 8.1
+    "segundos": 11.5
    },
    {
     "tipo": "titular",
@@ -1495,7 +1563,7 @@
     ],
     "pie": "Contra los Albatros, 11-10 y su último ataque: Carlos tira dentro… y entra.",
     "acento": "#1B1B3A",
-    "segundos": 7.1
+    "segundos": 10.1
    },
    {
     "tipo": "titular",
@@ -1507,7 +1575,7 @@
      "texto",
      "lila"
     ],
-    "segundos": 2.5
+    "segundos": 3.8
    }
   ]
  },
@@ -1528,7 +1596,7 @@
      "texto",
      "lila"
     ],
-    "segundos": 2.8
+    "segundos": 4.2
    },
    {
     "tipo": "titular",
@@ -1539,7 +1607,7 @@
      "oro"
     ],
     "pie": "Con sus dos tiros intactos.",
-    "segundos": 3.5
+    "segundos": 5.1
    },
    {
     "tipo": "titular",
@@ -1552,7 +1620,7 @@
      "lila"
     ],
     "pie": "Siempre hay alguien: 4 tiros entre 3 obligan a que alguien repita.",
-    "segundos": 6.1
+    "segundos": 8.8
    },
    {
     "tipo": "cartas",
@@ -1584,7 +1652,7 @@
      "Entra"
     ],
     "pie": "Joel ya ha gastado sus tiros. Fuera, aunque sea de las buenas.",
-    "segundos": 5.8
+    "segundos": 8.3
    },
    {
     "tipo": "titular",
@@ -1596,7 +1664,7 @@
      "texto",
      "oro"
     ],
-    "segundos": 3.5
+    "segundos": 5.1
    }
   ]
  },
@@ -1617,7 +1685,7 @@
      "texto",
      "lila"
     ],
-    "segundos": 2
+    "segundos": 3
    },
    {
     "tipo": "marcador",
@@ -1641,7 +1709,7 @@
      10
     ],
     "titulo": "Muerte súbita",
-    "segundos": 2.5
+    "segundos": 3.8
    },
    {
     "tipo": "titular",
@@ -1650,7 +1718,7 @@
      "cada uno."
     ],
     "pie": "Puede tirar cualquiera de pista, tenga tiros o no. Hasta que alguien quede por delante.",
-    "segundos": 7.5
+    "segundos": 10.6
    },
    {
     "tipo": "cartas",
@@ -1682,7 +1750,7 @@
      "Contra"
     ],
     "acento": "#1D3557",
-    "segundos": 3
+    "segundos": 4.5
    },
    {
     "tipo": "revela",
@@ -1696,7 +1764,21 @@
      "tipo": "dentro"
     },
     "pie": "La defensa acierta: +2",
-    "segundos": 4.8
+    "cuenta": {
+     "tirador": "Ainhoa",
+     "defensor": "Marta",
+     "ataque": 2,
+     "icono": null,
+     "bonus": 0,
+     "base": 5,
+     "defensa": 3,
+     "muro": 0,
+     "cierre": 2,
+     "total": 10,
+     "margen": 0,
+     "necesita": 8
+    },
+    "segundos": 10
    },
    {
     "tipo": "dados",
@@ -1705,8 +1787,7 @@
      6,
      3
     ],
-    "pie": "6 + 3 + 2 de ataque contra 10 de defensa",
-    "segundos": 3.2
+    "segundos": 6
    },
    {
     "tipo": "resultado",
@@ -1731,7 +1812,7 @@
      10
     ],
     "resalta": 0,
-    "segundos": 2.5
+    "segundos": 3.5
    },
    {
     "tipo": "titular",
@@ -1743,7 +1824,7 @@
      "texto",
      "oro"
     ],
-    "segundos": 2.5
+    "segundos": 3.8
    }
   ]
  },
@@ -1764,7 +1845,7 @@
      "texto",
      "lila"
     ],
-    "segundos": 2.8
+    "segundos": 4.2
    },
    {
     "tipo": "carta",
@@ -1782,7 +1863,7 @@
     "titulo": "Panteras",
     "pie": "Aro · 22 años",
     "acento": "#3C096C",
-    "segundos": 2.6
+    "segundos": 3.8
    },
    {
     "tipo": "carta",
@@ -1800,7 +1881,7 @@
     "titulo": "Coronas",
     "pie": "Tiro · 25 años",
     "acento": "#6A0DAD",
-    "segundos": 2.6
+    "segundos": 3.8
    },
    {
     "tipo": "carta",
@@ -1818,7 +1899,7 @@
     "titulo": "Halcones",
     "pie": "Muro · 32 años",
     "acento": "#F4A261",
-    "segundos": 2.6
+    "segundos": 3.8
    },
    {
     "tipo": "carta",
@@ -1836,7 +1917,7 @@
     "titulo": "Lobos",
     "pie": "34 años",
     "acento": "#495867",
-    "segundos": 2.6
+    "segundos": 3.8
    },
    {
     "tipo": "carta",
@@ -1854,7 +1935,7 @@
     "titulo": "Gigantes",
     "pie": "Tiro · 30 años",
     "acento": "#5C5C5C",
-    "segundos": 2.6
+    "segundos": 3.8
    },
    {
     "tipo": "titular",
@@ -1866,7 +1947,7 @@
      "texto",
      "oro"
     ],
-    "segundos": 2.5
+    "segundos": 3.8
    }
   ]
  },
@@ -1889,7 +1970,7 @@
     ],
     "etiqueta": "Partido de prueba",
     "pie": "Defiendes tú.",
-    "segundos": 3.5
+    "segundos": 5.1
    },
    {
     "tipo": "marcador",
@@ -1916,7 +1997,7 @@
     "titulo": "Atacan los Forjadores",
     "pie": "Pierden de 2: dentro empatan; de 3, ganan.",
     "acento": "#8B2500",
-    "segundos": 4.5
+    "segundos": 6.5
    },
    {
     "tipo": "cartas",
@@ -1947,7 +2028,7 @@
      "Tira",
      "Tú le defiendes"
     ],
-    "segundos": 3
+    "segundos": 4.5
    },
    {
     "tipo": "tabla",
@@ -1963,7 +2044,7 @@
       "fuera": 8
      }
     },
-    "segundos": 5
+    "segundos": 7.5
    },
    {
     "tipo": "pregunta",
@@ -1973,7 +2054,7 @@
     ],
     "pie": "Comenta DENTRO o FUERA",
     "acento": "#6A0DAD",
-    "segundos": 4
+    "segundos": 4.5
    },
    {
     "tipo": "revela",
@@ -1987,7 +2068,21 @@
      "tipo": "dentro"
     },
     "pie": "La defensa falla",
-    "segundos": 4.1
+    "cuenta": {
+     "tirador": "Enzo",
+     "defensor": "Celia",
+     "ataque": 3,
+     "icono": null,
+     "bonus": 0,
+     "base": 5,
+     "defensa": 2,
+     "muro": 0,
+     "cierre": 0,
+     "total": 7,
+     "margen": 2,
+     "necesita": 6
+    },
+    "segundos": 10
    },
    {
     "tipo": "dados",
@@ -1996,7 +2091,7 @@
      2,
      6
     ],
-    "segundos": 3.2
+    "segundos": 6
    },
    {
     "tipo": "resultado",
@@ -2023,7 +2118,7 @@
     "resalta": 0,
     "pie": "Ganan los Forjadores",
     "acento": "#8B2500",
-    "segundos": 2.5
+    "segundos": 3.5
    },
    {
     "tipo": "titular",
@@ -2035,7 +2130,7 @@
      "texto",
      "lila"
     ],
-    "segundos": 2
+    "segundos": 3
    }
   ]
  },
@@ -2056,7 +2151,7 @@
      "texto",
      "lila"
     ],
-    "segundos": 2
+    "segundos": 3
    },
    {
     "tipo": "titular",
@@ -2067,7 +2162,7 @@
      "oro"
     ],
     "pie": "Canasta de dentro que supera a la defensa por 6 o más.",
-    "segundos": 4.8
+    "segundos": 7
    },
    {
     "tipo": "cartas",
@@ -2098,7 +2193,7 @@
      "Tira",
      "Contra"
     ],
-    "segundos": 3
+    "segundos": 4.5
    },
    {
     "tipo": "dados",
@@ -2108,13 +2203,13 @@
      6
     ],
     "pie": "17 de ataque contra 11 de defensa: 6 por encima.",
-    "segundos": 3.2
+    "segundos": 6
    },
    {
     "tipo": "resultado",
     "titulo": "¡Mate!",
     "bien": true,
-    "segundos": 2.5
+    "segundos": 3.5
    },
    {
     "tipo": "titular",
@@ -2125,7 +2220,7 @@
      "lila"
     ],
     "pie": "Tiro de dentro que se queda corto por 4 o más.",
-    "segundos": 4.5
+    "segundos": 6.5
    },
    {
     "tipo": "dados",
@@ -2135,14 +2230,14 @@
      1
     ],
     "pie": "Nia saca 6 contra 11 de Kenna.",
-    "segundos": 3.2
+    "segundos": 6
    },
    {
     "tipo": "resultado",
     "titulo": "¡Tapón!",
     "bien": false,
     "pie": "No cambian el marcador. Pero se cantan.",
-    "segundos": 3.5
+    "segundos": 5.1
    }
   ]
  },
@@ -2179,7 +2274,7 @@
      }
     ],
     "pie": "Se decidió en la muerte súbita.",
-    "segundos": 5.5
+    "segundos": 7.9
    },
    {
     "tipo": "marcador",
@@ -2202,7 +2297,7 @@
      5,
      6
     ],
-    "segundos": 2.5
+    "segundos": 3.5
    },
    {
     "tipo": "marcador",
@@ -2229,7 +2324,7 @@
     "titulo": "Atacan los Búhos",
     "pie": "Empate.",
     "acento": "#1B1B3A",
-    "segundos": 2.8
+    "segundos": 4.2
    },
    {
     "tipo": "cartas",
@@ -2262,7 +2357,7 @@
     ],
     "pie": "Búhos: «En el final apretado, siempre dentro.»",
     "acento": "#1B1B3A",
-    "segundos": 3.8
+    "segundos": 5.6
    },
    {
     "tipo": "revela",
@@ -2276,7 +2371,21 @@
      "tipo": "fuera"
     },
     "pie": "La defensa falla",
-    "segundos": 4.8
+    "cuenta": {
+     "tirador": "Noa",
+     "defensor": "Vera",
+     "ataque": 4,
+     "icono": "Aro",
+     "bonus": 2,
+     "base": 5,
+     "defensa": 2,
+     "muro": 0,
+     "cierre": 0,
+     "total": 7,
+     "margen": 0,
+     "necesita": 1
+    },
+    "segundos": 10
    },
    {
     "tipo": "dados",
@@ -2285,8 +2394,7 @@
      3,
      3
     ],
-    "pie": "3 + 3 + 6 de ataque contra 7 de defensa",
-    "segundos": 3.2
+    "segundos": 6
    },
    {
     "tipo": "resultado",
@@ -2313,7 +2421,7 @@
     "resalta": 1,
     "pie": "Final. Mejor del partido: Noa Quintana (6 puntos).",
     "acento": "#1B1B3A",
-    "segundos": 3.5
+    "segundos": 5.1
    }
   ]
  },
@@ -2350,7 +2458,7 @@
      }
     ],
     "pie": "Se decidió al final.",
-    "segundos": 4.8
+    "segundos": 7
    },
    {
     "tipo": "marcador",
@@ -2373,7 +2481,7 @@
      4,
      7
     ],
-    "segundos": 2.5
+    "segundos": 3.5
    },
    {
     "tipo": "marcador",
@@ -2400,7 +2508,7 @@
     "titulo": "Atacan los Lobos",
     "pie": "Pierden de 1.",
     "acento": "#495867",
-    "segundos": 3.1
+    "segundos": 4.7
    },
    {
     "tipo": "cartas",
@@ -2432,7 +2540,7 @@
      "Contra"
     ],
     "acento": "#495867",
-    "segundos": 3
+    "segundos": 4.5
    },
    {
     "tipo": "revela",
@@ -2446,7 +2554,21 @@
      "tipo": "dentro"
     },
     "pie": "La defensa falla",
-    "segundos": 4.8
+    "cuenta": {
+     "tirador": "Ciro",
+     "defensor": "Carla",
+     "ataque": 3,
+     "icono": null,
+     "bonus": 0,
+     "base": 5,
+     "defensa": 4,
+     "muro": 0,
+     "cierre": 0,
+     "total": 9,
+     "margen": 2,
+     "necesita": 8
+    },
+    "segundos": 10
    },
    {
     "tipo": "dados",
@@ -2455,8 +2577,7 @@
      5,
      6
     ],
-    "pie": "5 + 6 + 3 de ataque contra 9 de defensa, que de fuera hay que superar por 2",
-    "segundos": 4.8
+    "segundos": 6
    },
    {
     "tipo": "resultado",
@@ -2483,7 +2604,7 @@
     "resalta": 0,
     "pie": "Final. Mejor del partido: Emeka Udeh (4 puntos).",
     "acento": "#495867",
-    "segundos": 3.5
+    "segundos": 5.1
    }
   ]
  },
@@ -2506,7 +2627,7 @@
     ],
     "etiqueta": "Partido de prueba",
     "pie": "Defiendes tú.",
-    "segundos": 3.5
+    "segundos": 5.1
    },
    {
     "tipo": "marcador",
@@ -2533,7 +2654,7 @@
     "titulo": "Atacan los Coronas",
     "pie": "Pierden de 1: cualquier canasta les da la victoria.",
     "acento": "#6A0DAD",
-    "segundos": 5.1
+    "segundos": 7.4
    },
    {
     "tipo": "cartas",
@@ -2565,7 +2686,7 @@
      "Tú le defiendes"
     ],
     "pie": "Muro: +2 contra dentro",
-    "segundos": 3
+    "segundos": 4.5
    },
    {
     "tipo": "tabla",
@@ -2581,7 +2702,7 @@
       "fuera": 9
      }
     },
-    "segundos": 5
+    "segundos": 7.5
    },
    {
     "tipo": "pregunta",
@@ -2591,7 +2712,7 @@
     ],
     "pie": "Comenta DENTRO o FUERA",
     "acento": "#5C5C5C",
-    "segundos": 4
+    "segundos": 4.5
    },
    {
     "tipo": "revela",
@@ -2605,7 +2726,21 @@
      "tipo": "dentro"
     },
     "pie": "La defensa falla",
-    "segundos": 4.1
+    "cuenta": {
+     "tirador": "Gonzalo",
+     "defensor": "Carla",
+     "ataque": 4,
+     "icono": null,
+     "bonus": 0,
+     "base": 5,
+     "defensa": 4,
+     "muro": 0,
+     "cierre": 0,
+     "total": 9,
+     "margen": 2,
+     "necesita": 7
+    },
+    "segundos": 10
    },
    {
     "tipo": "dados",
@@ -2614,7 +2749,7 @@
      5,
      2
     ],
-    "segundos": 3.2
+    "segundos": 6
    },
    {
     "tipo": "resultado",
@@ -2641,7 +2776,7 @@
     "resalta": 0,
     "pie": "Ganan los Coronas",
     "acento": "#6A0DAD",
-    "segundos": 2.5
+    "segundos": 3.5
    },
    {
     "tipo": "titular",
@@ -2653,7 +2788,7 @@
      "texto",
      "lila"
     ],
-    "segundos": 2
+    "segundos": 3
    }
   ]
  },
@@ -2690,7 +2825,7 @@
      }
     ],
     "pie": "Se decidió al final.",
-    "segundos": 4.8
+    "segundos": 7
    },
    {
     "tipo": "marcador",
@@ -2713,7 +2848,7 @@
      7,
      11
     ],
-    "segundos": 2.5
+    "segundos": 3.5
    },
    {
     "tipo": "marcador",
@@ -2740,7 +2875,7 @@
     "titulo": "Atacan los Relámpagos",
     "pie": "Ganan de 6.",
     "acento": "#003F88",
-    "segundos": 3.1
+    "segundos": 4.7
    },
    {
     "tipo": "cartas",
@@ -2772,7 +2907,7 @@
      "Contra"
     ],
     "acento": "#003F88",
-    "segundos": 3
+    "segundos": 4.5
    },
    {
     "tipo": "revela",
@@ -2786,7 +2921,21 @@
      "tipo": "dentro"
     },
     "pie": "La defensa falla",
-    "segundos": 4.8
+    "cuenta": {
+     "tirador": "Hugo",
+     "defensor": "Ingrid",
+     "ataque": 2,
+     "icono": "Tiro",
+     "bonus": 1,
+     "base": 5,
+     "defensa": 4,
+     "muro": 0,
+     "cierre": 0,
+     "total": 9,
+     "margen": 2,
+     "necesita": 8
+    },
+    "segundos": 10
    },
    {
     "tipo": "dados",
@@ -2795,8 +2944,7 @@
      6,
      4
     ],
-    "pie": "6 + 4 + 3 de ataque contra 9 de defensa, que de fuera hay que superar por 2",
-    "segundos": 4.8
+    "segundos": 6
    },
    {
     "tipo": "resultado",
@@ -2823,7 +2971,7 @@
     "resalta": 1,
     "pie": "Final. Mejor del partido: Darío Carmona (6 puntos).",
     "acento": "#003F88",
-    "segundos": 3.5
+    "segundos": 5.1
    }
   ]
  },
@@ -2860,7 +3008,7 @@
      }
     ],
     "pie": "Se decidió al final.",
-    "segundos": 4.8
+    "segundos": 7
    },
    {
     "tipo": "marcador",
@@ -2883,7 +3031,7 @@
      7,
      4
     ],
-    "segundos": 2.5
+    "segundos": 3.5
    },
    {
     "tipo": "marcador",
@@ -2910,7 +3058,7 @@
     "titulo": "Atacan los Albatros",
     "pie": "Ganan de 3.",
     "acento": "#1D3557",
-    "segundos": 3.1
+    "segundos": 4.7
    },
    {
     "tipo": "cartas",
@@ -2942,7 +3090,7 @@
      "Contra"
     ],
     "acento": "#1D3557",
-    "segundos": 3
+    "segundos": 4.5
    },
    {
     "tipo": "revela",
@@ -2956,7 +3104,21 @@
      "tipo": "dentro"
     },
     "pie": "La defensa acierta: +2",
-    "segundos": 4.8
+    "cuenta": {
+     "tirador": "Andrei",
+     "defensor": "Celia",
+     "ataque": 2,
+     "icono": null,
+     "bonus": 0,
+     "base": 5,
+     "defensa": 3,
+     "muro": 0,
+     "cierre": 2,
+     "total": 10,
+     "margen": 0,
+     "necesita": 8
+    },
+    "segundos": 10
    },
    {
     "tipo": "dados",
@@ -2965,8 +3127,7 @@
      5,
      3
     ],
-    "pie": "5 + 3 + 2 de ataque contra 10 de defensa",
-    "segundos": 3.2
+    "segundos": 6
    },
    {
     "tipo": "resultado",
@@ -2993,7 +3154,7 @@
     "resalta": 0,
     "pie": "Final. Mejor del partido: Goran Jansen (5 puntos).",
     "acento": "#1D3557",
-    "segundos": 3.5
+    "segundos": 5.1
    }
   ]
  },
@@ -3030,7 +3191,7 @@
      }
     ],
     "pie": "Se decidió en la muerte súbita.",
-    "segundos": 5.5
+    "segundos": 7.9
    },
    {
     "tipo": "marcador",
@@ -3053,7 +3214,7 @@
      4,
      5
     ],
-    "segundos": 2.5
+    "segundos": 3.5
    },
    {
     "tipo": "marcador",
@@ -3080,7 +3241,7 @@
     "titulo": "Atacan los Forjadores",
     "pie": "Empate.",
     "acento": "#8B2500",
-    "segundos": 2.8
+    "segundos": 4.2
    },
    {
     "tipo": "cartas",
@@ -3112,7 +3273,7 @@
      "Contra"
     ],
     "acento": "#8B2500",
-    "segundos": 3
+    "segundos": 4.5
    },
    {
     "tipo": "revela",
@@ -3126,7 +3287,21 @@
      "tipo": "dentro"
     },
     "pie": "La defensa falla",
-    "segundos": 4.8
+    "cuenta": {
+     "tirador": "Enzo",
+     "defensor": "Lucas",
+     "ataque": 3,
+     "icono": null,
+     "bonus": 0,
+     "base": 5,
+     "defensa": 2,
+     "muro": 0,
+     "cierre": 0,
+     "total": 7,
+     "margen": 2,
+     "necesita": 6
+    },
+    "segundos": 10
    },
    {
     "tipo": "dados",
@@ -3135,8 +3310,7 @@
      4,
      6
     ],
-    "pie": "4 + 6 + 3 de ataque contra 7 de defensa, que de fuera hay que superar por 2",
-    "segundos": 4.8
+    "segundos": 6
    },
    {
     "tipo": "resultado",
@@ -3163,7 +3337,7 @@
     "resalta": 1,
     "pie": "Final. Mejor del partido: Enzo Pastor (10 puntos).",
     "acento": "#8B2500",
-    "segundos": 3.5
+    "segundos": 5.1
    }
   ]
  },
@@ -3200,7 +3374,7 @@
      }
     ],
     "pie": "Se decidió al final.",
-    "segundos": 4.8
+    "segundos": 7
    },
    {
     "tipo": "marcador",
@@ -3223,7 +3397,7 @@
      12,
      6
     ],
-    "segundos": 2.5
+    "segundos": 3.5
    },
    {
     "tipo": "marcador",
@@ -3250,7 +3424,7 @@
     "titulo": "Atacan los Coronas",
     "pie": "Ganan de 1.",
     "acento": "#6A0DAD",
-    "segundos": 3.1
+    "segundos": 4.7
    },
    {
     "tipo": "cartas",
@@ -3282,7 +3456,7 @@
      "Contra"
     ],
     "acento": "#6A0DAD",
-    "segundos": 3
+    "segundos": 4.5
    },
    {
     "tipo": "revela",
@@ -3296,7 +3470,21 @@
      "tipo": "dentro"
     },
     "pie": "La defensa falla",
-    "segundos": 4.8
+    "cuenta": {
+     "tirador": "Joel",
+     "defensor": "Lara",
+     "ataque": 5,
+     "icono": null,
+     "bonus": 0,
+     "base": 5,
+     "defensa": 3,
+     "muro": 0,
+     "cierre": 0,
+     "total": 8,
+     "margen": 2,
+     "necesita": 5
+    },
+    "segundos": 10
    },
    {
     "tipo": "dados",
@@ -3305,8 +3493,7 @@
      6,
      4
     ],
-    "pie": "6 + 4 + 5 de ataque contra 8 de defensa, que de fuera hay que superar por 2",
-    "segundos": 4.8
+    "segundos": 6
    },
    {
     "tipo": "resultado",
@@ -3333,7 +3520,7 @@
     "resalta": 0,
     "pie": "Final. Mejor del partido: Joel Cebrián (6 puntos).",
     "acento": "#6A0DAD",
-    "segundos": 3.5
+    "segundos": 5.1
    }
   ]
  },
@@ -3370,7 +3557,7 @@
      }
     ],
     "pie": "Se decidió en la muerte súbita.",
-    "segundos": 5.5
+    "segundos": 7.9
    },
    {
     "tipo": "marcador",
@@ -3393,7 +3580,7 @@
      11,
      11
     ],
-    "segundos": 2.5
+    "segundos": 3.5
    },
    {
     "tipo": "marcador",
@@ -3420,7 +3607,7 @@
     "titulo": "Atacan los Coronas",
     "pie": "Empate.",
     "acento": "#6A0DAD",
-    "segundos": 2.8
+    "segundos": 4.2
    },
    {
     "tipo": "cartas",
@@ -3452,7 +3639,7 @@
      "Contra"
     ],
     "acento": "#6A0DAD",
-    "segundos": 3
+    "segundos": 4.5
    },
    {
     "tipo": "revela",
@@ -3466,7 +3653,21 @@
      "tipo": "dentro"
     },
     "pie": "La defensa falla",
-    "segundos": 4.8
+    "cuenta": {
+     "tirador": "Finn",
+     "defensor": "Elias",
+     "ataque": 6,
+     "icono": "Tiro",
+     "bonus": 1,
+     "base": 5,
+     "defensa": 2,
+     "muro": 0,
+     "cierre": 0,
+     "total": 7,
+     "margen": 2,
+     "necesita": 2
+    },
+    "segundos": 10
    },
    {
     "tipo": "dados",
@@ -3475,8 +3676,7 @@
      4,
      5
     ],
-    "pie": "4 + 5 + 7 de ataque contra 7 de defensa, que de fuera hay que superar por 2",
-    "segundos": 4.8
+    "segundos": 6
    },
    {
     "tipo": "resultado",
@@ -3503,7 +3703,7 @@
     "resalta": 1,
     "pie": "Final. Mejor del partido: Finn Diallo (42 puntos).",
     "acento": "#6A0DAD",
-    "segundos": 3.5
+    "segundos": 5.1
    }
   ]
  },
@@ -3540,7 +3740,7 @@
      }
     ],
     "pie": "Se decidió al final.",
-    "segundos": 4.8
+    "segundos": 7
    },
    {
     "tipo": "marcador",
@@ -3563,7 +3763,7 @@
      9,
      7
     ],
-    "segundos": 2.5
+    "segundos": 3.5
    },
    {
     "tipo": "marcador",
@@ -3590,7 +3790,7 @@
     "titulo": "Atacan los Búhos",
     "pie": "Pierden de 1.",
     "acento": "#1B1B3A",
-    "segundos": 3.1
+    "segundos": 4.7
    },
    {
     "tipo": "cartas",
@@ -3623,7 +3823,7 @@
     ],
     "pie": "Búhos: «En el final apretado, siempre dentro.»",
     "acento": "#1B1B3A",
-    "segundos": 3.8
+    "segundos": 5.6
    },
    {
     "tipo": "revela",
@@ -3637,7 +3837,21 @@
      "tipo": "dentro"
     },
     "pie": "La defensa acierta: +2",
-    "segundos": 4.8
+    "cuenta": {
+     "tirador": "Ximena",
+     "defensor": "Fabián",
+     "ataque": 4,
+     "icono": "Aro",
+     "bonus": 2,
+     "base": 5,
+     "defensa": 3,
+     "muro": 0,
+     "cierre": 2,
+     "total": 10,
+     "margen": 0,
+     "necesita": 4
+    },
+    "segundos": 10
    },
    {
     "tipo": "dados",
@@ -3646,8 +3860,7 @@
      6,
      4
     ],
-    "pie": "6 + 4 + 6 de ataque contra 10 de defensa",
-    "segundos": 3.2
+    "segundos": 6
    },
    {
     "tipo": "resultado",
@@ -3674,7 +3887,7 @@
     "resalta": 0,
     "pie": "Final. Mejor del partido: Iker Valverde (5 puntos).",
     "acento": "#1B1B3A",
-    "segundos": 3.5
+    "segundos": 5.1
    }
   ]
  },
@@ -3697,7 +3910,7 @@
     ],
     "etiqueta": "Partido de prueba",
     "pie": "Defiendes tú.",
-    "segundos": 3.5
+    "segundos": 5.1
    },
    {
     "tipo": "marcador",
@@ -3724,7 +3937,7 @@
     "titulo": "Atacan los Gigantes",
     "pie": "Pierden de 2: dentro empatan; de 3, ganan.",
     "acento": "#5C5C5C",
-    "segundos": 5.1
+    "segundos": 7.4
    },
    {
     "tipo": "cartas",
@@ -3756,7 +3969,7 @@
      "Tú le defiendes"
     ],
     "pie": "Aro: +2 dentro",
-    "segundos": 3
+    "segundos": 4.5
    },
    {
     "tipo": "tabla",
@@ -3772,7 +3985,7 @@
       "fuera": 9
      }
     },
-    "segundos": 5
+    "segundos": 7.5
    },
    {
     "tipo": "pregunta",
@@ -3782,7 +3995,7 @@
     ],
     "pie": "Comenta DENTRO o FUERA",
     "acento": "#1B1B3A",
-    "segundos": 4
+    "segundos": 4.5
    },
    {
     "tipo": "revela",
@@ -3796,7 +4009,21 @@
      "tipo": "dentro"
     },
     "pie": "La defensa acierta: +2",
-    "segundos": 4.1
+    "cuenta": {
+     "tirador": "Luka",
+     "defensor": "Ximena",
+     "ataque": 2,
+     "icono": null,
+     "bonus": 0,
+     "base": 5,
+     "defensa": 2,
+     "muro": 0,
+     "cierre": 2,
+     "total": 9,
+     "margen": 0,
+     "necesita": 7
+    },
+    "segundos": 10
    },
    {
     "tipo": "dados",
@@ -3805,7 +4032,7 @@
      1,
      3
     ],
-    "segundos": 3.2
+    "segundos": 6
    },
    {
     "tipo": "resultado",
@@ -3832,7 +4059,7 @@
     "resalta": 1,
     "pie": "Ganan los Búhos",
     "acento": "#1B1B3A",
-    "segundos": 2.5
+    "segundos": 3.8
    },
    {
     "tipo": "titular",
@@ -3844,7 +4071,7 @@
      "texto",
      "lila"
     ],
-    "segundos": 2
+    "segundos": 3
    }
   ]
  },
@@ -3881,7 +4108,7 @@
      }
     ],
     "pie": "Se decidió al final.",
-    "segundos": 4.8
+    "segundos": 7
    },
    {
     "tipo": "marcador",
@@ -3904,7 +4131,7 @@
      9,
      4
     ],
-    "segundos": 2.5
+    "segundos": 3.5
    },
    {
     "tipo": "marcador",
@@ -3931,7 +4158,7 @@
     "titulo": "Atacan los Gigantes",
     "pie": "Ganan de 4.",
     "acento": "#5C5C5C",
-    "segundos": 3.1
+    "segundos": 4.7
    },
    {
     "tipo": "cartas",
@@ -3963,7 +4190,7 @@
      "Contra"
     ],
     "acento": "#5C5C5C",
-    "segundos": 3
+    "segundos": 4.5
    },
    {
     "tipo": "revela",
@@ -3977,7 +4204,21 @@
      "tipo": "dentro"
     },
     "pie": "La defensa acierta: +2",
-    "segundos": 4.8
+    "cuenta": {
+     "tirador": "Luka",
+     "defensor": "Dalia",
+     "ataque": 2,
+     "icono": null,
+     "bonus": 0,
+     "base": 5,
+     "defensa": 2,
+     "muro": 0,
+     "cierre": 2,
+     "total": 9,
+     "margen": 0,
+     "necesita": 7
+    },
+    "segundos": 10
    },
    {
     "tipo": "dados",
@@ -3986,8 +4227,7 @@
      4,
      5
     ],
-    "pie": "4 + 5 + 2 de ataque contra 9 de defensa",
-    "segundos": 3.2
+    "segundos": 6
    },
    {
     "tipo": "resultado",
@@ -4014,7 +4254,7 @@
     "resalta": 0,
     "pie": "Final. Mejor del partido: Carla Echeverría (4 puntos).",
     "acento": "#5C5C5C",
-    "segundos": 3.5
+    "segundos": 5.1
    }
   ]
  },
@@ -4051,7 +4291,7 @@
      }
     ],
     "pie": "Un partido de verdad, tirada a tirada.",
-    "segundos": 5.8
+    "segundos": 8.3
    },
    {
     "tipo": "marcador",
@@ -4074,7 +4314,7 @@
      5,
      6
     ],
-    "segundos": 2.5
+    "segundos": 3.5
    },
    {
     "tipo": "marcador",
@@ -4101,7 +4341,7 @@
     "titulo": "Atacan los Panteras",
     "pie": "Pierden de 1.",
     "acento": "#3C096C",
-    "segundos": 3.1
+    "segundos": 4.7
    },
    {
     "tipo": "cartas",
@@ -4133,7 +4373,7 @@
      "Contra"
     ],
     "acento": "#3C096C",
-    "segundos": 3
+    "segundos": 4.5
    },
    {
     "tipo": "revela",
@@ -4147,7 +4387,21 @@
      "tipo": "fuera"
     },
     "pie": "La defensa acierta: +2",
-    "segundos": 4.8
+    "cuenta": {
+     "tirador": "Irene",
+     "defensor": "Vera",
+     "ataque": 3,
+     "icono": null,
+     "bonus": 0,
+     "base": 5,
+     "defensa": 2,
+     "muro": 0,
+     "cierre": 2,
+     "total": 9,
+     "margen": 2,
+     "necesita": 8
+    },
+    "segundos": 10
    },
    {
     "tipo": "dados",
@@ -4156,8 +4410,7 @@
      2,
      6
     ],
-    "pie": "2 + 6 + 3 de ataque contra 9 de defensa, que de fuera hay que superar por 2",
-    "segundos": 4.8
+    "segundos": 6
    },
    {
     "tipo": "resultado",
@@ -4184,7 +4437,7 @@
     "resalta": 0,
     "pie": "Final. Mejor del partido: Irene Pastor (6 puntos).",
     "acento": "#3C096C",
-    "segundos": 3.5
+    "segundos": 5.1
    }
   ]
  },
@@ -4221,7 +4474,7 @@
      }
     ],
     "pie": "Un partido de verdad, tirada a tirada.",
-    "segundos": 5.8
+    "segundos": 8.3
    },
    {
     "tipo": "marcador",
@@ -4244,7 +4497,7 @@
      2,
      6
     ],
-    "segundos": 2.5
+    "segundos": 3.5
    },
    {
     "tipo": "marcador",
@@ -4271,7 +4524,7 @@
     "titulo": "Atacan los Forjadores",
     "pie": "Pierden de 1.",
     "acento": "#8B2500",
-    "segundos": 3.1
+    "segundos": 4.7
    },
    {
     "tipo": "cartas",
@@ -4303,7 +4556,7 @@
      "Contra"
     ],
     "acento": "#8B2500",
-    "segundos": 3
+    "segundos": 4.5
    },
    {
     "tipo": "revela",
@@ -4317,7 +4570,21 @@
      "tipo": "fuera"
     },
     "pie": "La defensa acierta: +2",
-    "segundos": 4.8
+    "cuenta": {
+     "tirador": "Astrid",
+     "defensor": "Ainhoa",
+     "ataque": 4,
+     "icono": "Tiro",
+     "bonus": 1,
+     "base": 5,
+     "defensa": 3,
+     "muro": 0,
+     "cierre": 2,
+     "total": 10,
+     "margen": 2,
+     "necesita": 7
+    },
+    "segundos": 10
    },
    {
     "tipo": "dados",
@@ -4326,8 +4593,7 @@
      5,
      2
     ],
-    "pie": "5 + 2 + 5 de ataque contra 10 de defensa, que de fuera hay que superar por 2",
-    "segundos": 4.8
+    "segundos": 6
    },
    {
     "tipo": "resultado",
@@ -4354,7 +4620,7 @@
     "resalta": 0,
     "pie": "Final. Mejor del partido: Astrid Abara (6 puntos).",
     "acento": "#8B2500",
-    "segundos": 3.5
+    "segundos": 5.1
    }
   ]
  },
@@ -4391,7 +4657,7 @@
      }
     ],
     "pie": "Se decidió al final.",
-    "segundos": 4.8
+    "segundos": 7
    },
    {
     "tipo": "marcador",
@@ -4414,7 +4680,7 @@
      6,
      8
     ],
-    "segundos": 2.5
+    "segundos": 3.5
    },
    {
     "tipo": "marcador",
@@ -4441,7 +4707,7 @@
     "titulo": "Atacan los Corsarios",
     "pie": "Empate.",
     "acento": "#0B6E4F",
-    "segundos": 2.8
+    "segundos": 4.2
    },
    {
     "tipo": "cartas",
@@ -4473,7 +4739,7 @@
      "Contra"
     ],
     "acento": "#0B6E4F",
-    "segundos": 3
+    "segundos": 4.5
    },
    {
     "tipo": "revela",
@@ -4487,7 +4753,21 @@
      "tipo": "dentro"
     },
     "pie": "La defensa falla",
-    "segundos": 4.8
+    "cuenta": {
+     "tirador": "Lucía",
+     "defensor": "Gonzalo",
+     "ataque": 3,
+     "icono": null,
+     "bonus": 0,
+     "base": 5,
+     "defensa": 4,
+     "muro": 0,
+     "cierre": 0,
+     "total": 9,
+     "margen": 2,
+     "necesita": 8
+    },
+    "segundos": 10
    },
    {
     "tipo": "dados",
@@ -4496,8 +4776,7 @@
      2,
      6
     ],
-    "pie": "2 + 6 + 3 de ataque contra 9 de defensa, que de fuera hay que superar por 2",
-    "segundos": 4.8
+    "segundos": 6
    },
    {
     "tipo": "resultado",
@@ -4524,7 +4803,7 @@
     "resalta": 0,
     "pie": "Final. Mejor del partido: Andrea Ibarra (5 puntos).",
     "acento": "#0B6E4F",
-    "segundos": 3.5
+    "segundos": 5.1
    }
   ]
  }
