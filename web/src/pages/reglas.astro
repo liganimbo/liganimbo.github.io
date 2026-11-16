@@ -196,12 +196,8 @@ const enPista = CARTAS_POR_EQUIPO - 1;
   <h2>Juega tú</h2>
   <div class="tarjeta mesa">
     <div>
-      <strong>Imprime las cartas de las 12 franquicias</strong>, coge dos dados y unas monedas, y juega cualquier partido de la
+      <strong>Imprime las cartas de las 12 franquicias</strong> (las tienes en PDF al principio de esta página), coge dos dados y unas monedas, y juega cualquier partido de la
       liga en casa. Cada franquicia tiene su forma de jugar: elige la tuya.
-    </div>
-    <div class="botones">
-      <a class="boton" href={url("descargas/liga-nimbo-cartas.pdf")} download>Cartas (PDF)</a>
-      <a class="boton" href={url("descargas/liga-nimbo-reglamento.pdf")} download>Reglamento (PDF)</a>
     </div>
   </div>
 
@@ -404,22 +400,6 @@ const enPista = CARTAS_POR_EQUIPO - 1;
     flex-wrap: wrap;
     border-color: var(--acento);
     background: var(--acento-suave);
-  }
-  .boton {
-    font-weight: 700;
-    color: var(--sobre-acento);
-    background: var(--acento);
-    padding: 9px 16px;
-    border-radius: 8px;
-    white-space: nowrap;
-  }
-  .boton:hover {
-    color: var(--sobre-acento);
-  }
-  .botones {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
   }
   .descargas {
     display: flex;
