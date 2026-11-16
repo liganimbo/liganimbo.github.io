@@ -113,8 +113,8 @@ const HOJAS = 6;
     <h2><span class="num">4</span> Preparación</h2>
     <ol class="pasos">
       <li>Cada equipo pone <strong>{enPista} cartas en pista</strong> y deja <strong>1 de suplente</strong>, con sus fichas al lado.</li>
-      <li><strong>Marcajes:</strong> cada equipo decide en secreto a qué rival marca cada uno de sus {enPista} jugadores, uno a uno. Se revelan a la vez. Lo más cómodo: colocar cada carta enfrente de la que marca.</li>
-      <li>Se sortea quién ataca primero.</li>
+      <li><strong>Duelos:</strong> el equipo local empareja a sus {enPista} jugadores en pista con los {enPista} del visitante, y cada uno marca a su pareja. Lo más cómodo: colocar cada carta enfrente de su pareja. Si no hay local, se sortea.</li>
+      <li><strong>El visitante ataca primero.</strong></li>
     </ol>
 
     <h2><span class="num">5</span> Cada ataque es un farol</h2>
@@ -207,7 +207,7 @@ const HOJAS = 6;
         <dd>
           Cuando los dos equipos han hecho {R.descansoTras} ataques. <strong>El suplente entra obligatoriamente</strong>, con sus
           {R.fichasPorCarta} fichas. Sale quien tú elijas, pero <strong>solo puede salir quien ya haya gastado sus fichas</strong>: siempre
-          hay alguien, porque {R.descansoTras} tiros entre {enPista} obligan a que alguien repita. Después se rehacen los marcajes.
+          hay alguien, porque {R.descansoTras} tiros entre {enPista} obligan a que alguien repita. Después el local vuelve a decidir los duelos.
         </dd>
       </div>
       <div>
@@ -240,7 +240,7 @@ const HOJAS = 6;
     <div class="decisiones">
       <div><strong>¿Cuándo gastas a tu estrella?</strong><span>Sus dos tiros al principio, para coger ventaja, o guardados para el final, cuando más pesan.</span></div>
       <div><strong>¿Quién sale en el descanso?</strong><span>Solo sale quien ya no tiene tiros. Si tu mejor atacante defiende mal, gasta pronto sus fichas y sácalo.</span></div>
-      <div><strong>¿A quién marcas?</strong><span>Tu mejor defensa sobre su mejor tirador… o sobre quien todavía tiene fichas.</span></div>
+      <div><strong>¿Qué duelos pones en casa?</strong><span>Tu mejor defensa contra su mejor tirador… pero cada duelo va en los dos sentidos.</span></div>
       <div><strong>¿Dentro o fuera?</strong><span>Ir a lo seguro o leerle la mente al rival. Ahí está el juego.</span></div>
     </div>
 
@@ -252,7 +252,7 @@ const HOJAS = 6;
         </p>
         <ul>
           <li><strong>Liga regular</strong> a ida y vuelta: {2 * (mundo.franquicias.length - 1)} jornadas de 6 partidos.</li>
-          <li><strong>Clasificación</strong> por victorias. Empates: duelos directos y luego diferencia de puntos.</li>
+          <li><strong>Clasificación</strong> por victorias. Empates: enfrentamientos directos y luego diferencia de puntos.</li>
           <li>
             <strong>Playoffs</strong> para las {CONFIG.playoffs} mejores: {`cuartos y semifinales al mejor de ${mejorDe(CONFIG.victoriasPorRonda.cuartos)}, la Final al mejor de ${mejorDe(CONFIG.victoriasPorRonda.final)}`}.
           </li>

@@ -1,4 +1,4 @@
-// Reglas del partido de Nimbo (REGLAMENTO.md v0.5). Sin decisiones: eso es cosa de quien juega o de la IA.
+// Reglas del partido de Nimbo (REGLAMENTO.md v0.6). Sin decisiones: eso es cosa de quien juega o de la IA.
 
 export type Icono = "Tiro" | "Aro" | "Muro";
 export type Tipo = "dentro" | "fuera";
@@ -13,7 +13,7 @@ export interface Carta {
 }
 
 /** Versión del reglamento (REGLAMENTO.md). */
-export const VERSION_REGLAMENTO = "0.5";
+export const VERSION_REGLAMENTO = "0.6";
 
 export const REGLAS = {
   fichasPorCarta: 2,
@@ -108,7 +108,11 @@ export interface Alineacion {
 
 export const rival = (lado: Lado): Lado => (lado === 0 ? 1 : 0);
 
-export function crearPartido(a: Alineacion, b: Alineacion, primero: Lado): Partido {
+/** El lado 0 es siempre el local, y el visitante ataca primero. */
+export const LOCAL: Lado = 0;
+export const VISITANTE: Lado = 1;
+
+export function crearPartido(local: Alineacion, visitante: Alineacion): Partido {
   const equipo = (al: Alineacion): Equipo => ({
     franquicia: al.franquicia,
     cartas: Object.fromEntries(al.cartas.map((c) => [c.id, c])),
@@ -120,10 +124,10 @@ export function crearPartido(a: Alineacion, b: Alineacion, primero: Lado): Parti
     tiempoMuertoUsado: false,
   });
   return {
-    equipos: [equipo(a), equipo(b)],
+    equipos: [equipo(local), equipo(visitante)],
     puntos: [0, 0],
     ataques: [0, 0],
-    turno: primero,
+    turno: VISITANTE,
     fase: "juego",
     descansoHecho: false,
     jugadas: [],
@@ -132,15 +136,19 @@ export function crearPartido(a: Alineacion, b: Alineacion, primero: Lado): Parti
   };
 }
 
-/** Fija a quién marca cada jugador en pista de `lado`. Debe ser uno a uno con la pista rival. */
-export function fijarMarcajes(p: Partido, lado: Lado, marcajes: Record<string, string>) {
-  const propios = p.equipos[lado].pista;
-  const rivales = p.equipos[rival(lado)].pista;
-  const asignados = rivales.map((r) => marcajes[r]);
-  if (asignados.some((d) => !propios.includes(d)) || new Set(asignados).size !== propios.length) {
-    throw new Error("Marcajes no válidos: cada jugador en pista debe marcar a un rival distinto.");
+/**
+ * Duelos: el local empareja a sus jugadores en pista con los del visitante y cada uno marca a su pareja.
+ * `duelos` va de id local a id visitante y debe ser uno a uno.
+ */
+export function fijarDuelos(p: Partido, duelos: Record<string, string>) {
+  const locales = p.equipos[LOCAL].pista;
+  const visitantes = p.equipos[VISITANTE].pista;
+  const parejas = locales.map((l) => duelos[l]);
+  if (parejas.some((v) => !visitantes.includes(v)) || new Set(parejas).size !== visitantes.length) {
+    throw new Error("Duelos no válidos: cada jugador local debe tener de pareja a un visitante distinto.");
   }
-  p.equipos[lado].marcajes = Object.fromEntries(rivales.map((r) => [r, marcajes[r]]));
+  p.equipos[LOCAL].marcajes = Object.fromEntries(locales.map((l) => [duelos[l], l]));
+  p.equipos[VISITANTE].marcajes = Object.fromEntries(locales.map((l) => [l, duelos[l]]));
 }
 
 export const carta = (p: Partido, lado: Lado, id: string) => p.equipos[lado].cartas[id];
@@ -284,7 +292,7 @@ export function cambiar(p: Partido, lado: Lado, sale: string) {
   p.cambios.push({ tras: p.jugadas.length, equipo: lado, sale, entra });
 }
 
-/** Cierra el descanso. Antes hay que hacer los dos cambios y volver a fijar los marcajes. */
+/** Cierra el descanso. Antes hay que hacer los dos cambios y que el local vuelva a fijar los duelos. */
 export function terminarDescanso(p: Partido) {
   if (p.fase !== "descanso") return;
   if (p.equipos.some((eq) => eq.suplente && !eq.cambioHecho)) throw new Error("Falta el cambio de algún equipo.");

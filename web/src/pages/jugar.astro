@@ -16,7 +16,7 @@ const datos = { franquicias: mundo.franquicias, jugadores: mundo.jugadores };
   <details id="reglas" class="tarjeta reglas">
     <summary>Reglas rápidas</summary>
     <ul>
-      <li>Cada equipo tiene 4 cartas: 3 en pista y 1 suplente. Cada jugador en pista marca a un rival.</li>
+      <li>Cada equipo tiene 4 cartas: 3 en pista y 1 suplente. <strong>El local decide los duelos</strong>: empareja a los 6 de pista y cada uno marca a su pareja. El visitante ataca primero.</li>
       <li>Cada carta tiene <strong>2 tiros</strong> (●●). Cada equipo ataca 8 veces, por turnos.</li>
       <li>Cuando atacas, eliges quién tira (de quienes tengan tiros) y si va <strong>dentro (2 puntos)</strong> o <strong>fuera (3 puntos)</strong>.</li>
       <li>La defensa elige en secreto qué cierra. Si lo adivina, suma +2.</li>
@@ -24,7 +24,7 @@ const datos = { franquicias: mundo.franquicias, jugadores: mundo.jugadores };
       <li><strong>Defensa</strong> = 5 + Defensa de quien marca + su icono si encaja + 2 si ha cerrado lo que era.</li>
       <li>Iconos: <strong>Tiro</strong> +1 al tirar de fuera · <strong>Aro</strong> +2 al tirar de dentro · <strong>Muro</strong> +2 al defender tiros de dentro.</li>
       <li>Dentro entra si el ataque iguala o supera a la defensa. Fuera hay que superarla por 2.</li>
-      <li>Tras 4 ataques de cada equipo hay descanso: <strong>el suplente entra obligatoriamente</strong> por alguien que ya haya gastado sus dos tiros, y se rehacen los marcajes.</li>
+      <li>Tras 4 ataques de cada equipo hay descanso: <strong>el suplente entra obligatoriamente</strong> por alguien que ya haya gastado sus dos tiros, y el local vuelve a decidir los duelos.</li>
       <li>Un tiempo muerto por partido para repetir un tiro fallado.</li>
       <li>Gana quien más puntos tenga tras los 8 ataques. Si hay empate, muerte súbita: un ataque más cada equipo (puede tirar cualquiera) hasta que alguien quede por delante.</li>
     </ul>
@@ -44,11 +44,12 @@ const datos = { franquicias: mundo.franquicias, jugadores: mundo.jugadores };
   );
   const F = Object.fromEntries(datos.franquicias.map((f) => [f.id, f]));
   const J = datos.jugadores;
-  const YO: R.Lado = 0;
-  const RIVAL: R.Lado = 1;
+  // Se fijan al empezar: el lado 0 es el local.
+  let YO: R.Lado = R.LOCAL;
+  let RIVAL: R.Lado = R.VISITANTE;
   const mesa = document.getElementById("mesa")!;
 
-  type Pantalla = "eleccion" | "alineacion" | "marcajes" | "partido" | "descanso" | "final";
+  type Pantalla = "eleccion" | "alineacion" | "duelos" | "partido" | "descanso" | "final";
   interface Resultado {
     jugada: R.Jugada;
     nota?: string;
@@ -58,7 +59,9 @@ const datos = { franquicias: mundo.franquicias, jugadores: mundo.jugadores };
     mio: datos.franquicias[0].id,
     rival: datos.franquicias[1].id,
     suplente: null as string | null,
-    marcajes: {} as Record<string, string>,
+    enCasa: true,
+    /** Duelos vistos desde mi lado: id rival → id mío. */
+    duelos: {} as Record<string, string>,
     p: null as R.Partido | null,
     tirador: null as string | null,
     resultado: null as Resultado | null,
@@ -99,7 +102,7 @@ const datos = { franquicias: mundo.franquicias, jugadores: mundo.jugadores };
     const pantallas: Record<Pantalla, () => string> = {
       eleccion: pantallaEleccion,
       alineacion: pantallaAlineacion,
-      marcajes: pantallaMarcajes,
+      duelos: pantallaDuelos,
       partido: pantallaPartido,
       descanso: pantallaDescanso,
       final: pantallaFinal,
@@ -131,6 +134,11 @@ const datos = { franquicias: mundo.franquicias, jugadores: mundo.jugadores };
       <div class="mano">${F[st.mio].plantilla.map((id) => carta(id)).join("")}</div>
       <h2>2 · Rival</h2>${selectorEquipo("rival")}${identidad(st.rival)}
       <div class="mano">${F[st.rival].plantilla.map((id) => carta(id)).join("")}</div>
+      <h2>¿Dónde juegas?</h2>
+      <div class="equipos">
+        <button type="button" class="equipo-opcion ${st.enCasa ? "elegido" : ""}" data-accion="en-casa" data-id="si"><span>En casa: decides los duelos</span></button>
+        <button type="button" class="equipo-opcion ${st.enCasa ? "" : "elegido"}" data-accion="en-casa" data-id="no"><span>Fuera: atacas primero</span></button>
+      </div>
       <div class="acciones"><button class="boton" data-accion="a-alineacion">Siguiente: alineación →</button></div>
     </section>`;
   }
@@ -145,31 +153,39 @@ const datos = { franquicias: mundo.franquicias, jugadores: mundo.jugadores };
         .join("")}</div>
       <div class="acciones">
         <button class="boton secundario" data-accion="a-eleccion">← Equipos</button>
-        <button class="boton" data-accion="a-marcajes">Siguiente: marcajes →</button>
+        <button class="boton" data-accion="a-duelos">Siguiente: duelos →</button>
       </div>
     </section>`;
   }
 
-  function pantallaMarcajes() {
+  function pantallaDuelos() {
     const p = st.p!;
     const mios = p.equipos[YO].pista;
     const suyos = p.equipos[RIVAL].pista;
     const enDescanso = p.fase === "descanso";
+    const defensa = (m: string) => `Def ${J[m].defensa}${J[m].icono === "Muro" ? " · Muro (dentro)" : ""}`;
+    const peligro = (r: string) => {
+      const rj = J[r];
+      return `<div class="apagado peligro">Ataque ${rj.ataque}${rj.icono === "Tiro" || rj.icono === "Aro" ? ` · ${rj.icono} (${R.DESCRIPCION_ICONO[rj.icono]})` : ""}</div>`;
+    };
+    const explicacion = st.enCasa
+      ? "Juegas en casa: decides los duelos. Cada uno marca a su pareja, así que piensa en los dos sentidos: quién le para y a quién le anota."
+      : `Juegas fuera: los duelos los decide ${F[st.rival].nombre}. A cambio, atacas tú primero.`;
     return `<section class="paso tarjeta">
-      <h2>${enDescanso ? "Descanso · " : "4 · "}Marcajes</h2>
-      <p class="apagado">Decide a quién marca cada uno de tus jugadores. Quien marca suma su Defensa (y su Muro, si lo tiene, contra tiros de dentro) cuando ese rival tira.</p>
-      <div class="marcajes">${suyos
+      <h2>${enDescanso ? "Descanso · " : "4 · "}Duelos</h2>
+      <p class="apagado">${explicacion}</p>
+      <div class="duelos">${suyos
         .map((r) => {
-          const opciones = mios
-            .map((m) => `<option value="${m}" ${st.marcajes[r] === m ? "selected" : ""}>${nombre(m)} · Def ${J[m].defensa}${J[m].icono === "Muro" ? " · Muro (dentro)" : ""}</option>`)
-            .join("");
-          const rj = J[r];
-          return `<div class="par">${carta(r)}<div class="flecha">marcado por</div><select data-rival="${r}">${opciones}</select>
-            <div class="apagado peligro">Ataque ${rj.ataque}${rj.icono === "Tiro" || rj.icono === "Aro" ? ` · ${rj.icono} (${R.DESCRIPCION_ICONO[rj.icono]})` : ""}</div></div>`;
+          const pareja = st.enCasa
+            ? `<select data-rival="${r}">${mios
+                .map((m) => `<option value="${m}" ${st.duelos[r] === m ? "selected" : ""}>${nombre(m)} · ${defensa(m)}</option>`)
+                .join("")}</select>`
+            : carta(st.duelos[r]);
+          return `<div class="par">${carta(r)}<div class="flecha">contra</div>${pareja}${peligro(r)}</div>`;
         })
         .join("")}</div>
       <div class="acciones">
-        <button class="boton secundario" data-accion="marcaje-auto">Sugerencia automática</button>
+        ${st.enCasa ? `<button class="boton secundario" data-accion="duelos-auto">Sugerencia automática</button>` : ""}
         <button class="boton" data-accion="a-partido">${enDescanso ? "Volver a la pista →" : "¡A jugar! →"}</button>
       </div>
     </section>`;
@@ -196,7 +212,7 @@ const datos = { franquicias: mundo.franquicias, jugadores: mundo.jugadores };
     const cartas = eq.pista
       .map((id) => {
         const sinTiros = !prorroga && eq.fichas[id] === 0;
-        const etiqueta = `${prorroga ? "" : `<span class="fichas">${fichas(eq.fichas[id])}</span> `}Le marca ${nombreCorto(otros.marcajes[id])}`;
+        const etiqueta = `${prorroga ? "" : `<span class="fichas">${fichas(eq.fichas[id])}</span> `}Contra ${nombreCorto(otros.marcajes[id])}`;
         const clase = [st.tirador === id && l === YO ? "elegida" : "", sinTiros ? "descansa" : ""].join(" ");
         return carta(id, { accion: accion && !sinTiros ? accion : undefined, clase, etiqueta });
       })
@@ -343,16 +359,20 @@ const datos = { franquicias: mundo.franquicias, jugadores: mundo.jugadores };
   function empezar() {
     const mias = F[st.mio].plantilla.map((id) => J[id]);
     const suyas = F[st.rival].plantilla.map((id) => J[id]);
-    st.p = R.crearPartido(
-      { franquicia: st.mio, cartas: mias, pista: mias.map((c) => c.id).filter((id) => id !== st.suplente), suplente: st.suplente },
-      { franquicia: st.rival, cartas: suyas, ...IA.alinear(suyas) },
-      azar() < 0.5 ? YO : RIVAL,
-    );
-    R.fijarMarcajes(st.p, RIVAL, IA.marcar(st.p, RIVAL));
-    st.marcajes = IA.marcar(st.p, YO);
+    const yo = { franquicia: st.mio, cartas: mias, pista: mias.map((c) => c.id).filter((id) => id !== st.suplente), suplente: st.suplente };
+    const el = { franquicia: st.rival, cartas: suyas, ...IA.alinear(suyas) };
+    [YO, RIVAL] = st.enCasa ? [R.LOCAL, R.VISITANTE] : [R.VISITANTE, R.LOCAL];
+    st.p = st.enCasa ? R.crearPartido(yo, el) : R.crearPartido(el, yo);
+    proponerDuelos();
     st.tirador = null;
     st.resultado = null;
-    st.pantalla = "marcajes";
+    st.pantalla = "duelos";
+  }
+
+  /** Los duelos que haría la máquina, vistos desde mi lado (id rival → id mío). */
+  function proponerDuelos() {
+    const duelos = Object.entries(IA.emparejar(st.p!));
+    st.duelos = Object.fromEntries(st.enCasa ? duelos.map(([local, visitante]) => [visitante, local]) : duelos);
   }
 
   function mostrarTirada(resultado: Resultado) {
@@ -382,20 +402,19 @@ const datos = { franquicias: mundo.franquicias, jugadores: mundo.jugadores };
     R.cambiar(p, YO, sale);
     const suyo = IA.decidirCambio(p, RIVAL);
     if (suyo) R.cambiar(p, RIVAL, suyo);
-    R.fijarMarcajes(p, RIVAL, IA.marcar(p, RIVAL));
-    st.marcajes = IA.marcar(p, YO);
-    st.pantalla = "marcajes";
+    proponerDuelos();
+    st.pantalla = "duelos";
     pintar();
   }
 
   mesa.addEventListener("change", (e) => {
     const sel = e.target as HTMLSelectElement;
     if (!sel.dataset.rival) return;
-    // Si ese jugador ya marcaba a otro rival, se intercambian.
-    const anterior = st.marcajes[sel.dataset.rival];
-    const otro = Object.keys(st.marcajes).find((r) => r !== sel.dataset.rival && st.marcajes[r] === sel.value);
-    if (otro) st.marcajes[otro] = anterior;
-    st.marcajes[sel.dataset.rival] = sel.value;
+    // Si ese jugador ya tenía otra pareja, se intercambian.
+    const anterior = st.duelos[sel.dataset.rival];
+    const otro = Object.keys(st.duelos).find((r) => r !== sel.dataset.rival && st.duelos[r] === sel.value);
+    if (otro) st.duelos[otro] = anterior;
+    st.duelos[sel.dataset.rival] = sel.value;
     pintar();
   });
 
@@ -418,17 +437,20 @@ const datos = { franquicias: mundo.franquicias, jugadores: mundo.jugadores };
       case "a-alineacion":
         st.pantalla = "alineacion";
         break;
+      case "en-casa":
+        st.enCasa = id === "si";
+        break;
       case "suplente":
         st.suplente = id!;
         break;
-      case "a-marcajes":
+      case "a-duelos":
         empezar();
         break;
-      case "marcaje-auto":
-        st.marcajes = IA.marcar(p!, YO);
+      case "duelos-auto":
+        proponerDuelos();
         break;
       case "a-partido":
-        R.fijarMarcajes(p!, YO, st.marcajes);
+        R.fijarDuelos(p!, Object.fromEntries(Object.entries(st.duelos).map(([suyo, mio]) => (st.enCasa ? [mio, suyo] : [suyo, mio]))));
         if (p!.fase === "descanso") R.terminarDescanso(p!);
         st.pantalla = "partido";
         break;
@@ -608,7 +630,7 @@ const datos = { franquicias: mundo.franquicias, jugadores: mundo.jugadores };
     font-weight: 500;
     opacity: 0.85;
   }
-  .marcajes {
+  .duelos {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;

@@ -1,4 +1,4 @@
-# Nimbo · Reglamento v0.5
+# Nimbo · Reglamento v0.6
 
 > El juego con el que se deciden los partidos de la Liga Nimbo: baloncesto 3x3 con cartas y dos dados.
 > Se puede jugar en la web, con papel o dejar que el motor lo juegue con el plan de cada equipo.
@@ -56,8 +56,10 @@ La liga es mixta. Las cartas son solo números y el género nunca interviene en 
 ## 3. Preparación
 
 1. Cada equipo pone 3 cartas en pista y deja 1 de suplente.
-2. **Marcajes:** cada equipo decide en secreto a qué rival marca cada uno de sus 3 jugadores, uno a uno. Se revelan a la vez.
-3. Se sortea quién ataca primero.
+2. **Duelos:** el equipo **local** empareja a sus 3 jugadores en pista con los 3 del visitante. Cada uno marca a su pareja, y su pareja le marca a su vez. Si no hay local, se sortea.
+3. **El visitante ataca primero.**
+
+Jugar en casa pesa, como en el baloncesto de verdad: con las cartas de la liga, el local gana un 59 % de los partidos. Casi toda la ventaja está en el descanso, cuando el local ya sabe a quién le quedan tiros (si solo eligiera al principio, ganaría un 51 %). Atacar primero o segundo no cambia nada (simulado en la v0.6).
 
 ---
 
@@ -93,7 +95,7 @@ Salen unos 3 mates y unos 3 tapones por jornada. Los mates son cosa sobre todo d
 - **Descanso:** cuando los dos equipos han hecho **4 ataques**.
   - **El suplente entra obligatoriamente**, con sus 2 fichas.
   - Sale quien tú elijas, pero **solo puede salir alguien que ya haya gastado sus 2 fichas**. Siempre habrá al menos uno: con 4 tiros entre 3 jugadores, alguien ha tenido que tirar dos veces.
-  - Después, cada equipo vuelve a decidir sus marcajes.
+  - Después, el local vuelve a decidir los duelos.
 - **Tiempo muerto:** una vez por partido, cada equipo puede repetir una tirada de ataque propia que haya fallado.
 - **Final:** gana quien más puntos tenga cuando los dos equipos han hecho sus **8 ataques**.
 - **Muerte súbita:** si hay empate, cada equipo hace un ataque más, siguiendo el turno (empieza quien empezó el partido). Puede tirar cualquiera de pista, tenga fichas o no. Se repite hasta que, tras un ataque de cada uno, alguien vaya por delante.
@@ -105,7 +107,7 @@ Salen unos 3 mates y unos 3 tapones por jornada. Los mates son cosa sobre todo d
 
 - **Cuándo gastar a tu estrella.** ¿Sus dos tiros al principio, para coger ventaja, o los guardas para el final, cuando más pesan?
 - **Quién sale en el descanso.** Solo sale quien ya no tiene tiros. Si tu mejor atacante defiende mal, gasta pronto sus fichas y sácalo; si defiende bien, quizá prefieras que siga en pista marcando.
-- **Los marcajes.** Tu mejor defensor sobre su mejor tirador… o sobre quien todavía tiene fichas.
+- **Los duelos, si juegas en casa.** Tu mejor defensor contra su mejor tirador… pero cada duelo va en los dos sentidos: quien le para también tiene que anotarle.
 - **El farol.** Cada ataque es un pulso: ¿voy a lo seguro dentro o les leo la mente y tiro de fuera?
 
 ---
@@ -185,7 +187,7 @@ Mientras no haya dirección deportiva elegida por la afición, las decisiones la
 
 Antes de cada Noche Nimbo, la dirección deportiva de cada franquicia entrega un **plan de partido** corto:
 - Quiénes empiezan y quién sale en el descanso.
-- Los marcajes.
+- Los duelos, si juega en casa.
 - La preferencia de tiro: cuánto ir dentro o fuera y en qué orden gastar los tiros.
 - Qué suele cerrar en defensa.
 

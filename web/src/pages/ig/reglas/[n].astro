@@ -66,7 +66,7 @@ const acento = n === 6 ? franquicias[atacante.franquicia].colores[0] : "#4f46e5"
         <ul class="puntos">
           <li><strong>3 en pista y 1 suplente.</strong> Cada carta tiene <strong>Ataque</strong> y <strong>Defensa</strong>, del 2 al 6.</li>
           <li>Cada carta tiene <strong class="oro">{REGLAS.fichasPorCarta} tiros ●●</strong>. Por eso cada equipo ataca <strong>{REGLAS.ataquesPorEquipo} veces</strong>, por turnos.</li>
-          <li>Cada jugador en pista <strong>marca a un rival</strong>. Tú decides los emparejamientos.</li>
+          <li><strong>Duelos:</strong> cada jugador marca a una pareja rival. <strong>Los elige el local</strong>; el visitante ataca primero.</li>
         </ul>
       </section>
     )
@@ -174,7 +174,7 @@ const acento = n === 6 ? franquicias[atacante.franquicia].colores[0] : "#4f46e5"
         <h1 class="titular">Descanso<br />y final</h1>
         <ul class="puntos grandes">
           <li>
-            <strong>Tras {REGLAS.descansoTras} ataques</strong> de cada equipo, descanso: <strong>el suplente entra sí o sí</strong>, por alguien que ya haya gastado sus dos tiros. Y se rehacen los marcajes.
+            <strong>Tras {REGLAS.descansoTras} ataques</strong> de cada equipo, descanso: <strong>el suplente entra sí o sí</strong>, por alguien que ya haya gastado sus dos tiros. Y el local rehace los duelos.
           </li>
           <li><strong>Tiempo muerto:</strong> una vez por partido, repites un tiro fallado.</li>
           <li><strong>Gana quien más anote</strong> tras los {REGLAS.ataquesPorEquipo} ataques.</li>

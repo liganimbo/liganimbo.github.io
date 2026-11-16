@@ -11,7 +11,8 @@ import {
   carta,
   crearPartido,
   defensorDe,
-  fijarMarcajes,
+  fijarDuelos,
+  LOCAL,
   necesita,
   probabilidad,
   puedeTiempoMuerto,
@@ -20,7 +21,7 @@ import {
   terminarDescanso,
   tiempoMuerto,
   tiradoresDisponibles,
-  valorAtaque,
+  VISITANTE,
 } from "./reglas.ts";
 
 /** Carácter de juego de un equipo. `fuera`: cuánto le gusta tirar de 3 (0-1). */
@@ -31,7 +32,6 @@ export const ESTILO_NEUTRO: Estilo = { fuera: 0.5 };
 
 const TIPOS: Tipo[] = ["dentro", "fuera"];
 const valorCarta = (c: Carta) => c.ataque + c.defensa + (c.icono ? 1 : 0);
-const amenaza = (c: Carta) => Math.max(valorAtaque(c, "dentro"), valorAtaque(c, "fuera"));
 const muralla = (c: Carta) => c.defensa + (c.icono === "Muro" ? REGLAS.bonusMuro / 2 : 0);
 
 export function alinear(cartas: Carta[]): { pista: string[]; suplente: string | null } {
@@ -39,13 +39,31 @@ export function alinear(cartas: Carta[]): { pista: string[]; suplente: string | 
   return { pista: orden.slice(0, 3).map((c) => c.id), suplente: orden[3]?.id ?? null };
 }
 
-/** El mejor defensor a la mayor amenaza, y así sucesivamente. */
-export function marcar(p: Partido, lado: Lado): Record<string, string> {
-  const propios = [...p.equipos[lado].pista].sort((a, b) => muralla(carta(p, lado, b)) - muralla(carta(p, lado, a)));
-  const rivales = [...p.equipos[rival(lado)].pista].sort(
-    (a, b) => amenaza(carta(p, rival(lado), b)) - amenaza(carta(p, rival(lado), a)),
-  );
-  return Object.fromEntries(rivales.map((r, i) => [r, propios[i]]));
+/** Puntos esperados de `at` tirando `tipo` contra `de`, si la defensa cierra al 50%. */
+function esperado(at: Carta, de: Carta, tipo: Tipo) {
+  const pCierra = probabilidad(necesita(at, de, tipo, tipo));
+  const pAbierto = probabilidad(necesita(at, de, tipo, tipo === "dentro" ? "fuera" : "dentro"));
+  return REGLAS.puntos[tipo] * (pCierra + pAbierto) / 2;
+}
+const esperadoContra = (at: Carta, de: Carta) => Math.max(...TIPOS.map((tipo) => esperado(at, de, tipo)));
+
+function permutaciones<T>(lista: T[]): T[][] {
+  if (lista.length <= 1) return [lista];
+  return lista.flatMap((x, i) => permutaciones([...lista.slice(0, i), ...lista.slice(i + 1)]).map((resto) => [x, ...resto]));
+}
+
+/** Los duelos que más convienen al local: lo que anotan los suyos menos lo que anotan los rivales, según los tiros que les quedan. */
+export function emparejar(p: Partido): Record<string, string> {
+  const locales = p.equipos[LOCAL].pista;
+  const valor = (visitantes: string[]) =>
+    locales.reduce((suma, l, i) => {
+      const mio = carta(p, LOCAL, l);
+      const suyo = carta(p, VISITANTE, visitantes[i]);
+      const tiros = (lado: Lado, id: string) => Math.max(p.equipos[lado].fichas[id], 0.5);
+      return suma + esperadoContra(mio, suyo) * tiros(LOCAL, l) - esperadoContra(suyo, mio) * tiros(VISITANTE, visitantes[i]);
+    }, 0);
+  const mejor = permutaciones(p.equipos[VISITANTE].pista).sort((a, b) => valor(b) - valor(a))[0];
+  return Object.fromEntries(locales.map((l, i) => [l, mejor[i]]));
 }
 
 /** Puntos esperados de cada opción de ataque, suponiendo que la defensa cierra al 50%. */
@@ -54,11 +72,7 @@ export function opcionesDeAtaque(p: Partido) {
   return tiradoresDisponibles(p).flatMap((id) => {
     const at = carta(p, lado, id);
     const de = carta(p, rival(lado), defensorDe(p, id));
-    return TIPOS.map((tipo) => {
-      const pCierra = probabilidad(necesita(at, de, tipo, tipo));
-      const pAbierto = probabilidad(necesita(at, de, tipo, tipo === "dentro" ? "fuera" : "dentro"));
-      return { tirador: id, tipo, esperado: REGLAS.puntos[tipo] * (pCierra + pAbierto) / 2 };
-    });
+    return TIPOS.map((tipo) => ({ tirador: id, tipo, esperado: esperado(at, de, tipo) }));
   });
 }
 
@@ -109,9 +123,8 @@ export function jugarAutomatico(local: EquipoAutomatico, visitante: EquipoAutoma
   const p = crearPartido(
     { franquicia: local.franquicia, cartas: local.cartas, ...alinear(local.cartas) },
     { franquicia: visitante.franquicia, cartas: visitante.cartas, ...alinear(visitante.cartas) },
-    azar() < 0.5 ? 0 : 1,
   );
-  for (const lado of [0, 1] as Lado[]) fijarMarcajes(p, lado, marcar(p, lado));
+  fijarDuelos(p, emparejar(p));
 
   while (p.fase !== "final") {
     if (p.fase === "descanso") {
@@ -119,7 +132,7 @@ export function jugarAutomatico(local: EquipoAutomatico, visitante: EquipoAutoma
         const sale = decidirCambio(p, lado);
         if (sale) cambiar(p, lado, sale);
       }
-      for (const lado of [0, 1] as Lado[]) fijarMarcajes(p, lado, marcar(p, lado));
+      fijarDuelos(p, emparejar(p));
       terminarDescanso(p);
       continue;
     }

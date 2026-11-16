@@ -88,8 +88,8 @@ const enPista = CARTAS_POR_EQUIPO - 1;
   <h2>Preparación</h2>
   <ol class="pasos">
     <li>Cada equipo pone <strong>{enPista} cartas en pista</strong> y deja <strong>1 de suplente</strong>, con sus fichas al lado.</li>
-    <li><strong>Marcajes:</strong> cada equipo decide en secreto a qué rival marca cada uno de sus {enPista} jugadores, uno a uno. Se revelan a la vez.</li>
-    <li>Se sortea quién ataca primero. Los equipos atacan por turnos: <strong>{REGLAS.ataquesPorEquipo} ataques cada uno</strong>.</li>
+    <li><strong>Duelos:</strong> el equipo local empareja a sus {enPista} jugadores en pista con los {enPista} del visitante. Cada uno marca a su pareja. (Si no hay local, se sortea.)</li>
+    <li><strong>El visitante ataca primero.</strong> Los equipos atacan por turnos: <strong>{REGLAS.ataquesPorEquipo} ataques cada uno</strong>.</li>
   </ol>
 
   <h2>Cada ataque es un farol</h2>
@@ -164,7 +164,7 @@ const enPista = CARTAS_POR_EQUIPO - 1;
   <ul class="lista">
     <li>
       <strong>Descanso:</strong> cuando los dos equipos han hecho {REGLAS.descansoTras} ataques. <strong>El suplente entra
-      obligatoriamente</strong>, con sus fichas, por alguien que ya haya gastado las suyas. Después se rehacen los marcajes.
+      obligatoriamente</strong>, con sus fichas, por alguien que ya haya gastado las suyas. Después el local vuelve a decidir los duelos.
     </li>
     <li><strong>Tiempo muerto:</strong> una vez por partido, cada equipo puede repetir un tiro fallado.</li>
     <li><strong>Final:</strong> gana quien más puntos tenga tras los {REGLAS.ataquesPorEquipo} ataques de cada equipo.</li>
@@ -178,7 +178,7 @@ const enPista = CARTAS_POR_EQUIPO - 1;
   <div class="consejos">
     <div class="tarjeta"><strong>¿Cuándo gastas a tu estrella?</strong><span class="apagado">Sus dos tiros al principio para coger ventaja, o guardados para el final.</span></div>
     <div class="tarjeta"><strong>¿Quién sale en el descanso?</strong><span class="apagado">Solo sale quien ya no tiene tiros. Saca a quien peor defienda.</span></div>
-    <div class="tarjeta"><strong>¿A quién marcas?</strong><span class="apagado">Tu mejor defensa sobre su mejor tirador… o sobre quien aún tiene fichas.</span></div>
+    <div class="tarjeta"><strong>¿Qué duelos pones en casa?</strong><span class="apagado">Tu mejor defensa contra su mejor tirador… pero cada duelo va en los dos sentidos.</span></div>
     <div class="tarjeta"><strong>¿Dentro o fuera?</strong><span class="apagado">Ir a lo seguro o leerle la mente al rival. Ahí está el juego.</span></div>
   </div>
 
