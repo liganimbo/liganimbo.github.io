@@ -1,4 +1,5 @@
 // Una escena por tipo (ver tipos.ts). Todas se colocan en la zona que no tapa Instagram.
+import type React from "react";
 import { Easing, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
 import { Carta, Dado, Escudo } from "../elementos";
 import { COLOR, texto } from "../marca";
@@ -187,7 +188,7 @@ export const Pregunta = ({ e }: De<"pregunta">) => {
   );
 };
 
-// --- Revela: qué tiró y qué cerraron, y la cuenta antes de tirar ---------------------------------
+// --- Revela: qué tiró y qué cerraron, y la defensa total -----------------------------------------
 
 /** Una línea de la cuenta: qué es, de dónde sale y cuánto da. */
 const LineaCuenta = ({ que, suma, da, colorDa, desde }: { que: string; suma: string; da: string; colorDa: string; desde: number }) => {
@@ -207,8 +208,6 @@ export const Revela = ({ e }: De<"revela">) => {
   const acierta = e.tira.tipo === e.cierra.tipo;
   const c = e.cuenta;
   const defensa = [`${c.base}`, `${c.defensa} de ${c.defensor}`, c.muro ? `${c.muro} de Muro` : "", c.cierre ? `${c.cierre} por acertar` : ""].filter(Boolean).join(" + ");
-  const ataque = [`dados`, `${c.ataque} de ${c.tirador}`, c.bonus ? `${c.bonus} de ${c.icono}` : ""].filter(Boolean).join(" + ");
-  const necesita = c.margen ? `${c.total} + ${c.margen} por tirar de fuera − ${c.ataque + c.bonus}` : `${c.total} − ${c.ataque + c.bonus}`;
   return (
     <Zona gap={36}>
       <div style={{ ...titular, fontSize: 96, ...entra(frame, 0) }}>{e.titulo}</div>
@@ -223,50 +222,56 @@ export const Revela = ({ e }: De<"revela">) => {
       <div style={{ ...titular, textAlign: "center", fontSize: 80, color: acierta ? COLOR.lila : COLOR.oro, ...entra(frame, 2.7 * fps) }}>{e.pie}</div>
       <div style={{ display: "flex", flexDirection: "column", gap: 22, marginTop: 10 }}>
         <LineaCuenta que="Defensa" suma={defensa} da={`${c.total}`} colorDa={COLOR.lila} desde={4 * fps} />
-        <LineaCuenta que="Ataque" suma={ataque} da={`+${c.ataque + c.bonus}`} colorDa={COLOR.oro} desde={5.5 * fps} />
-        <LineaCuenta que="Necesita" suma={necesita} da={c.necesita <= 2 ? "✓" : c.necesita > 12 ? "✗" : `${c.necesita}+`} colorDa={COLOR.oro} desde={7 * fps} />
+        {c.margen > 0 && <LineaCuenta que="De fuera" suma={`Hay que superarla por ${c.margen}`} da={`${c.total + c.margen}`} colorDa={COLOR.lila} desde={5.5 * fps} />}
       </div>
     </Zona>
   );
 };
 
-// --- Dados: ruedan, se para uno, luego el otro, y la suma ------------------------------------------
+// --- Dados: la defensa arriba; ruedan, se para uno, luego el otro, y el ataque total -----------------
 
 export const Dados = ({ e }: De<"dados">) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const lanza = 0.5 * fps;
-  const para = [2.3 * fps, 3.1 * fps];
+  const t = e.tirada;
+  const lanza = 0.6 * fps;
+  const para = [2.4 * fps, 3.2 * fps];
   const cara = (n: number, semilla: number) => (frame < para[n] ? ((Math.floor(frame / 3) * 7 + semilla) % 6) + 1 : e.dados[n]);
   const caida = (n: number, desde: string) => interpolate(frame, [lanza, para[n]], [desde, "0px 0px"], { ...fijo, easing: Easing.out(Easing.cubic) });
   const vuelta = (n: number, sentido: number) => `${interpolate(frame, [lanza, para[n]], [sentido * 900, 0], { ...fijo, easing: Easing.out(Easing.cubic) })}deg`;
   const golpe = (n: number) => interpolate(frame, [para[n], para[n] + 4, para[n] + 10], [1, 1.12, 1], fijo);
-  const suma = e.dados[0] + e.dados[1];
   const muestra = para[1] + 0.5 * fps;
+  const objetivo = t.defensa + t.margen;
+  const suma = [`${e.dados[0]} + ${e.dados[1]}`, `${t.ataque} de ${t.tirador}`, t.bonus ? `${t.bonus} de ${t.icono}` : ""].filter(Boolean).join(" + ");
+  const caja = (que: string, valor: string, fondo: string, tinta: string, estilo: React.CSSProperties = {}) => (
+    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "18px 36px", borderRadius: 28, background: fondo, ...estilo }}>
+      <span style={{ ...etiqueta, fontSize: 34, color: tinta }}>{que}</span>
+      <span style={{ ...titular, fontSize: 130, color: tinta }}>{valor}</span>
+    </div>
+  );
   return (
-    <Zona gap={60}>
-      <div style={{ display: "flex", justifyContent: "center", ...entra(frame, 0) }}>
-        <span style={{ ...titular, fontSize: 104, color: COLOR.noche, background: COLOR.oro, padding: "16px 40px", borderRadius: 24 }}>
-          {e.necesita <= 2 ? "Entra seguro" : e.necesita > 12 ? "No puede entrar" : `Necesita ${e.necesita} o más`}
-        </span>
+    <Zona gap={50}>
+      <div style={entra(frame, 0)}>
+        {caja("Defensa", `${t.defensa}`, COLOR.lila, COLOR.noche)}
+        {t.margen > 0 && <div style={{ ...pie, fontSize: 38, color: COLOR.texto, marginTop: 14 }}>De fuera hay que superarla por {t.margen}: llegar a {objetivo}.</div>}
       </div>
       <div style={{ display: "flex", justifyContent: "center", gap: 80, opacity: frame >= lanza ? 1 : 0 }}>
-        <Dado name="Dado 1" lado={250} cara={cara(0, 2)} style={{ rotate: vuelta(0, -1), translate: caida(0, "-400px -300px"), scale: golpe(0) }} />
-        <Dado name="Dado 2" lado={250} cara={cara(1, 5)} style={{ rotate: vuelta(1, 1), translate: caida(1, "400px -360px"), scale: golpe(1) }} />
+        <Dado name="Dado 1" lado={240} cara={cara(0, 2)} style={{ rotate: vuelta(0, -1), translate: caida(0, "-400px -300px"), scale: golpe(0) }} />
+        <Dado name="Dado 2" lado={240} cara={cara(1, 5)} style={{ rotate: vuelta(1, 1), translate: caida(1, "400px -360px"), scale: golpe(1) }} />
       </div>
       <div
         style={{
-          ...titular,
-          textAlign: "center",
-          fontSize: 260,
-          color: suma >= e.necesita ? COLOR.oro : COLOR.apagado,
           opacity: interpolate(frame, [muestra, muestra + 4], [0, 1], fijo),
-          scale: interpolate(frame, [muestra, muestra + 0.5 * fps], [1.6, 1], { ...fijo, easing: Easing.out(Easing.back(2)) }),
+          scale: interpolate(frame, [muestra, muestra + 0.5 * fps], [1.25, 1], { ...fijo, easing: Easing.out(Easing.back(2)) }),
         }}
       >
-        = {suma}
+        {caja("Ataque", `${t.total}`, t.anota ? COLOR.oro : "#2a2d48", t.anota ? COLOR.noche : COLOR.texto)}
+        <div style={{ ...pie, fontSize: 38, color: COLOR.texto, marginTop: 14 }}>{suma}</div>
       </div>
-      {e.pie && <div style={{ ...pie, fontSize: 38, textAlign: "center", ...entra(frame, muestra + 0.5 * fps) }}>{e.pie}</div>}
+      <div style={{ ...titular, textAlign: "center", fontSize: 92, color: t.anota ? COLOR.oro : COLOR.lila, ...entra(frame, muestra + 0.8 * fps) }}>
+        {t.total} contra {objetivo}: {t.anota ? "¡llega!" : "no llega"}
+      </div>
+      {e.pie && <div style={{ ...pie, fontSize: 38, textAlign: "center", ...entra(frame, muestra + 1.3 * fps) }}>{e.pie}</div>}
     </Zona>
   );
 };

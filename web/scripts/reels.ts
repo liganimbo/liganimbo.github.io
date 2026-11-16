@@ -35,7 +35,7 @@ type Escena = { segundos?: number; acento?: string } & (
   | { tipo: "tabla"; titulo: string; tirador: string; tabla: Record<Tipo, Record<Tipo, number>> }
   | { tipo: "pregunta"; lineas: string[]; pie: string }
   | { tipo: "revela"; titulo: string; tira: { quien: string; tipo: Tipo }; cierra: { quien: string; tipo: Tipo }; pie: string; cuenta: ReturnType<typeof cuentaDe> }
-  | { tipo: "dados"; necesita: number; dados: number[]; pie?: string }
+  | { tipo: "dados"; dados: number[]; tirada: ReturnType<typeof tiradaDe>; pie?: string }
   | { tipo: "resultado"; titulo: string; bien: boolean; equipos?: Equipo[]; puntos?: number[]; resalta?: number; pie?: string }
   | { tipo: "lista"; titulo: string; items: { escudo?: Equipo; carta?: Ficha; titulo: string; texto: string }[] }
   | { tipo: "carta"; rango?: string; carta: Ficha; titulo: string; pie?: string }
@@ -85,26 +85,36 @@ function todasLasParejas(): [string, string][] {
   return IDS.flatMap((a) => IDS.filter((b) => b !== a).map((b) => [a, b] as [string, string]));
 }
 
-/** La cuenta antes de tirar: la defensa total, lo que suma el ataque y lo que tienen que sacar los dados. */
+/** La defensa total al descubrir qué se tira y qué se cierra (y, de fuera, que hay que superarla por 2). */
 function cuentaDe(j: Jugada) {
-  const at = mundo.jugadores[j.tirador];
   const de = mundo.jugadores[j.defensor];
-  const ataque = valorAtaque(at, j.tipo);
   return {
-    tirador: nombre(j.tirador),
     defensor: nombre(j.defensor),
-    ataque: at.ataque,
-    icono: ataque > at.ataque ? at.icono : null,
-    bonus: ataque - at.ataque,
     base: REGLAS.baseDefensa,
     defensa: de.defensa,
     muro: de.icono === "Muro" && (!REGLAS.muroSoloDentro || j.tipo === "dentro") ? REGLAS.bonusMuro : 0,
     cierre: j.cierra === j.tipo ? REGLAS.bonusCierre : 0,
     total: j.defensa,
     margen: j.tipo === "fuera" ? REGLAS.margenFuera : 0,
-    necesita: j.necesita,
   };
 }
+
+/** La tirada: la defensa que hay que alcanzar (o superar por 2, de fuera) y el ataque total con los dados. */
+function tiradaDe(j: Jugada) {
+  const at = mundo.jugadores[j.tirador];
+  const ataque = valorAtaque(at, j.tipo);
+  return {
+    tirador: nombre(j.tirador),
+    ataque: at.ataque,
+    icono: ataque > at.ataque ? at.icono : null,
+    bonus: ataque - at.ataque,
+    total: j.ataque,
+    defensa: j.defensa,
+    margen: j.tipo === "fuera" ? REGLAS.margenFuera : 0,
+    anota: j.anota,
+  };
+}
+const dadosDe = (j: Jugada, pie?: string): Escena => ({ tipo: "dados", dados: j.dados, tirada: tiradaDe(j), pie });
 
 /** Escenas de una jugada: quién tira y contra quién, qué eligieron con su cuenta, y los dados. */
 function escenasJugada(p: Partido, i: number, opciones: { titulo?: string; pieCartas?: string } = {}): Escena[] {
@@ -121,7 +131,7 @@ function escenasJugada(p: Partido, i: number, opciones: { titulo?: string; pieCa
       pie: j.cierra === j.tipo ? "La defensa acierta: +2" : "La defensa falla",
       cuenta: cuentaDe(j),
     },
-    { tipo: "dados", necesita: j.necesita, dados: j.dados },
+    dadosDe(j),
   ];
 }
 
@@ -173,7 +183,7 @@ function reglaCuenta(): Escena[] {
     { tipo: "cartas", titulo: "Ataque contra Defensa", cartas: [ficha(j.tirador), ficha(j.defensor)], roles: ["Tira", "Contra"] },
     { tipo: "titular", lineas: ["Ataque:", "dos dados + su Ataque"], colores: ["oro", "texto"], pie: `${nombre(j.tirador)}: dados + ${valorAtaque(at, j.tipo)}${at.icono === "Aro" ? " (su Aro suma 2 al tirar dentro)" : ""}` },
     { tipo: "titular", lineas: ["Defensa:", "5 + su Defensa"], colores: ["lila", "texto"], pie: `${nombre(j.defensor)}: 5 + ${de.defensa}${de.icono === "Muro" ? " + 2 de su Muro" : ""} + 2 porque ha cerrado dentro = ${j.defensa}` },
-    { tipo: "dados", necesita: j.necesita, dados: j.dados, pie: `Necesita ${j.necesita}. Saca justo ${j.necesita}.` },
+    dadosDe(j, "Justo lo que valía la defensa. Dentro, con igualarla basta."),
     { tipo: "resultado", titulo: "¡Entra!", bien: true, pie: "Dentro entra si iguala la defensa. Fuera, si la supera por 2." },
     { tipo: "titular", lineas: ["Así de simple.", "Así de tenso."], colores: ["texto", "oro"] },
   ];
@@ -264,10 +274,10 @@ function reglaMatesTapones(): Escena[] {
     gancho(["Mates", "y tapones."]),
     { tipo: "titular", lineas: ["Mate:"], colores: ["oro"], pie: `Canasta de dentro que supera a la defensa por ${REGLAS.margenMate} o más.` },
     { tipo: "cartas", titulo: `${nombre(jm.tirador)} contra ${nombre(jm.defensor)}`, cartas: [ficha(jm.tirador), ficha(jm.defensor)], roles: ["Tira", "Contra"] },
-    { tipo: "dados", necesita: jm.necesita, dados: jm.dados, pie: `${jm.ataque} de ataque contra ${jm.defensa} de defensa: ${jm.ataque - jm.defensa} por encima.` },
+    dadosDe(jm, `${jm.ataque - jm.defensa} por encima de la defensa.`),
     { tipo: "resultado", titulo: "¡Mate!", bien: true },
     { tipo: "titular", lineas: ["Tapón:"], colores: ["lila"], pie: `Tiro de dentro que se queda corto por ${REGLAS.margenTapon} o más.` },
-    { tipo: "dados", necesita: jt.necesita, dados: jt.dados, pie: `${nombre(jt.tirador)} saca ${jt.ataque} contra ${jt.defensa} de ${nombre(jt.defensor)}.` },
+    dadosDe(jt, `Se queda ${jt.defensa - jt.ataque} por debajo: tapón de ${nombre(jt.defensor)}.`),
     { tipo: "resultado", titulo: "¡Tapón!", bien: false, pie: "No cambian el marcador. Pero se cantan." },
   ];
 }
@@ -330,7 +340,7 @@ function dentroOFuera(p: Partido, i: number, contexto: string, conFirma: boolean
       pie: j.cierra === j.tipo ? "La defensa acierta: +2" : "La defensa falla",
       cuenta: cuentaDe(j),
     },
-    { tipo: "dados", necesita: j.necesita, dados: j.dados },
+    dadosDe(j),
     {
       tipo: "resultado",
       titulo: exclamacion(j),

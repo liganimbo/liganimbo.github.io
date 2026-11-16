@@ -64,28 +64,32 @@
     },
     "pie": "La defensa falla",
     "cuenta": {
-     "tirador": "Nia",
      "defensor": "Kenna",
-     "ataque": 4,
-     "icono": "Tiro",
-     "bonus": 1,
      "base": 5,
      "defensa": 6,
      "muro": 0,
      "cierre": 0,
      "total": 11,
-     "margen": 2,
-     "necesita": 8
+     "margen": 2
     },
     "segundos": 10
    },
    {
     "tipo": "dados",
-    "necesita": 8,
     "dados": [
      5,
      6
     ],
+    "tirada": {
+     "tirador": "Nia",
+     "ataque": 4,
+     "icono": "Tiro",
+     "bonus": 1,
+     "total": 16,
+     "defensa": 11,
+     "margen": 2,
+     "anota": true
+    },
     "segundos": 6
    },
    {
@@ -195,28 +199,32 @@
     },
     "pie": "La defensa acierta: +2",
     "cuenta": {
-     "tirador": "Dalia",
      "defensor": "Goran",
-     "ataque": 4,
-     "icono": "Tiro",
-     "bonus": 1,
      "base": 5,
      "defensa": 3,
      "muro": 0,
      "cierre": 2,
      "total": 10,
-     "margen": 2,
-     "necesita": 7
+     "margen": 2
     },
     "segundos": 10
    },
    {
     "tipo": "dados",
-    "necesita": 7,
     "dados": [
      3,
      2
     ],
+    "tirada": {
+     "tirador": "Dalia",
+     "ataque": 4,
+     "icono": "Tiro",
+     "bonus": 1,
+     "total": 10,
+     "defensa": 10,
+     "margen": 2,
+     "anota": false
+    },
     "segundos": 6
    },
    {
@@ -318,12 +326,21 @@
    },
    {
     "tipo": "dados",
-    "necesita": 7,
     "dados": [
      6,
      1
     ],
-    "pie": "Necesita 7. Saca justo 7.",
+    "tirada": {
+     "tirador": "Andrei",
+     "ataque": 2,
+     "icono": null,
+     "bonus": 0,
+     "total": 9,
+     "defensa": 9,
+     "margen": 0,
+     "anota": true
+    },
+    "pie": "Justo lo que valía la defensa. Dentro, con igualarla basta.",
     "segundos": 6
    },
    {
@@ -466,28 +483,32 @@
     },
     "pie": "La defensa acierta: +2",
     "cuenta": {
-     "tirador": "Andrei",
      "defensor": "Noa",
-     "ataque": 2,
-     "icono": null,
-     "bonus": 0,
      "base": 5,
      "defensa": 2,
      "muro": 0,
      "cierre": 2,
      "total": 9,
-     "margen": 2,
-     "necesita": 9
+     "margen": 2
     },
     "segundos": 10
    },
    {
     "tipo": "dados",
-    "necesita": 9,
     "dados": [
      1,
      5
     ],
+    "tirada": {
+     "tirador": "Andrei",
+     "ataque": 2,
+     "icono": null,
+     "bonus": 0,
+     "total": 8,
+     "defensa": 9,
+     "margen": 2,
+     "anota": false
+    },
     "segundos": 6
    },
    {
@@ -840,28 +861,32 @@
     },
     "pie": "La defensa acierta: +2",
     "cuenta": {
-     "tirador": "Marta",
      "defensor": "Celia",
-     "ataque": 3,
-     "icono": "Tiro",
-     "bonus": 1,
      "base": 5,
      "defensa": 2,
      "muro": 0,
      "cierre": 2,
      "total": 9,
-     "margen": 2,
-     "necesita": 7
+     "margen": 2
     },
     "segundos": 10
    },
    {
     "tipo": "dados",
-    "necesita": 7,
     "dados": [
      2,
      5
     ],
+    "tirada": {
+     "tirador": "Marta",
+     "ataque": 3,
+     "icono": "Tiro",
+     "bonus": 1,
+     "total": 11,
+     "defensa": 9,
+     "margen": 2,
+     "anota": true
+    },
     "segundos": 6
    },
    {
@@ -1380,28 +1405,32 @@
     },
     "pie": "La defensa acierta: +2",
     "cuenta": {
-     "tirador": "Vera",
      "defensor": "Dalia",
-     "ataque": 2,
-     "icono": null,
-     "bonus": 0,
      "base": 5,
      "defensa": 2,
      "muro": 0,
      "cierre": 2,
      "total": 9,
-     "margen": 2,
-     "necesita": 9
+     "margen": 2
     },
     "segundos": 10
    },
    {
     "tipo": "dados",
-    "necesita": 9,
     "dados": [
      6,
      4
     ],
+    "tirada": {
+     "tirador": "Vera",
+     "ataque": 2,
+     "icono": null,
+     "bonus": 0,
+     "total": 12,
+     "defensa": 9,
+     "margen": 2,
+     "anota": true
+    },
     "segundos": 6
    },
    {
@@ -1765,28 +1794,32 @@
     },
     "pie": "La defensa acierta: +2",
     "cuenta": {
-     "tirador": "Ainhoa",
      "defensor": "Marta",
-     "ataque": 2,
-     "icono": null,
-     "bonus": 0,
      "base": 5,
      "defensa": 3,
      "muro": 0,
      "cierre": 2,
      "total": 10,
-     "margen": 0,
-     "necesita": 8
+     "margen": 0
     },
     "segundos": 10
    },
    {
     "tipo": "dados",
-    "necesita": 8,
     "dados": [
      6,
      3
     ],
+    "tirada": {
+     "tirador": "Ainhoa",
+     "ataque": 2,
+     "icono": null,
+     "bonus": 0,
+     "total": 11,
+     "defensa": 10,
+     "margen": 0,
+     "anota": true
+    },
     "segundos": 6
    },
    {
@@ -2069,28 +2102,32 @@
     },
     "pie": "La defensa falla",
     "cuenta": {
-     "tirador": "Enzo",
      "defensor": "Celia",
-     "ataque": 3,
-     "icono": null,
-     "bonus": 0,
      "base": 5,
      "defensa": 2,
      "muro": 0,
      "cierre": 0,
      "total": 7,
-     "margen": 2,
-     "necesita": 6
+     "margen": 2
     },
     "segundos": 10
    },
    {
     "tipo": "dados",
-    "necesita": 6,
     "dados": [
      2,
      6
     ],
+    "tirada": {
+     "tirador": "Enzo",
+     "ataque": 3,
+     "icono": null,
+     "bonus": 0,
+     "total": 11,
+     "defensa": 7,
+     "margen": 2,
+     "anota": true
+    },
     "segundos": 6
    },
    {
@@ -2197,12 +2234,21 @@
    },
    {
     "tipo": "dados",
-    "necesita": 6,
     "dados": [
      6,
      6
     ],
-    "pie": "17 de ataque contra 11 de defensa: 6 por encima.",
+    "tirada": {
+     "tirador": "Santi",
+     "ataque": 5,
+     "icono": null,
+     "bonus": 0,
+     "total": 17,
+     "defensa": 11,
+     "margen": 0,
+     "anota": true
+    },
+    "pie": "6 por encima de la defensa.",
     "segundos": 6
    },
    {
@@ -2224,12 +2270,21 @@
    },
    {
     "tipo": "dados",
-    "necesita": 7,
     "dados": [
      1,
      1
     ],
-    "pie": "Nia saca 6 contra 11 de Kenna.",
+    "tirada": {
+     "tirador": "Nia",
+     "ataque": 4,
+     "icono": null,
+     "bonus": 0,
+     "total": 6,
+     "defensa": 11,
+     "margen": 0,
+     "anota": false
+    },
+    "pie": "Se queda 5 por debajo: tapón de Kenna.",
     "segundos": 6
    },
    {
@@ -2372,28 +2427,32 @@
     },
     "pie": "La defensa falla",
     "cuenta": {
-     "tirador": "Noa",
      "defensor": "Vera",
-     "ataque": 4,
-     "icono": "Aro",
-     "bonus": 2,
      "base": 5,
      "defensa": 2,
      "muro": 0,
      "cierre": 0,
      "total": 7,
-     "margen": 0,
-     "necesita": 1
+     "margen": 0
     },
     "segundos": 10
    },
    {
     "tipo": "dados",
-    "necesita": 1,
     "dados": [
      3,
      3
     ],
+    "tirada": {
+     "tirador": "Noa",
+     "ataque": 4,
+     "icono": "Aro",
+     "bonus": 2,
+     "total": 12,
+     "defensa": 7,
+     "margen": 0,
+     "anota": true
+    },
     "segundos": 6
    },
    {
@@ -2555,28 +2614,32 @@
     },
     "pie": "La defensa falla",
     "cuenta": {
-     "tirador": "Ciro",
      "defensor": "Carla",
-     "ataque": 3,
-     "icono": null,
-     "bonus": 0,
      "base": 5,
      "defensa": 4,
      "muro": 0,
      "cierre": 0,
      "total": 9,
-     "margen": 2,
-     "necesita": 8
+     "margen": 2
     },
     "segundos": 10
    },
    {
     "tipo": "dados",
-    "necesita": 8,
     "dados": [
      5,
      6
     ],
+    "tirada": {
+     "tirador": "Ciro",
+     "ataque": 3,
+     "icono": null,
+     "bonus": 0,
+     "total": 14,
+     "defensa": 9,
+     "margen": 2,
+     "anota": true
+    },
     "segundos": 6
    },
    {
@@ -2727,28 +2790,32 @@
     },
     "pie": "La defensa falla",
     "cuenta": {
-     "tirador": "Gonzalo",
      "defensor": "Carla",
-     "ataque": 4,
-     "icono": null,
-     "bonus": 0,
      "base": 5,
      "defensa": 4,
      "muro": 0,
      "cierre": 0,
      "total": 9,
-     "margen": 2,
-     "necesita": 7
+     "margen": 2
     },
     "segundos": 10
    },
    {
     "tipo": "dados",
-    "necesita": 7,
     "dados": [
      5,
      2
     ],
+    "tirada": {
+     "tirador": "Gonzalo",
+     "ataque": 4,
+     "icono": null,
+     "bonus": 0,
+     "total": 11,
+     "defensa": 9,
+     "margen": 2,
+     "anota": true
+    },
     "segundos": 6
    },
    {
@@ -2922,28 +2989,32 @@
     },
     "pie": "La defensa falla",
     "cuenta": {
-     "tirador": "Hugo",
      "defensor": "Ingrid",
-     "ataque": 2,
-     "icono": "Tiro",
-     "bonus": 1,
      "base": 5,
      "defensa": 4,
      "muro": 0,
      "cierre": 0,
      "total": 9,
-     "margen": 2,
-     "necesita": 8
+     "margen": 2
     },
     "segundos": 10
    },
    {
     "tipo": "dados",
-    "necesita": 8,
     "dados": [
      6,
      4
     ],
+    "tirada": {
+     "tirador": "Hugo",
+     "ataque": 2,
+     "icono": "Tiro",
+     "bonus": 1,
+     "total": 13,
+     "defensa": 9,
+     "margen": 2,
+     "anota": true
+    },
     "segundos": 6
    },
    {
@@ -3105,28 +3176,32 @@
     },
     "pie": "La defensa acierta: +2",
     "cuenta": {
-     "tirador": "Andrei",
      "defensor": "Celia",
-     "ataque": 2,
-     "icono": null,
-     "bonus": 0,
      "base": 5,
      "defensa": 3,
      "muro": 0,
      "cierre": 2,
      "total": 10,
-     "margen": 0,
-     "necesita": 8
+     "margen": 0
     },
     "segundos": 10
    },
    {
     "tipo": "dados",
-    "necesita": 8,
     "dados": [
      5,
      3
     ],
+    "tirada": {
+     "tirador": "Andrei",
+     "ataque": 2,
+     "icono": null,
+     "bonus": 0,
+     "total": 10,
+     "defensa": 10,
+     "margen": 0,
+     "anota": true
+    },
     "segundos": 6
    },
    {
@@ -3288,28 +3363,32 @@
     },
     "pie": "La defensa falla",
     "cuenta": {
-     "tirador": "Enzo",
      "defensor": "Lucas",
-     "ataque": 3,
-     "icono": null,
-     "bonus": 0,
      "base": 5,
      "defensa": 2,
      "muro": 0,
      "cierre": 0,
      "total": 7,
-     "margen": 2,
-     "necesita": 6
+     "margen": 2
     },
     "segundos": 10
    },
    {
     "tipo": "dados",
-    "necesita": 6,
     "dados": [
      4,
      6
     ],
+    "tirada": {
+     "tirador": "Enzo",
+     "ataque": 3,
+     "icono": null,
+     "bonus": 0,
+     "total": 13,
+     "defensa": 7,
+     "margen": 2,
+     "anota": true
+    },
     "segundos": 6
    },
    {
@@ -3471,28 +3550,32 @@
     },
     "pie": "La defensa falla",
     "cuenta": {
-     "tirador": "Joel",
      "defensor": "Lara",
-     "ataque": 5,
-     "icono": null,
-     "bonus": 0,
      "base": 5,
      "defensa": 3,
      "muro": 0,
      "cierre": 0,
      "total": 8,
-     "margen": 2,
-     "necesita": 5
+     "margen": 2
     },
     "segundos": 10
    },
    {
     "tipo": "dados",
-    "necesita": 5,
     "dados": [
      6,
      4
     ],
+    "tirada": {
+     "tirador": "Joel",
+     "ataque": 5,
+     "icono": null,
+     "bonus": 0,
+     "total": 15,
+     "defensa": 8,
+     "margen": 2,
+     "anota": true
+    },
     "segundos": 6
    },
    {
@@ -3654,28 +3737,32 @@
     },
     "pie": "La defensa falla",
     "cuenta": {
-     "tirador": "Finn",
      "defensor": "Elias",
-     "ataque": 6,
-     "icono": "Tiro",
-     "bonus": 1,
      "base": 5,
      "defensa": 2,
      "muro": 0,
      "cierre": 0,
      "total": 7,
-     "margen": 2,
-     "necesita": 2
+     "margen": 2
     },
     "segundos": 10
    },
    {
     "tipo": "dados",
-    "necesita": 2,
     "dados": [
      4,
      5
     ],
+    "tirada": {
+     "tirador": "Finn",
+     "ataque": 6,
+     "icono": "Tiro",
+     "bonus": 1,
+     "total": 16,
+     "defensa": 7,
+     "margen": 2,
+     "anota": true
+    },
     "segundos": 6
    },
    {
@@ -3838,28 +3925,32 @@
     },
     "pie": "La defensa acierta: +2",
     "cuenta": {
-     "tirador": "Ximena",
      "defensor": "Fabián",
-     "ataque": 4,
-     "icono": "Aro",
-     "bonus": 2,
      "base": 5,
      "defensa": 3,
      "muro": 0,
      "cierre": 2,
      "total": 10,
-     "margen": 0,
-     "necesita": 4
+     "margen": 0
     },
     "segundos": 10
    },
    {
     "tipo": "dados",
-    "necesita": 4,
     "dados": [
      6,
      4
     ],
+    "tirada": {
+     "tirador": "Ximena",
+     "ataque": 4,
+     "icono": "Aro",
+     "bonus": 2,
+     "total": 16,
+     "defensa": 10,
+     "margen": 0,
+     "anota": true
+    },
     "segundos": 6
    },
    {
@@ -4010,28 +4101,32 @@
     },
     "pie": "La defensa acierta: +2",
     "cuenta": {
-     "tirador": "Luka",
      "defensor": "Ximena",
-     "ataque": 2,
-     "icono": null,
-     "bonus": 0,
      "base": 5,
      "defensa": 2,
      "muro": 0,
      "cierre": 2,
      "total": 9,
-     "margen": 0,
-     "necesita": 7
+     "margen": 0
     },
     "segundos": 10
    },
    {
     "tipo": "dados",
-    "necesita": 7,
     "dados": [
      1,
      3
     ],
+    "tirada": {
+     "tirador": "Luka",
+     "ataque": 2,
+     "icono": null,
+     "bonus": 0,
+     "total": 6,
+     "defensa": 9,
+     "margen": 0,
+     "anota": false
+    },
     "segundos": 6
    },
    {
@@ -4205,28 +4300,32 @@
     },
     "pie": "La defensa acierta: +2",
     "cuenta": {
-     "tirador": "Luka",
      "defensor": "Dalia",
-     "ataque": 2,
-     "icono": null,
-     "bonus": 0,
      "base": 5,
      "defensa": 2,
      "muro": 0,
      "cierre": 2,
      "total": 9,
-     "margen": 0,
-     "necesita": 7
+     "margen": 0
     },
     "segundos": 10
    },
    {
     "tipo": "dados",
-    "necesita": 7,
     "dados": [
      4,
      5
     ],
+    "tirada": {
+     "tirador": "Luka",
+     "ataque": 2,
+     "icono": null,
+     "bonus": 0,
+     "total": 11,
+     "defensa": 9,
+     "margen": 0,
+     "anota": true
+    },
     "segundos": 6
    },
    {
@@ -4388,28 +4487,32 @@
     },
     "pie": "La defensa acierta: +2",
     "cuenta": {
-     "tirador": "Irene",
      "defensor": "Vera",
-     "ataque": 3,
-     "icono": null,
-     "bonus": 0,
      "base": 5,
      "defensa": 2,
      "muro": 0,
      "cierre": 2,
      "total": 9,
-     "margen": 2,
-     "necesita": 8
+     "margen": 2
     },
     "segundos": 10
    },
    {
     "tipo": "dados",
-    "necesita": 8,
     "dados": [
      2,
      6
     ],
+    "tirada": {
+     "tirador": "Irene",
+     "ataque": 3,
+     "icono": null,
+     "bonus": 0,
+     "total": 11,
+     "defensa": 9,
+     "margen": 2,
+     "anota": true
+    },
     "segundos": 6
    },
    {
@@ -4571,28 +4674,32 @@
     },
     "pie": "La defensa acierta: +2",
     "cuenta": {
-     "tirador": "Astrid",
      "defensor": "Ainhoa",
-     "ataque": 4,
-     "icono": "Tiro",
-     "bonus": 1,
      "base": 5,
      "defensa": 3,
      "muro": 0,
      "cierre": 2,
      "total": 10,
-     "margen": 2,
-     "necesita": 7
+     "margen": 2
     },
     "segundos": 10
    },
    {
     "tipo": "dados",
-    "necesita": 7,
     "dados": [
      5,
      2
     ],
+    "tirada": {
+     "tirador": "Astrid",
+     "ataque": 4,
+     "icono": "Tiro",
+     "bonus": 1,
+     "total": 12,
+     "defensa": 10,
+     "margen": 2,
+     "anota": true
+    },
     "segundos": 6
    },
    {
@@ -4754,28 +4861,32 @@
     },
     "pie": "La defensa falla",
     "cuenta": {
-     "tirador": "Lucía",
      "defensor": "Gonzalo",
-     "ataque": 3,
-     "icono": null,
-     "bonus": 0,
      "base": 5,
      "defensa": 4,
      "muro": 0,
      "cierre": 0,
      "total": 9,
-     "margen": 2,
-     "necesita": 8
+     "margen": 2
     },
     "segundos": 10
    },
    {
     "tipo": "dados",
-    "necesita": 8,
     "dados": [
      2,
      6
     ],
+    "tirada": {
+     "tirador": "Lucía",
+     "ataque": 3,
+     "icono": null,
+     "bonus": 0,
+     "total": 11,
+     "defensa": 9,
+     "margen": 2,
+     "anota": true
+    },
     "segundos": 6
    },
    {
