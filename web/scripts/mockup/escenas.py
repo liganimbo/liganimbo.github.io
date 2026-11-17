@@ -362,7 +362,7 @@ def navidad():
     luz(fuerza_hdri=0.12, ventana=10, color=(1.0, 0.82, 0.62))
     mesa()
     carta("Local", "J11", -0.036, 0.0, 11)
-    carta("Visitante", "J35", 0.036, 0.004, -12)
+    carta("Visitante", "J35", 0.036, 0.004, -12, z=0.0006)
     dado("Dado1", 4, -0.012, 0.075, 25)
     dado("Dado2", 6, 0.016, 0.07, -10)
     for fx, fy in [(-0.082, 0.05), (-0.064, 0.058), (0.078, 0.055)]:
