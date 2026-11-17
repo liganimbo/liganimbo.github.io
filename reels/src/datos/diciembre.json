@@ -16,7 +16,7 @@
      "texto",
      "lila"
     ],
-    "segundos": 3.3
+    "segundos": 3.7
    },
    {
     "tipo": "cartas",
@@ -49,7 +49,7 @@
     ],
     "pie": "48 cartas · 12 ciudades · una liga mixta de 3x3",
     "acento": "#2A9D8F",
-    "segundos": 6
+    "segundos": 7.1
    },
    {
     "tipo": "revela",
@@ -69,10 +69,9 @@
      "defensa": 6,
      "muro": 0,
      "cierre": 0,
-     "total": 11,
-     "margen": 2
+     "total": 11
     },
-    "segundos": 10
+    "segundos": 12.7
    },
    {
     "tipo": "dados",
@@ -85,12 +84,12 @@
      "ataque": 4,
      "icono": "Tiro",
      "bonus": 1,
-     "total": 16,
+     "total": 14,
      "defensa": 11,
-     "margen": 2,
+     "castigo": 2,
      "anota": true
     },
-    "segundos": 6
+    "segundos": 11.6
    },
    {
     "tipo": "resultado",
@@ -109,7 +108,7 @@
      "oro"
     ],
     "etiqueta": "Liga Nimbo · Temporada 1 · 12 de enero",
-    "segundos": 5.6
+    "segundos": 6.5
    }
   ]
  },
@@ -130,7 +129,7 @@
      "texto",
      "lila"
     ],
-    "segundos": 3.8
+    "segundos": 4.3
    },
    {
     "tipo": "titular",
@@ -139,7 +138,7 @@
      "en secreto:"
     ],
     "pie": "dentro, que vale 2… o fuera, que vale 3.",
-    "segundos": 7
+    "segundos": 8.2
    },
    {
     "tipo": "titular",
@@ -152,7 +151,7 @@
      "lila"
     ],
     "pie": "Si acierta, su defensa suma +2.",
-    "segundos": 6
+    "segundos": 7.1
    },
    {
     "tipo": "cartas",
@@ -184,7 +183,7 @@
      "Contra"
     ],
     "acento": "#2A9D8F",
-    "segundos": 4.5
+    "segundos": 4.8
    },
    {
     "tipo": "revela",
@@ -204,10 +203,9 @@
      "defensa": 3,
      "muro": 0,
      "cierre": 2,
-     "total": 10,
-     "margen": 2
+     "total": 10
     },
-    "segundos": 10
+    "segundos": 14.9
    },
    {
     "tipo": "dados",
@@ -220,19 +218,19 @@
      "ataque": 4,
      "icono": "Tiro",
      "bonus": 1,
-     "total": 10,
+     "total": 8,
      "defensa": 10,
-     "margen": 2,
+     "castigo": 2,
      "anota": false
     },
-    "segundos": 6
+    "segundos": 12.1
    },
    {
     "tipo": "resultado",
     "titulo": "¡No entra!",
     "bien": false,
     "pie": "Los Albatros lo vieron venir.",
-    "segundos": 4.7
+    "segundos": 5.4
    },
    {
     "tipo": "titular",
@@ -244,7 +242,7 @@
      "texto",
      "oro"
     ],
-    "segundos": 5.6
+    "segundos": 6.5
    }
   ]
  },
@@ -265,7 +263,7 @@
      "texto",
      "lila"
     ],
-    "segundos": 3.8
+    "segundos": 4.3
    },
    {
     "tipo": "cartas",
@@ -309,7 +307,7 @@
      "texto"
     ],
     "pie": "Andrei: dados + 2",
-    "segundos": 4.7
+    "segundos": 5.4
    },
    {
     "tipo": "titular",
@@ -322,7 +320,7 @@
      "texto"
     ],
     "pie": "Vera: 5 + 2 + 2 porque ha cerrado dentro = 9",
-    "segundos": 5.1
+    "segundos": 5.9
    },
    {
     "tipo": "dados",
@@ -337,18 +335,18 @@
      "bonus": 0,
      "total": 9,
      "defensa": 9,
-     "margen": 0,
+     "castigo": 0,
      "anota": true
     },
     "pie": "Justo lo que valía la defensa. Dentro, con igualarla basta.",
-    "segundos": 6
+    "segundos": 14.9
    },
    {
     "tipo": "resultado",
     "titulo": "¡Entra!",
     "bien": true,
-    "pie": "Dentro entra si iguala la defensa. Fuera, si la supera por 2.",
-    "segundos": 7
+    "pie": "Entra si iguala la defensa. De fuera, la tirada tiene -2.",
+    "segundos": 7.6
    },
    {
     "tipo": "titular",
@@ -360,16 +358,16 @@
      "texto",
      "oro"
     ],
-    "segundos": 4.2
+    "segundos": 4.8
    }
   ]
  },
  {
-  "id": "DF1",
+  "id": "DF1-1",
   "formato": "¿Dentro o fuera?",
   "fecha": "2026-12-04",
-  "titulo": "¿Dentro o fuera? 1",
-  "texto": "Último ataque. Los Albatros pierden de 2. 🏀🎲\nDefiendes tú: ¿qué cierras, dentro o fuera?\nComenta antes de ver el final 👇\n#LigaNimbo #baloncesto #3x3 #baloncesto3x3 #basket",
+  "titulo": "¿Dentro o fuera? 1 · la pregunta",
+  "texto": "Último ataque. El Vendaval pierde de 1. 🏀🎲\nDefiendes tú: ¿qué cierras, dentro o fuera?\nComenta y mañana, la tirada 👇\n#LigaNimbo #baloncesto #3x3 #baloncesto3x3 #basket",
   "escenas": [
    {
     "tipo": "titular",
@@ -383,39 +381,49 @@
     ],
     "etiqueta": "Partido de prueba",
     "pie": "Defiendes tú.",
-    "segundos": 5.1
+    "segundos": 5.9
    },
    {
     "tipo": "marcador",
     "etiqueta": "Último ataque",
     "equipos": [
      {
+      "id": "VAL",
+      "nombre": "Vendaval",
+      "c1": "#2A9D8F",
+      "c2": "#F1FAEE"
+     },
+     {
       "id": "PAL",
       "nombre": "Albatros",
       "c1": "#1D3557",
       "c2": "#E9C46A"
-     },
-     {
-      "id": "VLU",
-      "nombre": "Búhos",
-      "c1": "#1B1B3A",
-      "c2": "#E0AFA0"
      }
     ],
     "puntos": [
-     12,
-     14
+     10,
+     11
     ],
     "resalta": 1,
-    "titulo": "Atacan los Albatros",
-    "pie": "Pierden de 2: dentro empatan; de 3, ganan.",
-    "acento": "#1D3557",
-    "segundos": 6.5
+    "titulo": "Ataca el Vendaval",
+    "pie": "Pierden de 1: cualquier canasta les da la victoria.",
+    "acento": "#2A9D8F",
+    "segundos": 8.7
    },
    {
     "tipo": "cartas",
-    "titulo": "Tira Andrei",
+    "titulo": "Tira Vera",
     "cartas": [
+     {
+      "nombre": "Vera Robles",
+      "equipo": "VAL",
+      "meta": "29 años · Torreal",
+      "ataque": 3,
+      "defensa": 2,
+      "icono": "Tiro",
+      "c1": "#2A9D8F",
+      "c2": "#F1FAEE"
+     },
      {
       "nombre": "Andrei Kamara",
       "equipo": "PAL",
@@ -425,37 +433,27 @@
       "icono": null,
       "c1": "#1D3557",
       "c2": "#E9C46A"
-     },
-     {
-      "nombre": "Noa Quintana",
-      "equipo": "VLU",
-      "meta": "29 años · Alcorva",
-      "ataque": 4,
-      "defensa": 2,
-      "icono": "Aro",
-      "c1": "#1B1B3A",
-      "c2": "#E0AFA0"
      }
     ],
     "roles": [
      "Tira",
      "Tú le defiendes"
     ],
-    "pie": "Aro: +2 dentro",
+    "pie": "Tiro: +1 de fuera",
     "segundos": 4.5
    },
    {
     "tipo": "tabla",
-    "titulo": "Lo que necesita Andrei",
-    "tirador": "Andrei",
+    "titulo": "Lo que necesita Vera",
+    "tirador": "Vera",
     "tabla": {
      "dentro": {
-      "dentro": 7,
-      "fuera": 5
+      "dentro": 9,
+      "fuera": 7
      },
      "fuera": {
-      "dentro": 7,
-      "fuera": 9
+      "dentro": 8,
+      "fuera": 10
      }
     },
     "segundos": 7.5
@@ -467,88 +465,163 @@
      "cierras?"
     ],
     "pie": "Comenta DENTRO o FUERA",
-    "acento": "#1B1B3A",
-    "segundos": 4.5
+    "acento": "#1D3557",
+    "segundos": 4.8
    },
    {
-    "tipo": "revela",
-    "titulo": "Y pasó esto",
-    "tira": {
-     "quien": "Andrei tira",
-     "tipo": "fuera"
-    },
-    "cierra": {
-     "quien": "Búhos cierran",
-     "tipo": "fuera"
-    },
-    "pie": "La defensa acierta: +2",
-    "cuenta": {
-     "defensor": "Noa",
-     "base": 5,
-     "defensa": 2,
-     "muro": 0,
-     "cierre": 2,
-     "total": 9,
-     "margen": 2
-    },
-    "segundos": 10
-   },
-   {
-    "tipo": "dados",
-    "dados": [
-     1,
-     5
+    "tipo": "titular",
+    "lineas": [
+     "Mañana,",
+     "la tirada."
     ],
-    "tirada": {
-     "tirador": "Andrei",
-     "ataque": 2,
-     "icono": null,
-     "bonus": 0,
-     "total": 8,
-     "defensa": 9,
-     "margen": 2,
-     "anota": false
-    },
-    "segundos": 6
+    "colores": [
+     "texto",
+     "lila"
+    ],
+    "pie": "Y verás si la habrías parado.",
+    "segundos": 6.5
+   }
+  ]
+ },
+ {
+  "id": "DF1-2",
+  "formato": "¿Dentro o fuera?",
+  "fecha": "2026-12-05",
+  "titulo": "¿Dentro o fuera? 1 · la tirada",
+  "texto": "La tirada de ayer: Vera tira y salen los dados. 🎲\n¿La habrías parado con lo que cerraste? Míralo y cuéntalo 👇\n#LigaNimbo #baloncesto #3x3 #baloncesto3x3 #basket",
+  "escenas": [
+   {
+    "tipo": "titular",
+    "lineas": [
+     "¿Dentro o fuera?",
+     "La tirada"
+    ],
+    "colores": [
+     "texto",
+     "lila"
+    ],
+    "etiqueta": "Partido de prueba",
+    "pie": "Ayer elegiste qué cerrar.",
+    "segundos": 8.2
    },
    {
-    "tipo": "resultado",
-    "titulo": "¡No entra!",
-    "bien": false,
+    "tipo": "marcador",
+    "etiqueta": "Último ataque",
     "equipos": [
+     {
+      "id": "VAL",
+      "nombre": "Vendaval",
+      "c1": "#2A9D8F",
+      "c2": "#F1FAEE"
+     },
      {
       "id": "PAL",
       "nombre": "Albatros",
       "c1": "#1D3557",
       "c2": "#E9C46A"
-     },
-     {
-      "id": "VLU",
-      "nombre": "Búhos",
-      "c1": "#1B1B3A",
-      "c2": "#E0AFA0"
      }
     ],
     "puntos": [
-     12,
-     14
+     10,
+     11
     ],
     "resalta": 1,
-    "pie": "Ganan los Búhos",
-    "acento": "#1B1B3A",
-    "segundos": 3.8
+    "titulo": "Ataca el Vendaval",
+    "pie": "Pierden de 1: cualquier canasta les da la victoria.",
+    "acento": "#2A9D8F",
+    "segundos": 6
+   },
+   {
+    "tipo": "cartas",
+    "titulo": "Tira Vera",
+    "cartas": [
+     {
+      "nombre": "Vera Robles",
+      "equipo": "VAL",
+      "meta": "29 años · Torreal",
+      "ataque": 3,
+      "defensa": 2,
+      "icono": "Tiro",
+      "c1": "#2A9D8F",
+      "c2": "#F1FAEE"
+     },
+     {
+      "nombre": "Andrei Kamara",
+      "equipo": "PAL",
+      "meta": "29 años · Valmont",
+      "ataque": 2,
+      "defensa": 5,
+      "icono": null,
+      "c1": "#1D3557",
+      "c2": "#E9C46A"
+     }
+    ],
+    "roles": [
+     "Tira",
+     "Tú le defiendes"
+    ],
+    "pie": "Tiro: +1 de fuera",
+    "segundos": 4.5
+   },
+   {
+    "tipo": "tira",
+    "titulo": "Y tira…",
+    "quien": "Vera tira",
+    "tiro": "fuera",
+    "pie": "De 3, con -2 a la tirada.",
+    "acento": "#2A9D8F",
+    "segundos": 6.6
+   },
+   {
+    "tipo": "dados",
+    "dados": [
+     6,
+     2
+    ],
+    "tirada": {
+     "tirador": "Vera",
+     "ataque": 3,
+     "icono": "Tiro",
+     "bonus": 1,
+     "total": 10,
+     "castigo": 2
+    },
+    "segundos": 9.9
+   },
+   {
+    "tipo": "cierres",
+    "titulo": "¿La paraste?",
+    "ataque": 10,
+    "filas": [
+     {
+      "cierra": "dentro",
+      "suma": "5 + 5 de Andrei",
+      "defensa": 10,
+      "anota": true,
+      "pie": "Entra: gana el Vendaval, 13-11."
+     },
+     {
+      "cierra": "fuera",
+      "suma": "5 + 5 de Andrei + 2 por acertar",
+      "defensa": 12,
+      "anota": false,
+      "pie": "¡La paras! Ganan los Albatros, 10-11."
+     }
+    ],
+    "segundos": 17
    },
    {
     "tipo": "titular",
     "lineas": [
-     "¿Acertaste?",
+     "¿La paraste?",
      "Cuéntalo abajo."
     ],
     "colores": [
      "texto",
      "lila"
     ],
-    "segundos": 3
+    "pie": "En el partido, los Albatros cerraron fuera.",
+    "segundos": 7.6
    }
   ]
  },
@@ -569,7 +642,7 @@
      "texto",
      "lila"
     ],
-    "segundos": 3.8
+    "segundos": 4.3
    },
    {
     "tipo": "titular",
@@ -582,7 +655,7 @@
      "oro"
     ],
     "pie": "Cada equipo ataca 8 veces: no puedes tirar siempre con la misma.",
-    "segundos": 7.4
+    "segundos": 8.7
    },
    {
     "tipo": "titular",
@@ -594,7 +667,7 @@
      "texto",
      "lila"
     ],
-    "segundos": 5.1
+    "segundos": 5.9
    },
    {
     "tipo": "lista",
@@ -631,7 +704,7 @@
       "texto": "Su estrella no tira hasta la 2.ª parte."
      }
     ],
-    "segundos": 20.1
+    "segundos": 23
    },
    {
     "tipo": "titular",
@@ -643,7 +716,7 @@
      "texto",
      "oro"
     ],
-    "segundos": 3.8
+    "segundos": 4.3
    }
   ]
  },
@@ -664,7 +737,7 @@
      "texto",
      "lila"
     ],
-    "segundos": 3.3
+    "segundos": 3.7
    },
    {
     "tipo": "lista",
@@ -713,7 +786,7 @@
       "texto": "+2 al defender tiros de dentro"
      }
     ],
-    "segundos": 16
+    "segundos": 18
    },
    {
     "tipo": "titular",
@@ -726,7 +799,7 @@
      "lila"
     ],
     "pie": "Medido con miles de partidos simulados.",
-    "segundos": 7.9
+    "segundos": 9.3
    },
    {
     "tipo": "titular",
@@ -738,16 +811,16 @@
      "texto",
      "oro"
     ],
-    "segundos": 4.2
+    "segundos": 4.8
    }
   ]
  },
  {
-  "id": "DF2",
+  "id": "DF2-1",
   "formato": "¿Dentro o fuera?",
   "fecha": "2026-12-07",
-  "titulo": "¿Dentro o fuera? 2",
-  "texto": "Último ataque. El Vendaval pierde de 1. 🏀🎲\nDefiendes tú: ¿qué cierras, dentro o fuera?\nComenta antes de ver el final 👇\n#LigaNimbo #baloncesto #3x3 #baloncesto3x3 #basket",
+  "titulo": "¿Dentro o fuera? 2 · la pregunta",
+  "texto": "Último ataque. Los Panteras pierden de 2. 🏀🎲\nDefiendes tú: ¿qué cierras, dentro o fuera?\nComenta y mañana, la tirada 👇\n#LigaNimbo #baloncesto #3x3 #baloncesto3x3 #basket",
   "escenas": [
    {
     "tipo": "titular",
@@ -761,79 +834,78 @@
     ],
     "etiqueta": "Partido de prueba",
     "pie": "Defiendes tú.",
-    "segundos": 5.1
+    "segundos": 5.9
    },
    {
     "tipo": "marcador",
     "etiqueta": "Último ataque",
     "equipos": [
      {
-      "id": "VAL",
-      "nombre": "Vendaval",
-      "c1": "#2A9D8F",
-      "c2": "#F1FAEE"
+      "id": "EBA",
+      "nombre": "Panteras",
+      "c1": "#3C096C",
+      "c2": "#00B4D8"
      },
      {
-      "id": "OST",
-      "nombre": "Coronas",
-      "c1": "#6A0DAD",
-      "c2": "#FFD166"
+      "id": "MIR",
+      "nombre": "Halcones",
+      "c1": "#F4A261",
+      "c2": "#264653"
      }
     ],
     "puntos": [
-     18,
-     19
+     11,
+     13
     ],
     "resalta": 1,
-    "titulo": "Ataca el Vendaval",
-    "pie": "Pierden de 1: cualquier canasta les da la victoria.",
-    "acento": "#2A9D8F",
-    "segundos": 7.4
+    "titulo": "Atacan los Panteras",
+    "pie": "Pierden de 2: dentro empatan; de 3, ganan.",
+    "acento": "#3C096C",
+    "segundos": 7.6
    },
    {
     "tipo": "cartas",
-    "titulo": "Tira Marta",
+    "titulo": "Tira Kai",
     "cartas": [
      {
-      "nombre": "Marta Urrutia",
-      "equipo": "VAL",
-      "meta": "34 años · Ostria",
-      "ataque": 3,
+      "nombre": "Kai Bergström",
+      "equipo": "EBA",
+      "meta": "24 años · Ndara",
+      "ataque": 2,
       "defensa": 3,
-      "icono": "Tiro",
-      "c1": "#2A9D8F",
-      "c2": "#F1FAEE"
+      "icono": null,
+      "c1": "#3C096C",
+      "c2": "#00B4D8"
      },
      {
-      "nombre": "Celia Vega",
-      "equipo": "OST",
-      "meta": "27 años · Ostria",
-      "ataque": 4,
+      "nombre": "Vera Herrero",
+      "equipo": "MIR",
+      "meta": "31 años · Alcorva",
+      "ataque": 2,
       "defensa": 2,
       "icono": null,
-      "c1": "#6A0DAD",
-      "c2": "#FFD166"
+      "c1": "#F4A261",
+      "c2": "#264653"
      }
     ],
     "roles": [
      "Tira",
      "Tú le defiendes"
     ],
-    "pie": "Tiro: +1 de fuera",
     "segundos": 4.5
    },
    {
     "tipo": "tabla",
-    "titulo": "Lo que necesita Marta",
-    "tirador": "Marta",
+    "titulo": "Lo que necesita Kai",
+    "tirador": "Kai",
     "tabla": {
      "dentro": {
-      "dentro": 6,
-      "fuera": 4
+      "dentro": 7,
+      "fuera": 5
      },
      "fuera": {
-      "dentro": 5,
-      "fuera": 7
+      "dentro": 7,
+      "fuera": 9
      }
     },
     "segundos": 7.5
@@ -845,88 +917,162 @@
      "cierras?"
     ],
     "pie": "Comenta DENTRO o FUERA",
-    "acento": "#6A0DAD",
-    "segundos": 4.5
-   },
-   {
-    "tipo": "revela",
-    "titulo": "Y pasó esto",
-    "tira": {
-     "quien": "Marta tira",
-     "tipo": "fuera"
-    },
-    "cierra": {
-     "quien": "Coronas cierran",
-     "tipo": "fuera"
-    },
-    "pie": "La defensa acierta: +2",
-    "cuenta": {
-     "defensor": "Celia",
-     "base": 5,
-     "defensa": 2,
-     "muro": 0,
-     "cierre": 2,
-     "total": 9,
-     "margen": 2
-    },
-    "segundos": 10
-   },
-   {
-    "tipo": "dados",
-    "dados": [
-     2,
-     5
-    ],
-    "tirada": {
-     "tirador": "Marta",
-     "ataque": 3,
-     "icono": "Tiro",
-     "bonus": 1,
-     "total": 11,
-     "defensa": 9,
-     "margen": 2,
-     "anota": true
-    },
-    "segundos": 6
-   },
-   {
-    "tipo": "resultado",
-    "titulo": "¡Triple!",
-    "bien": true,
-    "equipos": [
-     {
-      "id": "VAL",
-      "nombre": "Vendaval",
-      "c1": "#2A9D8F",
-      "c2": "#F1FAEE"
-     },
-     {
-      "id": "OST",
-      "nombre": "Coronas",
-      "c1": "#6A0DAD",
-      "c2": "#FFD166"
-     }
-    ],
-    "puntos": [
-     21,
-     19
-    ],
-    "resalta": 0,
-    "pie": "Gana el Vendaval",
-    "acento": "#2A9D8F",
-    "segundos": 3.5
+    "acento": "#F4A261",
+    "segundos": 4.8
    },
    {
     "tipo": "titular",
     "lineas": [
-     "¿Acertaste?",
+     "Mañana,",
+     "la tirada."
+    ],
+    "colores": [
+     "texto",
+     "lila"
+    ],
+    "pie": "Y verás si la habrías parado.",
+    "segundos": 6.5
+   }
+  ]
+ },
+ {
+  "id": "DF2-2",
+  "formato": "¿Dentro o fuera?",
+  "fecha": "2026-12-08",
+  "titulo": "¿Dentro o fuera? 2 · la tirada",
+  "texto": "La tirada de ayer: Kai tira y salen los dados. 🎲\n¿La habrías parado con lo que cerraste? Míralo y cuéntalo 👇\n#LigaNimbo #baloncesto #3x3 #baloncesto3x3 #basket",
+  "escenas": [
+   {
+    "tipo": "titular",
+    "lineas": [
+     "¿Dentro o fuera?",
+     "La tirada"
+    ],
+    "colores": [
+     "texto",
+     "lila"
+    ],
+    "etiqueta": "Partido de prueba",
+    "pie": "Ayer elegiste qué cerrar.",
+    "segundos": 8.2
+   },
+   {
+    "tipo": "marcador",
+    "etiqueta": "Último ataque",
+    "equipos": [
+     {
+      "id": "EBA",
+      "nombre": "Panteras",
+      "c1": "#3C096C",
+      "c2": "#00B4D8"
+     },
+     {
+      "id": "MIR",
+      "nombre": "Halcones",
+      "c1": "#F4A261",
+      "c2": "#264653"
+     }
+    ],
+    "puntos": [
+     11,
+     13
+    ],
+    "resalta": 1,
+    "titulo": "Atacan los Panteras",
+    "pie": "Pierden de 2: dentro empatan; de 3, ganan.",
+    "acento": "#3C096C",
+    "segundos": 6
+   },
+   {
+    "tipo": "cartas",
+    "titulo": "Tira Kai",
+    "cartas": [
+     {
+      "nombre": "Kai Bergström",
+      "equipo": "EBA",
+      "meta": "24 años · Ndara",
+      "ataque": 2,
+      "defensa": 3,
+      "icono": null,
+      "c1": "#3C096C",
+      "c2": "#00B4D8"
+     },
+     {
+      "nombre": "Vera Herrero",
+      "equipo": "MIR",
+      "meta": "31 años · Alcorva",
+      "ataque": 2,
+      "defensa": 2,
+      "icono": null,
+      "c1": "#F4A261",
+      "c2": "#264653"
+     }
+    ],
+    "roles": [
+     "Tira",
+     "Tú le defiendes"
+    ],
+    "segundos": 4.5
+   },
+   {
+    "tipo": "tira",
+    "titulo": "Y tira…",
+    "quien": "Kai tira",
+    "tiro": "dentro",
+    "pie": "Dentro: vale 2.",
+    "acento": "#3C096C",
+    "segundos": 4.9
+   },
+   {
+    "tipo": "dados",
+    "dados": [
+     5,
+     1
+    ],
+    "tirada": {
+     "tirador": "Kai",
+     "ataque": 2,
+     "icono": null,
+     "bonus": 0,
+     "total": 8,
+     "castigo": 0
+    },
+    "segundos": 7.7
+   },
+   {
+    "tipo": "cierres",
+    "titulo": "¿La paraste?",
+    "ataque": 8,
+    "filas": [
+     {
+      "cierra": "dentro",
+      "suma": "5 + 2 de Vera + 2 por acertar",
+      "defensa": 9,
+      "anota": false,
+      "pie": "¡La paras! Ganan los Halcones, 11-13."
+     },
+     {
+      "cierra": "fuera",
+      "suma": "5 + 2 de Vera",
+      "defensa": 7,
+      "anota": true,
+      "pie": "Empate: a muerte súbita"
+     }
+    ],
+    "segundos": 17
+   },
+   {
+    "tipo": "titular",
+    "lineas": [
+     "¿La paraste?",
      "Cuéntalo abajo."
     ],
     "colores": [
      "texto",
      "lila"
     ],
-    "segundos": 3
+    "pie": "En el partido, los Halcones cerraron dentro.",
+    "segundos": 7.6
    }
   ]
  },
@@ -947,7 +1093,7 @@
      "texto",
      "lila"
     ],
-    "segundos": 3.8
+    "segundos": 4.3
    },
    {
     "tipo": "titular",
@@ -960,7 +1106,7 @@
      "oro"
     ],
     "pie": "Los dos últimos ataques con el marcador a 3 o menos, y la muerte súbita.",
-    "segundos": 9.7
+    "segundos": 11.5
    },
    {
     "tipo": "titular",
@@ -980,9 +1126,9 @@
       "c2": "#E9C46A"
      }
     ],
-    "pie": "El Vendaval ataca al final con 10-12. Cierran fuera… y Vera falla.",
+    "pie": "El Vendaval ataca al final con 12-10 (en su casa). Cierran fuera… y Vera falla.",
     "acento": "#1D3557",
-    "segundos": 11.5
+    "segundos": 15.4
    },
    {
     "tipo": "titular",
@@ -1002,9 +1148,9 @@
       "c2": "#F1FAEE"
      }
     ],
-    "pie": "Contra los Coronas, 17-14 y su último ataque: Marta tira de 3… y entra.",
+    "pie": "Contra los Coronas, en casa, 17-14 y su último ataque: Marta tira de 3… y entra.",
     "acento": "#2A9D8F",
-    "segundos": 10.1
+    "segundos": 13.2
    },
    {
     "tipo": "titular",
@@ -1026,7 +1172,7 @@
     ],
     "pie": "Finn Diallo se guarda un tiro. Ataque 7: no entra.",
     "acento": "#6A0DAD",
-    "segundos": 9.2
+    "segundos": 10.9
    },
    {
     "tipo": "titular",
@@ -1046,9 +1192,9 @@
       "c2": "#264653"
      }
     ],
-    "pie": "Contra el Vendaval, 17-14 y su último ataque: Vera tira de 3… y entra.",
+    "pie": "En casa del Vendaval, 14-17 y su último ataque: Vera tira de 3… y entra.",
     "acento": "#F4A261",
-    "segundos": 10.1
+    "segundos": 12.6
    },
    {
     "tipo": "titular",
@@ -1060,7 +1206,7 @@
      "texto",
      "lila"
     ],
-    "segundos": 3.8
+    "segundos": 4.3
    }
   ]
  },
@@ -1081,7 +1227,7 @@
      "texto",
      "lila"
     ],
-    "segundos": 3.8
+    "segundos": 4.3
    },
    {
     "tipo": "titular",
@@ -1090,7 +1236,7 @@
      "a los seis de pista."
     ],
     "pie": "Cada uno marca a su pareja, y su pareja le marca a su vez.",
-    "segundos": 11.5
+    "segundos": 13.7
    },
    {
     "tipo": "cartas",
@@ -1122,7 +1268,7 @@
      "Coronas"
     ],
     "pie": "Yago defiende a Joel, y Joel defiende a Yago.",
-    "segundos": 7.4
+    "segundos": 8.7
    },
    {
     "tipo": "titular",
@@ -1135,7 +1281,7 @@
      "lila"
     ],
     "pie": "Y ya sabe a quién le quedan tiros.",
-    "segundos": 7.9
+    "segundos": 9.3
    },
    {
     "tipo": "titular",
@@ -1148,7 +1294,7 @@
      "oro"
     ],
     "pie": "Atacar primero no da nada: el visitante empieza.",
-    "segundos": 7.9
+    "segundos": 9.3
    }
   ]
  },
@@ -1169,7 +1315,7 @@
      "texto",
      "lila"
     ],
-    "segundos": 3.8
+    "segundos": 4.3
    },
    {
     "tipo": "titular",
@@ -1182,7 +1328,7 @@
      "oro"
     ],
     "pie": "Los dos últimos ataques con el marcador a 3 o menos, y la muerte súbita.",
-    "segundos": 9.7
+    "segundos": 11.5
    },
    {
     "tipo": "titular",
@@ -1202,9 +1348,9 @@
       "c2": "#E63946"
      }
     ],
-    "pie": "Contra los Coronas, 10-12 y su último ataque: Nico tira dentro… y entra.",
+    "pie": "En casa de los Coronas, 12-10 y su último ataque: Nico tira dentro… y entra.",
     "acento": "#5C5C5C",
-    "segundos": 10.1
+    "segundos": 13.2
    },
    {
     "tipo": "titular",
@@ -1224,9 +1370,9 @@
       "c2": "#FAF3DD"
      }
     ],
-    "pie": "Contra los Coronas, 15-18. Todos esperaban lo otro: Lucía tira dentro… y entra.",
+    "pie": "Contra los Coronas, en casa, 15-18. Todos esperaban lo otro: Lucía tira dentro… y entra.",
     "acento": "#0B6E4F",
-    "segundos": 11
+    "segundos": 14.3
    },
    {
     "tipo": "titular",
@@ -1248,7 +1394,7 @@
     ],
     "pie": "Astrid Abara no tira hasta el ataque 5. Paciencia.",
     "acento": "#8B2500",
-    "segundos": 9.2
+    "segundos": 10.9
    },
    {
     "tipo": "titular",
@@ -1268,9 +1414,9 @@
       "c2": "#C1121F"
      }
     ],
-    "pie": "Contra los Albatros, 10-10 y su último ataque: Andrea tira dentro… y entra.",
+    "pie": "En casa de los Albatros, 10-10 y su último ataque: Andrea tira dentro… y entra.",
     "acento": "#111111",
-    "segundos": 10.1
+    "segundos": 13.2
    },
    {
     "tipo": "titular",
@@ -1282,16 +1428,16 @@
      "texto",
      "lila"
     ],
-    "segundos": 3.8
+    "segundos": 4.3
    }
   ]
  },
  {
-  "id": "DF3",
+  "id": "DF3-1",
   "formato": "¿Dentro o fuera?",
   "fecha": "2026-12-11",
-  "titulo": "¿Dentro o fuera? 3 (con firma)",
-  "texto": "Último ataque. Los Halcones pierden de 2. 🏀🎲\nEn el final siempre tiran de 3. Defiendes tú: ¿qué cierras, dentro o fuera?\nComenta antes de ver el final 👇\n#LigaNimbo #baloncesto #3x3 #baloncesto3x3 #basket",
+  "titulo": "¿Dentro o fuera? 3 (con firma) · la pregunta",
+  "texto": "Último ataque. Los Relámpagos pierden de 1. 🏀🎲\nEn el final siempre tiran de 3. Defiendes tú: ¿qué cierras, dentro o fuera?\nComenta y mañana, la tirada 👇\n#LigaNimbo #baloncesto #3x3 #baloncesto3x3 #basket",
   "escenas": [
    {
     "tipo": "titular",
@@ -1305,39 +1451,49 @@
     ],
     "etiqueta": "Partido de prueba",
     "pie": "Defiendes tú.",
-    "segundos": 5.1
+    "segundos": 5.9
    },
    {
     "tipo": "marcador",
     "etiqueta": "Último ataque",
     "equipos": [
      {
+      "id": "STE",
+      "nombre": "Relámpagos",
+      "c1": "#003F88",
+      "c2": "#FDC500"
+     },
+     {
       "id": "MIR",
       "nombre": "Halcones",
       "c1": "#F4A261",
       "c2": "#264653"
-     },
-     {
-      "id": "VAL",
-      "nombre": "Vendaval",
-      "c1": "#2A9D8F",
-      "c2": "#F1FAEE"
      }
     ],
     "puntos": [
-     12,
-     14
+     14,
+     15
     ],
     "resalta": 1,
-    "titulo": "Atacan los Halcones",
-    "pie": "Pierden de 2: dentro empatan; de 3, ganan.",
-    "acento": "#F4A261",
-    "segundos": 6.5
+    "titulo": "Atacan los Relámpagos",
+    "pie": "Pierden de 1: cualquier canasta les da la victoria.",
+    "acento": "#003F88",
+    "segundos": 8.7
    },
    {
     "tipo": "cartas",
-    "titulo": "Tira Vera",
+    "titulo": "Tira Kai",
     "cartas": [
+     {
+      "nombre": "Kai Ashworth",
+      "equipo": "STE",
+      "meta": "20 años · Valmont",
+      "ataque": 2,
+      "defensa": 3,
+      "icono": "Tiro",
+      "c1": "#003F88",
+      "c2": "#FDC500"
+     },
      {
       "nombre": "Vera Herrero",
       "equipo": "MIR",
@@ -1347,37 +1503,27 @@
       "icono": null,
       "c1": "#F4A261",
       "c2": "#264653"
-     },
-     {
-      "nombre": "Dalia Okafor",
-      "equipo": "VAL",
-      "meta": "20 años · Cabo Seren",
-      "ataque": 4,
-      "defensa": 2,
-      "icono": "Tiro",
-      "c1": "#2A9D8F",
-      "c2": "#F1FAEE"
      }
     ],
     "roles": [
      "Tira",
      "Tú le defiendes"
     ],
-    "pie": "Halcones: «En el final apretado, siempre de 3.»",
-    "segundos": 5.6
+    "pie": "Relámpagos: «En el final apretado, siempre de 3.»",
+    "segundos": 6.5
    },
    {
     "tipo": "tabla",
-    "titulo": "Lo que necesita Vera",
-    "tirador": "Vera",
+    "titulo": "Lo que necesita Kai",
+    "tirador": "Kai",
     "tabla": {
      "dentro": {
       "dentro": 7,
       "fuera": 5
      },
      "fuera": {
-      "dentro": 7,
-      "fuera": 9
+      "dentro": 6,
+      "fuera": 8
      }
     },
     "segundos": 7.5
@@ -1389,88 +1535,163 @@
      "cierras?"
     ],
     "pie": "Comenta DENTRO o FUERA",
-    "acento": "#2A9D8F",
-    "segundos": 4.5
+    "acento": "#F4A261",
+    "segundos": 4.8
    },
    {
-    "tipo": "revela",
-    "titulo": "Y pasó esto",
-    "tira": {
-     "quien": "Vera tira",
-     "tipo": "fuera"
-    },
-    "cierra": {
-     "quien": "Vendaval cierra",
-     "tipo": "fuera"
-    },
-    "pie": "La defensa acierta: +2",
-    "cuenta": {
-     "defensor": "Dalia",
-     "base": 5,
-     "defensa": 2,
-     "muro": 0,
-     "cierre": 2,
-     "total": 9,
-     "margen": 2
-    },
-    "segundos": 10
-   },
-   {
-    "tipo": "dados",
-    "dados": [
-     6,
-     4
+    "tipo": "titular",
+    "lineas": [
+     "Mañana,",
+     "la tirada."
     ],
-    "tirada": {
-     "tirador": "Vera",
-     "ataque": 2,
-     "icono": null,
-     "bonus": 0,
-     "total": 12,
-     "defensa": 9,
-     "margen": 2,
-     "anota": true
-    },
-    "segundos": 6
+    "colores": [
+     "texto",
+     "lila"
+    ],
+    "pie": "Y verás si la habrías parado.",
+    "segundos": 6.5
+   }
+  ]
+ },
+ {
+  "id": "DF3-2",
+  "formato": "¿Dentro o fuera?",
+  "fecha": "2026-12-12",
+  "titulo": "¿Dentro o fuera? 3 (con firma) · la tirada",
+  "texto": "La tirada de ayer: Kai tira y salen los dados. 🎲\n¿La habrías parado con lo que cerraste? Míralo y cuéntalo 👇\n#LigaNimbo #baloncesto #3x3 #baloncesto3x3 #basket",
+  "escenas": [
+   {
+    "tipo": "titular",
+    "lineas": [
+     "¿Dentro o fuera?",
+     "La tirada"
+    ],
+    "colores": [
+     "texto",
+     "lila"
+    ],
+    "etiqueta": "Partido de prueba",
+    "pie": "Ayer elegiste qué cerrar.",
+    "segundos": 8.2
    },
    {
-    "tipo": "resultado",
-    "titulo": "¡Triple!",
-    "bien": true,
+    "tipo": "marcador",
+    "etiqueta": "Último ataque",
     "equipos": [
+     {
+      "id": "STE",
+      "nombre": "Relámpagos",
+      "c1": "#003F88",
+      "c2": "#FDC500"
+     },
      {
       "id": "MIR",
       "nombre": "Halcones",
       "c1": "#F4A261",
       "c2": "#264653"
-     },
-     {
-      "id": "VAL",
-      "nombre": "Vendaval",
-      "c1": "#2A9D8F",
-      "c2": "#F1FAEE"
      }
     ],
     "puntos": [
-     15,
-     14
+     14,
+     15
     ],
-    "resalta": 0,
-    "pie": "Ganan los Halcones",
-    "acento": "#F4A261",
-    "segundos": 3.5
+    "resalta": 1,
+    "titulo": "Atacan los Relámpagos",
+    "pie": "Pierden de 1: cualquier canasta les da la victoria.",
+    "acento": "#003F88",
+    "segundos": 6
+   },
+   {
+    "tipo": "cartas",
+    "titulo": "Tira Kai",
+    "cartas": [
+     {
+      "nombre": "Kai Ashworth",
+      "equipo": "STE",
+      "meta": "20 años · Valmont",
+      "ataque": 2,
+      "defensa": 3,
+      "icono": "Tiro",
+      "c1": "#003F88",
+      "c2": "#FDC500"
+     },
+     {
+      "nombre": "Vera Herrero",
+      "equipo": "MIR",
+      "meta": "31 años · Alcorva",
+      "ataque": 2,
+      "defensa": 2,
+      "icono": null,
+      "c1": "#F4A261",
+      "c2": "#264653"
+     }
+    ],
+    "roles": [
+     "Tira",
+     "Tú le defiendes"
+    ],
+    "pie": "Tiro: +1 de fuera",
+    "segundos": 4.5
+   },
+   {
+    "tipo": "tira",
+    "titulo": "Y tira…",
+    "quien": "Kai tira",
+    "tiro": "fuera",
+    "pie": "De 3, con -2 a la tirada.",
+    "acento": "#003F88",
+    "segundos": 6.6
+   },
+   {
+    "tipo": "dados",
+    "dados": [
+     1,
+     6
+    ],
+    "tirada": {
+     "tirador": "Kai",
+     "ataque": 2,
+     "icono": "Tiro",
+     "bonus": 1,
+     "total": 8,
+     "castigo": 2
+    },
+    "segundos": 9.9
+   },
+   {
+    "tipo": "cierres",
+    "titulo": "¿La paraste?",
+    "ataque": 8,
+    "filas": [
+     {
+      "cierra": "dentro",
+      "suma": "5 + 2 de Vera",
+      "defensa": 7,
+      "anota": true,
+      "pie": "Entra: ganan los Relámpagos, 17-15."
+     },
+     {
+      "cierra": "fuera",
+      "suma": "5 + 2 de Vera + 2 por acertar",
+      "defensa": 9,
+      "anota": false,
+      "pie": "¡La paras! Ganan los Halcones, 14-15."
+     }
+    ],
+    "segundos": 17
    },
    {
     "tipo": "titular",
     "lineas": [
-     "¿Acertaste?",
+     "¿La paraste?",
      "Cuéntalo abajo."
     ],
     "colores": [
      "texto",
      "lila"
     ],
-    "segundos": 3
+    "pie": "En el partido, los Halcones cerraron fuera.",
+    "segundos": 7.6
    }
   ]
  },
@@ -1491,7 +1712,7 @@
      "texto",
      "lila"
     ],
-    "segundos": 3.8
+    "segundos": 4.3
    },
    {
     "tipo": "titular",
@@ -1504,7 +1725,7 @@
      "oro"
     ],
     "pie": "Los dos últimos ataques con el marcador a 3 o menos, y la muerte súbita.",
-    "segundos": 9.7
+    "segundos": 11.5
    },
    {
     "tipo": "titular",
@@ -1524,9 +1745,9 @@
       "c2": "#FDC500"
      }
     ],
-    "pie": "Contra los Panteras, 10-11 y su último ataque: Kai tira de 3… y entra.",
+    "pie": "En casa de los Panteras, 11-10 y su último ataque: Kai tira de 3… y entra.",
     "acento": "#003F88",
-    "segundos": 10.1
+    "segundos": 13.2
    },
    {
     "tipo": "titular",
@@ -1548,7 +1769,7 @@
     ],
     "pie": "Nico Serrano tira en los ataques 1 y 2. Sin esperar.",
     "acento": "#3C096C",
-    "segundos": 8.8
+    "segundos": 10.4
    },
    {
     "tipo": "titular",
@@ -1568,9 +1789,9 @@
       "c2": "#BDD5EA"
      }
     ],
-    "pie": "Los Albatros atacan al final con 13-13. Cierran dentro… y Ainhoa falla.",
+    "pie": "Los Albatros atacan al final con 13-13 (en casa de los Lobos). Cierran dentro… y Ainhoa falla.",
     "acento": "#495867",
-    "segundos": 11.5
+    "segundos": 16.5
    },
    {
     "tipo": "titular",
@@ -1590,9 +1811,9 @@
       "c2": "#E0AFA0"
      }
     ],
-    "pie": "Contra los Albatros, 11-10 y su último ataque: Carlos tira dentro… y entra.",
+    "pie": "En casa de los Albatros, 10-11 y su último ataque: Carlos tira dentro… y entra.",
     "acento": "#1B1B3A",
-    "segundos": 10.1
+    "segundos": 13.2
    },
    {
     "tipo": "titular",
@@ -1604,7 +1825,7 @@
      "texto",
      "lila"
     ],
-    "segundos": 3.8
+    "segundos": 4.3
    }
   ]
  },
@@ -1625,7 +1846,7 @@
      "texto",
      "lila"
     ],
-    "segundos": 4.2
+    "segundos": 4.8
    },
    {
     "tipo": "titular",
@@ -1636,7 +1857,7 @@
      "oro"
     ],
     "pie": "Con sus dos tiros intactos.",
-    "segundos": 5.1
+    "segundos": 5.9
    },
    {
     "tipo": "titular",
@@ -1649,7 +1870,7 @@
      "lila"
     ],
     "pie": "Siempre hay alguien: 4 tiros entre 3 obligan a que alguien repita.",
-    "segundos": 8.8
+    "segundos": 10.4
    },
    {
     "tipo": "cartas",
@@ -1681,7 +1902,7 @@
      "Entra"
     ],
     "pie": "Joel ya ha gastado sus tiros. Fuera, aunque sea de las buenas.",
-    "segundos": 8.3
+    "segundos": 9.8
    },
    {
     "tipo": "titular",
@@ -1693,7 +1914,7 @@
      "texto",
      "oro"
     ],
-    "segundos": 5.1
+    "segundos": 5.9
    }
   ]
  },
@@ -1702,7 +1923,7 @@
   "formato": "Regla",
   "fecha": "2026-12-14",
   "titulo": "Muerte súbita",
-  "texto": "Empate tras 8 ataques: muerte súbita. Un ataque más cada uno, hasta que alguien quede por delante. ⚡\nLas reglas completas y las cartas para imprimir, en la bio.\n#LigaNimbo #baloncesto #3x3 #baloncesto3x3",
+  "texto": "Empate tras 8 ataques: muerte súbita. Un ataque más cada uno… y si anotan los dos, gana quien la metió con más margen. ⚡\nLas reglas completas y las cartas para imprimir, en la bio.\n#LigaNimbo #baloncesto #3x3 #baloncesto3x3",
   "escenas": [
    {
     "tipo": "titular",
@@ -1714,7 +1935,7 @@
      "texto",
      "lila"
     ],
-    "segundos": 3
+    "segundos": 3.2
    },
    {
     "tipo": "marcador",
@@ -1738,7 +1959,7 @@
      10
     ],
     "titulo": "Muerte súbita",
-    "segundos": 3.8
+    "segundos": 4.3
    },
    {
     "tipo": "titular",
@@ -1746,8 +1967,8 @@
      "Un ataque más",
      "cada uno."
     ],
-    "pie": "Puede tirar cualquiera de pista, tenga tiros o no. Hasta que alguien quede por delante.",
-    "segundos": 10.6
+    "pie": "Puede tirar cualquiera de pista, tenga tiros o no.",
+    "segundos": 9.3
    },
    {
     "tipo": "cartas",
@@ -1799,10 +2020,9 @@
      "defensa": 3,
      "muro": 0,
      "cierre": 2,
-     "total": 10,
-     "margen": 0
+     "total": 10
     },
-    "segundos": 10
+    "segundos": 14.9
    },
    {
     "tipo": "dados",
@@ -1817,10 +2037,10 @@
      "bonus": 0,
      "total": 11,
      "defensa": 10,
-     "margen": 0,
+     "castigo": 0,
      "anota": true
     },
-    "segundos": 6
+    "segundos": 9.3
    },
    {
     "tipo": "resultado",
@@ -1850,14 +2070,15 @@
    {
     "tipo": "titular",
     "lineas": [
-     "Aquí no hay",
-     "segunda oportunidad."
+     "¿Y si anotan",
+     "los dos?"
     ],
     "colores": [
      "texto",
      "oro"
     ],
-    "segundos": 3.8
+    "pie": "Gana quien superó a su defensa por más, y suma 1 punto. Si fallan los dos, quien se quedó más cerca.",
+    "segundos": 15.4
    }
   ]
  },
@@ -1878,7 +2099,7 @@
      "texto",
      "lila"
     ],
-    "segundos": 4.2
+    "segundos": 4.8
    },
    {
     "tipo": "carta",
@@ -1980,16 +2201,16 @@
      "texto",
      "oro"
     ],
-    "segundos": 3.8
+    "segundos": 4.3
    }
   ]
  },
  {
-  "id": "DF4",
+  "id": "DF4-1",
   "formato": "¿Dentro o fuera?",
   "fecha": "2026-12-16",
-  "titulo": "¿Dentro o fuera? 4",
-  "texto": "Último ataque. Los Forjadores pierden de 2. 🏀🎲\nDefiendes tú: ¿qué cierras, dentro o fuera?\nComenta antes de ver el final 👇\n#LigaNimbo #baloncesto #3x3 #baloncesto3x3 #basket",
+  "titulo": "¿Dentro o fuera? 4 · la pregunta",
+  "texto": "Último ataque. Los Corsarios pierden de 2. 🏀🎲\nDefiendes tú: ¿qué cierras, dentro o fuera?\nComenta y mañana, la tirada 👇\n#LigaNimbo #baloncesto #3x3 #baloncesto3x3 #basket",
   "escenas": [
    {
     "tipo": "titular",
@@ -2003,78 +2224,79 @@
     ],
     "etiqueta": "Partido de prueba",
     "pie": "Defiendes tú.",
-    "segundos": 5.1
+    "segundos": 5.9
    },
    {
     "tipo": "marcador",
     "etiqueta": "Último ataque",
     "equipos": [
      {
-      "id": "FER",
-      "nombre": "Forjadores",
-      "c1": "#8B2500",
-      "c2": "#D9D9D9"
+      "id": "BRE",
+      "nombre": "Corsarios",
+      "c1": "#0B6E4F",
+      "c2": "#FAF3DD"
      },
      {
-      "id": "OST",
-      "nombre": "Coronas",
-      "c1": "#6A0DAD",
-      "c2": "#FFD166"
+      "id": "VLU",
+      "nombre": "Búhos",
+      "c1": "#1B1B3A",
+      "c2": "#E0AFA0"
      }
     ],
     "puntos": [
-     14,
-     16
+     11,
+     13
     ],
     "resalta": 1,
-    "titulo": "Atacan los Forjadores",
+    "titulo": "Atacan los Corsarios",
     "pie": "Pierden de 2: dentro empatan; de 3, ganan.",
-    "acento": "#8B2500",
-    "segundos": 6.5
+    "acento": "#0B6E4F",
+    "segundos": 7.6
    },
    {
     "tipo": "cartas",
-    "titulo": "Tira Enzo",
+    "titulo": "Tira Aroa",
     "cartas": [
      {
-      "nombre": "Enzo Pastor",
-      "equipo": "FER",
-      "meta": "33 años · Alcorva",
+      "nombre": "Aroa Vega",
+      "equipo": "BRE",
+      "meta": "21 años · Alcorva",
       "ataque": 3,
-      "defensa": 3,
-      "icono": null,
-      "c1": "#8B2500",
-      "c2": "#D9D9D9"
+      "defensa": 2,
+      "icono": "Muro",
+      "c1": "#0B6E4F",
+      "c2": "#FAF3DD"
      },
      {
-      "nombre": "Celia Vega",
-      "equipo": "OST",
-      "meta": "27 años · Ostria",
-      "ataque": 4,
-      "defensa": 2,
-      "icono": null,
-      "c1": "#6A0DAD",
-      "c2": "#FFD166"
+      "nombre": "Carlos Campos",
+      "equipo": "VLU",
+      "meta": "31 años · Ostria",
+      "ataque": 3,
+      "defensa": 3,
+      "icono": "Aro",
+      "c1": "#1B1B3A",
+      "c2": "#E0AFA0"
      }
     ],
     "roles": [
      "Tira",
      "Tú le defiendes"
     ],
-    "segundos": 4.5
+    "pie": "Muro: +2 contra dentro · Aro: +2 dentro",
+    "segundos": 5.4
    },
    {
     "tipo": "tabla",
-    "titulo": "Lo que necesita Enzo",
-    "tirador": "Enzo",
+    "titulo": "Lo que necesita Aroa",
+    "tirador": "Aroa",
     "tabla": {
      "dentro": {
-      "dentro": 6,
-      "fuera": 4
+      "dentro": 7,
+      "fuera": 5
      },
      "fuera": {
-      "dentro": 6,
-      "fuera": 8
+      "dentro": 7,
+      "fuera": 9
      }
     },
     "segundos": 7.5
@@ -2086,88 +2308,163 @@
      "cierras?"
     ],
     "pie": "Comenta DENTRO o FUERA",
-    "acento": "#6A0DAD",
-    "segundos": 4.5
-   },
-   {
-    "tipo": "revela",
-    "titulo": "Y pasó esto",
-    "tira": {
-     "quien": "Enzo tira",
-     "tipo": "fuera"
-    },
-    "cierra": {
-     "quien": "Coronas cierran",
-     "tipo": "dentro"
-    },
-    "pie": "La defensa falla",
-    "cuenta": {
-     "defensor": "Celia",
-     "base": 5,
-     "defensa": 2,
-     "muro": 0,
-     "cierre": 0,
-     "total": 7,
-     "margen": 2
-    },
-    "segundos": 10
-   },
-   {
-    "tipo": "dados",
-    "dados": [
-     2,
-     6
-    ],
-    "tirada": {
-     "tirador": "Enzo",
-     "ataque": 3,
-     "icono": null,
-     "bonus": 0,
-     "total": 11,
-     "defensa": 7,
-     "margen": 2,
-     "anota": true
-    },
-    "segundos": 6
-   },
-   {
-    "tipo": "resultado",
-    "titulo": "¡Triple!",
-    "bien": true,
-    "equipos": [
-     {
-      "id": "FER",
-      "nombre": "Forjadores",
-      "c1": "#8B2500",
-      "c2": "#D9D9D9"
-     },
-     {
-      "id": "OST",
-      "nombre": "Coronas",
-      "c1": "#6A0DAD",
-      "c2": "#FFD166"
-     }
-    ],
-    "puntos": [
-     17,
-     16
-    ],
-    "resalta": 0,
-    "pie": "Ganan los Forjadores",
-    "acento": "#8B2500",
-    "segundos": 3.5
+    "acento": "#1B1B3A",
+    "segundos": 4.8
    },
    {
     "tipo": "titular",
     "lineas": [
-     "¿Acertaste?",
+     "Mañana,",
+     "la tirada."
+    ],
+    "colores": [
+     "texto",
+     "lila"
+    ],
+    "pie": "Y verás si la habrías parado.",
+    "segundos": 6.5
+   }
+  ]
+ },
+ {
+  "id": "DF4-2",
+  "formato": "¿Dentro o fuera?",
+  "fecha": "2026-12-17",
+  "titulo": "¿Dentro o fuera? 4 · la tirada",
+  "texto": "La tirada de ayer: Aroa tira y salen los dados. 🎲\n¿La habrías parado con lo que cerraste? Míralo y cuéntalo 👇\n#LigaNimbo #baloncesto #3x3 #baloncesto3x3 #basket",
+  "escenas": [
+   {
+    "tipo": "titular",
+    "lineas": [
+     "¿Dentro o fuera?",
+     "La tirada"
+    ],
+    "colores": [
+     "texto",
+     "lila"
+    ],
+    "etiqueta": "Partido de prueba",
+    "pie": "Ayer elegiste qué cerrar.",
+    "segundos": 8.2
+   },
+   {
+    "tipo": "marcador",
+    "etiqueta": "Último ataque",
+    "equipos": [
+     {
+      "id": "BRE",
+      "nombre": "Corsarios",
+      "c1": "#0B6E4F",
+      "c2": "#FAF3DD"
+     },
+     {
+      "id": "VLU",
+      "nombre": "Búhos",
+      "c1": "#1B1B3A",
+      "c2": "#E0AFA0"
+     }
+    ],
+    "puntos": [
+     11,
+     13
+    ],
+    "resalta": 1,
+    "titulo": "Atacan los Corsarios",
+    "pie": "Pierden de 2: dentro empatan; de 3, ganan.",
+    "acento": "#0B6E4F",
+    "segundos": 6
+   },
+   {
+    "tipo": "cartas",
+    "titulo": "Tira Aroa",
+    "cartas": [
+     {
+      "nombre": "Aroa Vega",
+      "equipo": "BRE",
+      "meta": "21 años · Alcorva",
+      "ataque": 3,
+      "defensa": 2,
+      "icono": "Muro",
+      "c1": "#0B6E4F",
+      "c2": "#FAF3DD"
+     },
+     {
+      "nombre": "Carlos Campos",
+      "equipo": "VLU",
+      "meta": "31 años · Ostria",
+      "ataque": 3,
+      "defensa": 3,
+      "icono": "Aro",
+      "c1": "#1B1B3A",
+      "c2": "#E0AFA0"
+     }
+    ],
+    "roles": [
+     "Tira",
+     "Tú le defiendes"
+    ],
+    "pie": "Muro: +2 contra dentro · Aro: +2 dentro",
+    "segundos": 5.4
+   },
+   {
+    "tipo": "tira",
+    "titulo": "Y tira…",
+    "quien": "Aroa tira",
+    "tiro": "fuera",
+    "pie": "De 3, con -2 a la tirada.",
+    "acento": "#0B6E4F",
+    "segundos": 6.6
+   },
+   {
+    "tipo": "dados",
+    "dados": [
+     5,
+     2
+    ],
+    "tirada": {
+     "tirador": "Aroa",
+     "ataque": 3,
+     "icono": null,
+     "bonus": 0,
+     "total": 8,
+     "castigo": 2
+    },
+    "segundos": 8.8
+   },
+   {
+    "tipo": "cierres",
+    "titulo": "¿La paraste?",
+    "ataque": 8,
+    "filas": [
+     {
+      "cierra": "dentro",
+      "suma": "5 + 3 de Carlos",
+      "defensa": 8,
+      "anota": true,
+      "pie": "Entra: ganan los Corsarios, 14-13."
+     },
+     {
+      "cierra": "fuera",
+      "suma": "5 + 3 de Carlos + 2 por acertar",
+      "defensa": 10,
+      "anota": false,
+      "pie": "¡La paras! Ganan los Búhos, 11-13."
+     }
+    ],
+    "segundos": 17
+   },
+   {
+    "tipo": "titular",
+    "lineas": [
+     "¿La paraste?",
      "Cuéntalo abajo."
     ],
     "colores": [
      "texto",
      "lila"
     ],
-    "segundos": 3
+    "pie": "En el partido, los Búhos cerraron fuera.",
+    "segundos": 7.6
    }
   ]
  },
@@ -2188,7 +2485,7 @@
      "texto",
      "lila"
     ],
-    "segundos": 3
+    "segundos": 3.2
    },
    {
     "tipo": "titular",
@@ -2199,7 +2496,7 @@
      "oro"
     ],
     "pie": "Canasta de dentro que supera a la defensa por 6 o más.",
-    "segundos": 7
+    "segundos": 8.2
    },
    {
     "tipo": "cartas",
@@ -2245,11 +2542,11 @@
      "bonus": 0,
      "total": 17,
      "defensa": 11,
-     "margen": 0,
+     "castigo": 0,
      "anota": true
     },
     "pie": "6 por encima de la defensa.",
-    "segundos": 6
+    "segundos": 12.1
    },
    {
     "tipo": "resultado",
@@ -2266,7 +2563,7 @@
      "lila"
     ],
     "pie": "Tiro de dentro que se queda corto por 4 o más.",
-    "segundos": 6.5
+    "segundos": 7.6
    },
    {
     "tipo": "dados",
@@ -2281,18 +2578,18 @@
      "bonus": 0,
      "total": 6,
      "defensa": 11,
-     "margen": 0,
+     "castigo": 0,
      "anota": false
     },
     "pie": "Se queda 5 por debajo: tapón de Kenna.",
-    "segundos": 6
+    "segundos": 13.8
    },
    {
     "tipo": "resultado",
     "titulo": "¡Tapón!",
     "bien": false,
     "pie": "No cambian el marcador. Pero se cantan.",
-    "segundos": 5.1
+    "segundos": 5.9
    }
   ]
  },
@@ -2301,7 +2598,7 @@
   "formato": "Amistoso",
   "fecha": "2026-12-18",
   "titulo": "Vendaval – Búhos",
-  "texto": "Amistosos de Navidad · Vendaval – Búhos 🎄🏀\nLos Búhos ganan 16-14.\nPartido real: la semilla (navidad-2026-VAL-VLU) y todas las tiradas, en la crónica (enlace en la bio).\n#LigaNimbo #baloncesto #3x3 #baloncesto3x3",
+  "texto": "Amistosos de Navidad · Vendaval – Búhos 🎄🏀\nLos Búhos ganan 14-16.\nPartido real: la semilla (navidad-2026-VAL-VLU) y todas las tiradas, en la crónica (enlace en la bio).\n#LigaNimbo #baloncesto #3x3 #baloncesto3x3",
   "escenas": [
    {
     "tipo": "titular",
@@ -2329,7 +2626,7 @@
      }
     ],
     "pie": "Se decidió en la muerte súbita.",
-    "segundos": 7.9
+    "segundos": 9.3
    },
    {
     "tipo": "marcador",
@@ -2379,7 +2676,7 @@
     "titulo": "Atacan los Búhos",
     "pie": "Empate.",
     "acento": "#1B1B3A",
-    "segundos": 4.2
+    "segundos": 4.8
    },
    {
     "tipo": "cartas",
@@ -2412,7 +2709,7 @@
     ],
     "pie": "Búhos: «En el final apretado, siempre dentro.»",
     "acento": "#1B1B3A",
-    "segundos": 5.6
+    "segundos": 6.5
    },
    {
     "tipo": "revela",
@@ -2432,10 +2729,9 @@
      "defensa": 2,
      "muro": 0,
      "cierre": 0,
-     "total": 7,
-     "margen": 0
+     "total": 7
     },
-    "segundos": 10
+    "segundos": 13.8
    },
    {
     "tipo": "dados",
@@ -2450,10 +2746,10 @@
      "bonus": 2,
      "total": 12,
      "defensa": 7,
-     "margen": 0,
+     "castigo": 0,
      "anota": true
     },
-    "segundos": 6
+    "segundos": 10.4
    },
    {
     "tipo": "resultado",
@@ -2480,7 +2776,7 @@
     "resalta": 1,
     "pie": "Final. Mejor del partido: Noa Quintana (6 puntos).",
     "acento": "#1B1B3A",
-    "segundos": 5.1
+    "segundos": 5.9
    }
   ]
  },
@@ -2517,7 +2813,7 @@
      }
     ],
     "pie": "Se decidió al final.",
-    "segundos": 7
+    "segundos": 8.2
    },
    {
     "tipo": "marcador",
@@ -2567,7 +2863,7 @@
     "titulo": "Atacan los Lobos",
     "pie": "Pierden de 1.",
     "acento": "#495867",
-    "segundos": 4.7
+    "segundos": 5.4
    },
    {
     "tipo": "cartas",
@@ -2619,10 +2915,9 @@
      "defensa": 4,
      "muro": 0,
      "cierre": 0,
-     "total": 9,
-     "margen": 2
+     "total": 9
     },
-    "segundos": 10
+    "segundos": 13.8
    },
    {
     "tipo": "dados",
@@ -2635,12 +2930,12 @@
      "ataque": 3,
      "icono": null,
      "bonus": 0,
-     "total": 14,
+     "total": 12,
      "defensa": 9,
-     "margen": 2,
+     "castigo": 2,
      "anota": true
     },
-    "segundos": 6
+    "segundos": 10.4
    },
    {
     "tipo": "resultado",
@@ -2667,16 +2962,16 @@
     "resalta": 0,
     "pie": "Final. Mejor del partido: Emeka Udeh (4 puntos).",
     "acento": "#495867",
-    "segundos": 5.1
+    "segundos": 5.9
    }
   ]
  },
  {
-  "id": "DF5",
+  "id": "DF5-1",
   "formato": "¿Dentro o fuera?",
   "fecha": "2026-12-20",
-  "titulo": "¿Dentro o fuera? 5",
-  "texto": "Último ataque. Los Coronas pierden de 1. 🏀🎲\nDefiendes tú: ¿qué cierras, dentro o fuera?\nComenta antes de ver el final 👇\n#LigaNimbo #baloncesto #3x3 #baloncesto3x3 #basket",
+  "titulo": "¿Dentro o fuera? 5 · la pregunta",
+  "texto": "Último ataque. Los Forjadores pierden de 2. 🏀🎲\nDefiendes tú: ¿qué cierras, dentro o fuera?\nComenta y mañana, la tirada 👇\n#LigaNimbo #baloncesto #3x3 #baloncesto3x3 #basket",
   "escenas": [
    {
     "tipo": "titular",
@@ -2690,75 +2985,74 @@
     ],
     "etiqueta": "Partido de prueba",
     "pie": "Defiendes tú.",
-    "segundos": 5.1
+    "segundos": 5.9
    },
    {
     "tipo": "marcador",
     "etiqueta": "Último ataque",
     "equipos": [
      {
-      "id": "OST",
-      "nombre": "Coronas",
-      "c1": "#6A0DAD",
-      "c2": "#FFD166"
+      "id": "FER",
+      "nombre": "Forjadores",
+      "c1": "#8B2500",
+      "c2": "#D9D9D9"
      },
      {
-      "id": "TOR",
-      "nombre": "Gigantes",
-      "c1": "#5C5C5C",
-      "c2": "#E63946"
+      "id": "EBA",
+      "nombre": "Panteras",
+      "c1": "#3C096C",
+      "c2": "#00B4D8"
      }
     ],
     "puntos": [
-     16,
-     17
+     10,
+     12
     ],
     "resalta": 1,
-    "titulo": "Atacan los Coronas",
-    "pie": "Pierden de 1: cualquier canasta les da la victoria.",
-    "acento": "#6A0DAD",
-    "segundos": 7.4
+    "titulo": "Atacan los Forjadores",
+    "pie": "Pierden de 2: dentro empatan; de 3, ganan.",
+    "acento": "#8B2500",
+    "segundos": 7.6
    },
    {
     "tipo": "cartas",
-    "titulo": "Tira Gonzalo",
+    "titulo": "Tira Enzo",
     "cartas": [
      {
-      "nombre": "Gonzalo Márquez",
-      "equipo": "OST",
-      "meta": "26 años · Las Brezas",
-      "ataque": 4,
-      "defensa": 4,
+      "nombre": "Enzo Pastor",
+      "equipo": "FER",
+      "meta": "33 años · Alcorva",
+      "ataque": 3,
+      "defensa": 3,
       "icono": null,
-      "c1": "#6A0DAD",
-      "c2": "#FFD166"
+      "c1": "#8B2500",
+      "c2": "#D9D9D9"
      },
      {
-      "nombre": "Carla Echeverría",
-      "equipo": "TOR",
-      "meta": "23 años · Sierra Gris",
-      "ataque": 2,
-      "defensa": 4,
-      "icono": "Muro",
-      "c1": "#5C5C5C",
-      "c2": "#E63946"
+      "nombre": "Celia Toledo",
+      "equipo": "EBA",
+      "meta": "28 años · Torreal",
+      "ataque": 5,
+      "defensa": 3,
+      "icono": null,
+      "c1": "#3C096C",
+      "c2": "#00B4D8"
      }
     ],
     "roles": [
      "Tira",
      "Tú le defiendes"
     ],
-    "pie": "Muro: +2 contra dentro",
     "segundos": 4.5
    },
    {
     "tipo": "tabla",
-    "titulo": "Lo que necesita Gonzalo",
-    "tirador": "Gonzalo",
+    "titulo": "Lo que necesita Enzo",
+    "tirador": "Enzo",
     "tabla": {
      "dentro": {
-      "dentro": 9,
-      "fuera": 7
+      "dentro": 7,
+      "fuera": 5
      },
      "fuera": {
       "dentro": 7,
@@ -2774,88 +3068,162 @@
      "cierras?"
     ],
     "pie": "Comenta DENTRO o FUERA",
-    "acento": "#5C5C5C",
-    "segundos": 4.5
-   },
-   {
-    "tipo": "revela",
-    "titulo": "Y pasó esto",
-    "tira": {
-     "quien": "Gonzalo tira",
-     "tipo": "fuera"
-    },
-    "cierra": {
-     "quien": "Gigantes cierran",
-     "tipo": "dentro"
-    },
-    "pie": "La defensa falla",
-    "cuenta": {
-     "defensor": "Carla",
-     "base": 5,
-     "defensa": 4,
-     "muro": 0,
-     "cierre": 0,
-     "total": 9,
-     "margen": 2
-    },
-    "segundos": 10
-   },
-   {
-    "tipo": "dados",
-    "dados": [
-     5,
-     2
-    ],
-    "tirada": {
-     "tirador": "Gonzalo",
-     "ataque": 4,
-     "icono": null,
-     "bonus": 0,
-     "total": 11,
-     "defensa": 9,
-     "margen": 2,
-     "anota": true
-    },
-    "segundos": 6
-   },
-   {
-    "tipo": "resultado",
-    "titulo": "¡Triple!",
-    "bien": true,
-    "equipos": [
-     {
-      "id": "OST",
-      "nombre": "Coronas",
-      "c1": "#6A0DAD",
-      "c2": "#FFD166"
-     },
-     {
-      "id": "TOR",
-      "nombre": "Gigantes",
-      "c1": "#5C5C5C",
-      "c2": "#E63946"
-     }
-    ],
-    "puntos": [
-     19,
-     17
-    ],
-    "resalta": 0,
-    "pie": "Ganan los Coronas",
-    "acento": "#6A0DAD",
-    "segundos": 3.5
+    "acento": "#3C096C",
+    "segundos": 4.8
    },
    {
     "tipo": "titular",
     "lineas": [
-     "¿Acertaste?",
+     "Mañana,",
+     "la tirada."
+    ],
+    "colores": [
+     "texto",
+     "lila"
+    ],
+    "pie": "Y verás si la habrías parado.",
+    "segundos": 6.5
+   }
+  ]
+ },
+ {
+  "id": "DF5-2",
+  "formato": "¿Dentro o fuera?",
+  "fecha": "2026-12-21",
+  "titulo": "¿Dentro o fuera? 5 · la tirada",
+  "texto": "La tirada de ayer: Enzo tira y salen los dados. 🎲\n¿La habrías parado con lo que cerraste? Míralo y cuéntalo 👇\n#LigaNimbo #baloncesto #3x3 #baloncesto3x3 #basket",
+  "escenas": [
+   {
+    "tipo": "titular",
+    "lineas": [
+     "¿Dentro o fuera?",
+     "La tirada"
+    ],
+    "colores": [
+     "texto",
+     "lila"
+    ],
+    "etiqueta": "Partido de prueba",
+    "pie": "Ayer elegiste qué cerrar.",
+    "segundos": 8.2
+   },
+   {
+    "tipo": "marcador",
+    "etiqueta": "Último ataque",
+    "equipos": [
+     {
+      "id": "FER",
+      "nombre": "Forjadores",
+      "c1": "#8B2500",
+      "c2": "#D9D9D9"
+     },
+     {
+      "id": "EBA",
+      "nombre": "Panteras",
+      "c1": "#3C096C",
+      "c2": "#00B4D8"
+     }
+    ],
+    "puntos": [
+     10,
+     12
+    ],
+    "resalta": 1,
+    "titulo": "Atacan los Forjadores",
+    "pie": "Pierden de 2: dentro empatan; de 3, ganan.",
+    "acento": "#8B2500",
+    "segundos": 6
+   },
+   {
+    "tipo": "cartas",
+    "titulo": "Tira Enzo",
+    "cartas": [
+     {
+      "nombre": "Enzo Pastor",
+      "equipo": "FER",
+      "meta": "33 años · Alcorva",
+      "ataque": 3,
+      "defensa": 3,
+      "icono": null,
+      "c1": "#8B2500",
+      "c2": "#D9D9D9"
+     },
+     {
+      "nombre": "Celia Toledo",
+      "equipo": "EBA",
+      "meta": "28 años · Torreal",
+      "ataque": 5,
+      "defensa": 3,
+      "icono": null,
+      "c1": "#3C096C",
+      "c2": "#00B4D8"
+     }
+    ],
+    "roles": [
+     "Tira",
+     "Tú le defiendes"
+    ],
+    "segundos": 4.5
+   },
+   {
+    "tipo": "tira",
+    "titulo": "Y tira…",
+    "quien": "Enzo tira",
+    "tiro": "fuera",
+    "pie": "De 3, con -2 a la tirada.",
+    "acento": "#8B2500",
+    "segundos": 6.6
+   },
+   {
+    "tipo": "dados",
+    "dados": [
+     3,
+     4
+    ],
+    "tirada": {
+     "tirador": "Enzo",
+     "ataque": 3,
+     "icono": null,
+     "bonus": 0,
+     "total": 8,
+     "castigo": 2
+    },
+    "segundos": 8.8
+   },
+   {
+    "tipo": "cierres",
+    "titulo": "¿La paraste?",
+    "ataque": 8,
+    "filas": [
+     {
+      "cierra": "dentro",
+      "suma": "5 + 3 de Celia",
+      "defensa": 8,
+      "anota": true,
+      "pie": "Entra: ganan los Forjadores, 13-12."
+     },
+     {
+      "cierra": "fuera",
+      "suma": "5 + 3 de Celia + 2 por acertar",
+      "defensa": 10,
+      "anota": false,
+      "pie": "¡La paras! Ganan los Panteras, 10-12."
+     }
+    ],
+    "segundos": 17
+   },
+   {
+    "tipo": "titular",
+    "lineas": [
+     "¿La paraste?",
      "Cuéntalo abajo."
     ],
     "colores": [
      "texto",
      "lila"
     ],
-    "segundos": 3
+    "pie": "En el partido, los Panteras cerraron dentro.",
+    "segundos": 7.6
    }
   ]
  },
@@ -2864,7 +3232,7 @@
   "formato": "Amistoso",
   "fecha": "2026-12-21",
   "titulo": "Halcones – Relámpagos",
-  "texto": "Amistosos de Navidad · Halcones – Relámpagos 🎄🏀\nLos Relámpagos ganan 19-10.\nPartido real: la semilla (navidad-2026-MIR-STE) y todas las tiradas, en la crónica (enlace en la bio).\n#LigaNimbo #baloncesto #3x3 #baloncesto3x3",
+  "texto": "Amistosos de Navidad · Halcones – Relámpagos 🎄🏀\nLos Relámpagos ganan 10-19.\nPartido real: la semilla (navidad-2026-MIR-STE) y todas las tiradas, en la crónica (enlace en la bio).\n#LigaNimbo #baloncesto #3x3 #baloncesto3x3",
   "escenas": [
    {
     "tipo": "titular",
@@ -2892,7 +3260,7 @@
      }
     ],
     "pie": "Se decidió al final.",
-    "segundos": 7
+    "segundos": 8.2
    },
    {
     "tipo": "marcador",
@@ -2942,7 +3310,7 @@
     "titulo": "Atacan los Relámpagos",
     "pie": "Ganan de 6.",
     "acento": "#003F88",
-    "segundos": 4.7
+    "segundos": 5.4
    },
    {
     "tipo": "cartas",
@@ -2994,10 +3362,9 @@
      "defensa": 4,
      "muro": 0,
      "cierre": 0,
-     "total": 9,
-     "margen": 2
+     "total": 9
     },
-    "segundos": 10
+    "segundos": 13.8
    },
    {
     "tipo": "dados",
@@ -3010,12 +3377,12 @@
      "ataque": 2,
      "icono": "Tiro",
      "bonus": 1,
-     "total": 13,
+     "total": 11,
      "defensa": 9,
-     "margen": 2,
+     "castigo": 2,
      "anota": true
     },
-    "segundos": 6
+    "segundos": 11.6
    },
    {
     "tipo": "resultado",
@@ -3042,7 +3409,7 @@
     "resalta": 1,
     "pie": "Final. Mejor del partido: Darío Carmona (6 puntos).",
     "acento": "#003F88",
-    "segundos": 5.1
+    "segundos": 5.9
    }
   ]
  },
@@ -3079,7 +3446,7 @@
      }
     ],
     "pie": "Se decidió al final.",
-    "segundos": 7
+    "segundos": 8.2
    },
    {
     "tipo": "marcador",
@@ -3129,7 +3496,7 @@
     "titulo": "Atacan los Albatros",
     "pie": "Ganan de 3.",
     "acento": "#1D3557",
-    "segundos": 4.7
+    "segundos": 5.4
    },
    {
     "tipo": "cartas",
@@ -3181,10 +3548,9 @@
      "defensa": 3,
      "muro": 0,
      "cierre": 2,
-     "total": 10,
-     "margen": 0
+     "total": 10
     },
-    "segundos": 10
+    "segundos": 14.9
    },
    {
     "tipo": "dados",
@@ -3199,10 +3565,10 @@
      "bonus": 0,
      "total": 10,
      "defensa": 10,
-     "margen": 0,
+     "castigo": 0,
      "anota": true
     },
-    "segundos": 6
+    "segundos": 9.3
    },
    {
     "tipo": "resultado",
@@ -3229,7 +3595,7 @@
     "resalta": 0,
     "pie": "Final. Mejor del partido: Goran Jansen (5 puntos).",
     "acento": "#1D3557",
-    "segundos": 5.1
+    "segundos": 5.9
    }
   ]
  },
@@ -3238,7 +3604,7 @@
   "formato": "Amistoso",
   "fecha": "2026-12-23",
   "titulo": "Cuervos – Forjadores",
-  "texto": "Amistosos de Navidad · Cuervos – Forjadores 🎄🏀\nLos Forjadores ganan 15-14.\nPartido real: la semilla (navidad-2026-ALC-FER) y todas las tiradas, en la crónica (enlace en la bio).\n#LigaNimbo #baloncesto #3x3 #baloncesto3x3",
+  "texto": "Amistosos de Navidad · Cuervos – Forjadores 🎄🏀\nLos Cuervos ganan 13-12.\nPartido real: la semilla (navidad-2026-ALC-FER) y todas las tiradas, en la crónica (enlace en la bio).\n#LigaNimbo #baloncesto #3x3 #baloncesto3x3",
   "escenas": [
    {
     "tipo": "titular",
@@ -3266,7 +3632,7 @@
      }
     ],
     "pie": "Se decidió en la muerte súbita.",
-    "segundos": 7.9
+    "segundos": 9.3
    },
    {
     "tipo": "marcador",
@@ -3309,29 +3675,19 @@
      }
     ],
     "puntos": [
-     12,
+     10,
      12
     ],
-    "resalta": 1,
-    "titulo": "Atacan los Forjadores",
-    "pie": "Empate.",
-    "acento": "#8B2500",
-    "segundos": 4.2
+    "resalta": 0,
+    "titulo": "Atacan los Cuervos",
+    "pie": "Pierden de 2.",
+    "acento": "#111111",
+    "segundos": 5.4
    },
    {
     "tipo": "cartas",
-    "titulo": "Tira Enzo",
+    "titulo": "Tira Lucas",
     "cartas": [
-     {
-      "nombre": "Enzo Pastor",
-      "equipo": "FER",
-      "meta": "33 años · Alcorva",
-      "ataque": 3,
-      "defensa": 3,
-      "icono": null,
-      "c1": "#8B2500",
-      "c2": "#D9D9D9"
-     },
      {
       "nombre": "Lucas Fuentes",
       "equipo": "ALC",
@@ -3341,59 +3697,84 @@
       "icono": null,
       "c1": "#111111",
       "c2": "#C1121F"
+     },
+     {
+      "nombre": "Enzo Pastor",
+      "equipo": "FER",
+      "meta": "33 años · Alcorva",
+      "ataque": 3,
+      "defensa": 3,
+      "icono": null,
+      "c1": "#8B2500",
+      "c2": "#D9D9D9"
      }
     ],
     "roles": [
      "Tira",
      "Contra"
     ],
-    "acento": "#8B2500",
-    "segundos": 4.5
+    "pie": "Cuervos: «En el final apretado, siempre dentro.»",
+    "acento": "#111111",
+    "segundos": 6.5
    },
    {
     "tipo": "revela",
     "titulo": "Los dos eligen en secreto",
     "tira": {
-     "quien": "Enzo tira",
-     "tipo": "fuera"
+     "quien": "Lucas tira",
+     "tipo": "dentro"
     },
     "cierra": {
-     "quien": "Cuervos cierran",
-     "tipo": "dentro"
+     "quien": "Forjadores cierran",
+     "tipo": "fuera"
     },
     "pie": "La defensa falla",
     "cuenta": {
-     "defensor": "Lucas",
+     "defensor": "Enzo",
      "base": 5,
-     "defensa": 2,
+     "defensa": 3,
      "muro": 0,
      "cierre": 0,
-     "total": 7,
-     "margen": 2
+     "total": 8
     },
-    "segundos": 10
+    "segundos": 13.8
    },
    {
     "tipo": "dados",
     "dados": [
-     4,
-     6
+     6,
+     1
     ],
     "tirada": {
-     "tirador": "Enzo",
-     "ataque": 3,
+     "tirador": "Lucas",
+     "ataque": 4,
      "icono": null,
      "bonus": 0,
-     "total": 13,
-     "defensa": 7,
-     "margen": 2,
+     "total": 11,
+     "defensa": 8,
+     "castigo": 0,
      "anota": true
     },
-    "segundos": 6
+    "segundos": 9.3
+   },
+   {
+    "tipo": "titular",
+    "lineas": [
+     "12-12:",
+     "desempate."
+    ],
+    "colores": [
+     "texto",
+     "oro"
+    ],
+    "etiqueta": "Muerte súbita",
+    "pie": "Gana quien superó a su defensa por más. Los Cuervos la superaron por 3; los Forjadores, por 2. +1 para los Cuervos.",
+    "acento": "#111111",
+    "segundos": 13.7
    },
    {
     "tipo": "resultado",
-    "titulo": "¡Triple!",
+    "titulo": "¡Canasta!",
     "bien": true,
     "equipos": [
      {
@@ -3410,13 +3791,13 @@
      }
     ],
     "puntos": [
-     14,
-     15
+     13,
+     12
     ],
-    "resalta": 1,
-    "pie": "Final. Mejor del partido: Enzo Pastor (10 puntos).",
-    "acento": "#8B2500",
-    "segundos": 5.1
+    "resalta": 0,
+    "pie": "Final. Mejor del partido: Enzo Pastor (7 puntos).",
+    "acento": "#111111",
+    "segundos": 5.9
    }
   ]
  },
@@ -3453,7 +3834,7 @@
      }
     ],
     "pie": "Se decidió al final.",
-    "segundos": 7
+    "segundos": 8.2
    },
    {
     "tipo": "marcador",
@@ -3503,7 +3884,7 @@
     "titulo": "Atacan los Coronas",
     "pie": "Ganan de 1.",
     "acento": "#6A0DAD",
-    "segundos": 4.7
+    "segundos": 5.4
    },
    {
     "tipo": "cartas",
@@ -3555,10 +3936,9 @@
      "defensa": 3,
      "muro": 0,
      "cierre": 0,
-     "total": 8,
-     "margen": 2
+     "total": 8
     },
-    "segundos": 10
+    "segundos": 13.8
    },
    {
     "tipo": "dados",
@@ -3571,12 +3951,12 @@
      "ataque": 5,
      "icono": null,
      "bonus": 0,
-     "total": 15,
+     "total": 13,
      "defensa": 8,
-     "margen": 2,
+     "castigo": 2,
      "anota": true
     },
-    "segundos": 6
+    "segundos": 10.4
    },
    {
     "tipo": "resultado",
@@ -3603,7 +3983,7 @@
     "resalta": 0,
     "pie": "Final. Mejor del partido: Joel Cebrián (6 puntos).",
     "acento": "#6A0DAD",
-    "segundos": 5.1
+    "segundos": 5.9
    }
   ]
  },
@@ -3612,7 +3992,7 @@
   "formato": "Amistoso",
   "fecha": "2026-12-25",
   "titulo": "Relámpagos – Coronas",
-  "texto": "Amistosos de Navidad · Relámpagos – Coronas 🎄🏀\nLos Coronas ganan 55-52.\nPartido real: la semilla (navidad-2026-STE-OST) y todas las tiradas, en la crónica (enlace en la bio).\n#LigaNimbo #baloncesto #3x3 #baloncesto3x3",
+  "texto": "Amistosos de Navidad · Relámpagos – Coronas 🎄🏀\nLos Coronas ganan 22-23.\nPartido real: la semilla (navidad-2026-STE-OST) y todas las tiradas, en la crónica (enlace en la bio).\n#LigaNimbo #baloncesto #3x3 #baloncesto3x3",
   "escenas": [
    {
     "tipo": "titular",
@@ -3640,7 +4020,7 @@
      }
     ],
     "pie": "Se decidió en la muerte súbita.",
-    "segundos": 7.9
+    "segundos": 9.3
    },
    {
     "tipo": "marcador",
@@ -3683,14 +4063,14 @@
      }
     ],
     "puntos": [
-     52,
-     52
+     19,
+     19
     ],
     "resalta": 1,
     "titulo": "Atacan los Coronas",
     "pie": "Empate.",
     "acento": "#6A0DAD",
-    "segundos": 4.2
+    "segundos": 4.8
    },
    {
     "tipo": "cartas",
@@ -3733,24 +4113,23 @@
     },
     "cierra": {
      "quien": "Relámpagos cierran",
-     "tipo": "dentro"
+     "tipo": "fuera"
     },
-    "pie": "La defensa falla",
+    "pie": "La defensa acierta: +2",
     "cuenta": {
      "defensor": "Elias",
      "base": 5,
      "defensa": 2,
      "muro": 0,
-     "cierre": 0,
-     "total": 7,
-     "margen": 2
+     "cierre": 2,
+     "total": 9
     },
-    "segundos": 10
+    "segundos": 14.9
    },
    {
     "tipo": "dados",
     "dados": [
-     4,
+     3,
      5
     ],
     "tirada": {
@@ -3758,12 +4137,27 @@
      "ataque": 6,
      "icono": "Tiro",
      "bonus": 1,
-     "total": 16,
-     "defensa": 7,
-     "margen": 2,
+     "total": 13,
+     "defensa": 9,
+     "castigo": 2,
      "anota": true
     },
-    "segundos": 6
+    "segundos": 11.6
+   },
+   {
+    "tipo": "titular",
+    "lineas": [
+     "22-22:",
+     "desempate."
+    ],
+    "colores": [
+     "texto",
+     "oro"
+    ],
+    "etiqueta": "Muerte súbita",
+    "pie": "Gana quien superó a su defensa por más. Los Coronas la superaron por 4; los Relámpagos, la igualaron. +1 para los Coronas.",
+    "acento": "#6A0DAD",
+    "segundos": 14.3
    },
    {
     "tipo": "resultado",
@@ -3784,13 +4178,13 @@
      }
     ],
     "puntos": [
-     52,
-     55
+     22,
+     23
     ],
     "resalta": 1,
-    "pie": "Final. Mejor del partido: Finn Diallo (42 puntos).",
+    "pie": "Final. Mejor del partido: Finn Diallo (9 puntos).",
     "acento": "#6A0DAD",
-    "segundos": 5.1
+    "segundos": 5.9
    }
   ]
  },
@@ -3827,7 +4221,7 @@
      }
     ],
     "pie": "Se decidió al final.",
-    "segundos": 7
+    "segundos": 8.2
    },
    {
     "tipo": "marcador",
@@ -3877,7 +4271,7 @@
     "titulo": "Atacan los Búhos",
     "pie": "Pierden de 1.",
     "acento": "#1B1B3A",
-    "segundos": 4.7
+    "segundos": 5.4
    },
    {
     "tipo": "cartas",
@@ -3910,7 +4304,7 @@
     ],
     "pie": "Búhos: «En el final apretado, siempre dentro.»",
     "acento": "#1B1B3A",
-    "segundos": 5.6
+    "segundos": 6.5
    },
    {
     "tipo": "revela",
@@ -3930,10 +4324,9 @@
      "defensa": 3,
      "muro": 0,
      "cierre": 2,
-     "total": 10,
-     "margen": 0
+     "total": 10
     },
-    "segundos": 10
+    "segundos": 14.9
    },
    {
     "tipo": "dados",
@@ -3948,10 +4341,10 @@
      "bonus": 2,
      "total": 16,
      "defensa": 10,
-     "margen": 0,
+     "castigo": 0,
      "anota": true
     },
-    "segundos": 6
+    "segundos": 10.4
    },
    {
     "tipo": "resultado",
@@ -3978,16 +4371,16 @@
     "resalta": 0,
     "pie": "Final. Mejor del partido: Iker Valverde (5 puntos).",
     "acento": "#1B1B3A",
-    "segundos": 5.1
+    "segundos": 5.9
    }
   ]
  },
  {
-  "id": "DF6",
+  "id": "DF6-1",
   "formato": "¿Dentro o fuera?",
   "fecha": "2026-12-27",
-  "titulo": "¿Dentro o fuera? 6",
-  "texto": "Último ataque. Los Gigantes pierden de 2. 🏀🎲\nDefiendes tú: ¿qué cierras, dentro o fuera?\nComenta antes de ver el final 👇\n#LigaNimbo #baloncesto #3x3 #baloncesto3x3 #basket",
+  "titulo": "¿Dentro o fuera? 6 · la pregunta",
+  "texto": "Último ataque. Los Halcones pierden de 2. 🏀🎲\nDefiendes tú: ¿qué cierras, dentro o fuera?\nComenta y mañana, la tirada 👇\n#LigaNimbo #baloncesto #3x3 #baloncesto3x3 #basket",
   "escenas": [
    {
     "tipo": "titular",
@@ -4001,17 +4394,17 @@
     ],
     "etiqueta": "Partido de prueba",
     "pie": "Defiendes tú.",
-    "segundos": 5.1
+    "segundos": 5.9
    },
    {
     "tipo": "marcador",
-    "etiqueta": "Muerte súbita · último ataque",
+    "etiqueta": "Último ataque",
     "equipos": [
      {
-      "id": "TOR",
-      "nombre": "Gigantes",
-      "c1": "#5C5C5C",
-      "c2": "#E63946"
+      "id": "MIR",
+      "nombre": "Halcones",
+      "c1": "#F4A261",
+      "c2": "#264653"
      },
      {
       "id": "VLU",
@@ -4021,28 +4414,28 @@
      }
     ],
     "puntos": [
-     12,
-     14
+     10,
+     12
     ],
     "resalta": 1,
-    "titulo": "Atacan los Gigantes",
+    "titulo": "Atacan los Halcones",
     "pie": "Pierden de 2: dentro empatan; de 3, ganan.",
-    "acento": "#5C5C5C",
-    "segundos": 7.4
+    "acento": "#F4A261",
+    "segundos": 7.6
    },
    {
     "tipo": "cartas",
-    "titulo": "Tira Luka",
+    "titulo": "Tira Vera",
     "cartas": [
      {
-      "nombre": "Luka Sorensen",
-      "equipo": "TOR",
-      "meta": "21 años · Port Ashby",
+      "nombre": "Vera Herrero",
+      "equipo": "MIR",
+      "meta": "31 años · Alcorva",
       "ataque": 2,
       "defensa": 2,
       "icono": null,
-      "c1": "#5C5C5C",
-      "c2": "#E63946"
+      "c1": "#F4A261",
+      "c2": "#264653"
      },
      {
       "nombre": "Ximena Cuesta",
@@ -4064,8 +4457,8 @@
    },
    {
     "tipo": "tabla",
-    "titulo": "Lo que necesita Luka",
-    "tirador": "Luka",
+    "titulo": "Lo que necesita Vera",
+    "tirador": "Vera",
     "tabla": {
      "dentro": {
       "dentro": 7,
@@ -4086,59 +4479,53 @@
     ],
     "pie": "Comenta DENTRO o FUERA",
     "acento": "#1B1B3A",
-    "segundos": 4.5
+    "segundos": 4.8
    },
    {
-    "tipo": "revela",
-    "titulo": "Y pasó esto",
-    "tira": {
-     "quien": "Luka tira",
-     "tipo": "dentro"
-    },
-    "cierra": {
-     "quien": "Búhos cierran",
-     "tipo": "dentro"
-    },
-    "pie": "La defensa acierta: +2",
-    "cuenta": {
-     "defensor": "Ximena",
-     "base": 5,
-     "defensa": 2,
-     "muro": 0,
-     "cierre": 2,
-     "total": 9,
-     "margen": 0
-    },
-    "segundos": 10
-   },
-   {
-    "tipo": "dados",
-    "dados": [
-     1,
-     3
+    "tipo": "titular",
+    "lineas": [
+     "Mañana,",
+     "la tirada."
     ],
-    "tirada": {
-     "tirador": "Luka",
-     "ataque": 2,
-     "icono": null,
-     "bonus": 0,
-     "total": 6,
-     "defensa": 9,
-     "margen": 0,
-     "anota": false
-    },
-    "segundos": 6
+    "colores": [
+     "texto",
+     "lila"
+    ],
+    "pie": "Y verás si la habrías parado.",
+    "segundos": 6.5
+   }
+  ]
+ },
+ {
+  "id": "DF6-2",
+  "formato": "¿Dentro o fuera?",
+  "fecha": "2026-12-28",
+  "titulo": "¿Dentro o fuera? 6 · la tirada",
+  "texto": "La tirada de ayer: Vera tira y salen los dados. 🎲\n¿La habrías parado con lo que cerraste? Míralo y cuéntalo 👇\n#LigaNimbo #baloncesto #3x3 #baloncesto3x3 #basket",
+  "escenas": [
+   {
+    "tipo": "titular",
+    "lineas": [
+     "¿Dentro o fuera?",
+     "La tirada"
+    ],
+    "colores": [
+     "texto",
+     "lila"
+    ],
+    "etiqueta": "Partido de prueba",
+    "pie": "Ayer elegiste qué cerrar.",
+    "segundos": 8.2
    },
    {
-    "tipo": "resultado",
-    "titulo": "¡No entra!",
-    "bien": false,
+    "tipo": "marcador",
+    "etiqueta": "Último ataque",
     "equipos": [
      {
-      "id": "TOR",
-      "nombre": "Gigantes",
-      "c1": "#5C5C5C",
-      "c2": "#E63946"
+      "id": "MIR",
+      "nombre": "Halcones",
+      "c1": "#F4A261",
+      "c2": "#264653"
      },
      {
       "id": "VLU",
@@ -4148,25 +4535,106 @@
      }
     ],
     "puntos": [
-     12,
-     14
+     10,
+     12
     ],
     "resalta": 1,
-    "pie": "Ganan los Búhos",
-    "acento": "#1B1B3A",
-    "segundos": 3.8
+    "titulo": "Atacan los Halcones",
+    "pie": "Pierden de 2: dentro empatan; de 3, ganan.",
+    "acento": "#F4A261",
+    "segundos": 6
+   },
+   {
+    "tipo": "cartas",
+    "titulo": "Tira Vera",
+    "cartas": [
+     {
+      "nombre": "Vera Herrero",
+      "equipo": "MIR",
+      "meta": "31 años · Alcorva",
+      "ataque": 2,
+      "defensa": 2,
+      "icono": null,
+      "c1": "#F4A261",
+      "c2": "#264653"
+     },
+     {
+      "nombre": "Ximena Cuesta",
+      "equipo": "VLU",
+      "meta": "24 años · Valcierzo",
+      "ataque": 4,
+      "defensa": 2,
+      "icono": "Aro",
+      "c1": "#1B1B3A",
+      "c2": "#E0AFA0"
+     }
+    ],
+    "roles": [
+     "Tira",
+     "Tú le defiendes"
+    ],
+    "pie": "Aro: +2 dentro",
+    "segundos": 4.5
+   },
+   {
+    "tipo": "tira",
+    "titulo": "Y tira…",
+    "quien": "Vera tira",
+    "tiro": "fuera",
+    "pie": "De 3, con -2 a la tirada.",
+    "acento": "#F4A261",
+    "segundos": 6.6
+   },
+   {
+    "tipo": "dados",
+    "dados": [
+     5,
+     2
+    ],
+    "tirada": {
+     "tirador": "Vera",
+     "ataque": 2,
+     "icono": null,
+     "bonus": 0,
+     "total": 7,
+     "castigo": 2
+    },
+    "segundos": 8.8
+   },
+   {
+    "tipo": "cierres",
+    "titulo": "¿La paraste?",
+    "ataque": 7,
+    "filas": [
+     {
+      "cierra": "dentro",
+      "suma": "5 + 2 de Ximena",
+      "defensa": 7,
+      "anota": true,
+      "pie": "Entra: ganan los Halcones, 13-12."
+     },
+     {
+      "cierra": "fuera",
+      "suma": "5 + 2 de Ximena + 2 por acertar",
+      "defensa": 9,
+      "anota": false,
+      "pie": "¡La paras! Ganan los Búhos, 10-12."
+     }
+    ],
+    "segundos": 17
    },
    {
     "tipo": "titular",
     "lineas": [
-     "¿Acertaste?",
+     "¿La paraste?",
      "Cuéntalo abajo."
     ],
     "colores": [
      "texto",
      "lila"
     ],
-    "segundos": 3
+    "pie": "En el partido, los Búhos cerraron fuera.",
+    "segundos": 7.6
    }
   ]
  },
@@ -4203,7 +4671,7 @@
      }
     ],
     "pie": "Se decidió al final.",
-    "segundos": 7
+    "segundos": 8.2
    },
    {
     "tipo": "marcador",
@@ -4253,7 +4721,7 @@
     "titulo": "Atacan los Gigantes",
     "pie": "Ganan de 4.",
     "acento": "#5C5C5C",
-    "segundos": 4.7
+    "segundos": 5.4
    },
    {
     "tipo": "cartas",
@@ -4305,10 +4773,9 @@
      "defensa": 2,
      "muro": 0,
      "cierre": 2,
-     "total": 9,
-     "margen": 0
+     "total": 9
     },
-    "segundos": 10
+    "segundos": 14.9
    },
    {
     "tipo": "dados",
@@ -4323,10 +4790,10 @@
      "bonus": 0,
      "total": 11,
      "defensa": 9,
-     "margen": 0,
+     "castigo": 0,
      "anota": true
     },
-    "segundos": 6
+    "segundos": 9.3
    },
    {
     "tipo": "resultado",
@@ -4353,7 +4820,7 @@
     "resalta": 0,
     "pie": "Final. Mejor del partido: Carla Echeverría (4 puntos).",
     "acento": "#5C5C5C",
-    "segundos": 5.1
+    "segundos": 5.9
    }
   ]
  },
@@ -4390,7 +4857,7 @@
      }
     ],
     "pie": "Un partido de verdad, tirada a tirada.",
-    "segundos": 8.3
+    "segundos": 9.8
    },
    {
     "tipo": "marcador",
@@ -4440,7 +4907,7 @@
     "titulo": "Atacan los Panteras",
     "pie": "Pierden de 1.",
     "acento": "#3C096C",
-    "segundos": 4.7
+    "segundos": 5.4
    },
    {
     "tipo": "cartas",
@@ -4492,10 +4959,9 @@
      "defensa": 2,
      "muro": 0,
      "cierre": 2,
-     "total": 9,
-     "margen": 2
+     "total": 9
     },
-    "segundos": 10
+    "segundos": 14.9
    },
    {
     "tipo": "dados",
@@ -4508,12 +4974,12 @@
      "ataque": 3,
      "icono": null,
      "bonus": 0,
-     "total": 11,
+     "total": 9,
      "defensa": 9,
-     "margen": 2,
+     "castigo": 2,
      "anota": true
     },
-    "segundos": 6
+    "segundos": 10.4
    },
    {
     "tipo": "resultado",
@@ -4540,7 +5006,7 @@
     "resalta": 0,
     "pie": "Final. Mejor del partido: Irene Pastor (6 puntos).",
     "acento": "#3C096C",
-    "segundos": 5.1
+    "segundos": 5.9
    }
   ]
  },
@@ -4577,7 +5043,7 @@
      }
     ],
     "pie": "Un partido de verdad, tirada a tirada.",
-    "segundos": 8.3
+    "segundos": 9.8
    },
    {
     "tipo": "marcador",
@@ -4627,7 +5093,7 @@
     "titulo": "Atacan los Forjadores",
     "pie": "Pierden de 1.",
     "acento": "#8B2500",
-    "segundos": 4.7
+    "segundos": 5.4
    },
    {
     "tipo": "cartas",
@@ -4679,10 +5145,9 @@
      "defensa": 3,
      "muro": 0,
      "cierre": 2,
-     "total": 10,
-     "margen": 2
+     "total": 10
     },
-    "segundos": 10
+    "segundos": 14.9
    },
    {
     "tipo": "dados",
@@ -4695,12 +5160,12 @@
      "ataque": 4,
      "icono": "Tiro",
      "bonus": 1,
-     "total": 12,
+     "total": 10,
      "defensa": 10,
-     "margen": 2,
+     "castigo": 2,
      "anota": true
     },
-    "segundos": 6
+    "segundos": 11.6
    },
    {
     "tipo": "resultado",
@@ -4727,7 +5192,7 @@
     "resalta": 0,
     "pie": "Final. Mejor del partido: Astrid Abara (6 puntos).",
     "acento": "#8B2500",
-    "segundos": 5.1
+    "segundos": 5.9
    }
   ]
  },
@@ -4764,7 +5229,7 @@
      }
     ],
     "pie": "Se decidió al final.",
-    "segundos": 7
+    "segundos": 8.2
    },
    {
     "tipo": "marcador",
@@ -4814,7 +5279,7 @@
     "titulo": "Atacan los Corsarios",
     "pie": "Empate.",
     "acento": "#0B6E4F",
-    "segundos": 4.2
+    "segundos": 4.8
    },
    {
     "tipo": "cartas",
@@ -4866,10 +5331,9 @@
      "defensa": 4,
      "muro": 0,
      "cierre": 0,
-     "total": 9,
-     "margen": 2
+     "total": 9
     },
-    "segundos": 10
+    "segundos": 13.8
    },
    {
     "tipo": "dados",
@@ -4882,12 +5346,12 @@
      "ataque": 3,
      "icono": null,
      "bonus": 0,
-     "total": 11,
+     "total": 9,
      "defensa": 9,
-     "margen": 2,
+     "castigo": 2,
      "anota": true
     },
-    "segundos": 6
+    "segundos": 10.4
    },
    {
     "tipo": "resultado",
@@ -4914,7 +5378,7 @@
     "resalta": 0,
     "pie": "Final. Mejor del partido: Andrea Ibarra (5 puntos).",
     "acento": "#0B6E4F",
-    "segundos": 5.1
+    "segundos": 5.9
    }
   ]
  }

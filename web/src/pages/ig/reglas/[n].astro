@@ -3,7 +3,7 @@
 import Instagram from "../../../layouts/Instagram.astro";
 import CartaGrande from "../../../components/ig/CartaGrande.astro";
 import { activas, franquicias, jugadores } from "../../../lib/liga";
-import { DESCRIPCION_ICONO, REGLAS, necesita, valorAtaque, valorDefensa } from "../../../motor/reglas.ts";
+import { DESCRIPCION_ICONO, REGLAS, castigo, necesita, valorAtaque, valorDefensa } from "../../../motor/reglas.ts";
 
 export function getStaticPaths() {
   return Array.from({ length: 8 }, (_, i) => ({ params: { n: String(i + 1) } }));
@@ -22,7 +22,7 @@ const dados: [number, number] = [5, 4];
 const ejAtaque = dados[0] + dados[1] + valorAtaque(atacante, "dentro");
 const ejDefensa = valorDefensa(defensor, "dentro", "dentro");
 const ejDefensaFuera = valorDefensa(defensor, "fuera", "dentro");
-const ejAtaqueFuera = dados[0] + dados[1] + valorAtaque(atacante, "fuera");
+const ejAtaqueFuera = dados[0] + dados[1] + valorAtaque(atacante, "fuera") - castigo("fuera");
 const nombreCorto = (nombre: string) => nombre.split(" ")[0];
 
 const equipoEjemplo = franquicias[atacante.franquicia].plantilla.map((id) => jugadores[id]);
@@ -123,7 +123,7 @@ const acento = n === 6 ? franquicias[atacante.franquicia].colores[0] : "#4f46e5"
         <h1 class="titular">La cuenta</h1>
         <div class="formula">
           <div class="etq">Ataque</div>
-          <div class="f">🎲 + 🎲 + <strong>Ataque</strong> de quien tira <span class="suave">+ su icono</span></div>
+          <div class="f">🎲 + 🎲 + <strong>Ataque</strong> de quien tira <span class="suave">+ su icono - {REGLAS.castigoFuera} si es de fuera</span></div>
         </div>
         <div class="formula">
           <div class="etq">Defensa</div>
@@ -132,8 +132,8 @@ const acento = n === 6 ? franquicias[atacante.franquicia].colores[0] : "#4f46e5"
           </div>
         </div>
         <div class="reglas-tiro">
-          <div><span class="pastilla">Dentro</span> entra si el ataque <strong>iguala o supera</strong> la defensa.</div>
-          <div><span class="pastilla">Fuera</span> entra si la <strong>supera por {REGLAS.margenFuera} o más</strong>.</div>
+          <div>Entra si el ataque <strong>iguala o supera</strong> la defensa.</div>
+          <div><span class="pastilla">Fuera</span> la tirada tiene <strong>-{REGLAS.castigoFuera}</strong>, pero vale {REGLAS.puntos.fuera}.</div>
         </div>
       </section>
     )
@@ -160,8 +160,8 @@ const acento = n === 6 ? franquicias[atacante.franquicia].colores[0] : "#4f46e5"
           <li class:list={["resultado", { falla: ejAtaque < ejDefensa }]}>{ejAtaque >= ejDefensa ? `${ejAtaque} ≥ ${ejDefensa}: ¡canasta de 2!` : `${ejAtaque} < ${ejDefensa}: no entra.`}</li>
         </ol>
         <p class="nota">
-          ¿Y si hubiera tirado de fuera? Perdía el Aro ({ejAtaqueFuera}), pero la defensa se quedaba en {ejDefensaFuera}: necesitaba {ejDefensaFuera + REGLAS.margenFuera}.{" "}
-          {ejAtaqueFuera >= ejDefensaFuera + REGLAS.margenFuera ? "Habría sido triple." : "Tampoco entraba."}
+          ¿Y si hubiera tirado de fuera? Perdía el Aro y tenía el -{REGLAS.castigoFuera} ({ejAtaqueFuera}), pero la defensa se quedaba en {ejDefensaFuera}.{" "}
+          {ejAtaqueFuera >= ejDefensaFuera ? "Habría sido triple." : "Tampoco entraba."}
         </p>
       </section>
     )
@@ -178,7 +178,7 @@ const acento = n === 6 ? franquicias[atacante.franquicia].colores[0] : "#4f46e5"
           </li>
           <li><strong>Tiempo muerto:</strong> una vez por partido, repites un tiro fallado.</li>
           <li><strong>Gana quien más anote</strong> tras los {REGLAS.ataquesPorEquipo} ataques.</li>
-          <li><strong>¿Empate?</strong> Muerte súbita: un ataque más cada uno, puede tirar cualquiera, hasta que alguien quede por delante.</li>
+          <li><strong>¿Empate?</strong> Muerte súbita: un ataque más cada uno y puede tirar cualquiera. Si anotan lo mismo, gana quien superó a su defensa por más (+1 punto).</li>
         </ul>
         <p class="nota">La gran pregunta: ¿gastas pronto los tiros de tu estrella o los guardas para el final?</p>
       </section>

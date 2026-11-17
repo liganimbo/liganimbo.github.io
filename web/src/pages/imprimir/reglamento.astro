@@ -5,7 +5,7 @@ import Impresion from "../../layouts/Impresion.astro";
 import Emblema from "../../components/Emblema.astro";
 import Naipe from "../../components/Naipe.astro";
 import { activas, mundo } from "../../lib/liga";
-import { DESCRIPCION_ICONO, REGLAS, VERSION_REGLAMENTO, valorAtaque, valorDefensa } from "../../motor/reglas.ts";
+import { DESCRIPCION_ICONO, REGLAS, VERSION_REGLAMENTO, castigo, valorAtaque, valorDefensa } from "../../motor/reglas.ts";
 import { CARTAS_POR_EQUIPO, TECHO_MAXIMO } from "../../motor/mundo.ts";
 import { CONFIG } from "../../motor/temporada.ts";
 import { VERANO } from "../../motor/verano.ts";
@@ -19,7 +19,7 @@ const dados: [number, number] = [5, 4];
 const suma = dados[0] + dados[1];
 const ataqueDentro = suma + valorAtaque(atacante, "dentro");
 const defensaDentro = valorDefensa(defensor, "dentro", "dentro");
-const ataqueFuera = suma + valorAtaque(atacante, "fuera");
+const ataqueFuera = suma + valorAtaque(atacante, "fuera") - castigo("fuera");
 const defensaFuera = valorDefensa(defensor, "fuera", "dentro");
 const nombre = (n: string) => n.split(" ")[0];
 const enPista = CARTAS_POR_EQUIPO - 1;
@@ -143,7 +143,7 @@ const HOJAS = 6;
       <div class="formula">
         <div class="etq">Ataque</div>
         <div class="f-linea"><b>dos dados</b> + <b>Ataque</b> de quien tira</div>
-        <div class="f-extra">+{R.bonusAro} si es Aro y tira dentro · +{R.bonusTiro} si es Tiro y tira fuera</div>
+        <div class="f-extra">-{R.castigoFuera} si tira fuera · +{R.bonusAro} si es Aro y tira dentro · +{R.bonusTiro} si es Tiro y tira fuera</div>
       </div>
       <div class="formula">
         <div class="etq">Defensa</div>
@@ -152,8 +152,8 @@ const HOJAS = 6;
       </div>
     </div>
     <div class="entra">
-      <div><span class="pastilla naranja">Dentro</span> entra si el ataque <strong>iguala o supera</strong> a la defensa: <strong>{R.puntos.dentro} puntos</strong>.</div>
-      <div><span class="pastilla indigo">Fuera</span> entra si el ataque <strong>supera a la defensa por {R.margenFuera} o más</strong>: <strong>{R.puntos.fuera} puntos</strong>.</div>
+      <div>Entra si el ataque <strong>iguala o supera</strong> a la defensa.</div>
+      <div><span class="pastilla naranja">Dentro</span> <strong>{R.puntos.dentro} puntos</strong> · <span class="pastilla indigo">Fuera</span> <strong>{R.puntos.fuera} puntos</strong>, con -{R.castigoFuera} a la tirada.</div>
     </div>
 
     <div class="caja-mates">
@@ -194,9 +194,9 @@ const HOJAS = 6;
         {defensaDentro - ataqueDentro >= R.margenTapon && " ¡Tapón!"}
       </p>
       <p class="pequeño">
-        ¿Y si hubiera tirado de fuera? Perdía el Aro (ataque {ataqueFuera}), pero el Muro no frena los triples y la defensa había
-        cerrado dentro: se quedaba en {defensaFuera} y le bastaba con {defensaFuera + R.margenFuera}.{" "}
-        {ataqueFuera >= defensaFuera + R.margenFuera ? "Habría sido triple." : "Tampoco entraba."}
+        ¿Y si hubiera tirado de fuera? Perdía el Aro y tenía el -{R.castigoFuera} (ataque {ataqueFuera}), pero el Muro no frena los
+        triples y la defensa había cerrado dentro: se quedaba en {defensaFuera}.{" "}
+        {ataqueFuera >= defensaFuera ? "Habría sido triple." : "Tampoco entraba."}
       </p>
     </div>
 
@@ -222,7 +222,8 @@ const HOJAS = 6;
         <dt>Muerte súbita</dt>
         <dd>
           Si hay empate, un ataque más por equipo, siguiendo el turno (empieza quien empezó el partido). Puede tirar cualquiera de
-          pista, tenga fichas o no. Se repite hasta que, tras un ataque de cada uno, alguien vaya por delante.
+          pista, tenga fichas o no. Si uno anota más, gana. Si anotan lo mismo, gana quien superó a su defensa por más; si fallan
+          los dos, quien se quedó más cerca. Quien gana así suma {R.puntoDesempate} punto. Si también empatan en eso, otra ronda.
         </dd>
       </div>
       <div>
@@ -293,7 +294,7 @@ const HOJAS = 6;
       <div>
         <div class="etq">Ataque</div>
         <div><b>2 dados + Ataque</b></div>
-        <div class="f-extra">+{R.bonusAro} Aro (dentro) · +{R.bonusTiro} Tiro (fuera)</div>
+        <div class="f-extra">-{R.castigoFuera} fuera · +{R.bonusAro} Aro (dentro) · +{R.bonusTiro} Tiro (fuera)</div>
       </div>
       <div>
         <div class="etq">Defensa</div>
@@ -302,8 +303,8 @@ const HOJAS = 6;
       </div>
       <div>
         <div class="etq">¿Entra?</div>
-        <div>Dentro, igualar: <b>{R.puntos.dentro} puntos</b></div>
-        <div>Fuera, superar por {R.margenFuera}: <b>{R.puntos.fuera} puntos</b></div>
+        <div>Igualar o superar la defensa</div>
+        <div>Dentro <b>{R.puntos.dentro} puntos</b> · fuera <b>{R.puntos.fuera} puntos</b></div>
       </div>
       <div>
         <div class="etq">Partido</div>

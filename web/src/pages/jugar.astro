@@ -20,13 +20,13 @@ const datos = { franquicias: mundo.franquicias, jugadores: mundo.jugadores };
       <li>Cada carta tiene <strong>2 tiros</strong> (●●). Cada equipo ataca 8 veces, por turnos.</li>
       <li>Cuando atacas, eliges quién tira (de quienes tengan tiros) y si va <strong>dentro (2 puntos)</strong> o <strong>fuera (3 puntos)</strong>.</li>
       <li>La defensa elige en secreto qué cierra. Si lo adivina, suma +2.</li>
-      <li><strong>Ataque</strong> = dos dados + Ataque de quien tira + su icono si encaja.</li>
+      <li><strong>Ataque</strong> = dos dados + Ataque de quien tira + su icono si encaja, y -2 si tira de fuera.</li>
       <li><strong>Defensa</strong> = 5 + Defensa de quien marca + su icono si encaja + 2 si ha cerrado lo que era.</li>
       <li>Iconos: <strong>Tiro</strong> +1 al tirar de fuera · <strong>Aro</strong> +2 al tirar de dentro · <strong>Muro</strong> +2 al defender tiros de dentro.</li>
-      <li>Dentro entra si el ataque iguala o supera a la defensa. Fuera hay que superarla por 2.</li>
+      <li>Entra si el ataque iguala o supera a la defensa.</li>
       <li>Tras 4 ataques de cada equipo hay descanso: <strong>el suplente entra obligatoriamente</strong> por alguien que ya haya gastado sus dos tiros, y el local vuelve a decidir los duelos.</li>
       <li>Un tiempo muerto por partido para repetir un tiro fallado.</li>
-      <li>Gana quien más puntos tenga tras los 8 ataques. Si hay empate, muerte súbita: un ataque más cada equipo (puede tirar cualquiera) hasta que alguien quede por delante.</li>
+      <li>Gana quien más puntos tenga tras los 8 ataques. Si hay empate, muerte súbita: un ataque más cada equipo (puede tirar cualquiera). Si anotan lo mismo, gana quien superó a su defensa por más; si fallan los dos, quien se quedó más cerca. Quien gana así suma 1 punto.</li>
     </ul>
   </details>
 
@@ -201,7 +201,7 @@ const datos = { franquicias: mundo.franquicias, jugadores: mundo.jugadores };
         <div class="m-pts">${p.puntos[l]}</div></div>`;
     };
     const meta = R.enProrroga(p, YO) && R.enProrroga(p, RIVAL) ? "Muerte súbita" : p.descansoHecho ? "2ª parte" : "1ª parte";
-    return `<div class="marcador-juego tarjeta">${lado(YO)}<div class="m-meta">${meta}</div>${lado(RIVAL)}</div>`;
+    return `<div class="marcador-juego tarjeta">${lado(R.LOCAL)}<div class="m-meta">${meta}</div>${lado(R.VISITANTE)}</div>`;
   }
 
   function filaPista(l: R.Lado, accion?: string) {
@@ -244,7 +244,7 @@ const datos = { franquicias: mundo.franquicias, jugadores: mundo.jugadores };
     return `<div class="panel resultado ${j.anota ? (mio ? "bien" : "mal") : mio ? "mal" : "bien"}">
       <div class="tirada">${dados(j.dados, st.rodando ? "rodando" : "")}</div>
       <div class="r-titulo">${st.rodando ? "…" : titulo}</div>
-      <div class="r-cuenta apagado">${st.rodando ? "" : `Ataque: ${j.dados[0]} + ${j.dados[1]} + ${R.valorAtaque(at, j.tipo)} (${at.nombre.split(" ")[0]}) = <strong>${j.ataque}</strong> · Defensa de ${nombreCorto(j.defensor)}: <strong>${j.defensa}</strong>${j.tipo === "fuera" ? " (de fuera hay que superarla por 2)" : ""}`}</div>
+      <div class="r-cuenta apagado">${st.rodando ? "" : `Ataque: ${j.dados[0]} + ${j.dados[1]} + ${R.valorAtaque(at, j.tipo)} (${at.nombre.split(" ")[0]})${j.tipo === "fuera" ? ` - ${R.REGLAS.castigoFuera} (fuera)` : ""} = <strong>${j.ataque}</strong> · Defensa de ${nombreCorto(j.defensor)}: <strong>${j.defensa}</strong>`}</div>
       ${st.rodando ? "" : `<div class="apagado">${cierre}${nota ? ` ${nota}` : ""}</div>`}
       ${st.rodando ? "" : `<div class="acciones">${tm}<button class="boton" data-accion="seguir">Seguir →</button></div>`}
     </div>`;
@@ -296,7 +296,7 @@ const datos = { franquicias: mundo.franquicias, jugadores: mundo.jugadores };
           : j.tapon
           ? `Tapón de ${nombre(j.defensor)}`
           : j.anota ? `${nombre(j.tirador)} anota ${j.tipo === "fuera" ? "de 3" : "de 2"}` : `${nombre(j.tirador)} falla ${TIPO[j.tipo]}`;
-        return `<li class="${j.anota ? "" : "apagado"}">${escudo(p.equipos[j.equipo].franquicia, 18)} ${txt}${j.tiempoMuerto ? " (tras tiempo muerto)" : ""}<span class="reg-m">${j.marcador[YO]}-${j.marcador[RIVAL]}</span></li>`;
+        return `<li class="${j.anota ? "" : "apagado"}">${escudo(p.equipos[j.equipo].franquicia, 18)} ${txt}${j.tiempoMuerto ? " (tras tiempo muerto)" : ""}<span class="reg-m">${j.marcador[0]}-${j.marcador[1]}</span></li>`;
       })
       .join("");
     return filas ? `<h3>Últimas jugadas</h3><ol class="registro">${filas}</ol>` : "";
@@ -347,8 +347,8 @@ const datos = { franquicias: mundo.franquicias, jugadores: mundo.jugadores };
     const stats = R.estadisticas(p)[mejor];
     return `${marcador()}<section class="paso tarjeta final ${gano ? "bien" : "mal"}">
       <h2>${gano ? "¡Victoria!" : "Derrota"}</h2>
-      <p>${gano ? `Los ${F[st.mio].nombre} ganan ${p.puntos[YO]}-${p.puntos[RIVAL]}.` : `Los ${F[st.rival].nombre} ganan ${p.puntos[RIVAL]}-${p.puntos[YO]}.`}
-      ${p.jugadas.length > 2 * R.REGLAS.ataquesPorEquipo ? "Se decidió en la muerte súbita." : ""}</p>
+      <p>Los ${F[gano ? st.mio : st.rival].nombre} ganan ${p.puntos[0]}-${p.puntos[1]}.
+      ${p.jugadas.at(-1)?.desempate ? "Se decidió en la muerte súbita, por margen: +1 punto de desempate." : p.jugadas.length > 2 * R.REGLAS.ataquesPorEquipo ? "Se decidió en la muerte súbita." : ""}</p>
       <p>★ Mejor del partido: <strong>${nombre(mejor)}</strong> (${stats.pts} puntos, ${stats.paradas} paradas).</p>
       <div class="acciones"><button class="boton" data-accion="revancha">Revancha</button><button class="boton secundario" data-accion="a-eleccion">Otros equipos</button></div>
     </section>${registro()}`;

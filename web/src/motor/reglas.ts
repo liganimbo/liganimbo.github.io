@@ -26,12 +26,15 @@ export const REGLAS = {
   /** El Muro solo suma contra los tiros de dentro. */
   muroSoloDentro: true,
   bonusCierre: 2,
-  margenFuera: 2,
+  /** Tirar de fuera resta esto a la tirada. */
+  castigoFuera: 2,
   /** Canasta de dentro que supera a la defensa por esto o más: mate. Solo se cuenta, no cambia nada. */
   margenMate: 6,
   /** Tiro de dentro que se queda corto por esto o más: tapón. Solo se cuenta, no cambia nada. */
   margenTapon: 4,
   puntos: { dentro: 2, fuera: 3 } as Record<Tipo, number>,
+  /** Muerte súbita: si la ronda acaba igual, gana quien superó a su defensa por más (o se quedó más cerca), y suma esto. */
+  puntoDesempate: 1,
 };
 
 /** Texto de cada icono, sacado de los números de las reglas. */
@@ -76,6 +79,8 @@ export interface Jugada {
   tapon: boolean;
   marcador: [number, number];
   tiempoMuerto?: { dadosAnteriores: [number, number] };
+  /** En la última jugada de una ronda de muerte súbita que acabó igual: quién la gana por margen (ataque menos defensa). */
+  desempate?: { gana: Lado; margen: [number, number] };
 }
 
 export interface Cambio {
@@ -177,10 +182,12 @@ export function valorDefensa(c: Carta, tipo: Tipo, cierra: Tipo): number {
   );
 }
 
+/** Lo que se resta a la tirada por el tipo de tiro: de fuera, -2. */
+export const castigo = (tipo: Tipo) => (tipo === "fuera" ? REGLAS.castigoFuera : 0);
+
 /** Lo que tienen que sumar los dos dados para que entre. */
 export function necesita(atacante: Carta, defensor: Carta, tipo: Tipo, cierra: Tipo): number {
-  const margen = tipo === "fuera" ? REGLAS.margenFuera : 0;
-  return valorDefensa(defensor, tipo, cierra) + margen - valorAtaque(atacante, tipo);
+  return valorDefensa(defensor, tipo, cierra) + castigo(tipo) - valorAtaque(atacante, tipo);
 }
 
 const FORMAS_DE_SUMAR = [0, 0, 1, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1];
@@ -211,9 +218,9 @@ export function atacar(p: Partido, tirador: string, tipo: Tipo, cierra: Tipo, da
 function resolver(p: Partido, lado: Lado, tirador: string, defensor: string, tipo: Tipo, cierra: Tipo, dados: [number, number]): Jugada {
   const at = carta(p, lado, tirador);
   const de = carta(p, rival(lado), defensor);
-  const ataque = dados[0] + dados[1] + valorAtaque(at, tipo);
+  const ataque = dados[0] + dados[1] + valorAtaque(at, tipo) - castigo(tipo);
   const defensa = valorDefensa(de, tipo, cierra);
-  const anota = ataque >= defensa + (tipo === "fuera" ? REGLAS.margenFuera : 0);
+  const anota = ataque >= defensa;
   const puntos = anota ? REGLAS.puntos[tipo] : 0;
   p.puntos[lado] += puntos;
   return {
@@ -251,6 +258,7 @@ export function puedeTiempoMuerto(p: Partido, lado: Lado): boolean {
 export function tiempoMuerto(p: Partido, lado: Lado, dados: [number, number]): Jugada {
   if (!puedeTiempoMuerto(p, lado)) throw new Error("No se puede pedir tiempo muerto ahora.");
   const anterior = p.jugadas.pop()!;
+  if (anterior.desempate) p.puntos[anterior.desempate.gana] -= REGLAS.puntoDesempate;
   p.equipos[lado].tiempoMuertoUsado = true;
   const nueva = resolver(p, lado, anterior.tirador, anterior.defensor, anterior.tipo, anterior.cierra, dados);
   nueva.tiempoMuerto = { dadosAnteriores: anterior.dados };
@@ -269,6 +277,22 @@ function comprobarEstado(p: Partido, lado: Lado) {
   if (a === b && a >= REGLAS.ataquesPorEquipo && p.puntos[0] !== p.puntos[1]) {
     p.ganador = p.puntos[0] > p.puntos[1] ? 0 : 1;
     p.fase = "final";
+    return;
+  }
+  // Ronda de muerte súbita que acaba igual (anotan lo mismo o fallan los dos): gana quien superó a su defensa por más,
+  // o quien se quedó más cerca, y suma el punto de desempate. Si también empatan en eso, otra ronda.
+  if (a === b && a > REGLAS.ataquesPorEquipo) {
+    const ronda = p.jugadas.slice(-2);
+    const margen = [0, 1].map((l) => ronda.filter((j) => j.equipo === l).reduce((_, j) => j.ataque - j.defensa, 0)) as [number, number];
+    if (margen[0] !== margen[1]) {
+      const gana: Lado = margen[0] > margen[1] ? 0 : 1;
+      const ultima = ronda[1];
+      p.puntos[gana] += REGLAS.puntoDesempate;
+      ultima.desempate = { gana, margen };
+      ultima.marcador = [p.puntos[0], p.puntos[1]];
+      p.ganador = gana;
+      p.fase = "final";
+    }
     return;
   }
   if (!p.descansoHecho && a >= REGLAS.descansoTras && b >= REGLAS.descansoTras) p.fase = "descanso";

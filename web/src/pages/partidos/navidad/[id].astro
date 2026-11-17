@@ -1,0 +1,31 @@
+---
+// Crónica de un Amistoso de Navidad: el mismo partido que cuenta su Reel, con la semilla para comprobarlo.
+import Base from "../../../layouts/Base.astro";
+import Cronica from "../../../components/Cronica.astro";
+import { amistosos } from "../../../lib/amistosos";
+import { fecha, franquicias, url } from "../../../lib/liga";
+
+export function getStaticPaths() {
+  return amistosos.map((a) => ({ params: { id: a.id }, props: { a } }));
+}
+
+const { a } = Astro.props;
+const p = a.p;
+---
+
+<Base titulo={`${franquicias[p.local].nombre} ${p.marcador[0]}-${p.marcador[1]} ${franquicias[p.visitante].nombre} · Amistosos de Navidad`}>
+  <div class="aviso tarjeta">
+    <strong>Amistosos de Navidad.</strong> No cuentan para la liga, pero son partidos de verdad: los ha jugado el motor con la
+    semilla <code>{a.semilla}</code>, sin repetir ni elegir. <a href={url("partidos/navidad")}>Los 12 amistosos</a> ·
+    <a href={url("reglas")}>Las reglas</a>.
+  </div>
+  <Cronica p={p} contexto={`Amistosos de Navidad · ${fecha(p.fecha)} · Pista de ${franquicias[p.local].ciudad}`} />
+</Base>
+
+<style>
+  .aviso {
+    margin-bottom: 16px;
+    background: var(--acento-suave);
+    border-color: var(--acento);
+  }
+</style>

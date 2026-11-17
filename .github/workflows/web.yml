@@ -1,10 +1,14 @@
-# Publica la web en GitHub Pages cada vez que se sube algo a main.
+# Publica la web en GitHub Pages cada vez que se sube algo a main (y cada tarde durante los Amistosos de Navidad).
 # La web se construye con los datos que haya en datos/ (la liga se avanza en local con npm run liga).
 name: Publicar web
 
 on:
   push:
     branches: [main]
+  # Amistosos de Navidad: cada tarde se reconstruye para publicar la crónica del día (la web solo enseña los ya jugados).
+  # 17:00 UTC = 18:00 en Madrid, antes del Reel de las 20:00.
+  schedule:
+    - cron: "0 17 18-31 12 *"
   workflow_dispatch:
 
 permissions:

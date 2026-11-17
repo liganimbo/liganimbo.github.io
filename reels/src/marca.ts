@@ -15,6 +15,12 @@ export const COLOR = {
   verde: "#6ee7a8",
 };
 
+/** Las cartas de elección, como las impresas: Dentro naranja, Fuera índigo. */
+export const TIRO = {
+  dentro: { c1: "#f47a2c", c2: "#b8430a" },
+  fuera: { c1: "#4b4fe0", c2: "#1d2060" },
+};
+
 /** Fondo de las publicaciones: halos del color protagonista sobre azul noche. */
 export const fondo = (acento = "#4f46e5") =>
   [

@@ -125,7 +125,7 @@ const R = REGLAS;
                   <small>Si atacas</small>
                   {t === "dentro"
                     ? `Tiro de ${R.puntos.dentro}. Entra si igualas la defensa.`
-                    : `Tiro de ${R.puntos.fuera}. Entra si superas la defensa por ${R.margenFuera}.`}
+                    : `Tiro de ${R.puntos.fuera}. -${R.castigoFuera} a la tirada; entra si igualas la defensa.`}
                 </div>
                 <div>
                   <small>Si defiendes</small>
@@ -172,10 +172,10 @@ const R = REGLAS;
             <div class="ch-bloque">
               <small>¿Entra?</small>
               <div>
-                Dentro, igualar: <strong>{R.puntos.dentro} puntos</strong>
+                Si iguala la defensa. Dentro: <strong>{R.puntos.dentro} puntos</strong>
               </div>
               <div>
-                Fuera, superar por {R.margenFuera}: <strong>{R.puntos.fuera} puntos</strong>
+                Fuera: <strong>{R.puntos.fuera} puntos</strong>, con -{R.castigoFuera} a la tirada
               </div>
             </div>
           </div>

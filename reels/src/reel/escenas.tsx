@@ -2,12 +2,11 @@
 import type React from "react";
 import { Easing, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
 import { Carta, Dado, Escudo } from "../elementos";
-import { COLOR, texto } from "../marca";
+import { COLOR, texto, TIRO } from "../marca";
 import { color, Eleccion, entra, etiqueta, finEntrada, fijo, Marcador, pie, tamTitular, titular, Zona } from "./comun";
 import type { Escena, Tipo } from "./tipos";
 
 type De<T extends Escena["tipo"]> = { e: Extract<Escena, { tipo: T }> };
-const palabra = (t: Tipo) => (t === "fuera" ? "Fuera" : "Dentro");
 
 // --- Titular ---------------------------------------------------------------------------------
 
@@ -148,8 +147,8 @@ export const Tabla = ({ e }: De<"tabla">) => {
         ])}
       </div>
       <div style={{ ...pie, fontSize: 38, ...entra(frame, 3.4 * fps) }}>
-        Si cierras lo que tira, su defensa suma <span style={{ color: COLOR.texto, fontWeight: 700 }}>+2</span>. De fuera hay que superarla{" "}
-        <span style={{ color: COLOR.texto, fontWeight: 700 }}>por 2</span>.
+        Si cierras lo que tira, su defensa suma <span style={{ color: COLOR.texto, fontWeight: 700 }}>+2</span>. De fuera, la tirada tiene{" "}
+        <span style={{ color: COLOR.texto, fontWeight: 700 }}>-2</span>.
       </div>
     </Zona>
   );
@@ -213,16 +212,15 @@ export const Revela = ({ e }: De<"revela">) => {
       <div style={{ ...titular, fontSize: 96, ...entra(frame, 0) }}>{e.titulo}</div>
       <div style={{ display: "flex", justifyContent: "center", gap: 40, height: 400 }}>
         <div style={{ scale: 0.68, transformOrigin: "top center" }}>
-          <Eleccion quien={e.tira.quien} revela={palabra(e.tira.tipo)} gira={0.8 * fps} color={COLOR.oro} />
+          <Eleccion quien={e.tira.quien} tipo={e.tira.tipo} gira={0.8 * fps} />
         </div>
         <div style={{ scale: 0.68, transformOrigin: "top center" }}>
-          <Eleccion quien={e.cierra.quien} revela={palabra(e.cierra.tipo)} gira={2 * fps} color={COLOR.lila} />
+          <Eleccion quien={e.cierra.quien} tipo={e.cierra.tipo} gira={2 * fps} />
         </div>
       </div>
       <div style={{ ...titular, textAlign: "center", fontSize: 80, color: acierta ? COLOR.lila : COLOR.oro, ...entra(frame, 2.7 * fps) }}>{e.pie}</div>
       <div style={{ display: "flex", flexDirection: "column", gap: 22, marginTop: 10 }}>
         <LineaCuenta que="Defensa" suma={defensa} da={`${c.total}`} colorDa={COLOR.lila} desde={4 * fps} />
-        {c.margen > 0 && <LineaCuenta que="De fuera" suma={`Hay que superarla por ${c.margen}`} da={`${c.total + c.margen}`} colorDa={COLOR.lila} desde={5.5 * fps} />}
       </div>
     </Zona>
   );
@@ -241,8 +239,7 @@ export const Dados = ({ e }: De<"dados">) => {
   const vuelta = (n: number, sentido: number) => `${interpolate(frame, [lanza, para[n]], [sentido * 900, 0], { ...fijo, easing: Easing.out(Easing.cubic) })}deg`;
   const golpe = (n: number) => interpolate(frame, [para[n], para[n] + 4, para[n] + 10], [1, 1.12, 1], fijo);
   const muestra = para[1] + 0.5 * fps;
-  const objetivo = t.defensa + t.margen;
-  const suma = [`${e.dados[0]} + ${e.dados[1]}`, `${t.ataque} de ${t.tirador}`, t.bonus ? `${t.bonus} de ${t.icono}` : ""].filter(Boolean).join(" + ");
+  const suma = [`${e.dados[0]} + ${e.dados[1]}`, `${t.ataque} de ${t.tirador}`, t.bonus ? `${t.bonus} de ${t.icono}` : ""].filter(Boolean).join(" + ") + (t.castigo ? ` - ${t.castigo} de fuera` : "");
   const caja = (que: string, valor: string, fondo: string, tinta: string, estilo: React.CSSProperties = {}) => (
     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "18px 36px", borderRadius: 28, background: fondo, ...estilo }}>
       <span style={{ ...etiqueta, fontSize: 34, color: tinta }}>{que}</span>
@@ -252,8 +249,7 @@ export const Dados = ({ e }: De<"dados">) => {
   return (
     <Zona gap={50}>
       <div style={entra(frame, 0)}>
-        {caja("Defensa", `${t.defensa}`, COLOR.lila, COLOR.noche)}
-        {t.margen > 0 && <div style={{ ...pie, fontSize: 38, color: COLOR.texto, marginTop: 14 }}>De fuera hay que superarla por {t.margen}: llegar a {objetivo}.</div>}
+        {t.defensa !== undefined && caja("Defensa", `${t.defensa}`, COLOR.lila, COLOR.noche)}
       </div>
       <div style={{ display: "flex", justifyContent: "center", gap: 80, opacity: frame >= lanza ? 1 : 0 }}>
         <Dado name="Dado 1" lado={240} cara={cara(0, 2)} style={{ rotate: vuelta(0, -1), translate: caida(0, "-400px -300px"), scale: golpe(0) }} />
@@ -265,13 +261,70 @@ export const Dados = ({ e }: De<"dados">) => {
           scale: interpolate(frame, [muestra, muestra + 0.5 * fps], [1.25, 1], { ...fijo, easing: Easing.out(Easing.back(2)) }),
         }}
       >
-        {caja("Ataque", `${t.total}`, t.anota ? COLOR.oro : "#2a2d48", t.anota ? COLOR.noche : COLOR.texto)}
+        {caja("Ataque", `${t.total}`, t.anota !== false ? COLOR.oro : "#2a2d48", t.anota !== false ? COLOR.noche : COLOR.texto)}
         <div style={{ ...pie, fontSize: 38, color: COLOR.texto, marginTop: 14 }}>{suma}</div>
       </div>
-      <div style={{ ...titular, textAlign: "center", fontSize: 92, color: t.anota ? COLOR.oro : COLOR.lila, ...entra(frame, muestra + 0.8 * fps) }}>
-        {t.total} contra {objetivo}: {t.anota ? "¡llega!" : "no llega"}
-      </div>
+      {t.defensa !== undefined && (
+        <div style={{ ...titular, textAlign: "center", fontSize: 92, color: t.anota ? COLOR.oro : COLOR.lila, ...entra(frame, muestra + 0.8 * fps) }}>
+          {t.total} contra {t.defensa}: {t.anota ? "¡llega!" : "no llega"}
+        </div>
+      )}
       {e.pie && <div style={{ ...pie, fontSize: 38, textAlign: "center", ...entra(frame, muestra + 1.3 * fps) }}>{e.pie}</div>}
+    </Zona>
+  );
+};
+
+// --- Tira: solo se gira la carta de quien ataca --------------------------------------------------
+
+export const Tira = ({ e }: De<"tira">) => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  return (
+    <Zona gap={50}>
+      <div style={{ ...titular, fontSize: 110, ...entra(frame, 0) }}>{e.titulo}</div>
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <Eleccion quien={e.quien} tipo={e.tiro} gira={0.8 * fps} />
+      </div>
+      <div style={{ ...titular, textAlign: "center", fontSize: 72, color: COLOR.texto, ...entra(frame, 1.4 * fps) }}>{e.pie}</div>
+    </Zona>
+  );
+};
+
+// --- Cierres: con los mismos dados, qué pasaba cerrando dentro y cerrando fuera -------------------
+
+export const Cierres = ({ e }: De<"cierres">) => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  return (
+    <Zona gap={44}>
+      <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", ...entra(frame, 0) }}>
+        <span style={{ ...titular, fontSize: 110 }}>{e.titulo}</span>
+        <span style={{ ...etiqueta, color: COLOR.oro }}>
+          Ataque <span style={{ ...titular, fontSize: 96, letterSpacing: 0 }}>{e.ataque}</span>
+        </span>
+      </div>
+      {e.filas.map((f, n) => {
+        const desde = (0.6 + 3.2 * n) * fps;
+        const { c1, c2 } = TIRO[f.cierra];
+        return (
+          <div
+            key={f.cierra}
+            style={{ borderRadius: 34, padding: "30px 36px", display: "flex", flexDirection: "column", gap: 14, background: "rgb(255 255 255 / 6%)", border: `5px solid ${c1}`, ...entra(frame, desde) }}
+          >
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <span style={{ ...etiqueta, color: COLOR.texto }}>
+                Si cierras{" "}
+                <span style={{ padding: "4px 18px", borderRadius: 14, background: `linear-gradient(135deg, ${c1}, ${c2})` }}>{f.cierra}</span>
+              </span>
+              <span style={{ ...titular, fontSize: 80, color: COLOR.lila }}>{f.defensa}</span>
+            </div>
+            <div style={{ ...pie, fontSize: 36, color: COLOR.apagado }}>Defensa: {f.suma}</div>
+            <div style={{ ...titular, fontSize: 64, color: f.anota ? COLOR.oro : COLOR.lila, ...entra(frame, desde + 1.2 * fps) }}>
+              {e.ataque} contra {f.defensa}. {f.pie}
+            </div>
+          </div>
+        );
+      })}
     </Zona>
   );
 };

@@ -22,22 +22,22 @@ const mejor = mejorDeLaJornada(n);
   <section class="lista">
     {
       partidos.map((p) => {
-        const gana = p.marcador[1] > p.marcador[0] ? 1 : 0;
+        const gana = p.marcador[0] > p.marcador[1] ? 0 : 1;
         return (
           <div class="partido">
-            <div class:list={["eq", { pierde: gana !== 1 }]}>
-              <Escudo id={p.visitante} tam={70} />
-              <span class="id">{p.visitante}</span>
+            <div class:list={["eq", { pierde: gana !== 0 }]}>
+              <Escudo id={p.local} tam={70} />
+              <span class="id">{p.local}</span>
             </div>
             <div class="marcador">
-              <span class:list={{ pierde: gana !== 1 }}>{p.marcador[1]}</span>
-              <span class="guion">–</span>
               <span class:list={{ pierde: gana !== 0 }}>{p.marcador[0]}</span>
+              <span class="guion">–</span>
+              <span class:list={{ pierde: gana !== 1 }}>{p.marcador[1]}</span>
               {p.jugadas.length > 16 && <span class="ms">Muerte súbita</span>}
             </div>
-            <div class:list={["eq", "der", { pierde: gana !== 0 }]}>
-              <span class="id">{p.local}</span>
-              <Escudo id={p.local} tam={70} />
+            <div class:list={["eq", "der", { pierde: gana !== 1 }]}>
+              <span class="id">{p.visitante}</span>
+              <Escudo id={p.visitante} tam={70} />
             </div>
           </div>
         );

@@ -24,8 +24,8 @@ const mejor = mejorDeLaJornada(n);
     {
       partidos.map((p) => {
         const filas = [
-          { id: p.visitante, pts: p.marcador[1], gana: p.marcador[1] > p.marcador[0] },
           { id: p.local, pts: p.marcador[0], gana: p.marcador[0] > p.marcador[1] },
+          { id: p.visitante, pts: p.marcador[1], gana: p.marcador[1] > p.marcador[0] },
         ];
         return (
           <div class="partido">

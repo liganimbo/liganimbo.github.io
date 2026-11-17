@@ -9,8 +9,9 @@ import fs from "node:fs";
 import path from "node:path";
 import { crearAzar } from "../src/motor/azar.ts";
 import { type Estilo, describirFirma, estrella, finalApretado, jugarAutomatico } from "../src/motor/ia.ts";
+import { AMISTOSOS, semillaAmistoso } from "../src/motor/amistosos.ts";
 import { type Mundo, valorCarta } from "../src/motor/mundo.ts";
-import { type Jugada, type Partido, type Tipo, REGLAS, estadisticas, mejorDelPartido, necesita, valorAtaque } from "../src/motor/reglas.ts";
+import { type Jugada, type Partido, type Tipo, REGLAS, castigo, estadisticas, mejorDelPartido, necesita, valorAtaque, valorDefensa } from "../src/motor/reglas.ts";
 
 const mundo: Mundo = JSON.parse(fs.readFileSync(path.resolve(import.meta.dirname, "../../datos/mundo.json"), "utf8"));
 const SALIDA = path.resolve(import.meta.dirname, "../../reels/src/datos/diciembre.json");
@@ -36,29 +37,43 @@ type Escena = { segundos?: number; acento?: string } & (
   | { tipo: "pregunta"; lineas: string[]; pie: string }
   | { tipo: "revela"; titulo: string; tira: { quien: string; tipo: Tipo }; cierra: { quien: string; tipo: Tipo }; pie: string; cuenta: ReturnType<typeof cuentaDe> }
   | { tipo: "dados"; dados: number[]; tirada: ReturnType<typeof tiradaDe>; pie?: string }
+  | { tipo: "tira"; titulo: string; quien: string; tiro: Tipo; pie: string }
+  | { tipo: "cierres"; titulo: string; ataque: number; filas: { cierra: Tipo; suma: string; defensa: number; anota: boolean; pie: string }[] }
   | { tipo: "resultado"; titulo: string; bien: boolean; equipos?: Equipo[]; puntos?: number[]; resalta?: number; pie?: string }
   | { tipo: "lista"; titulo: string; items: { escudo?: Equipo; carta?: Ficha; titulo: string; texto: string }[] }
   | { tipo: "carta"; rango?: string; carta: Ficha; titulo: string; pie?: string }
 );
 type Reel = { id: string; formato: string; fecha: string; titulo: string; texto: string; escenas: Escena[] };
 
-/** Segundos para leer con calma (algo más de 2 palabras por segundo) lo que pone en pantalla, con un mínimo por tipo para que se vea lo que pasa. */
-const MINIMO: Record<Escena["tipo"], number> = { titular: 3, cartas: 4.5, marcador: 3.5, tabla: 7.5, pregunta: 4.5, revela: 10, dados: 6, resultado: 3.5, lista: 2, carta: 3.8 };
+/** Segundos para leer con calma (menos de 2 palabras por segundo) lo que pone en pantalla, con un mínimo por tipo para que se vea lo que pasa. */
+const MINIMO: Record<Escena["tipo"], number> = { titular: 3, cartas: 4.5, marcador: 3.5, tabla: 7.5, pregunta: 4.5, revela: 10, dados: 6, resultado: 3.5, lista: 2, carta: 3.8, tira: 4, cierres: 9 };
+/** Lo que tarda en salir el texto que hay que leer (las cartas se giran antes, los dados ruedan antes). */
+const RETRASO: Partial<Record<Escena["tipo"], number>> = { tabla: 3.4, revela: 4, dados: 4.5, tira: 1.2, cierres: 0.5 };
+const PALABRAS_POR_SEGUNDO = 1.8;
 function aLeer(e: Escena): string[] {
   const comunes = [("titulo" in e && e.titulo) || "", ("etiqueta" in e && e.etiqueta) || "", ("pie" in e && e.pie) || ""];
   if (e.tipo === "titular" || e.tipo === "pregunta") return [...e.lineas, ...comunes];
-  if (e.tipo === "revela") return [e.tira.quien, e.cierra.quien, ...comunes];
+  // La cuenta de la defensa y la del ataque también se leen, con sus números.
+  if (e.tipo === "revela") return [e.tira.quien, e.cierra.quien, "Defensa de", e.cuenta.defensor, e.cuenta.muro ? "de Muro" : "", e.cuenta.cierre ? "por acertar" : "", ...comunes];
+  if (e.tipo === "dados") {
+    const t = e.tirada;
+    const contra = t.defensa === undefined ? [] : ["Defensa contra", t.anota ? "llega" : "no llega"];
+    return ["Ataque de", t.tirador, t.icono ? "de " + t.icono : "", t.castigo ? "de fuera" : "", ...contra, ...comunes];
+  }
+  if (e.tipo === "cierres") return [e.titulo, ...e.filas.flatMap((f) => ["Si cierras", f.cierra, "Defensa", f.suma, "contra", f.pie])];
   if (e.tipo === "lista") return [...e.items.flatMap((x) => [x.titulo, x.texto]), ...comunes];
   return comunes;
 }
 function duracion(e: Escena): number {
   const palabras = aLeer(e).join(" ").split(/\s+/).filter((w) => /\p{L}/u.test(w)).length;
   const extra = e.tipo === "lista" ? 1.8 * e.items.length : 0;
-  return Math.round(Math.max(MINIMO[e.tipo], 1.5 + palabras / 2.2) * 10 + extra * 10) / 10;
+  const leer = (RETRASO[e.tipo] ?? 0) + 1.5 + palabras / PALABRAS_POR_SEGUNDO;
+  return Math.round(Math.max(MINIMO[e.tipo], leer) * 10 + extra * 10) / 10;
 }
 
 // «los Búhos», «el Vendaval»: el artículo y el verbo dependen de si el nombre es plural.
 const plural = (fid: string) => franquicias[fid].nombre.endsWith("s");
+const del = (fid: string) => `${plural(fid) ? "de los" : "del"} ${franquicias[fid].nombre}`;
 const los = (fid: string) => `${plural(fid) ? "los" : "el"} ${franquicias[fid].nombre}`;
 const Los = (fid: string) => los(fid)[0].toUpperCase() + los(fid).slice(1);
 const verbo = (fid: string, singular: string, plu: string) => (plural(fid) ? plu : singular);
@@ -85,7 +100,7 @@ function todasLasParejas(): [string, string][] {
   return IDS.flatMap((a) => IDS.filter((b) => b !== a).map((b) => [a, b] as [string, string]));
 }
 
-/** La defensa total al descubrir qué se tira y qué se cierra (y, de fuera, que hay que superarla por 2). */
+/** La defensa total al descubrir qué se tira y qué se cierra. */
 function cuentaDe(j: Jugada) {
   const de = mundo.jugadores[j.defensor];
   return {
@@ -95,12 +110,11 @@ function cuentaDe(j: Jugada) {
     muro: de.icono === "Muro" && (!REGLAS.muroSoloDentro || j.tipo === "dentro") ? REGLAS.bonusMuro : 0,
     cierre: j.cierra === j.tipo ? REGLAS.bonusCierre : 0,
     total: j.defensa,
-    margen: j.tipo === "fuera" ? REGLAS.margenFuera : 0,
   };
 }
 
-/** La tirada: la defensa que hay que alcanzar (o superar por 2, de fuera) y el ataque total con los dados. */
-function tiradaDe(j: Jugada) {
+/** La tirada: la defensa que hay que alcanzar y el ataque total con los dados (con el -2, de fuera). Sin defensa, solo el ataque. */
+function tiradaDe(j: Jugada, conDefensa = true) {
   const at = mundo.jugadores[j.tirador];
   const ataque = valorAtaque(at, j.tipo);
   return {
@@ -109,9 +123,9 @@ function tiradaDe(j: Jugada) {
     icono: ataque > at.ataque ? at.icono : null,
     bonus: ataque - at.ataque,
     total: j.ataque,
-    defensa: j.defensa,
-    margen: j.tipo === "fuera" ? REGLAS.margenFuera : 0,
-    anota: j.anota,
+    defensa: conDefensa ? j.defensa : undefined,
+    castigo: castigo(j.tipo),
+    anota: conDefensa ? j.anota : undefined,
   };
 }
 const dadosDe = (j: Jugada, pie?: string): Escena => ({ tipo: "dados", dados: j.dados, tirada: tiradaDe(j), pie });
@@ -184,7 +198,7 @@ function reglaCuenta(): Escena[] {
     { tipo: "titular", lineas: ["Ataque:", "dos dados + su Ataque"], colores: ["oro", "texto"], pie: `${nombre(j.tirador)}: dados + ${valorAtaque(at, j.tipo)}${at.icono === "Aro" ? " (su Aro suma 2 al tirar dentro)" : ""}` },
     { tipo: "titular", lineas: ["Defensa:", "5 + su Defensa"], colores: ["lila", "texto"], pie: `${nombre(j.defensor)}: 5 + ${de.defensa}${de.icono === "Muro" ? " + 2 de su Muro" : ""} + 2 porque ha cerrado dentro = ${j.defensa}` },
     dadosDe(j, "Justo lo que valía la defensa. Dentro, con igualarla basta."),
-    { tipo: "resultado", titulo: "¡Entra!", bien: true, pie: "Dentro entra si iguala la defensa. Fuera, si la supera por 2." },
+    { tipo: "resultado", titulo: "¡Entra!", bien: true, pie: `Entra si iguala la defensa. De fuera, la tirada tiene -${REGLAS.castigoFuera}.` },
     { tipo: "titular", lineas: ["Así de simple.", "Así de tenso."], colores: ["texto", "oro"] },
   ];
 }
@@ -251,17 +265,17 @@ function reglaDescanso(): Escena[] {
 }
 
 function reglaMuerteSubita(): Escena[] {
-  const { p, i } = buscar((p, j, i) => i === p.jugadas.length - 1 && i >= 2 * REGLAS.ataquesPorEquipo && j.anota, "subita");
+  const { p, i } = buscar((p, j, i) => i === p.jugadas.length - 1 && i >= 2 * REGLAS.ataquesPorEquipo && j.anota && !j.desempate, "subita");
   const j = p.jugadas[i];
   const empate = p.jugadas[2 * REGLAS.ataquesPorEquipo - 1].marcador;
   const fa = p.equipos[j.equipo].franquicia;
   return [
     gancho(["Empate", "tras 8 ataques."]),
     { tipo: "marcador", etiqueta: "Final… o no", equipos: p.equipos.map((e) => equipo(e.franquicia)), puntos: empate, titulo: "Muerte súbita" },
-    { tipo: "titular", lineas: ["Un ataque más", "cada uno."], pie: "Puede tirar cualquiera de pista, tenga tiros o no. Hasta que alguien quede por delante." },
+    { tipo: "titular", lineas: ["Un ataque más", "cada uno."], pie: "Puede tirar cualquiera de pista, tenga tiros o no." },
     ...escenasJugada(p, i, { titulo: `${Los(fa)} ${verbo(fa, "elige", "eligen")} a ${nombre(j.tirador)}` }),
     { tipo: "resultado", titulo: exclamacion(j), bien: true, equipos: p.equipos.map((e) => equipo(e.franquicia)), puntos: j.marcador, resalta: j.equipo },
-    { tipo: "titular", lineas: ["Aquí no hay", "segunda oportunidad."], colores: ["texto", "oro"] },
+    { tipo: "titular", lineas: ["¿Y si anotan", "los dos?"], colores: ["texto", "oro"], pie: `Gana quien superó a su defensa por más, y suma ${REGLAS.puntoDesempate} punto. Si fallan los dos, quien se quedó más cerca.` },
   ];
 }
 
@@ -296,28 +310,34 @@ function esPulso(p: Partido, j: Jugada, i: number) {
   const valor = (tipo: Tipo, cierra: Tipo) => vale(tipo) * probabilidadDe(necesita(at, de, tipo, cierra));
   return valor("fuera", "dentro") > valor("dentro", "dentro") && valor("dentro", "fuera") > valor("fuera", "fuera");
 }
+/**
+ * Un pulso en el que lo que cierres decide: con esos dados, cerrando lo que tira se para y cerrando lo otro entra.
+ * Y sin tiempo muerto de por medio (si le quedara, fallando habría repetido la tirada).
+ */
+function esDentroOFuera(p: Partido, j: Jugada, i: number) {
+  if (!esPulso(p, j, i) || i >= 2 * REGLAS.ataquesPorEquipo || j.tiempoMuerto || !p.equipos[j.equipo].tiempoMuertoUsado) return false;
+  const de = mundo.jugadores[j.defensor];
+  return j.ataque >= valorDefensa(de, j.tipo, otro(j.tipo)) && j.ataque < valorDefensa(de, j.tipo, j.tipo);
+}
+const otro = (t: Tipo): Tipo => (t === "dentro" ? "fuera" : "dentro");
 const FORMAS_DE_SUMAR = [0, 0, 1, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1];
 const probabilidadDe = (n: number) => (n <= 2 ? 1 : n > 12 ? 0 : FORMAS_DE_SUMAR.slice(n).reduce((s, x) => s + x, 0) / 36);
 
-function dentroOFuera(p: Partido, i: number, contexto: string, conFirma: boolean): Escena[] {
+/** Lo que comparten las dos partes: el gancho, el marcador antes del último ataque y el duelo. */
+function situacion(p: Partido, i: number, contexto: string, conFirma: boolean, lineas: string[], pieGancho: string): Escena[] {
   const j = p.jugadas[i];
   const fa = p.equipos[j.equipo].franquicia;
-  const fd = p.equipos[1 - j.equipo].franquicia;
-  const antes = antesDe(p, i);
-  const pierde = antes[1 - j.equipo] - antes[j.equipo];
+  const pierde = antesDe(p, i)[1 - j.equipo] - antesDe(p, i)[j.equipo];
   const at = mundo.jugadores[j.tirador];
   const de = mundo.jugadores[j.defensor];
   const firma = franquicias[fa].estilo.firma;
-  const equipos = p.equipos.map((e) => equipo(e.franquicia));
-  const despues = j.marcador;
-  const ganador = despues[0] === despues[1] ? null : despues[0] > despues[1] ? 0 : 1;
   return [
-    gancho(["¿Dentro", "o fuera?"], { etiqueta: contexto, pie: "Defiendes tú." }),
+    gancho(lineas, { etiqueta: contexto, pie: pieGancho }),
     {
       tipo: "marcador",
       etiqueta: i >= 2 * REGLAS.ataquesPorEquipo ? "Muerte súbita · último ataque" : "Último ataque",
-      equipos,
-      puntos: antes,
+      equipos: p.equipos.map((e) => equipo(e.franquicia)),
+      puntos: antesDe(p, i),
       resalta: 1 - j.equipo,
       titulo: `${verbo(fa, "Ataca", "Atacan")} ${los(fa)}`,
       pie: pierde === 1 ? "Pierden de 1: cualquier canasta les da la victoria." : "Pierden de 2: dentro empatan; de 3, ganan.",
@@ -330,28 +350,64 @@ function dentroOFuera(p: Partido, i: number, contexto: string, conFirma: boolean
       roles: ["Tira", "Tú le defiendes"],
       pie: conFirma && firma ? `${franquicias[fa].nombre}: «${describirFirma(firma)}»` : [at.icono, de.icono].filter(Boolean).length ? iconosEnJuego(at.icono, de.icono) : undefined,
     },
+  ];
+}
+
+/** Parte 1: la situación y la pregunta. La tirada, mañana. */
+function dentroOFuera1(p: Partido, i: number, contexto: string, conFirma: boolean): Escena[] {
+  const j = p.jugadas[i];
+  const fd = p.equipos[1 - j.equipo].franquicia;
+  const at = mundo.jugadores[j.tirador];
+  const de = mundo.jugadores[j.defensor];
+  return [
+    ...situacion(p, i, contexto, conFirma, ["¿Dentro", "o fuera?"], "Defiendes tú."),
     { tipo: "tabla", titulo: `Lo que necesita ${nombre(j.tirador)}`, tirador: nombre(j.tirador), tabla: Object.fromEntries(TIPOS.map((t) => [t, Object.fromEntries(TIPOS.map((c) => [c, necesita(at, de, t, c)]))])) as Record<Tipo, Record<Tipo, number>> },
     { tipo: "pregunta", lineas: ["¿Qué", "cierras?"], pie: "Comenta DENTRO o FUERA", acento: franquicias[fd].colores[0] },
+    { tipo: "titular", lineas: ["Mañana,", "la tirada."], colores: ["texto", "lila"], pie: "Y verás si la habrías parado." },
+  ];
+}
+
+/** Parte 2: lo que tira, los dados y qué habría pasado cerrando dentro y cerrando fuera. */
+function dentroOFuera2(p: Partido, i: number, contexto: string): Escena[] {
+  const j = p.jugadas[i];
+  const fa = p.equipos[j.equipo].franquicia;
+  const fd = p.equipos[1 - j.equipo].franquicia;
+  const de = mundo.jugadores[j.defensor];
+  const antes = antesDe(p, i);
+  const final = (anota: boolean) => {
+    const puntos = [...antes];
+    if (anota) puntos[j.equipo] += REGLAS.puntos[j.tipo];
+    if (puntos[0] === puntos[1]) return "Empate: a muerte súbita";
+    const g = p.equipos[puntos[0] > puntos[1] ? 0 : 1].franquicia;
+    return `${anota ? "Entra:" : "¡La paras!"} ${anota ? verbo(g, "gana", "ganan") : verbo(g, "Gana", "Ganan")} ${los(g)}, ${puntos[0]}-${puntos[1]}.`;
+  };
+  // El repaso de la situación, más rápido: ya se vio ayer.
+  const [gancho2, marcador, cartas] = situacion(p, i, contexto, false, ["¿Dentro o fuera?", "La tirada"], "Ayer elegiste qué cerrar.");
+  return [
+    gancho2,
+    { ...marcador, segundos: 6 },
+    cartas,
     {
-      tipo: "revela",
-      titulo: "Y pasó esto",
-      tira: { quien: `${nombre(j.tirador)} tira`, tipo: j.tipo },
-      cierra: { quien: `${franquicias[fd].nombre} cierra${plural(fd) ? "n" : ""}`, tipo: j.cierra },
-      pie: j.cierra === j.tipo ? "La defensa acierta: +2" : "La defensa falla",
-      cuenta: cuentaDe(j),
+      tipo: "tira",
+      titulo: "Y tira…",
+      quien: `${nombre(j.tirador)} tira`,
+      tiro: j.tipo,
+      pie: j.tipo === "fuera" ? `De 3, con -${REGLAS.castigoFuera} a la tirada.` : `Dentro: vale ${REGLAS.puntos.dentro}.`,
+      acento: franquicias[fa].colores[0],
     },
-    dadosDe(j),
+    { tipo: "dados", dados: j.dados, tirada: tiradaDe(j, false) },
     {
-      tipo: "resultado",
-      titulo: exclamacion(j),
-      bien: j.anota,
-      equipos,
-      puntos: despues,
-      resalta: ganador ?? undefined,
-      pie: ganador === null ? "Empate: a muerte súbita" : `${verbo(p.equipos[ganador].franquicia, "Gana", "Ganan")} ${los(p.equipos[ganador].franquicia)}`,
-      acento: franquicias[j.anota ? fa : fd].colores[0],
+      tipo: "cierres",
+      titulo: "¿La paraste?",
+      ataque: j.ataque,
+      filas: TIPOS.map((c) => {
+        const cuenta = cuentaDe({ ...j, cierra: c });
+        const defensa = valorDefensa(de, j.tipo, c);
+        const suma = [`${cuenta.base}`, `${cuenta.defensa} de ${cuenta.defensor}`, cuenta.muro ? `${cuenta.muro} de Muro` : "", c === j.tipo ? `${REGLAS.bonusCierre} por acertar` : ""].filter(Boolean).join(" + ");
+        return { cierra: c, suma, defensa, anota: j.ataque >= defensa, pie: final(j.ataque >= defensa) };
+      }),
     },
-    { tipo: "titular", lineas: ["¿Acertaste?", "Cuéntalo abajo."], colores: ["texto", "lila"] },
+    { tipo: "titular", lineas: ["¿La paraste?", "Cuéntalo abajo."], colores: ["texto", "lila"], pie: `En el partido, ${los(fd)} ${verbo(fd, "cerró", "cerraron")} ${j.cierra}.` },
   ];
 }
 function iconosEnJuego(a: string | null, d: string | null) {
@@ -368,13 +424,18 @@ function ejemploFirma(fid: string): string {
   const parejas = rivales.flatMap((r) => [[fid, r], [r, fid]] as [string, string][]);
   const lado = (p: Partido) => (p.equipos[0].franquicia === fid ? 0 : 1);
   const rivalDe = (p: Partido) => p.equipos[1 - lado(p)].franquicia;
+  // El marcador, siempre local-visitante: por eso se dice quién juega en casa.
+  const contra = (p: Partido, i: number) => {
+    const m = antesDe(p, i);
+    return `${lado(p) === 0 ? `Contra ${los(rivalDe(p))}, en casa` : `En casa ${del(rivalDe(p))}`}, ${m[0]}-${m[1]}`;
+  };
   const marcador = (p: Partido, i: number) => {
     const m = antesDe(p, i);
-    return `${m[lado(p)]}-${m[1 - lado(p)]}`;
+    return `${m[0]}-${m[1]} (${lado(p) === 0 ? `en casa ${del(fid)}` : "en su casa"})`;
   };
   if (firma.tipo === "tiro") {
     const { p, j, i } = buscar((p, j, i) => j.equipo === lado(p) && i >= 2 * REGLAS.ataquesPorEquipo - 2 && finalApretadoAntes(p, i) && j.tipo === firma.va && j.anota, `firma-${fid}`, parejas);
-    return `Contra ${los(rivalDe(p))}, ${marcador(p, i)} y su último ataque: ${nombre(j.tirador)} tira ${deTipo(j.tipo)}… y entra.`;
+    return `${contra(p, i)} y su último ataque: ${nombre(j.tirador)} tira ${deTipo(j.tipo)}… y entra.`;
   }
   if (firma.tipo === "cierre") {
     const { p, j, i } = buscar((p, j, i) => j.equipo !== lado(p) && i >= 2 * REGLAS.ataquesPorEquipo - 2 && finalApretadoAntes(p, i) && j.cierra === firma.cierra && j.tipo === firma.cierra && !j.anota, `firma-${fid}`, parejas);
@@ -382,7 +443,7 @@ function ejemploFirma(fid: string): string {
   }
   if (firma.tipo === "contraria") {
     const { p, j, i } = buscar((p, j, i) => j.equipo === lado(p) && i >= 2 * REGLAS.ataquesPorEquipo - 2 && finalApretadoAntes(p, i) && j.cierra !== j.tipo && j.anota, `firma-${fid}`, parejas);
-    return `Contra ${los(rivalDe(p))}, ${marcador(p, i)}. Todos esperaban lo otro: ${nombre(j.tirador)} tira ${deTipo(j.tipo)}… y entra.`;
+    return `${contra(p, i)}. Todos esperaban lo otro: ${nombre(j.tirador)} tira ${deTipo(j.tipo)}… y entra.`;
   }
   const { p } = buscar((p) => true, `firma-${fid}`, parejas);
   const id = estrella(p, lado(p));
@@ -428,21 +489,6 @@ function mejoresCartas(): Escena[] {
 
 // --- AM · Amistosos de Navidad -----------------------------------------------------------------
 
-const AMISTOSOS: [string, string, string][] = [
-  ["2026-12-18", "VAL", "VLU"],
-  ["2026-12-19", "SGR", "TOR"],
-  ["2026-12-21", "MIR", "STE"],
-  ["2026-12-22", "PAL", "EBA"],
-  ["2026-12-23", "ALC", "FER"],
-  ["2026-12-24", "OST", "BRE"],
-  ["2026-12-25", "STE", "OST"],
-  ["2026-12-26", "VLU", "SGR"],
-  ["2026-12-28", "TOR", "VAL"],
-  ["2026-12-29", "EBA", "MIR"],
-  ["2026-12-30", "FER", "PAL"],
-  ["2026-12-31", "BRE", "ALC"],
-];
-const semillaAmistoso = (local: string, visitante: string) => `navidad-2026-${local}-${visitante}`;
 const amistosos = Object.fromEntries(AMISTOSOS.map(([, l, v]) => [`${l}-${v}`, jugar(l, v, semillaAmistoso(l, v))]));
 
 /** La jugada que lo decidió: la que puso al ganador por delante para no volver a ir por detrás (o, si ganó de principio a fin, su última canasta). */
@@ -482,7 +528,29 @@ function amistoso(fecha: string, local: string, visitante: string): Escena[] {
     cartas,
     revela,
     dados,
+    ...escenaDesempate(p),
     { tipo: "resultado", titulo: exclamacion(j), bien: j.anota, equipos, puntos: p.puntos, resalta: p.ganador!, pie: `Final. Mejor del partido: ${mundo.jugadores[mejor].nombre} (${linea.pts} puntos).`, acento: franquicias[p.equipos[p.ganador!].franquicia].colores[0] },
+  ];
+}
+
+/** Si la muerte súbita acabó igualada, cómo se desempató: por cuánto superó cada uno a su defensa. */
+function escenaDesempate(p: Partido): Escena[] {
+  const d = p.jugadas.at(-1)!.desempate;
+  if (!d) return [];
+  const g = p.equipos[d.gana].franquicia;
+  const o = p.equipos[1 - d.gana].franquicia;
+  const por = (fid: string, m: number) =>
+    m > 0 ? `${verbo(fid, "la superó", "la superaron")} por ${m}` : m === 0 ? verbo(fid, "la igualó", "la igualaron") : `${verbo(fid, "se quedó", "se quedaron")} a ${-m}`;
+  const empate = p.jugadas.at(-1)!.marcador.map((x, l) => (l === d.gana ? x - REGLAS.puntoDesempate : x));
+  return [
+    {
+      tipo: "titular",
+      lineas: [`${empate[0]}-${empate[1]}:`, "desempate."],
+      colores: ["texto", "oro"],
+      etiqueta: "Muerte súbita",
+      pie: `Gana quien superó a su defensa por más. ${Los(g)} ${por(g, d.margen[d.gana])}; ${los(o)}, ${d.margen[1 - d.gana] > 0 ? `por ${d.margen[1 - d.gana]}` : por(o, d.margen[1 - d.gana])}. +${REGLAS.puntoDesempate} para ${los(g)}.`,
+      acento: franquicias[g].colores[0],
+    },
   ];
 }
 
@@ -492,7 +560,7 @@ function dofDeAmistoso(hasta: string, excluir: string[]) {
     if (fecha > hasta) break;
     const p = amistosos[`${l}-${v}`];
     const i = p.jugadas.length - 1;
-    if (!excluir.includes(`${l}-${v}`) && esPulso(p, p.jugadas[i], i)) return { p, i, clave: `${l}-${v}` };
+    if (!excluir.includes(`${l}-${v}`) && esDentroOFuera(p, p.jugadas[i], i)) return { p, i, clave: `${l}-${v}` };
   }
   return null;
 }
@@ -511,7 +579,7 @@ añadir("R2", "Regla", "2026-12-03", "La cuenta", `Dos dados + tu Ataque contra 
 // ¿Dentro o fuera? de partidos de prueba: uno por equipo que ataca, sin repetir.
 const usados = new Set<string>();
 const dof = (prefijo: string, vale: (p: Partido, j: Jugada) => boolean = () => true) => {
-  const r = buscar((p, j, i) => esPulso(p, j, i) && !usados.has(p.equipos[j.equipo].franquicia) && vale(p, j), prefijo);
+  const r = buscar((p, j, i) => esDentroOFuera(p, j, i) && !usados.has(p.equipos[j.equipo].franquicia) && vale(p, j), prefijo);
   usados.add(r.p.equipos[r.j.equipo].franquicia);
   return r;
 };
@@ -519,14 +587,22 @@ const textoDof = (p: Partido, i: number) => {
   const j = p.jugadas[i];
   const fa = p.equipos[j.equipo].franquicia;
   const m = antesDe(p, i);
-  return `Último ataque. ${Los(fa)} ${verbo(fa, "pierde", "pierden")} de ${m[1 - j.equipo] - m[j.equipo]}. 🏀🎲\nDefiendes tú: ¿qué cierras, dentro o fuera?\nComenta antes de ver el final 👇\n${HASHTAGS} #basket`;
+  return `Último ataque. ${Los(fa)} ${verbo(fa, "pierde", "pierden")} de ${m[1 - j.equipo] - m[j.equipo]}. 🏀🎲\nDefiendes tú: ¿qué cierras, dentro o fuera?\nComenta y mañana, la tirada 👇\n${HASHTAGS} #basket`;
+};
+const textoDof2 = (p: Partido, i: number) =>
+  `La tirada de ayer: ${nombre(p.jugadas[i].tirador)} tira y salen los dados. 🎲\n¿La habrías parado con lo que cerraste? Míralo y cuéntalo 👇\n${HASHTAGS} #basket`;
+const mañana = (fecha: string) => new Date(Date.parse(fecha) + 86400000).toISOString().slice(0, 10);
+/** Las dos partes de un ¿Dentro o fuera?: la pregunta en `fecha` y la tirada al día siguiente. */
+const dosPartes = (id: string, fecha: string, titulo: string, p: Partido, i: number, contexto: string, conFirma: boolean, texto = textoDof(p, i)) => {
+  añadir(`${id}-1`, "¿Dentro o fuera?", fecha, `${titulo} · la pregunta`, texto, dentroOFuera1(p, i, contexto, conFirma));
+  añadir(`${id}-2`, "¿Dentro o fuera?", mañana(fecha), `${titulo} · la tirada`, textoDof2(p, i), dentroOFuera2(p, i, contexto));
 };
 const df1 = dof("dof-1");
-añadir("DF1", "¿Dentro o fuera?", "2026-12-04", "¿Dentro o fuera? 1", textoDof(df1.p, df1.i), dentroOFuera(df1.p, df1.i, "Partido de prueba", false));
+dosPartes("DF1", "2026-12-04", "¿Dentro o fuera? 1", df1.p, df1.i, "Partido de prueba", false);
 añadir("R3", "Regla", "2026-12-05", "Dos tiros por carta", `Cada carta tira dos veces. ¿Gastas a tu estrella pronto o la guardas para el final? ⏳\n${pieReglas}`, reglaFichas());
 añadir("R4", "Regla", "2026-12-06", "Los iconos", `Tiro, Aro y Muro: tres iconos, tres ventajas. 🏀\n${pieReglas}`, reglaIconos());
-const df2 = dof("dof-2", (p, j) => j.cierra === j.tipo);
-añadir("DF2", "¿Dentro o fuera?", "2026-12-07", "¿Dentro o fuera? 2", textoDof(df2.p, df2.i), dentroOFuera(df2.p, df2.i, "Partido de prueba", false));
+const df2 = dof("dof-2", (p, j) => j.tipo === "dentro");
+dosPartes("DF2", "2026-12-07", "¿Dentro o fuera? 2", df2.p, df2.i, "Partido de prueba", false);
 añadir("FI1", "Firmas", "2026-12-08", "Firmas 1/3", `Cada franquicia tiene su manía en el final apretado (1/3). ¿Te la sabías? 👀\n${HASHTAGS}`, firmas(IDS.slice(0, 4)));
 añadir("R5", "Regla", "2026-12-09", "Los duelos", `En casa, eliges los duelos. Por eso el local gana el 59 %. 🏟️\n${pieReglas}`, reglaDuelos());
 añadir("FI2", "Firmas", "2026-12-10", "Firmas 2/3", `Más manías del final apretado (2/3). 👀\n${HASHTAGS}`, firmas(IDS.slice(4, 8)));
@@ -534,19 +610,19 @@ const df3 = dof("dof-3", (p, j) => {
   const f = franquicias[p.equipos[j.equipo].franquicia].estilo.firma;
   return f?.tipo === "tiro" && f.va === "fuera" && finalApretado(p, j.equipo);
 });
-añadir("DF3", "¿Dentro o fuera?", "2026-12-11", "¿Dentro o fuera? 3 (con firma)", textoDof(df3.p, df3.i).replace("Defiendes tú", "En el final siempre tiran de 3. Defiendes tú"), dentroOFuera(df3.p, df3.i, "Partido de prueba", true));
+dosPartes("DF3", "2026-12-11", "¿Dentro o fuera? 3 (con firma)", df3.p, df3.i, "Partido de prueba", true, textoDof(df3.p, df3.i).replace("Defiendes tú", "En el final siempre tiran de 3. Defiendes tú"));
 añadir("FI3", "Firmas", "2026-12-12", "Firmas 3/3", `Las últimas manías del final apretado (3/3). Ya conoces las 12. 👀\n${HASHTAGS}`, firmas(IDS.slice(8, 12)));
 añadir("R6", "Regla", "2026-12-13", "El descanso", `En el descanso, el suplente entra sí o sí. Y sale quien ya no tiene tiros. 🔄\n${pieReglas}`, reglaDescanso());
-añadir("R7", "Regla", "2026-12-14", "Muerte súbita", `Empate tras 8 ataques: muerte súbita. Un ataque más cada uno, hasta que alguien quede por delante. ⚡\n${pieReglas}`, reglaMuerteSubita());
+añadir("R7", "Regla", "2026-12-14", "Muerte súbita", `Empate tras 8 ataques: muerte súbita. Un ataque más cada uno… y si anotan los dos, gana quien la metió con más margen. ⚡\n${pieReglas}`, reglaMuerteSubita());
 añadir("CA", "Cartas", "2026-12-15", "Las 5 mejores cartas", `Las 5 mejores cartas de la liga, una a una. ¿Cuál quieres en tu equipo? 🃏\n${HASHTAGS}`, mejoresCartas());
-const df4 = dof("dof-4", (p, j) => j.cierra !== j.tipo);
-añadir("DF4", "¿Dentro o fuera?", "2026-12-16", "¿Dentro o fuera? 4", textoDof(df4.p, df4.i), dentroOFuera(df4.p, df4.i, "Partido de prueba", false));
+const df4 = dof("dof-4", (p, j) => j.tipo === "fuera");
+dosPartes("DF4", "2026-12-16", "¿Dentro o fuera? 4", df4.p, df4.i, "Partido de prueba", false);
 añadir("R8", "Regla", "2026-12-17", "Mates y tapones", `Mates y tapones: no cambian el marcador, pero se cantan. 💥\n${pieReglas}`, reglaMatesTapones());
 
 const textoAmistoso = (fecha: string, l: string, v: string) => {
   const p = amistosos[`${l}-${v}`];
   const g = p.equipos[p.ganador!].franquicia;
-  return `Amistosos de Navidad · ${franquicias[l].nombre} – ${franquicias[v].nombre} 🎄🏀\n${Los(g)} ${verbo(g, "gana", "ganan")} ${Math.max(...p.puntos)}-${Math.min(...p.puntos)}.\nPartido real: la semilla (${semillaAmistoso(l, v)}) y todas las tiradas, en la crónica (enlace en la bio).\n${HASHTAGS}`;
+  return `Amistosos de Navidad · ${franquicias[l].nombre} – ${franquicias[v].nombre} 🎄🏀\n${Los(g)} ${verbo(g, "gana", "ganan")} ${p.puntos[0]}-${p.puntos[1]}.\nPartido real: la semilla (${semillaAmistoso(l, v)}) y todas las tiradas, en la crónica (enlace en la bio).\n${HASHTAGS}`;
 };
 const dofAmistosos: string[] = [];
 AMISTOSOS.forEach(([fecha, l, v], n) => {
@@ -559,10 +635,10 @@ AMISTOSOS.forEach(([fecha, l, v], n) => {
     if (r) {
       dofAmistosos.push(r.clave);
       const [lr, vr] = r.clave.split("-");
-      añadir(id, "¿Dentro o fuera?", otro, `${id.replace("DF", "¿Dentro o fuera? ")} (amistoso)`, textoDof(r.p, r.i), dentroOFuera(r.p, r.i, `Amistoso · ${franquicias[lr].nombre} – ${franquicias[vr].nombre}`, true));
+      dosPartes(id, otro, `${id.replace("DF", "¿Dentro o fuera? ")} (amistoso)`, r.p, r.i, `Amistoso · ${franquicias[lr].nombre} – ${franquicias[vr].nombre}`, true);
     } else {
       const d = dof(`dof-${id}`);
-      añadir(id, "¿Dentro o fuera?", otro, id.replace("DF", "¿Dentro o fuera? "), textoDof(d.p, d.i), dentroOFuera(d.p, d.i, "Partido de prueba", false));
+      dosPartes(id, otro, id.replace("DF", "¿Dentro o fuera? "), d.p, d.i, "Partido de prueba", false);
     }
   }
 });

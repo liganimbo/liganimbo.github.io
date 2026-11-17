@@ -2,7 +2,7 @@
 // en el primer fotograma, y el Reel acaba con esa misma escena entrando, así que el último fotograma es el primero.
 import { AbsoluteFill, Sequence, Track } from "remotion";
 import { fondo } from "../marca";
-import { Cartas, Dados, entradaTitular, EscenaMarcador, Lista, Pregunta, Resultado, Revela, Tabla, Titular, UnaCarta } from "./escenas";
+import { Cartas, Cierres, Dados, entradaTitular, EscenaMarcador, Lista, Pregunta, Resultado, Revela, Tabla, Tira, Titular, UnaCarta } from "./escenas";
 import { type Escena, type Guion, REELS } from "./tipos";
 
 export const FPS = 30;
@@ -23,6 +23,10 @@ const Pinta = ({ e }: { e: Escena }) => {
       return <Revela e={e} />;
     case "dados":
       return <Dados e={e} />;
+    case "tira":
+      return <Tira e={e} />;
+    case "cierres":
+      return <Cierres e={e} />;
     case "resultado":
       return <Resultado e={e} />;
     case "lista":

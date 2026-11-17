@@ -1,21 +1,23 @@
 ---
-// Tarjeta compacta de un partido: visitante arriba, local abajo.
+// Tarjeta compacta de un partido: local arriba, visitante abajo (los resultados, siempre local-visitante).
 import Escudo from "./Escudo.astro";
 import { franquicias, jugadores, url, type Resumen } from "../lib/liga";
 
 interface Props {
   p: Resumen;
   etiqueta?: string;
+  /** Adónde lleva; por defecto, a la crónica del partido de liga. */
+  href?: string;
 }
-const { p, etiqueta } = Astro.props;
+const { p, etiqueta, href = url(`partidos/${p.id}`) } = Astro.props;
 const [ptsLocal, ptsVisitante] = p.marcador;
 const filas = [
-  { id: p.visitante, pts: ptsVisitante, gana: ptsVisitante > ptsLocal },
   { id: p.local, pts: ptsLocal, gana: ptsLocal > ptsVisitante },
+  { id: p.visitante, pts: ptsVisitante, gana: ptsVisitante > ptsLocal },
 ];
 ---
 
-<a class="resultado tarjeta" href={url(`partidos/${p.id}`)}>
+<a class="resultado tarjeta" href={href}>
   {etiqueta && <div class="cabeza apagado">{etiqueta}</div>}
   {
     filas.map((f) => (

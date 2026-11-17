@@ -11,6 +11,6 @@ const { resumen } = Astro.props;
 const p = partido(resumen.id);
 ---
 
-<Base titulo={`${franquicias[p.visitante].nombre} ${p.marcador[1]}-${p.marcador[0]} ${franquicias[p.local].nombre}`}>
+<Base titulo={`${franquicias[p.local].nombre} ${p.marcador[0]}-${p.marcador[1]} ${franquicias[p.visitante].nombre}`}>
   <Cronica p={p} contexto={`${resumen.contexto} · ${fecha(p.fecha)} · Pista de ${franquicias[p.local].ciudad}`} />
 </Base>

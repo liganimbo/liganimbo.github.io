@@ -1,0 +1,38 @@
+---
+// Los Amistosos de Navidad: los ya jugados, cada uno con su crónica.
+import Base from "../../../layouts/Base.astro";
+import Resultado from "../../../components/Resultado.astro";
+import { amistosos, quedan } from "../../../lib/amistosos";
+import { fecha, url } from "../../../lib/liga";
+import { REGLAS } from "../../../motor/reglas.ts";
+---
+
+<Base titulo="Amistosos de Navidad">
+  <h1>Amistosos de Navidad</h1>
+  <p class="apagado">
+    Del 18 al 31 de diciembre, antes de la Temporada 1: 12 partidos, uno al día, y cada franquicia juega uno en casa y otro fuera.
+    No cuentan para la liga, pero son de verdad: los juega el motor con una semilla fija, sin repetir ni elegir.
+  </p>
+  {amistosos.length === 0 && <p class="tarjeta">El primero se juega el viernes 18 de diciembre.</p>}
+  <div class="rejilla">
+    {
+      amistosos.map((a) => (
+        <Resultado
+          p={{ ...a.p, contexto: "Amistoso", prorroga: a.p.jugadas.length > 2 * REGLAS.ataquesPorEquipo }}
+          etiqueta={fecha(a.p.fecha)}
+          href={url(`partidos/navidad/${a.id}`)}
+        />
+      ))
+    }
+  </div>
+  {quedan > 0 && amistosos.length > 0 && <p class="apagado">Quedan {quedan}: cada día, uno más.</p>}
+</Base>
+
+<style>
+  .rejilla {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+</style>

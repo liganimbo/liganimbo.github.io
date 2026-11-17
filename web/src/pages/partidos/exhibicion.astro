@@ -6,7 +6,7 @@ import { exhibicion as p } from "../../lib/exhibicion";
 import { fecha, franquicias, url } from "../../lib/liga";
 ---
 
-<Base titulo={`Exhibición: ${franquicias[p.visitante].nombre} ${p.marcador[1]}-${p.marcador[0]} ${franquicias[p.local].nombre}`}>
+<Base titulo={`Exhibición: ${franquicias[p.local].nombre} ${p.marcador[0]}-${p.marcador[1]} ${franquicias[p.visitante].nombre}`}>
   <div class="aviso tarjeta">
     <strong>Partido de exhibición.</strong> No cuenta para la liga: lo ha jugado el motor con las cartas de hoy para que veas
     cómo es la crónica de un partido. Cada partido de la temporada tendrá una página así. <a href={url("reglas")}>Las reglas, aquí</a>.

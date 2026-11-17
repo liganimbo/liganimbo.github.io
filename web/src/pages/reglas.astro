@@ -3,7 +3,7 @@
 import Base from "../layouts/Base.astro";
 import Carta from "../components/Carta.astro";
 import { activas, url } from "../lib/liga";
-import { DESCRIPCION_ICONO, REGLAS, VERSION_REGLAMENTO, valorAtaque, valorDefensa } from "../motor/reglas.ts";
+import { DESCRIPCION_ICONO, REGLAS, VERSION_REGLAMENTO, castigo, valorAtaque, valorDefensa } from "../motor/reglas.ts";
 import { CARTAS_POR_EQUIPO, TECHO_MAXIMO } from "../motor/mundo.ts";
 import { VERANO } from "../motor/verano.ts";
 
@@ -15,7 +15,7 @@ const dados: [number, number] = [5, 4];
 const suma = dados[0] + dados[1];
 const ataqueDentro = suma + valorAtaque(atacante, "dentro");
 const defensaDentro = valorDefensa(defensor, "dentro", "dentro");
-const ataqueFuera = suma + valorAtaque(atacante, "fuera");
+const ataqueFuera = suma + valorAtaque(atacante, "fuera") - castigo("fuera");
 const defensaFuera = valorDefensa(defensor, "fuera", "dentro");
 const nombre = (n: string) => n.split(" ")[0];
 const enPista = CARTAS_POR_EQUIPO - 1;
@@ -98,7 +98,7 @@ const enPista = CARTAS_POR_EQUIPO - 1;
       <div class="etq">Quien ataca</div>
       <p>Elige <strong>quién tira</strong> (de quienes tengan fichas) y gasta una. En secreto, elige:</p>
       <div class="opcion">Dentro · <strong>{REGLAS.puntos.dentro} puntos</strong></div>
-      <div class="opcion">Fuera · <strong>{REGLAS.puntos.fuera} puntos</strong></div>
+      <div class="opcion">Fuera · <strong>{REGLAS.puntos.fuera} puntos</strong>, con -{REGLAS.castigoFuera} a la tirada</div>
     </div>
     <div class="vs">vs</div>
     <div class="tarjeta">
@@ -117,7 +117,7 @@ const enPista = CARTAS_POR_EQUIPO - 1;
   <div class="formulas">
     <div class="tarjeta formula">
       <div class="etq">Ataque</div>
-      <div>dos dados + <strong>Ataque</strong> de quien tira + su icono, si encaja</div>
+      <div>dos dados + <strong>Ataque</strong> de quien tira + su icono, si encaja - {REGLAS.castigoFuera}, si tira de fuera</div>
     </div>
     <div class="tarjeta formula">
       <div class="etq">Defensa</div>
@@ -128,8 +128,7 @@ const enPista = CARTAS_POR_EQUIPO - 1;
     </div>
   </div>
   <ul class="resultado-reglas">
-    <li><span class="etiqueta">Dentro</span> entra si el ataque <strong>iguala o supera</strong> a la defensa: {REGLAS.puntos.dentro} puntos.</li>
-    <li><span class="etiqueta">Fuera</span> entra si el ataque <strong>supera a la defensa por {REGLAS.margenFuera} o más</strong>: {REGLAS.puntos.fuera} puntos.</li>
+    <li>Entra si el ataque <strong>iguala o supera</strong> a la defensa: {REGLAS.puntos.dentro} puntos de dentro, {REGLAS.puntos.fuera} de fuera.</li>
   </ul>
   <p>
     <strong>Mates y tapones</strong> no cambian el marcador, pero se cantan: una canasta de dentro que supera a la defensa por
@@ -154,9 +153,9 @@ const enPista = CARTAS_POR_EQUIPO - 1;
       {ataqueDentro >= defensaDentro ? `${ataqueDentro} ≥ ${defensaDentro}: ¡canasta de 2!` : `${ataqueDentro} < ${defensaDentro}: no entra.`}
     </p>
     <p class="apagado">
-      ¿Y si hubiera tirado de fuera? Perdía el Aro (ataque {ataqueFuera}), pero el Muro no frena los triples y la defensa
-      había cerrado dentro: se quedaba en {defensaFuera} y le bastaba con {defensaFuera + REGLAS.margenFuera}.{" "}
-      {ataqueFuera >= defensaFuera + REGLAS.margenFuera ? "Habría sido triple." : "Tampoco entraba."}
+      ¿Y si hubiera tirado de fuera? Perdía el Aro y tenía el -{REGLAS.castigoFuera} (ataque {ataqueFuera}), pero el Muro no frena los
+      triples y la defensa había cerrado dentro: se quedaba en {defensaFuera}.{" "}
+      {ataqueFuera >= defensaFuera ? "Habría sido triple." : "Tampoco entraba."}
     </p>
   </div>
 
@@ -170,7 +169,8 @@ const enPista = CARTAS_POR_EQUIPO - 1;
     <li><strong>Final:</strong> gana quien más puntos tenga tras los {REGLAS.ataquesPorEquipo} ataques de cada equipo.</li>
     <li>
       <strong>Muerte súbita:</strong> si hay empate, un ataque más por equipo, siguiendo el turno. Puede tirar cualquiera de pista,
-      tenga fichas o no. Se repite hasta que alguien quede por delante.
+      tenga fichas o no. Si uno anota más, gana. Si anotan lo mismo, gana quien superó a su defensa por más; si fallan los dos,
+      quien se quedó más cerca. Quien gana así suma {REGLAS.puntoDesempate} punto. Si también empatan en eso, otra ronda.
     </li>
   </ul>
 

@@ -12,7 +12,7 @@
 - Cada carta tiene **Ataque** y **Defensa**, del 1 al 6, y a veces un **icono**.
 - Cada carta tiene **2 tiros**. Cada equipo ataca **8 veces**, por turnos.
 - En cada ataque:
-  - Quien ataca elige **quién tira** y, en secreto, si tira **dentro** (2 puntos) o **fuera** (3 puntos).
+  - Quien ataca elige **quién tira** y, en secreto, si tira **dentro** (2 puntos) o **fuera** (3 puntos, con -2 a la tirada).
   - Quien defiende elige, en secreto, qué **cierra**: dentro o fuera.
   - Se revela, se tiran **dos dados** y se mira si entra.
 - A mitad de partido, **el suplente entra obligatoriamente**.
@@ -72,14 +72,11 @@ Jugar en casa pesa, como en el baloncesto de verdad: con las cartas de la liga, 
 3. Se revelan las dos elecciones y se calcula:
 
 ```
-ATAQUE  = dos dados + Ataque de quien tira (+ su icono, si encaja)
+ATAQUE  = dos dados + Ataque de quien tira (+ su icono, si encaja) (-2 si tira de fuera)
 DEFENSA = 5 + Defensa de quien le marca (+2 si es Muro y el tiro es de dentro) (+2 si ha cerrado lo que era)
 ```
 
-4. Resultado:
-   - **Dentro:** si ATAQUE iguala o supera a DEFENSA, **canasta de 2**.
-   - **Fuera:** si ATAQUE supera a DEFENSA **por 2 o más**, **canasta de 3**.
-   - Si no, no entra.
+4. Resultado: si ATAQUE iguala o supera a DEFENSA, entra. **Dentro vale 2** y **fuera vale 3**, pero de fuera la tirada tiene **-2**.
 5. Ataca el otro equipo.
 
 **Mates y tapones.** No cambian nada en el marcador: se cantan, se apuntan y salen en los vídeos.
@@ -98,7 +95,10 @@ Salen unos 3 mates y unos 3 tapones por jornada. Los mates son cosa sobre todo d
   - Después, el local vuelve a decidir los duelos.
 - **Tiempo muerto:** una vez por partido, cada equipo puede repetir una tirada de ataque propia que haya fallado.
 - **Final:** gana quien más puntos tenga cuando los dos equipos han hecho sus **8 ataques**.
-- **Muerte súbita:** si hay empate, cada equipo hace un ataque más, siguiendo el turno (empieza quien empezó el partido). Puede tirar cualquiera de pista, tenga fichas o no. Se repite hasta que, tras un ataque de cada uno, alguien vaya por delante.
+- **Muerte súbita:** si hay empate, cada equipo hace un ataque más, siguiendo el turno (empieza quien empezó el partido). Puede tirar cualquiera de pista, tenga fichas o no.
+  - Si uno anota más que el otro, gana.
+  - Si anotan lo mismo, gana quien haya superado a su defensa **por más**. Si fallan los dos, gana quien se haya quedado **más cerca**. Quien gana así suma **1 punto** de desempate.
+  - Solo si también empatan en eso, otra ronda. Casi siempre se decide en la primera (el 94 %) y nunca pasó de 3 rondas en 5.280 partidos simulados (v0.6).
 - **Mejor del partido:** más puntos anotados, más 1 por cada ataque rival que no entre estando marcado por esa persona.
 
 ---
@@ -123,7 +123,7 @@ Los Forjadores atacan. Les marcan así: Sekou (Defensa 5, Muro) a Inés, Lucía 
    - DEFENSA: 5 + 5 + 2 (Muro) + 2 (ha cerrado dentro) = **14**
    - 18 ≥ 14: **canasta de 2** para Inés. Por 4: le faltaron 2 para que fuera mate.
 
-Si Búhos hubiera cerrado fuera, la defensa habría sido 12. Y si Forjadores hubiera tirado de fuera, Inés perdía el +2 de Aro (su ataque se quedaba en 16), pero la defensa bajaba mucho más: el Muro de Sekou no cuenta contra los triples y Búhos había cerrado dentro, así que la defensa era 10 y le bastaba con 12. **Triple.**
+Si Búhos hubiera cerrado fuera, la defensa habría sido 12. Y si Forjadores hubiera tirado de fuera, Inés perdía el +2 de Aro y tenía el -2 de fuera (11 + 5 - 2 = 14), pero la defensa bajaba mucho más: el Muro de Sekou no cuenta contra los triples y Búhos había cerrado dentro, así que la defensa era 10. 14 ≥ 10: **triple.**
 
 ---
 

@@ -5,7 +5,7 @@ import Carta from "./Carta.astro";
 import Escudo from "./Escudo.astro";
 import Evolucion from "./Evolucion.astro";
 import { TIPO, franquicias, jugadores, url } from "../lib/liga";
-import { REGLAS, type Jugada } from "../motor/reglas.ts";
+import { REGLAS, castigo, type Jugada } from "../motor/reglas.ts";
 import type { PartidoGuardado } from "../motor/temporada.ts";
 
 interface Props {
@@ -17,6 +17,8 @@ const { p, contexto } = Astro.props;
 const lados = [p.local, p.visitante];
 const nombreEq = (lado: number) => franquicias[lados[lado]].nombre;
 const nombre = (id: string) => jugadores[id].nombre;
+/** Ataque menos defensa, con signo: +3 si la superó por 3, -2 si se quedó a 2. */
+const margenTexto = (m: number) => (m > 0 ? `+${m}` : `${m}`);
 const ganador = p.marcador[0] > p.marcador[1] ? 0 : 1;
 const regulares = 2 * REGLAS.ataquesPorEquipo;
 const prorroga = p.jugadas.length > regulares;
@@ -80,7 +82,7 @@ const resultado = (j: Jugada) =>
 
 <section class="marcador tarjeta">
   {
-    [1, 0].map((lado) => (
+    [0, 1].map((lado) => (
       <a href={url(`franquicias/${lados[lado]}`)} class:list={["lado", { ganador: ganador === lado }]}>
         <Escudo id={lados[lado]} tam={64} />
         <div class="ciudad apagado">{franquicias[lados[lado]].ciudad}</div>
@@ -124,7 +126,7 @@ const resultado = (j: Jugada) =>
 <h2>Quintetos</h2>
 <div class="quintetos">
   {
-    [1, 0].map((lado) => (
+    [0, 1].map((lado) => (
       <div class="tarjeta quinteto">
         <div class="cab-equipo">
           <Escudo id={lados[lado]} tam={26} /> <strong>{nombreEq(lado)}</strong>
@@ -142,15 +144,20 @@ const resultado = (j: Jugada) =>
 
 <h2>Jugada a jugada</h2>
 <p class="apagado explica">
-  Cada ataque: quién tira y quién le marca, el farol (qué tira y qué cierra la defensa), los dos dados y la cuenta. Dentro basta
-  con igualar la defensa; fuera hay que superarla por {REGLAS.margenFuera}.
+  Cada ataque: quién tira y quién le marca, el farol (qué tira y qué cierra la defensa), los dos dados y la cuenta. Entra si el ataque
+  iguala la defensa; de fuera, la tirada tiene -{REGLAS.castigoFuera}.
 </p>
 
 {
   partes.map((parte) => (
     <section class="parte">
       <h3 class="titulo-parte">{parte.titulo}</h3>
-      {parte.titulo === "Muerte súbita" && <p class="apagado">Empate tras {REGLAS.ataquesPorEquipo} ataques: un ataque más cada uno, y puede tirar cualquiera.</p>}
+      {parte.titulo === "Muerte súbita" && (
+        <p class="apagado">
+          Empate tras {REGLAS.ataquesPorEquipo} ataques: un ataque más cada uno, y puede tirar cualquiera. Si anotan lo mismo, gana
+          quien superó a su defensa por más (o, si fallan los dos, quien se quedó más cerca), con {REGLAS.puntoDesempate} punto de desempate.
+        </p>
+      )}
       <ol class="jugadas">
         {pasos.slice(parte.desde, parte.hasta).map(({ j, i, n, quedan, cambiaLider }) => {
           const suma = j.dados[0] + j.dados[1];
@@ -167,7 +174,7 @@ const resultado = (j: Jugada) =>
                 {i === decisiva && <span class="etiqueta destacada">Canasta decisiva</span>}
                 {cambiaLider && i !== decisiva && <span class="etiqueta">Cambio de líder</span>}
                 <span class="j-marcador">
-                  <span class:list={{ fuerte: j.equipo === 1 }}>{j.marcador[1]}</span>-<span class:list={{ fuerte: j.equipo === 0 }}>{j.marcador[0]}</span>
+                  <span class:list={{ fuerte: j.equipo === 0 }}>{j.marcador[0]}</span>-<span class:list={{ fuerte: j.equipo === 1 }}>{j.marcador[1]}</span>
                 </span>
               </div>
               <div class="j-cuerpo">
@@ -194,7 +201,7 @@ const resultado = (j: Jugada) =>
                   ))}
                 </div>
                 <div class="j-cuenta">
-                  <div>Ataque <strong>{j.ataque}</strong> <span class="apagado">({suma} de dados + {j.ataque - suma})</span></div>
+                  <div>Ataque <strong>{j.ataque}</strong> <span class="apagado">({suma} de dados + {j.ataque - suma + castigo(j.tipo)}{j.tipo === "fuera" && ` - ${REGLAS.castigoFuera} de fuera`})</span></div>
                   <div>Defensa <strong>{j.defensa}</strong> <span class="apagado">{adivina ? `(con +${REGLAS.bonusCierre} por adivinarlo)` : ""}</span></div>
                   <div class="apagado">{j.necesita <= 2 ? "Entraba con cualquier tirada" : j.necesita > 12 ? "No podía entrar" : `Necesitaba sacar ${j.necesita} o más`}</div>
                 </div>
@@ -203,6 +210,12 @@ const resultado = (j: Jugada) =>
                   {j.anota && <span class="r-puntos">+{j.puntos}</span>}
                 </div>
               </div>
+              {j.desempate && (
+                <p class="j-nota">
+                  Ronda igualada. Por cuánto superó cada uno a su defensa: {nombreEq(0)} {margenTexto(j.desempate.margen[0])},{" "}
+                  {nombreEq(1)} {margenTexto(j.desempate.margen[1])}. +{REGLAS.puntoDesempate} punto de desempate para {nombreEq(j.desempate.gana)}.
+                </p>
+              )}
               {j.tiempoMuerto && (
                 <p class="j-nota">
                   Tiempo muerto: la primera tirada ({j.tiempoMuerto.dadosAnteriores.join(" y ")}) no entraba, y {nombreEq(j.equipo)} la repite.
@@ -216,7 +229,7 @@ const resultado = (j: Jugada) =>
         <div class="tarjeta descanso">
           <strong>Descanso</strong>
           <span>
-            {p.jugadas[descanso - 1] && `${nombreEq(1)} ${p.jugadas[descanso - 1].marcador[1]}-${p.jugadas[descanso - 1].marcador[0]} ${nombreEq(0)}. `}
+            {p.jugadas[descanso - 1] && `${nombreEq(0)} ${p.jugadas[descanso - 1].marcador[0]}-${p.jugadas[descanso - 1].marcador[1]} ${nombreEq(1)}. `}
             {p.cambios.map((c) => `${nombreEq(c.equipo)}: entra ${nombre(c.entra)} por ${nombre(c.sale)}.`).join(" ")}
           </span>
         </div>
@@ -228,7 +241,7 @@ const resultado = (j: Jugada) =>
 <h2>Las cartas</h2>
 <div class="estadisticas">
   {
-    [1, 0].map((lado) => (
+    [0, 1].map((lado) => (
       <section>
         <h3 class="cab-equipo">
           <Escudo id={lados[lado]} tam={24} /> {nombreEq(lado)}

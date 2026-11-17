@@ -2,8 +2,8 @@
 import type React from "react";
 import { Easing, interpolate, useCurrentFrame } from "remotion";
 import { Escudo } from "../elementos";
-import { COLOR, texto, titulo } from "../marca";
-import type { Color, Equipo } from "./tipos";
+import { COLOR, texto, TIRO, titulo } from "../marca";
+import type { Color, Equipo, Tipo } from "./tipos";
 
 export const fijo = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 export const suave = Easing.bezier(0.16, 1, 0.3, 1);
@@ -68,10 +68,11 @@ export const Marcador = ({ equipos, puntos, resalta, tam = 1, style }: { equipos
 );
 
 /** Carta boca abajo que se da la vuelta en el fotograma `gira`. */
-export const Eleccion = ({ quien, revela, gira, color: fondo }: { quien: string; revela: string; gira: number; color: string }) => {
+export const Eleccion = ({ quien, tipo, gira }: { quien: string; tipo: Tipo; gira: number }) => {
   const frame = useCurrentFrame();
   const giro = interpolate(frame, [gira, gira + 12], [0, 1], fijo);
   const delante = giro > 0.5;
+  const { c1, c2 } = TIRO[tipo];
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 28 }}>
       <div style={{ ...etiqueta, color: COLOR.apagado }}>{quien}</div>
@@ -84,12 +85,12 @@ export const Eleccion = ({ quien, revela, gira, color: fondo }: { quien: string;
           placeItems: "center",
           textAlign: "center",
           scale: `${Math.abs(Math.cos(giro * Math.PI))} 1`,
-          background: delante ? fondo : "#22256a",
-          border: `6px solid ${delante ? fondo : COLOR.lila}`,
+          background: delante ? `radial-gradient(circle at 100% 0%, color-mix(in srgb, ${c1} 80%, #fff 20%), ${c1} 30%, ${c2} 95%)` : "#22256a",
+          border: `6px solid ${delante ? c1 : COLOR.lila}`,
           boxShadow: "0 30px 80px rgb(0 0 0 / 45%)",
         }}
       >
-        <span style={{ ...titular, fontSize: delante ? 92 : 220, color: delante ? COLOR.noche : COLOR.lila }}>{delante ? revela : "?"}</span>
+        <span style={{ ...titular, fontSize: delante ? 92 : 220, color: delante ? COLOR.texto : COLOR.lila }}>{delante ? (tipo === "fuera" ? "Fuera" : "Dentro") : "?"}</span>
       </div>
     </div>
   );

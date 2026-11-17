@@ -89,7 +89,7 @@ const descanso = p.cambios[0]?.tras;
       cursor.setAttribute("x1", String(cx));
       cursor.setAttribute("x2", String(cx));
       cursor.setAttribute("visibility", "visible");
-      info.innerHTML = `<div class="apagado">Ataque ${pt.n}</div><strong>${fig.dataset.vis} ${pt.m[1]} – ${pt.m[0]} ${fig.dataset.loc}</strong><div>${pt.texto}</div>`;
+      info.innerHTML = `<div class="apagado">Ataque ${pt.n}</div><strong>${fig.dataset.loc} ${pt.m[0]} – ${pt.m[1]} ${fig.dataset.vis}</strong><div>${pt.texto}</div>`;
       info.hidden = false;
       const px = e.clientX - lienzo.getBoundingClientRect().left;
       info.style.left = `${Math.max(0, Math.min(px + 12, lienzo.clientWidth - 190))}px`;

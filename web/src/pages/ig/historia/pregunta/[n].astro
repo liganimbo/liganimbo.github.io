@@ -30,7 +30,7 @@ const iconos = [s.atacante, s.defensor].filter((j) => j.icono);
   </div>
 
   <ul class="reglas suave">
-    <li><strong>Dentro</strong> vale 2. <strong>Fuera</strong> vale 3, pero hay que superar la defensa por 2.</li>
+    <li><strong>Dentro</strong> vale 2. <strong>Fuera</strong> vale 3, pero la tirada tiene -2.</li>
     {iconos.map((j) => <li><strong>{j.icono}:</strong> {DESCRIPCION_ICONO[j.icono!]}.</li>)}
     <li>La defensa también elige: si cierra lo que tiras, suma +2.</li>
   </ul>
