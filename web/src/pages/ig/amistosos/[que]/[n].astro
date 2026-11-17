@@ -1,0 +1,350 @@
+---
+// Carruseles de los Amistosos de Navidad: «cómo van» (27 dic, con los 8 jugados) y el balance (1 ene, con los 12).
+// Enseñan resultados, así que solo se publican cuando llega su fecha (en local, con npm run dev, siempre).
+import Instagram from "../../../../layouts/Instagram.astro";
+import Escudo from "../../../../components/Escudo.astro";
+import CartaGrande from "../../../../components/ig/CartaGrande.astro";
+import FilaAmistoso from "../../../../components/ig/FilaAmistoso.astro";
+import { CARRUSELES, publicado, resumen, todos, type Amistoso } from "../../../../lib/amistosos";
+import { fecha, franquicias, jugadores, temporada } from "../../../../lib/liga";
+
+type Que = keyof typeof CARRUSELES;
+
+export function getStaticPaths() {
+  return (Object.keys(CARRUSELES) as Que[])
+    .filter((que) => publicado(CARRUSELES[que].fecha))
+    .flatMap((que) => Array.from({ length: CARRUSELES[que].diapositivas }, (_, i) => ({ params: { que, n: String(i + 1) } })));
+}
+
+const que = Astro.params.que as Que;
+const n = Number(Astro.params.n);
+const total = CARRUSELES[que].diapositivas;
+const balance = que === "balance";
+const jugados = todos.filter((a) => a.fecha < CARRUSELES[que].fecha);
+const porJugar = todos.filter((a) => a.fecha >= CARRUSELES[que].fecha);
+const r = resumen(jugados);
+const mitad = Math.ceil(jugados.length / 2);
+const marcador = (a: Amistoso) => `${franquicias[a.local].nombre} ${a.p.marcador[0]}-${a.p.marcador[1]} ${franquicias[a.visitante].nombre}`;
+const top = r.anotadores.slice(0, 3);
+const primeraJornada = temporada.calendario[0];
+// Qué diapositiva toca: el balance lleva además la clasificación de los amistosos y, al final, la Temporada 1.
+const orden = balance ? ["portada", "resultados-1", "resultados-2", "tabla", "cifras", "anotadores", "temporada"] : ["portada", "resultados-1", "resultados-2", "cifras", "anotadores", "quedan"];
+const diapo = orden[n - 1];
+---
+
+<Instagram titulo={`Amistosos: ${balance ? "balance" : "cómo van"} ${n}/${total}`} etiqueta={`${balance ? "Balance" : "Amistosos"} · ${n}/${total}`}>
+  {
+    diapo === "portada" && (
+      <section class="portada">
+        <div class="antetitulo">Amistosos de Navidad</div>
+        <h1 class="titular grande">{balance ? <>El<br /><span class="oro">balance</span></> : <>Cómo<br /><span class="oro">van</span></>}</h1>
+        <p class="entradilla">
+          {balance
+            ? `Los ${jugados.length} partidos, jugados. Esto es lo que nos dejan antes de la Temporada 1.`
+            : `${jugados.length} jugados y ${porJugar.length} por jugar. Resultados, cifras y quién está en racha.`}
+        </p>
+        <div class="escudos-portada">
+          {[...new Set(jugados.flatMap((a) => [a.local, a.visitante]))].slice(0, 6).map((fid) => <Escudo id={fid} tam={96} />)}
+        </div>
+        <div class="desliza">Desliza →</div>
+      </section>
+    )
+  }
+
+  {
+    (diapo === "resultados-1" || diapo === "resultados-2") && (
+      <section class="diapo">
+        <h1 class="titular">Resultados</h1>
+        <p class="entradilla">{diapo === "resultados-1" ? `Del ${fecha(jugados[0].fecha)} al ${fecha(jugados[mitad - 1].fecha)}` : `Del ${fecha(jugados[mitad].fecha)} al ${fecha(jugados.at(-1)!.fecha)}`}</p>
+        <div class="lista resultados">
+          {(diapo === "resultados-1" ? jugados.slice(0, mitad) : jugados.slice(mitad)).map((a) => <FilaAmistoso a={a} tam={balance ? 54 : 64} />)}
+        </div>
+      </section>
+    )
+  }
+
+  {
+    diapo === "tabla" && (
+      <section class="diapo">
+        <h1 class="titular">Cómo quedan</h1>
+        <p class="entradilla">Dos partidos cada una. No cuentan para la liga, pero dicen mucho.</p>
+        <div class="tabla">
+          {r.tabla.map((t, i) => (
+            <div class="fila-tabla">
+              <span class="pos">{i + 1}</span>
+              <Escudo id={t.fid} tam={44} />
+              <span class="eq-nombre">{franquicias[t.fid].nombre}</span>
+              <span class="vd">{t.v}-{t.d}</span>
+              <span class="dif suave">{t.pf - t.pc > 0 ? "+" : ""}{t.pf - t.pc}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  {
+    diapo === "cifras" && (
+      <section class="diapo">
+        <h1 class="titular">En cifras</h1>
+        <div class="cifras">
+          <div><span>{r.localGana}<small>/{r.jugados}</small></span>victorias del local</div>
+          <div><span>{r.mates}</span>{r.mates === 1 ? "mate" : "mates"}</div>
+          <div><span>{r.tapones}</span>{r.tapones === 1 ? "tapón" : "tapones"}</div>
+          <div><span>{r.subitas.length}</span>{r.subitas.length === 1 ? "muerte súbita" : "muertes súbitas"}</div>
+        </div>
+        <div class="destacados">
+          <div>
+            <div class="etq">El de más puntos</div>
+            <div class="valor">{marcador(r.masPuntos)}</div>
+          </div>
+          <div>
+            <div class="etq">El más ajustado</div>
+            <div class="valor">{marcador(r.masAjustado)}</div>
+          </div>
+          <div>
+            <div class="etq">La mayor diferencia</div>
+            <div class="valor">{marcador(r.paliza)}</div>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    diapo === "anotadores" && (
+      <section class="diapo">
+        <h1 class="titular">Los que<br />más anotan</h1>
+        <div class="tres-cartas">
+          {top.map((x, i) => (
+            <div class="mini">
+              <div class="pts"><span>{x.pts}</span> puntos</div>
+              <CartaGrande j={jugadores[x.jid]} giro={i === 1 ? 0 : i === 0 ? -3 : 3} />
+            </div>
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  {
+    diapo === "quedan" && (
+      <section class="diapo">
+        <h1 class="titular">Lo que queda</h1>
+        <p class="entradilla">Cada día, el partido a las 20:00 en Reel. La crónica, en la web.</p>
+        <div class="lista">
+          {porJugar.map((a) => <FilaAmistoso a={a} sinResultado tam={64} />)}
+        </div>
+      </section>
+    )
+  }
+
+  {
+    diapo === "temporada" && (
+      <section class="diapo">
+        <div class="antetitulo">{fecha(primeraJornada.fecha)}</div>
+        <h1 class="titular">Ahora sí,<br /><span class="oro">la liga</span></h1>
+        <p class="entradilla">La Temporada 1 empieza con estos partidos. ¿Te la vas a perder?</p>
+        <div class="lista">
+          {primeraJornada.cruces.map(([local, visitante]) => (
+            <div class="cruce">
+              <Escudo id={local} tam={56} />
+              <span class="eq-nombre">{franquicias[local].nombre}</span>
+              <span class="suave vs">vs</span>
+              <span class="eq-nombre der">{franquicias[visitante].nombre}</span>
+              <Escudo id={visitante} tam={56} />
+            </div>
+          ))}
+        </div>
+      </section>
+    )
+  }
+</Instagram>
+
+<style>
+  .portada,
+  .diapo {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .portada {
+    justify-content: center;
+  }
+  .diapo {
+    margin-top: 36px;
+  }
+  .titular {
+    font-size: 104px;
+  }
+  .titular.grande {
+    font-size: 170px;
+    margin: 12px 0 28px;
+  }
+  .oro {
+    color: var(--oro);
+  }
+  .entradilla {
+    font-size: 32px;
+    line-height: 1.35;
+    color: color-mix(in srgb, var(--texto) 80%, transparent);
+    margin: 14px 0 0;
+    max-width: 900px;
+  }
+  .escudos-portada {
+    display: flex;
+    gap: 22px;
+    margin-top: 44px;
+  }
+  .desliza {
+    margin-top: 48px;
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--oro);
+  }
+  .lista {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 36px;
+  }
+  .resultados {
+    gap: 22px;
+  }
+  .resultados :global(.fila-am) {
+    padding: 22px;
+  }
+  .tabla {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 28px;
+  }
+  .fila-tabla {
+    display: grid;
+    grid-template-columns: 50px 50px 1fr 110px 80px;
+    align-items: center;
+    gap: 16px;
+    padding: 6px 22px;
+    border-radius: 18px;
+    background: color-mix(in srgb, var(--texto) 7%, transparent);
+  }
+  .pos {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 800;
+    font-size: 38px;
+    color: var(--oro);
+  }
+  .eq-nombre {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 800;
+    font-size: 40px;
+    text-transform: uppercase;
+  }
+  .vd {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 800;
+    font-size: 44px;
+    text-align: right;
+  }
+  .dif {
+    font-size: 26px;
+    font-weight: 700;
+    text-align: right;
+  }
+  .cifras {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 40px;
+  }
+  .cifras div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 24px 28px;
+    border-radius: 24px;
+    background: color-mix(in srgb, var(--texto) 7%, transparent);
+    font-size: 26px;
+    font-weight: 600;
+    color: color-mix(in srgb, var(--texto) 80%, transparent);
+  }
+  .cifras span {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 800;
+    font-size: 110px;
+    line-height: 1;
+    color: var(--oro);
+  }
+  .cifras small {
+    font-size: 56px;
+    color: color-mix(in srgb, var(--texto) 55%, transparent);
+  }
+  .destacados {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    margin-top: 40px;
+  }
+  .etq {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--oro);
+  }
+  .valor {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 800;
+    font-size: 48px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+  .tres-cartas {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 50px;
+  }
+  .tres-cartas .mini {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+  }
+  .tres-cartas :global(.carta-ig) {
+    zoom: 0.7;
+  }
+  .pts {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .pts span {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 800;
+    font-size: 96px;
+    color: var(--oro);
+    letter-spacing: 0;
+  }
+  .cruce {
+    display: grid;
+    grid-template-columns: 56px 1fr 60px 1fr 56px;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 22px;
+    border-radius: 22px;
+    background: color-mix(in srgb, var(--texto) 7%, transparent);
+  }
+  .cruce .vs {
+    text-align: center;
+    font-size: 26px;
+    font-weight: 700;
+  }
+  .cruce .der {
+    text-align: right;
+  }
+</style>

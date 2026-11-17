@@ -38,6 +38,7 @@ type Escena = { segundos?: number; acento?: string } & (
   | { tipo: "revela"; titulo: string; tira: { quien: string; tipo: Tipo }; cierra: { quien: string; tipo: Tipo }; pie: string; cuenta: ReturnType<typeof cuentaDe> }
   | { tipo: "dados"; dados: number[]; tirada: ReturnType<typeof tiradaDe>; pie?: string }
   | { tipo: "tira"; titulo: string; quien: string; tiro: Tipo; pie: string }
+  | { tipo: "tiros"; titulo: string; equipos: Equipo[]; inicio: number[]; tiros: ReturnType<typeof tiroDe>[]; porTiro: number }
   | { tipo: "cierres"; titulo: string; ataque: number; filas: { cierra: Tipo; suma: string; defensa: number; anota: boolean; pie: string }[] }
   | { tipo: "resultado"; titulo: string; bien: boolean; equipos?: Equipo[]; puntos?: number[]; resalta?: number; pie?: string }
   | { tipo: "lista"; titulo: string; items: { escudo?: Equipo; carta?: Ficha; titulo: string; texto: string }[] }
@@ -46,7 +47,7 @@ type Escena = { segundos?: number; acento?: string } & (
 type Reel = { id: string; formato: string; fecha: string; titulo: string; texto: string; escenas: Escena[] };
 
 /** Segundos para leer con calma (menos de 2 palabras por segundo) lo que pone en pantalla, con un mínimo por tipo para que se vea lo que pasa. */
-const MINIMO: Record<Escena["tipo"], number> = { titular: 3, cartas: 4.5, marcador: 3.5, tabla: 7.5, pregunta: 4.5, revela: 10, dados: 6, resultado: 3.5, lista: 2, carta: 3.8, tira: 4, cierres: 9 };
+const MINIMO: Record<Escena["tipo"], number> = { titular: 3, cartas: 4.5, marcador: 3.5, tabla: 7.5, pregunta: 4.5, revela: 10, dados: 6, resultado: 3.5, lista: 2, carta: 3.8, tira: 4, cierres: 9, tiros: 3 };
 /** Lo que tarda en salir el texto que hay que leer (las cartas se giran antes, los dados ruedan antes). */
 const RETRASO: Partial<Record<Escena["tipo"], number>> = { tabla: 3.4, revela: 4, dados: 4.5, tira: 1.2, cierres: 0.5 };
 const PALABRAS_POR_SEGUNDO = 1.8;
@@ -412,7 +413,7 @@ function dentroOFuera2(p: Partido, i: number, contexto: string): Escena[] {
 }
 function iconosEnJuego(a: string | null, d: string | null) {
   const texto: Record<string, string> = { Tiro: "Tiro: +1 de fuera", Aro: "Aro: +2 dentro", Muro: "Muro: +2 contra dentro" };
-  return [a, d].filter((x): x is string => !!x).map((x) => texto[x]).join(" · ");
+  return [a, d].filter((x): x is string => !!x).map((x) => texto[x]).join("\n");
 }
 
 // --- FI · Firmas ------------------------------------------------------------------------------
@@ -491,47 +492,7 @@ function mejoresCartas(): Escena[] {
 
 const amistosos = Object.fromEntries(AMISTOSOS.map(([, l, v]) => [`${l}-${v}`, jugar(l, v, semillaAmistoso(l, v))]));
 
-/** La jugada que lo decidió: la que puso al ganador por delante para no volver a ir por detrás (o, si ganó de principio a fin, su última canasta). */
-function decisiva(p: Partido) {
-  const g = p.ganador!;
-  let i: number | null = null;
-  p.jugadas.forEach((j, n) => {
-    if (j.marcador[g] <= j.marcador[1 - g]) i = null;
-    else if (i === null) i = n;
-  });
-  if (i !== null && i >= 6) return i;
-  return p.jugadas.findLastIndex((j) => j.equipo === g && j.anota);
-}
-
 const FECHA = (f: string) => new Date(`${f}T12:00:00Z`).toLocaleDateString("es-ES", { day: "numeric", month: "long", timeZone: "UTC" });
-
-function amistoso(fecha: string, local: string, visitante: string): Escena[] {
-  const p = amistosos[`${local}-${visitante}`];
-  const i = decisiva(p);
-  const j = p.jugadas[i];
-  const fa = p.equipos[j.equipo].franquicia;
-  const equipos = p.equipos.map((e) => equipo(e.franquicia));
-  const descanso = p.jugadas[2 * REGLAS.descansoTras - 1].marcador;
-  const ataque = Math.floor(i / 2) + 1;
-  const subita = i >= 2 * REGLAS.ataquesPorEquipo;
-  const firma = franquicias[fa].estilo.firma;
-  const conFirma = firma?.tipo === "tiro" && finalApretadoAntes(p, i);
-  const mejor = mejorDelPartido(p);
-  const linea = estadisticas(p)[mejor];
-  const antes = antesDe(p, i);
-  const situacion = antes[j.equipo] === antes[1 - j.equipo] ? "Empate" : antes[j.equipo] < antes[1 - j.equipo] ? `Pierden de ${antes[1 - j.equipo] - antes[j.equipo]}` : `Ganan de ${antes[j.equipo] - antes[1 - j.equipo]}`;
-  const [cartas, revela, dados] = escenasJugada(p, i, { titulo: `Tira ${nombre(j.tirador)}`, pieCartas: conFirma ? `${franquicias[fa].nombre}: «${describirFirma(firma!)}»` : undefined });
-  return [
-    gancho([franquicias[local].nombre, `contra ${franquicias[visitante].nombre}`], { etiqueta: `Amistosos de Navidad · ${FECHA(fecha)}`, escudos: equipos, pie: subita ? "Se decidió en la muerte súbita." : ataque >= 7 ? "Se decidió al final." : "Un partido de verdad, tirada a tirada." }),
-    { tipo: "marcador", etiqueta: "Al descanso", equipos, puntos: descanso },
-    { tipo: "marcador", etiqueta: subita ? "Muerte súbita" : `Ataque ${ataque} de ${REGLAS.ataquesPorEquipo}`, equipos, puntos: antes, resalta: j.equipo, titulo: `${verbo(fa, "Ataca", "Atacan")} ${los(fa)}`, pie: `${situacion}.`, acento: franquicias[fa].colores[0] },
-    cartas,
-    revela,
-    dados,
-    ...escenaDesempate(p),
-    { tipo: "resultado", titulo: exclamacion(j), bien: j.anota, equipos, puntos: p.puntos, resalta: p.ganador!, pie: `Final. Mejor del partido: ${mundo.jugadores[mejor].nombre} (${linea.pts} puntos).`, acento: franquicias[p.equipos[p.ganador!].franquicia].colores[0] },
-  ];
-}
 
 /** Si la muerte súbita acabó igualada, cómo se desempató: por cuánto superó cada uno a su defensa. */
 function escenaDesempate(p: Partido): Escena[] {
@@ -551,6 +512,90 @@ function escenaDesempate(p: Partido): Escena[] {
       pie: `Gana quien superó a su defensa por más. ${Los(g)} ${por(g, d.margen[d.gana])}; ${los(o)}, ${d.margen[1 - d.gana] > 0 ? `por ${d.margen[1 - d.gana]}` : por(o, d.margen[1 - d.gana])}. +${REGLAS.puntoDesempate} para ${los(g)}.`,
       acento: franquicias[g].colores[0],
     },
+  ];
+}
+
+/** Un ataque en una línea: quién, qué tira, los dados y si entra. */
+function tiroDe(j: Jugada) {
+  return { equipo: j.equipo, tirador: nombre(j.tirador), tipo: j.tipo, dados: j.dados, anota: j.anota, puntos: j.puntos, mate: j.mate, tapon: j.tapon, marcador: j.marcador, tiempoMuerto: !!j.tiempoMuerto };
+}
+/** Segundos por ataque en el repaso tiro a tiro. */
+const POR_TIRO = 2.5;
+/** Los ataques de `desde` a `hasta` (sin incluir), uno tras otro con el marcador arriba. */
+function escenaTiros(p: Partido, titulo: string, desde: number, hasta: number): Escena[] {
+  if (hasta <= desde) return [];
+  const tiros = p.jugadas.slice(desde, hasta).map(tiroDe);
+  return [{ tipo: "tiros", titulo, equipos: p.equipos.map((e) => equipo(e.franquicia)), inicio: antesDe(p, desde), tiros, porTiro: POR_TIRO, segundos: tiros.length * POR_TIRO + 1.5 }];
+}
+
+/** La canasta que puso al ganador por delante para no volver a ir por detrás (o empatado). */
+function puestoPorDelante(p: Partido) {
+  const g = p.ganador!;
+  let i = -1;
+  p.jugadas.forEach((j, n) => {
+    if (j.marcador[g] <= j.marcador[1 - g]) i = -1;
+    else if (i < 0) i = n;
+  });
+  return i;
+}
+
+/**
+ * El momento que de verdad importó, para contarlo entero: el último ataque si con él se podía cambiar el resultado
+ * (y la muerte súbita); si no, la canasta que puso al ganador por delante para siempre, si fue en la 2.ª parte;
+ * y si no, un mate, un tapón o, en último caso, esa misma canasta aunque fuera pronto. Nunca un tiro que no cambia nada.
+ */
+function momentoClave(p: Partido): { i: number; por: string } {
+  const ultimo = p.jugadas.length - 1;
+  const j = p.jugadas[ultimo];
+  const antes = antesDe(p, ultimo);
+  const pierde = antes[1 - j.equipo] - antes[j.equipo];
+  if (ultimo >= 2 * REGLAS.ataquesPorEquipo) return { i: ultimo, por: "La muerte súbita" };
+  if (pierde >= 0 && pierde < REGLAS.puntos.fuera) return { i: ultimo, por: "El último ataque" };
+  const d = puestoPorDelante(p);
+  if (d >= 2 * REGLAS.descansoTras) return { i: d, por: "La canasta que lo decidió" };
+  const mate = p.jugadas.findLastIndex((x) => x.mate);
+  if (mate >= 0) return { i: mate, por: "El mate del partido" };
+  const tapon = p.jugadas.findLastIndex((x) => x.tapon);
+  if (tapon >= 0) return { i: tapon, por: "El tapón del partido" };
+  return { i: d, por: "Desde aquí, ya no soltaron el mando" };
+}
+
+/** Amistoso contado tiro a tiro: la 1.ª parte, el descanso, la 2.ª parte y el momento clave entero, a cámara lenta. */
+function amistosoTiroATiro(fecha: string, local: string, visitante: string): Escena[] {
+  const p = amistosos[`${local}-${visitante}`];
+  const equipos = p.equipos.map((e) => equipo(e.franquicia));
+  const mitad = 2 * REGLAS.descansoTras;
+  const { i, por } = momentoClave(p);
+  const j = p.jugadas[i];
+  const fa = p.equipos[j.equipo].franquicia;
+  const antes = antesDe(p, i);
+  const situacion = antes[j.equipo] === antes[1 - j.equipo] ? "Empate" : antes[j.equipo] < antes[1 - j.equipo] ? `Pierden de ${antes[1 - j.equipo] - antes[j.equipo]}` : `Ganan de ${antes[j.equipo] - antes[1 - j.equipo]}`;
+  const subita = p.jugadas.length > 2 * REGLAS.ataquesPorEquipo;
+  const mejor = mejorDelPartido(p);
+  const linea = estadisticas(p)[mejor];
+  const cambios = p.cambios.map((c) => `${franquicias[p.equipos[c.equipo].franquicia].nombre}: entra ${nombre(c.entra)} por ${nombre(c.sale)}`);
+  const firma = franquicias[fa].estilo.firma;
+  const conFirma = firma?.tipo === "tiro" && finalApretadoAntes(p, i);
+  const [cartas, revela, dados] = escenasJugada(p, i, { titulo: `Tira ${nombre(j.tirador)}`, pieCartas: conFirma ? `${franquicias[fa].nombre}: «${describirFirma(firma!)}»` : undefined });
+  const parte = (desde: number, hasta: number) => (desde < mitad ? "Primera parte" : desde < 2 * REGLAS.ataquesPorEquipo ? "Segunda parte" : "Muerte súbita");
+  // El repaso se para antes del momento clave y sigue después, si quedan ataques.
+  const tramos = (desde: number, hasta: number) =>
+    i >= desde && i < hasta ? [...escenaTiros(p, parte(desde, i), desde, i), "clave" as const, ...escenaTiros(p, parte(desde, hasta), i + 1, hasta)] : escenaTiros(p, parte(desde, hasta), desde, hasta);
+  const clave: Escena[] = [
+    { tipo: "marcador", etiqueta: por, equipos, puntos: antes, resalta: j.equipo, titulo: `${verbo(fa, "Ataca", "Atacan")} ${los(fa)}`, pie: `${situacion}.`, acento: franquicias[fa].colores[0] },
+    cartas,
+    { ...revela, segundos: Math.min(revela.segundos ?? duracion(revela), 12) },
+    { ...dados, segundos: Math.min(dados.segundos ?? duracion(dados), 10) },
+  ];
+  const expandir = (xs: (Escena | "clave")[]) => xs.flatMap((x) => (x === "clave" ? clave : [x]));
+  return [
+    gancho([franquicias[local].nombre, `contra ${franquicias[visitante].nombre}`], { etiqueta: `Amistosos de Navidad · ${FECHA(fecha)}`, escudos: equipos, pie: subita ? "Tiro a tiro. Y con muerte súbita." : "Tiro a tiro.", segundos: 6 }),
+    ...expandir(tramos(0, mitad)),
+    { tipo: "marcador", etiqueta: "Al descanso", equipos, puntos: p.jugadas[mitad - 1].marcador, pie: cambios.join("\n") || undefined, segundos: 7 },
+    ...expandir(tramos(mitad, 2 * REGLAS.ataquesPorEquipo)),
+    ...expandir(tramos(2 * REGLAS.ataquesPorEquipo, p.jugadas.length)),
+    ...escenaDesempate(p),
+    { tipo: "resultado", titulo: "Final", bien: true, equipos, puntos: p.puntos, resalta: p.ganador!, pie: `Mejor del partido: ${mundo.jugadores[mejor].nombre} (${linea.pts} puntos).`, acento: franquicias[p.equipos[p.ganador!].franquicia].colores[0] },
   ];
 }
 
@@ -626,7 +671,7 @@ const textoAmistoso = (fecha: string, l: string, v: string) => {
 };
 const dofAmistosos: string[] = [];
 AMISTOSOS.forEach(([fecha, l, v], n) => {
-  añadir(`AM${n + 1}`, "Amistoso", fecha, `${franquicias[l].nombre} – ${franquicias[v].nombre}`, textoAmistoso(fecha, l, v), amistoso(fecha, l, v));
+  añadir(`AM${n + 1}`, "Amistoso", fecha, `${franquicias[l].nombre} – ${franquicias[v].nombre}`, textoAmistoso(fecha, l, v), amistosoTiroATiro(fecha, l, v));
   // Los ¿Dentro o fuera? de los domingos 20 y 27, sacados de los amistosos ya jugados.
   if (fecha === "2026-12-19" || fecha === "2026-12-26") {
     const otro = fecha === "2026-12-19" ? "2026-12-20" : "2026-12-27";

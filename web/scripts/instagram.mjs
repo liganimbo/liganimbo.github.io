@@ -1,4 +1,5 @@
-// Exporta a PNG las publicaciones del plan de Instagram (la lista de /instagram).
+// Exporta a PNG las publicaciones del plan de Instagram (la lista de /instagram), cada tipo en su carpeta de instagram/:
+// publicaciones/ (numeradas en orden), stories/ y perfil/. Los Reels van a reels/ (los exporta reels/scripts/video.mjs).
 // Uso: npm run instagram            (con la web en marcha: npm run dev)
 //      WEB=http://localhost:4321 npm run instagram
 import { execFileSync } from "node:child_process";
@@ -36,15 +37,19 @@ const plan = html.slice(html.indexOf('class="plan"'));
 const rutas = [...plan.matchAll(/href="([^"]*\/ig\/[^"]+)"/g)].map((m) => m[1]);
 const navegador = buscarNavegador();
 
-// Solo se borran las imágenes numeradas y las stories de una exportación anterior: los Reels y lo demás se quedan.
-fs.mkdirSync(SALIDA, { recursive: true });
-for (const archivo of fs.readdirSync(SALIDA)) if (/^(\d+|historia)-.*\.png$/.test(archivo)) fs.rmSync(path.join(SALIDA, archivo));
+// Se rehacen las imágenes de publicaciones, stories y perfil de una exportación anterior; los Reels y lo demás se quedan.
+const CARPETA = { publicaciones: path.join(SALIDA, "publicaciones"), stories: path.join(SALIDA, "stories"), perfil: path.join(SALIDA, "perfil") };
+for (const dir of Object.values(CARPETA)) {
+  fs.mkdirSync(dir, { recursive: true });
+  for (const archivo of fs.readdirSync(dir)) if (archivo.endsWith(".png")) fs.rmSync(path.join(dir, archivo));
+}
 const alto = (ruta) => (ruta.includes("/ig/historia/") ? 1920 : ruta.includes("/ig/apertura/") ? 1440 : 1350);
 let numero = 0;
 rutas.forEach((ruta) => {
   // Las publicaciones van numeradas en orden; las stories, con su nombre (historia-...).
   const base = ruta.replace(/^.*\/ig\//, "").replaceAll("/", "-");
-  const nombre = ruta.includes("/ig/historia/") ? `${base}.png` : `${String(++numero).padStart(2, "0")}-${base}.png`;
+  const historia = ruta.includes("/ig/historia/");
+  const nombre = historia ? `${base}.png` : `${String(++numero).padStart(2, "0")}-${base}.png`;
   execFileSync(navegador, [
     "--headless",
     "--disable-gpu",
@@ -52,13 +57,18 @@ rutas.forEach((ruta) => {
     "--force-device-scale-factor=1",
     `--window-size=1080,${alto(ruta)}`,
     "--virtual-time-budget=5000",
-    `--screenshot=${path.join(SALIDA, nombre)}`,
+    `--screenshot=${path.join(historia ? CARPETA.stories : CARPETA.publicaciones, nombre)}`,
     new URL(ruta, WEB).href,
   ], { stdio: "ignore" });
   console.log(`✓ ${nombre}`);
 });
-// Foto de perfil, cuadrada: el escudo y la alternativa con texto.
-for (const [pagina, archivo] of [["avatar", "00-avatar.png"], ["avatar-texto", "00-avatar-texto.png"]]) {
+// Foto de perfil y portadas de las destacadas, cuadradas.
+const cuadradas = [
+  ["avatar", "avatar.png"],
+  ["avatar-texto", "avatar-texto.png"],
+  ...["juega", "reglas", "franquicias", "amistosos"].map((id) => [`destacada/${id}`, `destacada-${id}.png`]),
+];
+for (const [pagina, archivo] of cuadradas) {
   execFileSync(navegador, [
     "--headless",
     "--disable-gpu",
@@ -66,10 +76,10 @@ for (const [pagina, archivo] of [["avatar", "00-avatar.png"], ["avatar-texto", "
     "--force-device-scale-factor=1",
     "--window-size=1080,1080",
     "--virtual-time-budget=5000",
-    `--screenshot=${path.join(SALIDA, archivo)}`,
+    `--screenshot=${path.join(CARPETA.perfil, archivo)}`,
     new URL(`/ig/${pagina}`, WEB).href,
   ], { stdio: "ignore" });
-  console.log(`✓ ${archivo} (foto de perfil)`);
+  console.log(`✓ perfil/${archivo}`);
 }
 
-console.log(`\n${rutas.length + 2} imágenes en ${SALIDA}`);
+console.log(`\n${rutas.length + cuadradas.length} imágenes en ${SALIDA}`);

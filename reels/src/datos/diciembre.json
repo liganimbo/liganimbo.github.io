@@ -2282,7 +2282,7 @@
      "Tira",
      "Tú le defiendes"
     ],
-    "pie": "Muro: +2 contra dentro · Aro: +2 dentro",
+    "pie": "Muro: +2 contra dentro\nAro: +2 dentro",
     "segundos": 5.4
    },
    {
@@ -2403,7 +2403,7 @@
      "Tira",
      "Tú le defiendes"
     ],
-    "pie": "Muro: +2 contra dentro · Aro: +2 dentro",
+    "pie": "Muro: +2 contra dentro\nAro: +2 dentro",
     "segundos": 5.4
    },
    {
@@ -2625,8 +2625,178 @@
       "c2": "#E0AFA0"
      }
     ],
-    "pie": "Se decidió en la muerte súbita.",
-    "segundos": 9.3
+    "pie": "Tiro a tiro. Y con muerte súbita.",
+    "segundos": 6
+   },
+   {
+    "tipo": "tiros",
+    "titulo": "Primera parte",
+    "equipos": [
+     {
+      "id": "VAL",
+      "nombre": "Vendaval",
+      "c1": "#2A9D8F",
+      "c2": "#F1FAEE"
+     },
+     {
+      "id": "VLU",
+      "nombre": "Búhos",
+      "c1": "#1B1B3A",
+      "c2": "#E0AFA0"
+     }
+    ],
+    "inicio": [
+     0,
+     0
+    ],
+    "tiros": [
+     {
+      "equipo": 1,
+      "tirador": "Iker",
+      "tipo": "dentro",
+      "dados": [
+       3,
+       6
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": true,
+      "tapon": false,
+      "marcador": [
+       0,
+       2
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Nia",
+      "tipo": "fuera",
+      "dados": [
+       4,
+       1
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       0,
+       2
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Carlos",
+      "tipo": "dentro",
+      "dados": [
+       5,
+       4
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": true,
+      "tapon": false,
+      "marcador": [
+       0,
+       4
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Marta",
+      "tipo": "dentro",
+      "dados": [
+       2,
+       6
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       2,
+       4
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Iker",
+      "tipo": "dentro",
+      "dados": [
+       2,
+       5
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": true,
+      "tapon": false,
+      "marcador": [
+       2,
+       6
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Nia",
+      "tipo": "fuera",
+      "dados": [
+       2,
+       3
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       2,
+       6
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Ximena",
+      "tipo": "fuera",
+      "dados": [
+       3,
+       1
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       2,
+       6
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Marta",
+      "tipo": "fuera",
+      "dados": [
+       1,
+       4
+      ],
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       5,
+       6
+      ],
+      "tiempoMuerto": false
+     }
+    ],
+    "porTiro": 2.5,
+    "segundos": 21.5
    },
    {
     "tipo": "marcador",
@@ -2649,11 +2819,226 @@
      5,
      6
     ],
-    "segundos": 3.5
+    "pie": "Vendaval: entra Vera por Nia\nBúhos: entra Noa por Iker",
+    "segundos": 7
+   },
+   {
+    "tipo": "tiros",
+    "titulo": "Segunda parte",
+    "equipos": [
+     {
+      "id": "VAL",
+      "nombre": "Vendaval",
+      "c1": "#2A9D8F",
+      "c2": "#F1FAEE"
+     },
+     {
+      "id": "VLU",
+      "nombre": "Búhos",
+      "c1": "#1B1B3A",
+      "c2": "#E0AFA0"
+     }
+    ],
+    "inicio": [
+     5,
+     6
+    ],
+    "tiros": [
+     {
+      "equipo": 1,
+      "tirador": "Ximena",
+      "tipo": "dentro",
+      "dados": [
+       3,
+       3
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       5,
+       8
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Vera",
+      "tipo": "fuera",
+      "dados": [
+       1,
+       2
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       5,
+       8
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Carlos",
+      "tipo": "dentro",
+      "dados": [
+       3,
+       2
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       5,
+       10
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Dalia",
+      "tipo": "fuera",
+      "dados": [
+       3,
+       4
+      ],
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       8,
+       10
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Noa",
+      "tipo": "dentro",
+      "dados": [
+       4,
+       3
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": true,
+      "tapon": false,
+      "marcador": [
+       8,
+       12
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Dalia",
+      "tipo": "fuera",
+      "dados": [
+       2,
+       6
+      ],
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       11,
+       12
+      ],
+      "tiempoMuerto": true
+     },
+     {
+      "equipo": 1,
+      "tirador": "Noa",
+      "tipo": "dentro",
+      "dados": [
+       6,
+       1
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": true,
+      "tapon": false,
+      "marcador": [
+       11,
+       14
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Vera",
+      "tipo": "fuera",
+      "dados": [
+       2,
+       5
+      ],
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       14,
+       14
+      ],
+      "tiempoMuerto": false
+     }
+    ],
+    "porTiro": 2.5,
+    "segundos": 21.5
+   },
+   {
+    "tipo": "tiros",
+    "titulo": "Muerte súbita",
+    "equipos": [
+     {
+      "id": "VAL",
+      "nombre": "Vendaval",
+      "c1": "#2A9D8F",
+      "c2": "#F1FAEE"
+     },
+     {
+      "id": "VLU",
+      "nombre": "Búhos",
+      "c1": "#1B1B3A",
+      "c2": "#E0AFA0"
+     }
+    ],
+    "inicio": [
+     14,
+     14
+    ],
+    "tiros": [
+     {
+      "equipo": 1,
+      "tirador": "Noa",
+      "tipo": "dentro",
+      "dados": [
+       3,
+       3
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       14,
+       16
+      ],
+      "tiempoMuerto": false
+     }
+    ],
+    "porTiro": 2.5,
+    "segundos": 4
    },
    {
     "tipo": "marcador",
-    "etiqueta": "Muerte súbita",
+    "etiqueta": "La muerte súbita",
     "equipos": [
      {
       "id": "VAL",
@@ -2670,90 +3055,90 @@
     ],
     "puntos": [
      14,
-     14
+     16
     ],
-    "resalta": 1,
-    "titulo": "Atacan los Búhos",
-    "pie": "Empate.",
-    "acento": "#1B1B3A",
-    "segundos": 4.8
+    "resalta": 0,
+    "titulo": "Ataca el Vendaval",
+    "pie": "Pierden de 2.",
+    "acento": "#2A9D8F",
+    "segundos": 5.9
    },
    {
     "tipo": "cartas",
-    "titulo": "Tira Noa",
+    "titulo": "Tira Dalia",
     "cartas": [
      {
-      "nombre": "Noa Quintana",
+      "nombre": "Dalia Okafor",
+      "equipo": "VAL",
+      "meta": "20 años · Cabo Seren",
+      "ataque": 4,
+      "defensa": 2,
+      "icono": "Tiro",
+      "c1": "#2A9D8F",
+      "c2": "#F1FAEE"
+     },
+     {
+      "nombre": "Ximena Cuesta",
       "equipo": "VLU",
-      "meta": "29 años · Alcorva",
+      "meta": "24 años · Valcierzo",
       "ataque": 4,
       "defensa": 2,
       "icono": "Aro",
       "c1": "#1B1B3A",
       "c2": "#E0AFA0"
-     },
-     {
-      "nombre": "Vera Robles",
-      "equipo": "VAL",
-      "meta": "29 años · Torreal",
-      "ataque": 3,
-      "defensa": 2,
-      "icono": "Tiro",
-      "c1": "#2A9D8F",
-      "c2": "#F1FAEE"
      }
     ],
     "roles": [
      "Tira",
      "Contra"
     ],
-    "pie": "Búhos: «En el final apretado, siempre dentro.»",
-    "acento": "#1B1B3A",
+    "pie": "Vendaval: «En el final apretado, siempre de 3.»",
+    "acento": "#2A9D8F",
     "segundos": 6.5
    },
    {
     "tipo": "revela",
     "titulo": "Los dos eligen en secreto",
     "tira": {
-     "quien": "Noa tira",
-     "tipo": "dentro"
-    },
-    "cierra": {
-     "quien": "Vendaval cierra",
+     "quien": "Dalia tira",
      "tipo": "fuera"
     },
-    "pie": "La defensa falla",
+    "cierra": {
+     "quien": "Búhos cierran",
+     "tipo": "fuera"
+    },
+    "pie": "La defensa acierta: +2",
     "cuenta": {
-     "defensor": "Vera",
+     "defensor": "Ximena",
      "base": 5,
      "defensa": 2,
      "muro": 0,
-     "cierre": 0,
-     "total": 7
+     "cierre": 2,
+     "total": 9
     },
-    "segundos": 13.8
+    "segundos": 12
    },
    {
     "tipo": "dados",
     "dados": [
-     3,
-     3
+     1,
+     1
     ],
     "tirada": {
-     "tirador": "Noa",
+     "tirador": "Dalia",
      "ataque": 4,
-     "icono": "Aro",
-     "bonus": 2,
-     "total": 12,
-     "defensa": 7,
-     "castigo": 0,
-     "anota": true
+     "icono": "Tiro",
+     "bonus": 1,
+     "total": 5,
+     "defensa": 9,
+     "castigo": 2,
+     "anota": false
     },
-    "segundos": 10.4
+    "segundos": 10
    },
    {
     "tipo": "resultado",
-    "titulo": "¡Canasta!",
+    "titulo": "Final",
     "bien": true,
     "equipos": [
      {
@@ -2774,9 +3159,9 @@
      16
     ],
     "resalta": 1,
-    "pie": "Final. Mejor del partido: Noa Quintana (6 puntos).",
+    "pie": "Mejor del partido: Noa Quintana (6 puntos).",
     "acento": "#1B1B3A",
-    "segundos": 5.9
+    "segundos": 5.4
    }
   ]
  },
@@ -2812,8 +3197,178 @@
       "c2": "#E63946"
      }
     ],
-    "pie": "Se decidió al final.",
-    "segundos": 8.2
+    "pie": "Tiro a tiro.",
+    "segundos": 6
+   },
+   {
+    "tipo": "tiros",
+    "titulo": "Primera parte",
+    "equipos": [
+     {
+      "id": "SGR",
+      "nombre": "Lobos",
+      "c1": "#495867",
+      "c2": "#BDD5EA"
+     },
+     {
+      "id": "TOR",
+      "nombre": "Gigantes",
+      "c1": "#5C5C5C",
+      "c2": "#E63946"
+     }
+    ],
+    "inicio": [
+     0,
+     0
+    ],
+    "tiros": [
+     {
+      "equipo": 1,
+      "tirador": "Rocío",
+      "tipo": "dentro",
+      "dados": [
+       1,
+       4
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       0,
+       0
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Emeka",
+      "tipo": "dentro",
+      "dados": [
+       6,
+       1
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       2,
+       0
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Carla",
+      "tipo": "dentro",
+      "dados": [
+       5,
+       3
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       2,
+       2
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Emeka",
+      "tipo": "dentro",
+      "dados": [
+       4,
+       2
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       4,
+       2
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Rocío",
+      "tipo": "fuera",
+      "dados": [
+       5,
+       4
+      ],
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       4,
+       5
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Yago",
+      "tipo": "dentro",
+      "dados": [
+       3,
+       1
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": true,
+      "marcador": [
+       4,
+       5
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Carla",
+      "tipo": "dentro",
+      "dados": [
+       6,
+       4
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       4,
+       7
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Yago",
+      "tipo": "fuera",
+      "dados": [
+       2,
+       4
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       4,
+       7
+      ],
+      "tiempoMuerto": false
+     }
+    ],
+    "porTiro": 2.5,
+    "segundos": 21.5
    },
    {
     "tipo": "marcador",
@@ -2836,11 +3391,164 @@
      4,
      7
     ],
-    "segundos": 3.5
+    "pie": "Lobos: entra Ciro por Yago\nGigantes: entra Luka por Rocío",
+    "segundos": 7
+   },
+   {
+    "tipo": "tiros",
+    "titulo": "Segunda parte",
+    "equipos": [
+     {
+      "id": "SGR",
+      "nombre": "Lobos",
+      "c1": "#495867",
+      "c2": "#BDD5EA"
+     },
+     {
+      "id": "TOR",
+      "nombre": "Gigantes",
+      "c1": "#5C5C5C",
+      "c2": "#E63946"
+     }
+    ],
+    "inicio": [
+     4,
+     7
+    ],
+    "tiros": [
+     {
+      "equipo": 1,
+      "tirador": "Luka",
+      "tipo": "fuera",
+      "dados": [
+       1,
+       2
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       4,
+       7
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Fabián",
+      "tipo": "dentro",
+      "dados": [
+       4,
+       2
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       6,
+       7
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Luka",
+      "tipo": "dentro",
+      "dados": [
+       6,
+       4
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       6,
+       9
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Fabián",
+      "tipo": "dentro",
+      "dados": [
+       4,
+       2
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       8,
+       9
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Nico",
+      "tipo": "dentro",
+      "dados": [
+       3,
+       4
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": true,
+      "marcador": [
+       8,
+       9
+      ],
+      "tiempoMuerto": true
+     },
+     {
+      "equipo": 0,
+      "tirador": "Ciro",
+      "tipo": "fuera",
+      "dados": [
+       5,
+       1
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       8,
+       9
+      ],
+      "tiempoMuerto": true
+     },
+     {
+      "equipo": 1,
+      "tirador": "Nico",
+      "tipo": "dentro",
+      "dados": [
+       1,
+       4
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": true,
+      "marcador": [
+       8,
+       9
+      ],
+      "tiempoMuerto": false
+     }
+    ],
+    "porTiro": 2.5,
+    "segundos": 19
    },
    {
     "tipo": "marcador",
-    "etiqueta": "Ataque 8 de 8",
+    "etiqueta": "El último ataque",
     "equipos": [
      {
       "id": "SGR",
@@ -2863,7 +3571,7 @@
     "titulo": "Atacan los Lobos",
     "pie": "Pierden de 1.",
     "acento": "#495867",
-    "segundos": 5.4
+    "segundos": 5.9
    },
    {
     "tipo": "cartas",
@@ -2917,7 +3625,7 @@
      "cierre": 0,
      "total": 9
     },
-    "segundos": 13.8
+    "segundos": 12
    },
    {
     "tipo": "dados",
@@ -2935,11 +3643,11 @@
      "castigo": 2,
      "anota": true
     },
-    "segundos": 10.4
+    "segundos": 10
    },
    {
     "tipo": "resultado",
-    "titulo": "¡Triple!",
+    "titulo": "Final",
     "bien": true,
     "equipos": [
      {
@@ -2960,9 +3668,9 @@
      9
     ],
     "resalta": 0,
-    "pie": "Final. Mejor del partido: Emeka Udeh (4 puntos).",
+    "pie": "Mejor del partido: Emeka Udeh (4 puntos).",
     "acento": "#495867",
-    "segundos": 5.9
+    "segundos": 5.4
    }
   ]
  },
@@ -3259,8 +3967,285 @@
       "c2": "#FDC500"
      }
     ],
-    "pie": "Se decidió al final.",
-    "segundos": 8.2
+    "pie": "Tiro a tiro.",
+    "segundos": 6
+   },
+   {
+    "tipo": "tiros",
+    "titulo": "Primera parte",
+    "equipos": [
+     {
+      "id": "MIR",
+      "nombre": "Halcones",
+      "c1": "#F4A261",
+      "c2": "#264653"
+     },
+     {
+      "id": "STE",
+      "nombre": "Relámpagos",
+      "c1": "#003F88",
+      "c2": "#FDC500"
+     }
+    ],
+    "inicio": [
+     0,
+     0
+    ],
+    "tiros": [
+     {
+      "equipo": 1,
+      "tirador": "Elias",
+      "tipo": "fuera",
+      "dados": [
+       4,
+       6
+      ],
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       0,
+       3
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Ingrid",
+      "tipo": "dentro",
+      "dados": [
+       1,
+       4
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       2,
+       3
+      ],
+      "tiempoMuerto": false
+     }
+    ],
+    "porTiro": 2.5,
+    "segundos": 6.5
+   },
+   {
+    "tipo": "marcador",
+    "etiqueta": "El mate del partido",
+    "equipos": [
+     {
+      "id": "MIR",
+      "nombre": "Halcones",
+      "c1": "#F4A261",
+      "c2": "#264653"
+     },
+     {
+      "id": "STE",
+      "nombre": "Relámpagos",
+      "c1": "#003F88",
+      "c2": "#FDC500"
+     }
+    ],
+    "puntos": [
+     2,
+     3
+    ],
+    "resalta": 1,
+    "titulo": "Atacan los Relámpagos",
+    "pie": "Ganan de 1.",
+    "acento": "#003F88",
+    "segundos": 6.5
+   },
+   {
+    "tipo": "cartas",
+    "titulo": "Tira Elias",
+    "cartas": [
+     {
+      "nombre": "Elias Brennan",
+      "equipo": "STE",
+      "meta": "24 años · Kostavia",
+      "ataque": 5,
+      "defensa": 2,
+      "icono": "Tiro",
+      "c1": "#003F88",
+      "c2": "#FDC500"
+     },
+     {
+      "nombre": "Triana Delgado",
+      "equipo": "MIR",
+      "meta": "22 años · Torreal",
+      "ataque": 3,
+      "defensa": 2,
+      "icono": "Tiro",
+      "c1": "#F4A261",
+      "c2": "#264653"
+     }
+    ],
+    "roles": [
+     "Tira",
+     "Contra"
+    ],
+    "acento": "#003F88",
+    "segundos": 4.5
+   },
+   {
+    "tipo": "revela",
+    "titulo": "Los dos eligen en secreto",
+    "tira": {
+     "quien": "Elias tira",
+     "tipo": "dentro"
+    },
+    "cierra": {
+     "quien": "Halcones cierran",
+     "tipo": "fuera"
+    },
+    "pie": "La defensa falla",
+    "cuenta": {
+     "defensor": "Triana",
+     "base": 5,
+     "defensa": 2,
+     "muro": 0,
+     "cierre": 0,
+     "total": 7
+    },
+    "segundos": 12
+   },
+   {
+    "tipo": "dados",
+    "dados": [
+     5,
+     5
+    ],
+    "tirada": {
+     "tirador": "Elias",
+     "ataque": 5,
+     "icono": null,
+     "bonus": 0,
+     "total": 15,
+     "defensa": 7,
+     "castigo": 0,
+     "anota": true
+    },
+    "segundos": 9.3
+   },
+   {
+    "tipo": "tiros",
+    "titulo": "Primera parte",
+    "equipos": [
+     {
+      "id": "MIR",
+      "nombre": "Halcones",
+      "c1": "#F4A261",
+      "c2": "#264653"
+     },
+     {
+      "id": "STE",
+      "nombre": "Relámpagos",
+      "c1": "#003F88",
+      "c2": "#FDC500"
+     }
+    ],
+    "inicio": [
+     2,
+     5
+    ],
+    "tiros": [
+     {
+      "equipo": 0,
+      "tirador": "Emma",
+      "tipo": "fuera",
+      "dados": [
+       2,
+       3
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       2,
+       5
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Darío",
+      "tipo": "fuera",
+      "dados": [
+       5,
+       2
+      ],
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       2,
+       8
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Triana",
+      "tipo": "dentro",
+      "dados": [
+       6,
+       3
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       4,
+       8
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Darío",
+      "tipo": "fuera",
+      "dados": [
+       6,
+       4
+      ],
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       4,
+       11
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Triana",
+      "tipo": "fuera",
+      "dados": [
+       6,
+       6
+      ],
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       7,
+       11
+      ],
+      "tiempoMuerto": false
+     }
+    ],
+    "porTiro": 2.5,
+    "segundos": 14
    },
    {
     "tipo": "marcador",
@@ -3283,11 +4268,12 @@
      7,
      11
     ],
-    "segundos": 3.5
+    "pie": "Halcones: entra Vera por Triana\nRelámpagos: entra Hugo por Elias",
+    "segundos": 7
    },
    {
-    "tipo": "marcador",
-    "etiqueta": "Ataque 8 de 8",
+    "tipo": "tiros",
+    "titulo": "Segunda parte",
     "equipos": [
      {
       "id": "MIR",
@@ -3302,91 +4288,162 @@
       "c2": "#FDC500"
      }
     ],
-    "puntos": [
-     10,
-     16
+    "inicio": [
+     7,
+     11
     ],
-    "resalta": 1,
-    "titulo": "Atacan los Relámpagos",
-    "pie": "Ganan de 6.",
-    "acento": "#003F88",
-    "segundos": 5.4
-   },
-   {
-    "tipo": "cartas",
-    "titulo": "Tira Hugo",
-    "cartas": [
+    "tiros": [
      {
-      "nombre": "Hugo Tejada",
-      "equipo": "STE",
-      "meta": "34 años · Puerto Albar",
-      "ataque": 2,
-      "defensa": 3,
-      "icono": "Tiro",
-      "c1": "#003F88",
-      "c2": "#FDC500"
+      "equipo": 1,
+      "tirador": "Hugo",
+      "tipo": "dentro",
+      "dados": [
+       6,
+       3
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       7,
+       13
+      ],
+      "tiempoMuerto": false
      },
      {
-      "nombre": "Ingrid Radić",
-      "equipo": "MIR",
-      "meta": "32 años · Kostavia",
-      "ataque": 5,
-      "defensa": 4,
-      "icono": "Muro",
-      "c1": "#F4A261",
-      "c2": "#264653"
+      "equipo": 0,
+      "tirador": "Emma",
+      "tipo": "fuera",
+      "dados": [
+       3,
+       2
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       7,
+       13
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Kai",
+      "tipo": "fuera",
+      "dados": [
+       5,
+       5
+      ],
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       7,
+       16
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Ingrid",
+      "tipo": "fuera",
+      "dados": [
+       6,
+       2
+      ],
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       10,
+       16
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Kai",
+      "tipo": "fuera",
+      "dados": [
+       1,
+       3
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       10,
+       16
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Vera",
+      "tipo": "fuera",
+      "dados": [
+       6,
+       1
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       10,
+       16
+      ],
+      "tiempoMuerto": true
+     },
+     {
+      "equipo": 1,
+      "tirador": "Hugo",
+      "tipo": "fuera",
+      "dados": [
+       6,
+       4
+      ],
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       10,
+       19
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Vera",
+      "tipo": "fuera",
+      "dados": [
+       1,
+       4
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       10,
+       19
+      ],
+      "tiempoMuerto": false
      }
     ],
-    "roles": [
-     "Tira",
-     "Contra"
-    ],
-    "acento": "#003F88",
-    "segundos": 4.5
-   },
-   {
-    "tipo": "revela",
-    "titulo": "Los dos eligen en secreto",
-    "tira": {
-     "quien": "Hugo tira",
-     "tipo": "fuera"
-    },
-    "cierra": {
-     "quien": "Halcones cierran",
-     "tipo": "dentro"
-    },
-    "pie": "La defensa falla",
-    "cuenta": {
-     "defensor": "Ingrid",
-     "base": 5,
-     "defensa": 4,
-     "muro": 0,
-     "cierre": 0,
-     "total": 9
-    },
-    "segundos": 13.8
-   },
-   {
-    "tipo": "dados",
-    "dados": [
-     6,
-     4
-    ],
-    "tirada": {
-     "tirador": "Hugo",
-     "ataque": 2,
-     "icono": "Tiro",
-     "bonus": 1,
-     "total": 11,
-     "defensa": 9,
-     "castigo": 2,
-     "anota": true
-    },
-    "segundos": 11.6
+    "porTiro": 2.5,
+    "segundos": 21.5
    },
    {
     "tipo": "resultado",
-    "titulo": "¡Triple!",
+    "titulo": "Final",
     "bien": true,
     "equipos": [
      {
@@ -3407,9 +4464,9 @@
      19
     ],
     "resalta": 1,
-    "pie": "Final. Mejor del partido: Darío Carmona (6 puntos).",
+    "pie": "Mejor del partido: Darío Carmona (6 puntos).",
     "acento": "#003F88",
-    "segundos": 5.9
+    "segundos": 5.4
    }
   ]
  },
@@ -3445,8 +4502,285 @@
       "c2": "#00B4D8"
      }
     ],
-    "pie": "Se decidió al final.",
-    "segundos": 8.2
+    "pie": "Tiro a tiro.",
+    "segundos": 6
+   },
+   {
+    "tipo": "tiros",
+    "titulo": "Primera parte",
+    "equipos": [
+     {
+      "id": "PAL",
+      "nombre": "Albatros",
+      "c1": "#1D3557",
+      "c2": "#E9C46A"
+     },
+     {
+      "id": "EBA",
+      "nombre": "Panteras",
+      "c1": "#3C096C",
+      "c2": "#00B4D8"
+     }
+    ],
+    "inicio": [
+     0,
+     0
+    ],
+    "tiros": [
+     {
+      "equipo": 1,
+      "tirador": "Nico",
+      "tipo": "dentro",
+      "dados": [
+       6,
+       3
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": true,
+      "tapon": false,
+      "marcador": [
+       0,
+       2
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Goran",
+      "tipo": "dentro",
+      "dados": [
+       6,
+       3
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       2,
+       2
+      ],
+      "tiempoMuerto": false
+     }
+    ],
+    "porTiro": 2.5,
+    "segundos": 6.5
+   },
+   {
+    "tipo": "marcador",
+    "etiqueta": "El mate del partido",
+    "equipos": [
+     {
+      "id": "PAL",
+      "nombre": "Albatros",
+      "c1": "#1D3557",
+      "c2": "#E9C46A"
+     },
+     {
+      "id": "EBA",
+      "nombre": "Panteras",
+      "c1": "#3C096C",
+      "c2": "#00B4D8"
+     }
+    ],
+    "puntos": [
+     2,
+     2
+    ],
+    "resalta": 1,
+    "titulo": "Atacan los Panteras",
+    "pie": "Empate.",
+    "acento": "#3C096C",
+    "segundos": 5.9
+   },
+   {
+    "tipo": "cartas",
+    "titulo": "Tira Nico",
+    "cartas": [
+     {
+      "nombre": "Nico Serrano",
+      "equipo": "EBA",
+      "meta": "22 años · Nuevo Ébano",
+      "ataque": 5,
+      "defensa": 3,
+      "icono": "Aro",
+      "c1": "#3C096C",
+      "c2": "#00B4D8"
+     },
+     {
+      "nombre": "Goran Jansen",
+      "equipo": "PAL",
+      "meta": "25 años · Ilvessa",
+      "ataque": 3,
+      "defensa": 3,
+      "icono": null,
+      "c1": "#1D3557",
+      "c2": "#E9C46A"
+     }
+    ],
+    "roles": [
+     "Tira",
+     "Contra"
+    ],
+    "acento": "#3C096C",
+    "segundos": 4.5
+   },
+   {
+    "tipo": "revela",
+    "titulo": "Los dos eligen en secreto",
+    "tira": {
+     "quien": "Nico tira",
+     "tipo": "dentro"
+    },
+    "cierra": {
+     "quien": "Albatros cierran",
+     "tipo": "fuera"
+    },
+    "pie": "La defensa falla",
+    "cuenta": {
+     "defensor": "Goran",
+     "base": 5,
+     "defensa": 3,
+     "muro": 0,
+     "cierre": 0,
+     "total": 8
+    },
+    "segundos": 12
+   },
+   {
+    "tipo": "dados",
+    "dados": [
+     6,
+     5
+    ],
+    "tirada": {
+     "tirador": "Nico",
+     "ataque": 5,
+     "icono": "Aro",
+     "bonus": 2,
+     "total": 18,
+     "defensa": 8,
+     "castigo": 0,
+     "anota": true
+    },
+    "segundos": 10
+   },
+   {
+    "tipo": "tiros",
+    "titulo": "Primera parte",
+    "equipos": [
+     {
+      "id": "PAL",
+      "nombre": "Albatros",
+      "c1": "#1D3557",
+      "c2": "#E9C46A"
+     },
+     {
+      "id": "EBA",
+      "nombre": "Panteras",
+      "c1": "#3C096C",
+      "c2": "#00B4D8"
+     }
+    ],
+    "inicio": [
+     2,
+     4
+    ],
+    "tiros": [
+     {
+      "equipo": 0,
+      "tirador": "Kenna",
+      "tipo": "dentro",
+      "dados": [
+       6,
+       3
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       4,
+       4
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Celia",
+      "tipo": "dentro",
+      "dados": [
+       4,
+       1
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       4,
+       4
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Goran",
+      "tipo": "fuera",
+      "dados": [
+       4,
+       6
+      ],
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       7,
+       4
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Irene",
+      "tipo": "dentro",
+      "dados": [
+       4,
+       2
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       7,
+       4
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Kenna",
+      "tipo": "fuera",
+      "dados": [
+       4,
+       2
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       7,
+       4
+      ],
+      "tiempoMuerto": false
+     }
+    ],
+    "porTiro": 2.5,
+    "segundos": 14
    },
    {
     "tipo": "marcador",
@@ -3469,11 +4803,12 @@
      7,
      4
     ],
-    "segundos": 3.5
+    "pie": "Albatros: entra Ainhoa por Goran\nPanteras: entra Kai por Nico",
+    "segundos": 7
    },
    {
-    "tipo": "marcador",
-    "etiqueta": "Ataque 8 de 8",
+    "tipo": "tiros",
+    "titulo": "Segunda parte",
     "equipos": [
      {
       "id": "PAL",
@@ -3488,91 +4823,162 @@
       "c2": "#00B4D8"
      }
     ],
-    "puntos": [
-     13,
-     10
+    "inicio": [
+     7,
+     4
     ],
-    "resalta": 0,
-    "titulo": "Atacan los Albatros",
-    "pie": "Ganan de 3.",
-    "acento": "#1D3557",
-    "segundos": 5.4
-   },
-   {
-    "tipo": "cartas",
-    "titulo": "Tira Andrei",
-    "cartas": [
+    "tiros": [
      {
-      "nombre": "Andrei Kamara",
-      "equipo": "PAL",
-      "meta": "29 años · Valmont",
-      "ataque": 2,
-      "defensa": 5,
-      "icono": null,
-      "c1": "#1D3557",
-      "c2": "#E9C46A"
+      "equipo": 1,
+      "tirador": "Celia",
+      "tipo": "dentro",
+      "dados": [
+       6,
+       3
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       7,
+       6
+      ],
+      "tiempoMuerto": false
      },
      {
-      "nombre": "Celia Toledo",
-      "equipo": "EBA",
-      "meta": "28 años · Torreal",
-      "ataque": 5,
-      "defensa": 3,
-      "icono": null,
-      "c1": "#3C096C",
-      "c2": "#00B4D8"
+      "equipo": 0,
+      "tirador": "Ainhoa",
+      "tipo": "dentro",
+      "dados": [
+       4,
+       3
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       9,
+       6
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Irene",
+      "tipo": "dentro",
+      "dados": [
+       6,
+       5
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       9,
+       8
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Ainhoa",
+      "tipo": "dentro",
+      "dados": [
+       6,
+       3
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       11,
+       8
+      ],
+      "tiempoMuerto": true
+     },
+     {
+      "equipo": 1,
+      "tirador": "Kai",
+      "tipo": "dentro",
+      "dados": [
+       6,
+       4
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       11,
+       10
+      ],
+      "tiempoMuerto": true
+     },
+     {
+      "equipo": 0,
+      "tirador": "Andrei",
+      "tipo": "dentro",
+      "dados": [
+       5,
+       5
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       13,
+       10
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Kai",
+      "tipo": "fuera",
+      "dados": [
+       2,
+       4
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       13,
+       10
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Andrei",
+      "tipo": "dentro",
+      "dados": [
+       5,
+       3
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       15,
+       10
+      ],
+      "tiempoMuerto": false
      }
     ],
-    "roles": [
-     "Tira",
-     "Contra"
-    ],
-    "acento": "#1D3557",
-    "segundos": 4.5
-   },
-   {
-    "tipo": "revela",
-    "titulo": "Los dos eligen en secreto",
-    "tira": {
-     "quien": "Andrei tira",
-     "tipo": "dentro"
-    },
-    "cierra": {
-     "quien": "Panteras cierran",
-     "tipo": "dentro"
-    },
-    "pie": "La defensa acierta: +2",
-    "cuenta": {
-     "defensor": "Celia",
-     "base": 5,
-     "defensa": 3,
-     "muro": 0,
-     "cierre": 2,
-     "total": 10
-    },
-    "segundos": 14.9
-   },
-   {
-    "tipo": "dados",
-    "dados": [
-     5,
-     3
-    ],
-    "tirada": {
-     "tirador": "Andrei",
-     "ataque": 2,
-     "icono": null,
-     "bonus": 0,
-     "total": 10,
-     "defensa": 10,
-     "castigo": 0,
-     "anota": true
-    },
-    "segundos": 9.3
+    "porTiro": 2.5,
+    "segundos": 21.5
    },
    {
     "tipo": "resultado",
-    "titulo": "¡Canasta!",
+    "titulo": "Final",
     "bien": true,
     "equipos": [
      {
@@ -3593,9 +4999,9 @@
      10
     ],
     "resalta": 0,
-    "pie": "Final. Mejor del partido: Goran Jansen (5 puntos).",
+    "pie": "Mejor del partido: Goran Jansen (5 puntos).",
     "acento": "#1D3557",
-    "segundos": 5.9
+    "segundos": 5.4
    }
   ]
  },
@@ -3631,8 +5037,178 @@
       "c2": "#D9D9D9"
      }
     ],
-    "pie": "Se decidió en la muerte súbita.",
-    "segundos": 9.3
+    "pie": "Tiro a tiro. Y con muerte súbita.",
+    "segundos": 6
+   },
+   {
+    "tipo": "tiros",
+    "titulo": "Primera parte",
+    "equipos": [
+     {
+      "id": "ALC",
+      "nombre": "Cuervos",
+      "c1": "#111111",
+      "c2": "#C1121F"
+     },
+     {
+      "id": "FER",
+      "nombre": "Forjadores",
+      "c1": "#8B2500",
+      "c2": "#D9D9D9"
+     }
+    ],
+    "inicio": [
+     0,
+     0
+    ],
+    "tiros": [
+     {
+      "equipo": 1,
+      "tirador": "Zoe",
+      "tipo": "fuera",
+      "dados": [
+       6,
+       6
+      ],
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       0,
+       3
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Santi",
+      "tipo": "fuera",
+      "dados": [
+       4,
+       3
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       0,
+       3
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Andrea",
+      "tipo": "dentro",
+      "dados": [
+       6,
+       6
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": true,
+      "tapon": false,
+      "marcador": [
+       0,
+       5
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Andrea",
+      "tipo": "dentro",
+      "dados": [
+       6,
+       1
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       2,
+       5
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Andrea",
+      "tipo": "dentro",
+      "dados": [
+       3,
+       1
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       2,
+       5
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Andrea",
+      "tipo": "dentro",
+      "dados": [
+       4,
+       5
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       4,
+       5
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Zoe",
+      "tipo": "fuera",
+      "dados": [
+       3,
+       2
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       4,
+       5
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Gonzalo",
+      "tipo": "fuera",
+      "dados": [
+       1,
+       5
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       4,
+       5
+      ],
+      "tiempoMuerto": false
+     }
+    ],
+    "porTiro": 2.5,
+    "segundos": 21.5
    },
    {
     "tipo": "marcador",
@@ -3655,11 +5231,226 @@
      4,
      5
     ],
-    "segundos": 3.5
+    "pie": "Cuervos: entra Lucas por Andrea\nForjadores: entra Enzo por Andrea",
+    "segundos": 7
+   },
+   {
+    "tipo": "tiros",
+    "titulo": "Segunda parte",
+    "equipos": [
+     {
+      "id": "ALC",
+      "nombre": "Cuervos",
+      "c1": "#111111",
+      "c2": "#C1121F"
+     },
+     {
+      "id": "FER",
+      "nombre": "Forjadores",
+      "c1": "#8B2500",
+      "c2": "#D9D9D9"
+     }
+    ],
+    "inicio": [
+     4,
+     5
+    ],
+    "tiros": [
+     {
+      "equipo": 1,
+      "tirador": "Astrid",
+      "tipo": "dentro",
+      "dados": [
+       1,
+       1
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": true,
+      "marcador": [
+       4,
+       5
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Santi",
+      "tipo": "fuera",
+      "dados": [
+       5,
+       1
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       4,
+       5
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Enzo",
+      "tipo": "dentro",
+      "dados": [
+       3,
+       5
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       4,
+       7
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Lucas",
+      "tipo": "dentro",
+      "dados": [
+       2,
+       2
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       6,
+       7
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Enzo",
+      "tipo": "fuera",
+      "dados": [
+       5,
+       6
+      ],
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       6,
+       10
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Lucas",
+      "tipo": "dentro",
+      "dados": [
+       5,
+       4
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       8,
+       10
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Astrid",
+      "tipo": "fuera",
+      "dados": [
+       1,
+       6
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       8,
+       10
+      ],
+      "tiempoMuerto": true
+     },
+     {
+      "equipo": 0,
+      "tirador": "Gonzalo",
+      "tipo": "dentro",
+      "dados": [
+       5,
+       4
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       10,
+       10
+      ],
+      "tiempoMuerto": false
+     }
+    ],
+    "porTiro": 2.5,
+    "segundos": 21.5
+   },
+   {
+    "tipo": "tiros",
+    "titulo": "Muerte súbita",
+    "equipos": [
+     {
+      "id": "ALC",
+      "nombre": "Cuervos",
+      "c1": "#111111",
+      "c2": "#C1121F"
+     },
+     {
+      "id": "FER",
+      "nombre": "Forjadores",
+      "c1": "#8B2500",
+      "c2": "#D9D9D9"
+     }
+    ],
+    "inicio": [
+     10,
+     10
+    ],
+    "tiros": [
+     {
+      "equipo": 1,
+      "tirador": "Enzo",
+      "tipo": "dentro",
+      "dados": [
+       5,
+       1
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       10,
+       12
+      ],
+      "tiempoMuerto": false
+     }
+    ],
+    "porTiro": 2.5,
+    "segundos": 4
    },
    {
     "tipo": "marcador",
-    "etiqueta": "Muerte súbita",
+    "etiqueta": "La muerte súbita",
     "equipos": [
      {
       "id": "ALC",
@@ -3682,7 +5473,7 @@
     "titulo": "Atacan los Cuervos",
     "pie": "Pierden de 2.",
     "acento": "#111111",
-    "segundos": 5.4
+    "segundos": 5.9
    },
    {
     "tipo": "cartas",
@@ -3737,7 +5528,7 @@
      "cierre": 0,
      "total": 8
     },
-    "segundos": 13.8
+    "segundos": 12
    },
    {
     "tipo": "dados",
@@ -3774,7 +5565,7 @@
    },
    {
     "tipo": "resultado",
-    "titulo": "¡Canasta!",
+    "titulo": "Final",
     "bien": true,
     "equipos": [
      {
@@ -3795,9 +5586,9 @@
      12
     ],
     "resalta": 0,
-    "pie": "Final. Mejor del partido: Enzo Pastor (7 puntos).",
+    "pie": "Mejor del partido: Enzo Pastor (7 puntos).",
     "acento": "#111111",
-    "segundos": 5.9
+    "segundos": 5.4
    }
   ]
  },
@@ -3833,8 +5624,178 @@
       "c2": "#FAF3DD"
      }
     ],
-    "pie": "Se decidió al final.",
-    "segundos": 8.2
+    "pie": "Tiro a tiro.",
+    "segundos": 6
+   },
+   {
+    "tipo": "tiros",
+    "titulo": "Primera parte",
+    "equipos": [
+     {
+      "id": "OST",
+      "nombre": "Coronas",
+      "c1": "#6A0DAD",
+      "c2": "#FFD166"
+     },
+     {
+      "id": "BRE",
+      "nombre": "Corsarios",
+      "c1": "#0B6E4F",
+      "c2": "#FAF3DD"
+     }
+    ],
+    "inicio": [
+     0,
+     0
+    ],
+    "tiros": [
+     {
+      "equipo": 1,
+      "tirador": "Emeka",
+      "tipo": "fuera",
+      "dados": [
+       5,
+       6
+      ],
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       0,
+       3
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Joel",
+      "tipo": "fuera",
+      "dados": [
+       4,
+       5
+      ],
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       3,
+       3
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Emeka",
+      "tipo": "fuera",
+      "dados": [
+       5,
+       1
+      ],
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       3,
+       6
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Finn",
+      "tipo": "fuera",
+      "dados": [
+       3,
+       6
+      ],
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       6,
+       6
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Lucía",
+      "tipo": "fuera",
+      "dados": [
+       1,
+       4
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       6,
+       6
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Gonzalo",
+      "tipo": "fuera",
+      "dados": [
+       1,
+       6
+      ],
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       9,
+       6
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Lucía",
+      "tipo": "fuera",
+      "dados": [
+       1,
+       5
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       9,
+       6
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Gonzalo",
+      "tipo": "fuera",
+      "dados": [
+       4,
+       3
+      ],
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       12,
+       6
+      ],
+      "tiempoMuerto": false
+     }
+    ],
+    "porTiro": 2.5,
+    "segundos": 21.5
    },
    {
     "tipo": "marcador",
@@ -3857,11 +5818,74 @@
      12,
      6
     ],
-    "segundos": 3.5
+    "pie": "Coronas: entra Celia por Gonzalo\nCorsarios: entra Lara por Emeka",
+    "segundos": 7
+   },
+   {
+    "tipo": "tiros",
+    "titulo": "Segunda parte",
+    "equipos": [
+     {
+      "id": "OST",
+      "nombre": "Coronas",
+      "c1": "#6A0DAD",
+      "c2": "#FFD166"
+     },
+     {
+      "id": "BRE",
+      "nombre": "Corsarios",
+      "c1": "#0B6E4F",
+      "c2": "#FAF3DD"
+     }
+    ],
+    "inicio": [
+     12,
+     6
+    ],
+    "tiros": [
+     {
+      "equipo": 1,
+      "tirador": "Aroa",
+      "tipo": "dentro",
+      "dados": [
+       5,
+       1
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       12,
+       8
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Celia",
+      "tipo": "fuera",
+      "dados": [
+       3,
+       2
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       12,
+       8
+      ],
+      "tiempoMuerto": false
+     }
+    ],
+    "porTiro": 2.5,
+    "segundos": 6.5
    },
    {
     "tipo": "marcador",
-    "etiqueta": "Ataque 8 de 8",
+    "etiqueta": "El mate del partido",
     "equipos": [
      {
       "id": "OST",
@@ -3877,29 +5901,19 @@
      }
     ],
     "puntos": [
-     15,
-     14
+     12,
+     8
     ],
-    "resalta": 0,
-    "titulo": "Atacan los Coronas",
-    "pie": "Ganan de 1.",
-    "acento": "#6A0DAD",
-    "segundos": 5.4
+    "resalta": 1,
+    "titulo": "Atacan los Corsarios",
+    "pie": "Pierden de 4.",
+    "acento": "#0B6E4F",
+    "segundos": 6.5
    },
    {
     "tipo": "cartas",
-    "titulo": "Tira Joel",
+    "titulo": "Tira Lara",
     "cartas": [
-     {
-      "nombre": "Joel Cebrián",
-      "equipo": "OST",
-      "meta": "19 años · Torreal",
-      "ataque": 5,
-      "defensa": 2,
-      "icono": null,
-      "c1": "#6A0DAD",
-      "c2": "#FFD166"
-     },
      {
       "nombre": "Lara Urrutia",
       "equipo": "BRE",
@@ -3909,58 +5923,184 @@
       "icono": null,
       "c1": "#0B6E4F",
       "c2": "#FAF3DD"
+     },
+     {
+      "nombre": "Joel Cebrián",
+      "equipo": "OST",
+      "meta": "19 años · Torreal",
+      "ataque": 5,
+      "defensa": 2,
+      "icono": null,
+      "c1": "#6A0DAD",
+      "c2": "#FFD166"
      }
     ],
     "roles": [
      "Tira",
      "Contra"
     ],
-    "acento": "#6A0DAD",
+    "acento": "#0B6E4F",
     "segundos": 4.5
    },
    {
     "tipo": "revela",
     "titulo": "Los dos eligen en secreto",
     "tira": {
-     "quien": "Joel tira",
-     "tipo": "fuera"
+     "quien": "Lara tira",
+     "tipo": "dentro"
     },
     "cierra": {
-     "quien": "Corsarios cierran",
-     "tipo": "dentro"
+     "quien": "Coronas cierran",
+     "tipo": "fuera"
     },
     "pie": "La defensa falla",
     "cuenta": {
-     "defensor": "Lara",
+     "defensor": "Joel",
      "base": 5,
-     "defensa": 3,
+     "defensa": 2,
      "muro": 0,
      "cierre": 0,
-     "total": 8
+     "total": 7
     },
-    "segundos": 13.8
+    "segundos": 12
    },
    {
     "tipo": "dados",
     "dados": [
      6,
-     4
+     6
     ],
     "tirada": {
-     "tirador": "Joel",
-     "ataque": 5,
+     "tirador": "Lara",
+     "ataque": 3,
      "icono": null,
      "bonus": 0,
-     "total": 13,
-     "defensa": 8,
-     "castigo": 2,
+     "total": 15,
+     "defensa": 7,
+     "castigo": 0,
      "anota": true
     },
-    "segundos": 10.4
+    "segundos": 9.3
+   },
+   {
+    "tipo": "tiros",
+    "titulo": "Segunda parte",
+    "equipos": [
+     {
+      "id": "OST",
+      "nombre": "Coronas",
+      "c1": "#6A0DAD",
+      "c2": "#FFD166"
+     },
+     {
+      "id": "BRE",
+      "nombre": "Corsarios",
+      "c1": "#0B6E4F",
+      "c2": "#FAF3DD"
+     }
+    ],
+    "inicio": [
+     12,
+     10
+    ],
+    "tiros": [
+     {
+      "equipo": 0,
+      "tirador": "Celia",
+      "tipo": "fuera",
+      "dados": [
+       6,
+       2
+      ],
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       15,
+       10
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Lara",
+      "tipo": "dentro",
+      "dados": [
+       6,
+       1
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       15,
+       12
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Finn",
+      "tipo": "fuera",
+      "dados": [
+       3,
+       2
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       15,
+       12
+      ],
+      "tiempoMuerto": true
+     },
+     {
+      "equipo": 1,
+      "tirador": "Aroa",
+      "tipo": "dentro",
+      "dados": [
+       2,
+       3
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       15,
+       14
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Joel",
+      "tipo": "fuera",
+      "dados": [
+       6,
+       4
+      ],
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       18,
+       14
+      ],
+      "tiempoMuerto": false
+     }
+    ],
+    "porTiro": 2.5,
+    "segundos": 14
    },
    {
     "tipo": "resultado",
-    "titulo": "¡Triple!",
+    "titulo": "Final",
     "bien": true,
     "equipos": [
      {
@@ -3981,9 +6121,9 @@
      14
     ],
     "resalta": 0,
-    "pie": "Final. Mejor del partido: Joel Cebrián (6 puntos).",
+    "pie": "Mejor del partido: Joel Cebrián (6 puntos).",
     "acento": "#6A0DAD",
-    "segundos": 5.9
+    "segundos": 5.4
    }
   ]
  },
@@ -4019,8 +6159,178 @@
       "c2": "#FFD166"
      }
     ],
-    "pie": "Se decidió en la muerte súbita.",
-    "segundos": 9.3
+    "pie": "Tiro a tiro. Y con muerte súbita.",
+    "segundos": 6
+   },
+   {
+    "tipo": "tiros",
+    "titulo": "Primera parte",
+    "equipos": [
+     {
+      "id": "STE",
+      "nombre": "Relámpagos",
+      "c1": "#003F88",
+      "c2": "#FDC500"
+     },
+     {
+      "id": "OST",
+      "nombre": "Coronas",
+      "c1": "#6A0DAD",
+      "c2": "#FFD166"
+     }
+    ],
+    "inicio": [
+     0,
+     0
+    ],
+    "tiros": [
+     {
+      "equipo": 1,
+      "tirador": "Finn",
+      "tipo": "fuera",
+      "dados": [
+       1,
+       2
+      ],
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       0,
+       3
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Darío",
+      "tipo": "fuera",
+      "dados": [
+       2,
+       4
+      ],
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       3,
+       3
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Joel",
+      "tipo": "dentro",
+      "dados": [
+       6,
+       1
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       3,
+       5
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Kai",
+      "tipo": "fuera",
+      "dados": [
+       5,
+       5
+      ],
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       6,
+       5
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Joel",
+      "tipo": "fuera",
+      "dados": [
+       6,
+       5
+      ],
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       6,
+       8
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Darío",
+      "tipo": "fuera",
+      "dados": [
+       5,
+       1
+      ],
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       9,
+       8
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Gonzalo",
+      "tipo": "fuera",
+      "dados": [
+       4,
+       3
+      ],
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       9,
+       11
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Elias",
+      "tipo": "dentro",
+      "dados": [
+       5,
+       3
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       11,
+       11
+      ],
+      "tiempoMuerto": false
+     }
+    ],
+    "porTiro": 2.5,
+    "segundos": 21.5
    },
    {
     "tipo": "marcador",
@@ -4043,11 +6353,226 @@
      11,
      11
     ],
-    "segundos": 3.5
+    "pie": "Relámpagos: entra Hugo por Darío\nCoronas: entra Celia por Joel",
+    "segundos": 7
+   },
+   {
+    "tipo": "tiros",
+    "titulo": "Segunda parte",
+    "equipos": [
+     {
+      "id": "STE",
+      "nombre": "Relámpagos",
+      "c1": "#003F88",
+      "c2": "#FDC500"
+     },
+     {
+      "id": "OST",
+      "nombre": "Coronas",
+      "c1": "#6A0DAD",
+      "c2": "#FFD166"
+     }
+    ],
+    "inicio": [
+     11,
+     11
+    ],
+    "tiros": [
+     {
+      "equipo": 1,
+      "tirador": "Gonzalo",
+      "tipo": "fuera",
+      "dados": [
+       2,
+       6
+      ],
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       11,
+       14
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Elias",
+      "tipo": "dentro",
+      "dados": [
+       6,
+       1
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       13,
+       14
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Celia",
+      "tipo": "dentro",
+      "dados": [
+       3,
+       5
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       13,
+       16
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Hugo",
+      "tipo": "fuera",
+      "dados": [
+       5,
+       3
+      ],
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       16,
+       16
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Finn",
+      "tipo": "fuera",
+      "dados": [
+       4,
+       6
+      ],
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       16,
+       19
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Hugo",
+      "tipo": "fuera",
+      "dados": [
+       6,
+       6
+      ],
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       19,
+       19
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Celia",
+      "tipo": "fuera",
+      "dados": [
+       1,
+       6
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       19,
+       19
+      ],
+      "tiempoMuerto": true
+     },
+     {
+      "equipo": 0,
+      "tirador": "Kai",
+      "tipo": "fuera",
+      "dados": [
+       5,
+       1
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       19,
+       19
+      ],
+      "tiempoMuerto": true
+     }
+    ],
+    "porTiro": 2.5,
+    "segundos": 21.5
+   },
+   {
+    "tipo": "tiros",
+    "titulo": "Muerte súbita",
+    "equipos": [
+     {
+      "id": "STE",
+      "nombre": "Relámpagos",
+      "c1": "#003F88",
+      "c2": "#FDC500"
+     },
+     {
+      "id": "OST",
+      "nombre": "Coronas",
+      "c1": "#6A0DAD",
+      "c2": "#FFD166"
+     }
+    ],
+    "inicio": [
+     19,
+     19
+    ],
+    "tiros": [
+     {
+      "equipo": 1,
+      "tirador": "Finn",
+      "tipo": "fuera",
+      "dados": [
+       3,
+       5
+      ],
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       19,
+       22
+      ],
+      "tiempoMuerto": false
+     }
+    ],
+    "porTiro": 2.5,
+    "segundos": 4
    },
    {
     "tipo": "marcador",
-    "etiqueta": "Muerte súbita",
+    "etiqueta": "La muerte súbita",
     "equipos": [
      {
       "id": "STE",
@@ -4064,28 +6589,18 @@
     ],
     "puntos": [
      19,
-     19
+     22
     ],
-    "resalta": 1,
-    "titulo": "Atacan los Coronas",
-    "pie": "Empate.",
-    "acento": "#6A0DAD",
-    "segundos": 4.8
+    "resalta": 0,
+    "titulo": "Atacan los Relámpagos",
+    "pie": "Pierden de 3.",
+    "acento": "#003F88",
+    "segundos": 5.9
    },
    {
     "tipo": "cartas",
-    "titulo": "Tira Finn",
+    "titulo": "Tira Elias",
     "cartas": [
-     {
-      "nombre": "Finn Diallo",
-      "equipo": "OST",
-      "meta": "25 años · Kostavia",
-      "ataque": 6,
-      "defensa": 2,
-      "icono": "Tiro",
-      "c1": "#6A0DAD",
-      "c2": "#FFD166"
-     },
      {
       "nombre": "Elias Brennan",
       "equipo": "STE",
@@ -4095,54 +6610,65 @@
       "icono": "Tiro",
       "c1": "#003F88",
       "c2": "#FDC500"
+     },
+     {
+      "nombre": "Finn Diallo",
+      "equipo": "OST",
+      "meta": "25 años · Kostavia",
+      "ataque": 6,
+      "defensa": 2,
+      "icono": "Tiro",
+      "c1": "#6A0DAD",
+      "c2": "#FFD166"
      }
     ],
     "roles": [
      "Tira",
      "Contra"
     ],
-    "acento": "#6A0DAD",
-    "segundos": 4.5
+    "pie": "Relámpagos: «En el final apretado, siempre de 3.»",
+    "acento": "#003F88",
+    "segundos": 6.5
    },
    {
     "tipo": "revela",
     "titulo": "Los dos eligen en secreto",
     "tira": {
-     "quien": "Finn tira",
+     "quien": "Elias tira",
      "tipo": "fuera"
     },
     "cierra": {
-     "quien": "Relámpagos cierran",
+     "quien": "Coronas cierran",
      "tipo": "fuera"
     },
     "pie": "La defensa acierta: +2",
     "cuenta": {
-     "defensor": "Elias",
+     "defensor": "Finn",
      "base": 5,
      "defensa": 2,
      "muro": 0,
      "cierre": 2,
      "total": 9
     },
-    "segundos": 14.9
+    "segundos": 12
    },
    {
     "tipo": "dados",
     "dados": [
-     3,
-     5
+     2,
+     3
     ],
     "tirada": {
-     "tirador": "Finn",
-     "ataque": 6,
+     "tirador": "Elias",
+     "ataque": 5,
      "icono": "Tiro",
      "bonus": 1,
-     "total": 13,
+     "total": 9,
      "defensa": 9,
      "castigo": 2,
      "anota": true
     },
-    "segundos": 11.6
+    "segundos": 10
    },
    {
     "tipo": "titular",
@@ -4161,7 +6687,7 @@
    },
    {
     "tipo": "resultado",
-    "titulo": "¡Triple!",
+    "titulo": "Final",
     "bien": true,
     "equipos": [
      {
@@ -4182,9 +6708,9 @@
      23
     ],
     "resalta": 1,
-    "pie": "Final. Mejor del partido: Finn Diallo (9 puntos).",
+    "pie": "Mejor del partido: Finn Diallo (9 puntos).",
     "acento": "#6A0DAD",
-    "segundos": 5.9
+    "segundos": 5.4
    }
   ]
  },
@@ -4220,8 +6746,178 @@
       "c2": "#BDD5EA"
      }
     ],
-    "pie": "Se decidió al final.",
-    "segundos": 8.2
+    "pie": "Tiro a tiro.",
+    "segundos": 6
+   },
+   {
+    "tipo": "tiros",
+    "titulo": "Primera parte",
+    "equipos": [
+     {
+      "id": "VLU",
+      "nombre": "Búhos",
+      "c1": "#1B1B3A",
+      "c2": "#E0AFA0"
+     },
+     {
+      "id": "SGR",
+      "nombre": "Lobos",
+      "c1": "#495867",
+      "c2": "#BDD5EA"
+     }
+    ],
+    "inicio": [
+     0,
+     0
+    ],
+    "tiros": [
+     {
+      "equipo": 1,
+      "tirador": "Fabián",
+      "tipo": "dentro",
+      "dados": [
+       2,
+       3
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       0,
+       2
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Carlos",
+      "tipo": "dentro",
+      "dados": [
+       4,
+       3
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       2,
+       2
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Emeka",
+      "tipo": "fuera",
+      "dados": [
+       1,
+       1
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       2,
+       2
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Iker",
+      "tipo": "dentro",
+      "dados": [
+       3,
+       1
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       4,
+       2
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Yago",
+      "tipo": "dentro",
+      "dados": [
+       3,
+       1
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       4,
+       4
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Iker",
+      "tipo": "fuera",
+      "dados": [
+       5,
+       5
+      ],
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       7,
+       4
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Emeka",
+      "tipo": "fuera",
+      "dados": [
+       6,
+       5
+      ],
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       7,
+       7
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Carlos",
+      "tipo": "dentro",
+      "dados": [
+       3,
+       4
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       9,
+       7
+      ],
+      "tiempoMuerto": false
+     }
+    ],
+    "porTiro": 2.5,
+    "segundos": 21.5
    },
    {
     "tipo": "marcador",
@@ -4244,11 +6940,164 @@
      9,
      7
     ],
-    "segundos": 3.5
+    "pie": "Búhos: entra Noa por Iker\nLobos: entra Ciro por Emeka",
+    "segundos": 7
+   },
+   {
+    "tipo": "tiros",
+    "titulo": "Segunda parte",
+    "equipos": [
+     {
+      "id": "VLU",
+      "nombre": "Búhos",
+      "c1": "#1B1B3A",
+      "c2": "#E0AFA0"
+     },
+     {
+      "id": "SGR",
+      "nombre": "Lobos",
+      "c1": "#495867",
+      "c2": "#BDD5EA"
+     }
+    ],
+    "inicio": [
+     9,
+     7
+    ],
+    "tiros": [
+     {
+      "equipo": 1,
+      "tirador": "Fabián",
+      "tipo": "dentro",
+      "dados": [
+       6,
+       2
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       9,
+       9
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Ximena",
+      "tipo": "dentro",
+      "dados": [
+       5,
+       6
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": true,
+      "tapon": false,
+      "marcador": [
+       11,
+       9
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Ciro",
+      "tipo": "dentro",
+      "dados": [
+       6,
+       2
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       11,
+       11
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Noa",
+      "tipo": "dentro",
+      "dados": [
+       4,
+       5
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": true,
+      "tapon": false,
+      "marcador": [
+       13,
+       11
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Ciro",
+      "tipo": "dentro",
+      "dados": [
+       6,
+       4
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": true,
+      "tapon": false,
+      "marcador": [
+       13,
+       13
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Noa",
+      "tipo": "dentro",
+      "dados": [
+       1,
+       3
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       15,
+       13
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Yago",
+      "tipo": "fuera",
+      "dados": [
+       5,
+       4
+      ],
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       15,
+       16
+      ],
+      "tiempoMuerto": false
+     }
+    ],
+    "porTiro": 2.5,
+    "segundos": 19
    },
    {
     "tipo": "marcador",
-    "etiqueta": "Ataque 8 de 8",
+    "etiqueta": "El último ataque",
     "equipos": [
      {
       "id": "VLU",
@@ -4271,7 +7120,7 @@
     "titulo": "Atacan los Búhos",
     "pie": "Pierden de 1.",
     "acento": "#1B1B3A",
-    "segundos": 5.4
+    "segundos": 5.9
    },
    {
     "tipo": "cartas",
@@ -4326,7 +7175,7 @@
      "cierre": 2,
      "total": 10
     },
-    "segundos": 14.9
+    "segundos": 12
    },
    {
     "tipo": "dados",
@@ -4344,11 +7193,11 @@
      "castigo": 0,
      "anota": true
     },
-    "segundos": 10.4
+    "segundos": 10
    },
    {
     "tipo": "resultado",
-    "titulo": "¡Mate!",
+    "titulo": "Final",
     "bien": true,
     "equipos": [
      {
@@ -4369,9 +7218,9 @@
      16
     ],
     "resalta": 0,
-    "pie": "Final. Mejor del partido: Iker Valverde (5 puntos).",
+    "pie": "Mejor del partido: Iker Valverde (5 puntos).",
     "acento": "#1B1B3A",
-    "segundos": 5.9
+    "segundos": 5.4
    }
   ]
  },
@@ -4670,8 +7519,178 @@
       "c2": "#F1FAEE"
      }
     ],
-    "pie": "Se decidió al final.",
-    "segundos": 8.2
+    "pie": "Tiro a tiro.",
+    "segundos": 6
+   },
+   {
+    "tipo": "tiros",
+    "titulo": "Primera parte",
+    "equipos": [
+     {
+      "id": "TOR",
+      "nombre": "Gigantes",
+      "c1": "#5C5C5C",
+      "c2": "#E63946"
+     },
+     {
+      "id": "VAL",
+      "nombre": "Vendaval",
+      "c1": "#2A9D8F",
+      "c2": "#F1FAEE"
+     }
+    ],
+    "inicio": [
+     0,
+     0
+    ],
+    "tiros": [
+     {
+      "equipo": 1,
+      "tirador": "Dalia",
+      "tipo": "fuera",
+      "dados": [
+       3,
+       1
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       0,
+       0
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Rocío",
+      "tipo": "dentro",
+      "dados": [
+       1,
+       5
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       2,
+       0
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Nia",
+      "tipo": "dentro",
+      "dados": [
+       3,
+       3
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       2,
+       2
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Carla",
+      "tipo": "dentro",
+      "dados": [
+       1,
+       4
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       4,
+       2
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Dalia",
+      "tipo": "fuera",
+      "dados": [
+       1,
+       4
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       4,
+       2
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Nico",
+      "tipo": "dentro",
+      "dados": [
+       6,
+       1
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       6,
+       2
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Nia",
+      "tipo": "dentro",
+      "dados": [
+       3,
+       5
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       6,
+       4
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Rocío",
+      "tipo": "fuera",
+      "dados": [
+       6,
+       6
+      ],
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       9,
+       4
+      ],
+      "tiempoMuerto": false
+     }
+    ],
+    "porTiro": 2.5,
+    "segundos": 21.5
    },
    {
     "tipo": "marcador",
@@ -4694,11 +7713,128 @@
      9,
      4
     ],
-    "segundos": 3.5
+    "pie": "Gigantes: entra Luka por Rocío\nVendaval: entra Vera por Nia",
+    "segundos": 7
+   },
+   {
+    "tipo": "tiros",
+    "titulo": "Segunda parte",
+    "equipos": [
+     {
+      "id": "TOR",
+      "nombre": "Gigantes",
+      "c1": "#5C5C5C",
+      "c2": "#E63946"
+     },
+     {
+      "id": "VAL",
+      "nombre": "Vendaval",
+      "c1": "#2A9D8F",
+      "c2": "#F1FAEE"
+     }
+    ],
+    "inicio": [
+     9,
+     4
+    ],
+    "tiros": [
+     {
+      "equipo": 1,
+      "tirador": "Marta",
+      "tipo": "fuera",
+      "dados": [
+       1,
+       5
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       9,
+       4
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Luka",
+      "tipo": "dentro",
+      "dados": [
+       5,
+       3
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       11,
+       4
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Marta",
+      "tipo": "fuera",
+      "dados": [
+       5,
+       1
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       11,
+       4
+      ],
+      "tiempoMuerto": true
+     },
+     {
+      "equipo": 0,
+      "tirador": "Carla",
+      "tipo": "dentro",
+      "dados": [
+       4,
+       3
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       13,
+       4
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Vera",
+      "tipo": "dentro",
+      "dados": [
+       6,
+       2
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       13,
+       6
+      ],
+      "tiempoMuerto": false
+     }
+    ],
+    "porTiro": 2.5,
+    "segundos": 14
    },
    {
     "tipo": "marcador",
-    "etiqueta": "Ataque 8 de 8",
+    "etiqueta": "El tapón del partido",
     "equipos": [
      {
       "id": "TOR",
@@ -4715,33 +7851,33 @@
     ],
     "puntos": [
      13,
-     9
+     6
     ],
     "resalta": 0,
     "titulo": "Atacan los Gigantes",
-    "pie": "Ganan de 4.",
+    "pie": "Ganan de 7.",
     "acento": "#5C5C5C",
-    "segundos": 5.4
+    "segundos": 6.5
    },
    {
     "tipo": "cartas",
-    "titulo": "Tira Luka",
+    "titulo": "Tira Nico",
     "cartas": [
      {
-      "nombre": "Luka Sorensen",
+      "nombre": "Nico Ibarra",
       "equipo": "TOR",
-      "meta": "21 años · Port Ashby",
+      "meta": "19 años · Puerto Albar",
       "ataque": 2,
-      "defensa": 2,
+      "defensa": 5,
       "icono": null,
       "c1": "#5C5C5C",
       "c2": "#E63946"
      },
      {
-      "nombre": "Dalia Okafor",
+      "nombre": "Vera Robles",
       "equipo": "VAL",
-      "meta": "20 años · Cabo Seren",
-      "ataque": 4,
+      "meta": "29 años · Torreal",
+      "ataque": 3,
       "defensa": 2,
       "icono": "Tiro",
       "c1": "#2A9D8F",
@@ -4759,7 +7895,7 @@
     "tipo": "revela",
     "titulo": "Los dos eligen en secreto",
     "tira": {
-     "quien": "Luka tira",
+     "quien": "Nico tira",
      "tipo": "dentro"
     },
     "cierra": {
@@ -4768,36 +7904,98 @@
     },
     "pie": "La defensa acierta: +2",
     "cuenta": {
-     "defensor": "Dalia",
+     "defensor": "Vera",
      "base": 5,
      "defensa": 2,
      "muro": 0,
      "cierre": 2,
      "total": 9
     },
-    "segundos": 14.9
+    "segundos": 12
    },
    {
     "tipo": "dados",
     "dados": [
-     4,
-     5
+     2,
+     1
     ],
     "tirada": {
-     "tirador": "Luka",
+     "tirador": "Nico",
      "ataque": 2,
      "icono": null,
      "bonus": 0,
-     "total": 11,
+     "total": 5,
      "defensa": 9,
      "castigo": 0,
-     "anota": true
+     "anota": false
     },
-    "segundos": 9.3
+    "segundos": 9.9
+   },
+   {
+    "tipo": "tiros",
+    "titulo": "Segunda parte",
+    "equipos": [
+     {
+      "id": "TOR",
+      "nombre": "Gigantes",
+      "c1": "#5C5C5C",
+      "c2": "#E63946"
+     },
+     {
+      "id": "VAL",
+      "nombre": "Vendaval",
+      "c1": "#2A9D8F",
+      "c2": "#F1FAEE"
+     }
+    ],
+    "inicio": [
+     13,
+     6
+    ],
+    "tiros": [
+     {
+      "equipo": 1,
+      "tirador": "Vera",
+      "tipo": "fuera",
+      "dados": [
+       5,
+       6
+      ],
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       13,
+       9
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Luka",
+      "tipo": "dentro",
+      "dados": [
+       4,
+       5
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       15,
+       9
+      ],
+      "tiempoMuerto": false
+     }
+    ],
+    "porTiro": 2.5,
+    "segundos": 6.5
    },
    {
     "tipo": "resultado",
-    "titulo": "¡Canasta!",
+    "titulo": "Final",
     "bien": true,
     "equipos": [
      {
@@ -4818,9 +8016,9 @@
      9
     ],
     "resalta": 0,
-    "pie": "Final. Mejor del partido: Carla Echeverría (4 puntos).",
+    "pie": "Mejor del partido: Carla Echeverría (4 puntos).",
     "acento": "#5C5C5C",
-    "segundos": 5.9
+    "segundos": 5.4
    }
   ]
  },
@@ -4856,8 +8054,178 @@
       "c2": "#264653"
      }
     ],
-    "pie": "Un partido de verdad, tirada a tirada.",
-    "segundos": 9.8
+    "pie": "Tiro a tiro.",
+    "segundos": 6
+   },
+   {
+    "tipo": "tiros",
+    "titulo": "Primera parte",
+    "equipos": [
+     {
+      "id": "EBA",
+      "nombre": "Panteras",
+      "c1": "#3C096C",
+      "c2": "#00B4D8"
+     },
+     {
+      "id": "MIR",
+      "nombre": "Halcones",
+      "c1": "#F4A261",
+      "c2": "#264653"
+     }
+    ],
+    "inicio": [
+     0,
+     0
+    ],
+    "tiros": [
+     {
+      "equipo": 1,
+      "tirador": "Ingrid",
+      "tipo": "fuera",
+      "dados": [
+       1,
+       1
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       0,
+       0
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Nico",
+      "tipo": "fuera",
+      "dados": [
+       1,
+       1
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       0,
+       0
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Emma",
+      "tipo": "fuera",
+      "dados": [
+       2,
+       5
+      ],
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       0,
+       3
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Nico",
+      "tipo": "dentro",
+      "dados": [
+       3,
+       3
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": true,
+      "tapon": false,
+      "marcador": [
+       2,
+       3
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Emma",
+      "tipo": "dentro",
+      "dados": [
+       1,
+       1
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       2,
+       3
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Celia",
+      "tipo": "fuera",
+      "dados": [
+       5,
+       5
+      ],
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       5,
+       3
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Triana",
+      "tipo": "fuera",
+      "dados": [
+       4,
+       5
+      ],
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       5,
+       6
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Celia",
+      "tipo": "fuera",
+      "dados": [
+       2,
+       2
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       5,
+       6
+      ],
+      "tiempoMuerto": false
+     }
+    ],
+    "porTiro": 2.5,
+    "segundos": 21.5
    },
    {
     "tipo": "marcador",
@@ -4880,11 +8248,92 @@
      5,
      6
     ],
-    "segundos": 3.5
+    "pie": "Panteras: entra Kai por Nico\nHalcones: entra Vera por Emma",
+    "segundos": 7
+   },
+   {
+    "tipo": "tiros",
+    "titulo": "Segunda parte",
+    "equipos": [
+     {
+      "id": "EBA",
+      "nombre": "Panteras",
+      "c1": "#3C096C",
+      "c2": "#00B4D8"
+     },
+     {
+      "id": "MIR",
+      "nombre": "Halcones",
+      "c1": "#F4A261",
+      "c2": "#264653"
+     }
+    ],
+    "inicio": [
+     5,
+     6
+    ],
+    "tiros": [
+     {
+      "equipo": 1,
+      "tirador": "Ingrid",
+      "tipo": "fuera",
+      "dados": [
+       1,
+       1
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       5,
+       6
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Irene",
+      "tipo": "fuera",
+      "dados": [
+       5,
+       3
+      ],
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       8,
+       6
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Triana",
+      "tipo": "fuera",
+      "dados": [
+       3,
+       5
+      ],
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       8,
+       9
+      ],
+      "tiempoMuerto": true
+     }
+    ],
+    "porTiro": 2.5,
+    "segundos": 9
    },
    {
     "tipo": "marcador",
-    "etiqueta": "Ataque 6 de 8",
+    "etiqueta": "La canasta que lo decidió",
     "equipos": [
      {
       "id": "EBA",
@@ -4907,7 +8356,7 @@
     "titulo": "Atacan los Panteras",
     "pie": "Pierden de 1.",
     "acento": "#3C096C",
-    "segundos": 5.4
+    "segundos": 7.1
    },
    {
     "tipo": "cartas",
@@ -4961,7 +8410,7 @@
      "cierre": 2,
      "total": 9
     },
-    "segundos": 14.9
+    "segundos": 12
    },
    {
     "tipo": "dados",
@@ -4979,11 +8428,109 @@
      "castigo": 2,
      "anota": true
     },
-    "segundos": 10.4
+    "segundos": 10
+   },
+   {
+    "tipo": "tiros",
+    "titulo": "Segunda parte",
+    "equipos": [
+     {
+      "id": "EBA",
+      "nombre": "Panteras",
+      "c1": "#3C096C",
+      "c2": "#00B4D8"
+     },
+     {
+      "id": "MIR",
+      "nombre": "Halcones",
+      "c1": "#F4A261",
+      "c2": "#264653"
+     }
+    ],
+    "inicio": [
+     11,
+     9
+    ],
+    "tiros": [
+     {
+      "equipo": 1,
+      "tirador": "Vera",
+      "tipo": "fuera",
+      "dados": [
+       3,
+       2
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       11,
+       9
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Kai",
+      "tipo": "fuera",
+      "dados": [
+       6,
+       5
+      ],
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       14,
+       9
+      ],
+      "tiempoMuerto": true
+     },
+     {
+      "equipo": 1,
+      "tirador": "Vera",
+      "tipo": "fuera",
+      "dados": [
+       6,
+       5
+      ],
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       14,
+       12
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Kai",
+      "tipo": "dentro",
+      "dados": [
+       3,
+       6
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       16,
+       12
+      ],
+      "tiempoMuerto": false
+     }
+    ],
+    "porTiro": 2.5,
+    "segundos": 11.5
    },
    {
     "tipo": "resultado",
-    "titulo": "¡Triple!",
+    "titulo": "Final",
     "bien": true,
     "equipos": [
      {
@@ -5004,9 +8551,9 @@
      12
     ],
     "resalta": 0,
-    "pie": "Final. Mejor del partido: Irene Pastor (6 puntos).",
+    "pie": "Mejor del partido: Irene Pastor (6 puntos).",
     "acento": "#3C096C",
-    "segundos": 5.9
+    "segundos": 5.4
    }
   ]
  },
@@ -5042,8 +8589,178 @@
       "c2": "#E9C46A"
      }
     ],
-    "pie": "Un partido de verdad, tirada a tirada.",
-    "segundos": 9.8
+    "pie": "Tiro a tiro.",
+    "segundos": 6
+   },
+   {
+    "tipo": "tiros",
+    "titulo": "Primera parte",
+    "equipos": [
+     {
+      "id": "FER",
+      "nombre": "Forjadores",
+      "c1": "#8B2500",
+      "c2": "#D9D9D9"
+     },
+     {
+      "id": "PAL",
+      "nombre": "Albatros",
+      "c1": "#1D3557",
+      "c2": "#E9C46A"
+     }
+    ],
+    "inicio": [
+     0,
+     0
+    ],
+    "tiros": [
+     {
+      "equipo": 1,
+      "tirador": "Goran",
+      "tipo": "dentro",
+      "dados": [
+       6,
+       2
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       0,
+       2
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Andrea",
+      "tipo": "dentro",
+      "dados": [
+       4,
+       2
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       0,
+       2
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Andrei",
+      "tipo": "fuera",
+      "dados": [
+       3,
+       2
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       0,
+       2
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Andrea",
+      "tipo": "dentro",
+      "dados": [
+       3,
+       6
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       2,
+       2
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Goran",
+      "tipo": "dentro",
+      "dados": [
+       4,
+       3
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       2,
+       4
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Zoe",
+      "tipo": "dentro",
+      "dados": [
+       3,
+       4
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       2,
+       4
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Andrei",
+      "tipo": "dentro",
+      "dados": [
+       6,
+       4
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       2,
+       6
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Zoe",
+      "tipo": "dentro",
+      "dados": [
+       3,
+       1
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": true,
+      "marcador": [
+       2,
+       6
+      ],
+      "tiempoMuerto": false
+     }
+    ],
+    "porTiro": 2.5,
+    "segundos": 21.5
    },
    {
     "tipo": "marcador",
@@ -5066,11 +8783,92 @@
      2,
      6
     ],
-    "segundos": 3.5
+    "pie": "Forjadores: entra Enzo por Andrea\nAlbatros: entra Ainhoa por Goran",
+    "segundos": 7
+   },
+   {
+    "tipo": "tiros",
+    "titulo": "Segunda parte",
+    "equipos": [
+     {
+      "id": "FER",
+      "nombre": "Forjadores",
+      "c1": "#8B2500",
+      "c2": "#D9D9D9"
+     },
+     {
+      "id": "PAL",
+      "nombre": "Albatros",
+      "c1": "#1D3557",
+      "c2": "#E9C46A"
+     }
+    ],
+    "inicio": [
+     2,
+     6
+    ],
+    "tiros": [
+     {
+      "equipo": 1,
+      "tirador": "Ainhoa",
+      "tipo": "fuera",
+      "dados": [
+       4,
+       1
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       2,
+       6
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Astrid",
+      "tipo": "fuera",
+      "dados": [
+       5,
+       3
+      ],
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       5,
+       6
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Ainhoa",
+      "tipo": "dentro",
+      "dados": [
+       3,
+       2
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       5,
+       6
+      ],
+      "tiempoMuerto": true
+     }
+    ],
+    "porTiro": 2.5,
+    "segundos": 9
    },
    {
     "tipo": "marcador",
-    "etiqueta": "Ataque 6 de 8",
+    "etiqueta": "La canasta que lo decidió",
     "equipos": [
      {
       "id": "FER",
@@ -5093,7 +8891,7 @@
     "titulo": "Atacan los Forjadores",
     "pie": "Pierden de 1.",
     "acento": "#8B2500",
-    "segundos": 5.4
+    "segundos": 7.1
    },
    {
     "tipo": "cartas",
@@ -5147,7 +8945,7 @@
      "cierre": 2,
      "total": 10
     },
-    "segundos": 14.9
+    "segundos": 12
    },
    {
     "tipo": "dados",
@@ -5165,11 +8963,109 @@
      "castigo": 2,
      "anota": true
     },
-    "segundos": 11.6
+    "segundos": 10
+   },
+   {
+    "tipo": "tiros",
+    "titulo": "Segunda parte",
+    "equipos": [
+     {
+      "id": "FER",
+      "nombre": "Forjadores",
+      "c1": "#8B2500",
+      "c2": "#D9D9D9"
+     },
+     {
+      "id": "PAL",
+      "nombre": "Albatros",
+      "c1": "#1D3557",
+      "c2": "#E9C46A"
+     }
+    ],
+    "inicio": [
+     8,
+     6
+    ],
+    "tiros": [
+     {
+      "equipo": 1,
+      "tirador": "Kenna",
+      "tipo": "fuera",
+      "dados": [
+       4,
+       1
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       8,
+       6
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Enzo",
+      "tipo": "dentro",
+      "dados": [
+       6,
+       1
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       10,
+       6
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Kenna",
+      "tipo": "dentro",
+      "dados": [
+       4,
+       2
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": true,
+      "marcador": [
+       10,
+       6
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Enzo",
+      "tipo": "dentro",
+      "dados": [
+       4,
+       2
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       10,
+       6
+      ],
+      "tiempoMuerto": false
+     }
+    ],
+    "porTiro": 2.5,
+    "segundos": 11.5
    },
    {
     "tipo": "resultado",
-    "titulo": "¡Triple!",
+    "titulo": "Final",
     "bien": true,
     "equipos": [
      {
@@ -5190,9 +9086,9 @@
      6
     ],
     "resalta": 0,
-    "pie": "Final. Mejor del partido: Astrid Abara (6 puntos).",
+    "pie": "Mejor del partido: Astrid Abara (6 puntos).",
     "acento": "#8B2500",
-    "segundos": 5.9
+    "segundos": 5.4
    }
   ]
  },
@@ -5228,8 +9124,178 @@
       "c2": "#C1121F"
      }
     ],
-    "pie": "Se decidió al final.",
-    "segundos": 8.2
+    "pie": "Tiro a tiro.",
+    "segundos": 6
+   },
+   {
+    "tipo": "tiros",
+    "titulo": "Primera parte",
+    "equipos": [
+     {
+      "id": "BRE",
+      "nombre": "Corsarios",
+      "c1": "#0B6E4F",
+      "c2": "#FAF3DD"
+     },
+     {
+      "id": "ALC",
+      "nombre": "Cuervos",
+      "c1": "#111111",
+      "c2": "#C1121F"
+     }
+    ],
+    "inicio": [
+     0,
+     0
+    ],
+    "tiros": [
+     {
+      "equipo": 1,
+      "tirador": "Santi",
+      "tipo": "fuera",
+      "dados": [
+       1,
+       3
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       0,
+       0
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Emeka",
+      "tipo": "dentro",
+      "dados": [
+       2,
+       5
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       2,
+       0
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Santi",
+      "tipo": "fuera",
+      "dados": [
+       5,
+       4
+      ],
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       2,
+       3
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Emeka",
+      "tipo": "dentro",
+      "dados": [
+       1,
+       1
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       2,
+       3
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Andrea",
+      "tipo": "dentro",
+      "dados": [
+       2,
+       6
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       2,
+       5
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Aroa",
+      "tipo": "dentro",
+      "dados": [
+       1,
+       4
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       4,
+       5
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Andrea",
+      "tipo": "fuera",
+      "dados": [
+       3,
+       4
+      ],
+      "anota": true,
+      "puntos": 3,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       4,
+       8
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Aroa",
+      "tipo": "dentro",
+      "dados": [
+       6,
+       3
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       6,
+       8
+      ],
+      "tiempoMuerto": false
+     }
+    ],
+    "porTiro": 2.5,
+    "segundos": 21.5
    },
    {
     "tipo": "marcador",
@@ -5252,11 +9318,164 @@
      6,
      8
     ],
-    "segundos": 3.5
+    "pie": "Corsarios: entra Lara por Emeka\nCuervos: entra Lucas por Santi",
+    "segundos": 7
+   },
+   {
+    "tipo": "tiros",
+    "titulo": "Segunda parte",
+    "equipos": [
+     {
+      "id": "BRE",
+      "nombre": "Corsarios",
+      "c1": "#0B6E4F",
+      "c2": "#FAF3DD"
+     },
+     {
+      "id": "ALC",
+      "nombre": "Cuervos",
+      "c1": "#111111",
+      "c2": "#C1121F"
+     }
+    ],
+    "inicio": [
+     6,
+     8
+    ],
+    "tiros": [
+     {
+      "equipo": 1,
+      "tirador": "Lucas",
+      "tipo": "fuera",
+      "dados": [
+       5,
+       1
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       6,
+       8
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Lara",
+      "tipo": "fuera",
+      "dados": [
+       4,
+       3
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       6,
+       8
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Lucas",
+      "tipo": "fuera",
+      "dados": [
+       1,
+       4
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       6,
+       8
+      ],
+      "tiempoMuerto": true
+     },
+     {
+      "equipo": 0,
+      "tirador": "Lara",
+      "tipo": "dentro",
+      "dados": [
+       4,
+       4
+      ],
+      "anota": true,
+      "puntos": 2,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       8,
+       8
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 1,
+      "tirador": "Gonzalo",
+      "tipo": "dentro",
+      "dados": [
+       1,
+       4
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": true,
+      "marcador": [
+       8,
+       8
+      ],
+      "tiempoMuerto": false
+     },
+     {
+      "equipo": 0,
+      "tirador": "Lucía",
+      "tipo": "fuera",
+      "dados": [
+       2,
+       4
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       8,
+       8
+      ],
+      "tiempoMuerto": true
+     },
+     {
+      "equipo": 1,
+      "tirador": "Gonzalo",
+      "tipo": "dentro",
+      "dados": [
+       5,
+       3
+      ],
+      "anota": false,
+      "puntos": 0,
+      "mate": false,
+      "tapon": false,
+      "marcador": [
+       8,
+       8
+      ],
+      "tiempoMuerto": false
+     }
+    ],
+    "porTiro": 2.5,
+    "segundos": 19
    },
    {
     "tipo": "marcador",
-    "etiqueta": "Ataque 8 de 8",
+    "etiqueta": "El último ataque",
     "equipos": [
      {
       "id": "BRE",
@@ -5279,7 +9498,7 @@
     "titulo": "Atacan los Corsarios",
     "pie": "Empate.",
     "acento": "#0B6E4F",
-    "segundos": 4.8
+    "segundos": 5.4
    },
    {
     "tipo": "cartas",
@@ -5333,7 +9552,7 @@
      "cierre": 0,
      "total": 9
     },
-    "segundos": 13.8
+    "segundos": 12
    },
    {
     "tipo": "dados",
@@ -5351,11 +9570,11 @@
      "castigo": 2,
      "anota": true
     },
-    "segundos": 10.4
+    "segundos": 10
    },
    {
     "tipo": "resultado",
-    "titulo": "¡Triple!",
+    "titulo": "Final",
     "bien": true,
     "equipos": [
      {
@@ -5376,9 +9595,9 @@
      8
     ],
     "resalta": 0,
-    "pie": "Final. Mejor del partido: Andrea Ibarra (5 puntos).",
+    "pie": "Mejor del partido: Andrea Ibarra (5 puntos).",
     "acento": "#0B6E4F",
-    "segundos": 5.9
+    "segundos": 5.4
    }
   ]
  }

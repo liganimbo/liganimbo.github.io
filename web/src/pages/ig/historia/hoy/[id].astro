@@ -1,0 +1,118 @@
+---
+// Story "¿Quién gana hoy?" de cada Amistoso de Navidad (13:00): los dos equipos, su estrella y su firma. Encima va la
+// encuesta de dos opciones; el Reel con el partido sale a las 20:00. No enseña el resultado.
+import Instagram from "../../../../layouts/Instagram.astro";
+import Escudo from "../../../../components/Escudo.astro";
+import { todos } from "../../../../lib/amistosos";
+import { franquicias, jugadores } from "../../../../lib/liga";
+import { describirFirma } from "../../../../motor/ia.ts";
+
+export function getStaticPaths() {
+  return todos.map((a) => ({ params: { id: a.id }, props: { a } }));
+}
+
+const { a } = Astro.props;
+const dia = new Date(`${a.fecha}T12:00:00`).toLocaleDateString("es-ES", { weekday: "long", day: "numeric", month: "long" });
+const equipos = [a.local, a.visitante].map((fid, lado) => {
+  const f = franquicias[fid];
+  const estrella = f.plantilla.map((id) => jugadores[id]).sort((x, y) => y.ataque - x.ataque || y.defensa - x.defensa)[0];
+  return { f, lado, estrella, firma: f.estilo.firma ? describirFirma(f.estilo.firma) : null };
+});
+---
+
+<Instagram titulo={`¿Quién gana hoy? ${a.id}`} etiqueta="Amistosos de Navidad" acento={franquicias[a.local].colores[0]} historia>
+  <div class="antetitulo arriba">{dia}</div>
+  <h1 class="titular">¿Quién gana<br /><span class="oro">hoy?</span></h1>
+
+  <div class="duelo">
+    {
+      equipos.map(({ f, lado, estrella, firma }) => (
+        <div class="equipo" style={`--c1:${f.colores[0]}`}>
+          <div class="cab">
+            <Escudo id={f.id} tam={120} />
+            <div>
+              <div class="donde">{lado === 0 ? "En casa" : "Fuera"}</div>
+              <div class="nombre">{f.nombre}</div>
+              <div class="ciudad suave">{f.ciudad}</div>
+            </div>
+          </div>
+          <div class="estrella">
+            Estrella: <strong>{estrella.nombre}</strong> ({estrella.ataque} de ataque{estrella.icono ? `, ${estrella.icono}` : ""})
+          </div>
+          {firma && <div class="firma suave">Su firma: {firma}</div>}
+        </div>
+      ))
+    }
+  </div>
+
+  <div class="encuesta" aria-hidden="true"></div>
+  <div class="pie-story">El partido, a las 20:00 en Reel</div>
+</Instagram>
+
+<style>
+  .arriba {
+    margin-top: 40px;
+  }
+  .titular {
+    font-size: 150px;
+    margin-top: 12px;
+  }
+  .oro {
+    color: var(--oro);
+  }
+  .duelo {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    margin-top: 56px;
+  }
+  .equipo {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 28px 32px;
+    border-radius: 28px;
+    background: linear-gradient(160deg, color-mix(in srgb, var(--c1) 45%, transparent), color-mix(in srgb, var(--c1) 12%, transparent));
+    border: 2px solid color-mix(in srgb, var(--c1) 70%, white 10%);
+  }
+  .cab {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+  .donde {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--oro);
+  }
+  .nombre {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 800;
+    font-size: 76px;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+  .ciudad {
+    font-size: 24px;
+    margin-top: 4px;
+  }
+  .estrella {
+    font-size: 28px;
+  }
+  .firma {
+    font-size: 26px;
+    line-height: 1.35;
+  }
+  .encuesta {
+    flex: 1;
+  }
+  .pie-story {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 800;
+    font-size: 54px;
+    text-transform: uppercase;
+    color: var(--oro);
+  }
+</style>

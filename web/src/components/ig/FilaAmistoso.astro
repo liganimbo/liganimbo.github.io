@@ -1,0 +1,93 @@
+---
+// Un amistoso en una fila: fecha, local y visitante con sus escudos y el marcador (siempre local-visitante).
+import Escudo from "../Escudo.astro";
+import { franquicias } from "../../lib/liga";
+import type { Amistoso } from "../../lib/amistosos";
+
+interface Props {
+  a: Amistoso;
+  /** Sin resultado: para lo que aún no se ha jugado. */
+  sinResultado?: boolean;
+  /** Tamaño del escudo. */
+  tam?: number;
+}
+const { a, sinResultado = false, tam = 58 } = Astro.props;
+const dia = new Date(`${a.fecha}T12:00:00`).toLocaleDateString("es-ES", { weekday: "short", day: "numeric" });
+const [pl, pv] = a.p.marcador;
+const subita = a.p.jugadas.length > 16;
+---
+
+<div class="fila-am">
+  <span class="dia">{dia}</span>
+  <span class:list={["eq", { pierde: !sinResultado && pl < pv }]}>
+    <Escudo id={a.local} tam={tam} />
+    <span class="nom">{franquicias[a.local].nombre}</span>
+  </span>
+  <span class="res">
+    {sinResultado ? "vs" : <span class="num"><span class:list={{ pierde: pl < pv }}>{pl}</span>-<span class:list={{ pierde: pv < pl }}>{pv}</span></span>}
+    {!sinResultado && subita && <small>M. súbita</small>}
+  </span>
+  <span class:list={["eq", "der", { pierde: !sinResultado && pv < pl }]}>
+    <span class="nom">{franquicias[a.visitante].nombre}</span>
+    <Escudo id={a.visitante} tam={tam} />
+  </span>
+</div>
+
+<style>
+  .fila-am {
+    display: grid;
+    grid-template-columns: 110px 1fr 170px 1fr;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 22px;
+    border-radius: 22px;
+    background: color-mix(in srgb, var(--texto) 7%, transparent);
+  }
+  .dia {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--oro);
+  }
+  .eq {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+  }
+  .eq.der {
+    justify-content: flex-end;
+  }
+  .nom {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 800;
+    font-size: 40px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .res {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 800;
+    font-size: 58px;
+    line-height: 1;
+  }
+  .num {
+    white-space: nowrap;
+  }
+  .res small {
+    font-family: Inter, sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--lila);
+    margin-top: 4px;
+  }
+  .pierde {
+    opacity: 0.5;
+  }
+</style>

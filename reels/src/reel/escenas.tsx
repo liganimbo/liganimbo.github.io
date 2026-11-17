@@ -329,6 +329,79 @@ export const Cierres = ({ e }: De<"cierres">) => {
   );
 };
 
+// --- Tiros: el partido ataque a ataque, con el marcador arriba ----------------------------------------
+
+/** Cuántas líneas se ven a la vez: la nueva entra abajo y la más vieja se va por arriba. */
+const LINEAS = 5;
+const ALTO_LINEA = 128;
+
+export const Tiros = ({ e }: De<"tiros">) => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  const paso = e.porTiro * fps;
+  // Cuántos tiros han salido ya (el primero, nada más empezar) y cuánto lleva el último en pantalla.
+  const salidos = Math.min(e.tiros.length, Math.floor(frame / paso) + 1);
+  const dentro = frame - (salidos - 1) * paso;
+  const ultimo = e.tiros[salidos - 1];
+  // El marcador cambia cuando se paran los dados.
+  const resuelto = dentro >= 0.6 * fps;
+  const puntos = resuelto ? ultimo.marcador : salidos > 1 ? e.tiros[salidos - 2].marcador : e.inicio;
+  const desde = Math.max(0, salidos - LINEAS);
+  const subida = interpolate(dentro, [0, 10], [ALTO_LINEA, 0], { ...fijo, easing: Easing.out(Easing.cubic) });
+  return (
+    <Zona gap={40}>
+      <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between" }}>
+        <span style={{ ...titular, fontSize: 84 }}>{e.titulo}</span>
+        <span style={{ ...etiqueta, color: COLOR.apagado }}>
+          Ataque {Math.ceil(salidos / 2)}
+        </span>
+      </div>
+      <Marcador equipos={e.equipos} puntos={puntos} tam={0.62} />
+      <div style={{ position: "relative", height: LINEAS * ALTO_LINEA, overflow: "hidden" }}>
+        <div style={{ position: "absolute", left: 0, right: 0, ...(salidos > LINEAS ? { bottom: 0 } : { top: 0 }), translate: `0px ${salidos > LINEAS ? subida : 0}px` }}>
+          {e.tiros.slice(salidos > LINEAS ? desde - 1 : desde, salidos).map((t, n, lista) => {
+            const nuevo = n === lista.length - 1;
+            const edad = lista.length - 1 - n;
+            const eq = e.equipos[t.equipo];
+            const { c1, c2 } = TIRO[t.tipo];
+            const ve = !nuevo || resuelto;
+            return (
+              <div
+                key={`${desde}-${n}-${t.tirador}`}
+                style={{
+                  height: ALTO_LINEA,
+                  display: "grid",
+                  gridTemplateColumns: "64px 1fr 190px 150px 150px",
+                  alignItems: "center",
+                  gap: 18,
+                  opacity: nuevo ? interpolate(dentro, [0, 6], [0, 1], fijo) : Math.max(0.35, 1 - edad * 0.16),
+                }}
+              >
+                <Escudo name={`Escudo ${n}`} id={eq.id} c1={eq.c1} c2={eq.c2} tam={60} />
+                <span style={{ ...titular, fontSize: 58, textTransform: "none", whiteSpace: "nowrap", overflow: "hidden" }}>{t.tirador}</span>
+                <span style={{ ...etiqueta, fontSize: 30, letterSpacing: 3, color: COLOR.texto, textAlign: "center", padding: "10px 0", borderRadius: 14, background: `linear-gradient(135deg, ${c1}, ${c2})` }}>
+                  {t.tipo}
+                </span>
+                <span style={{ display: "flex", gap: 12 }}>
+                  {t.dados.map((d, k) => (
+                    <Dado key={k} name={`Dado ${n}-${k}`} lado={62} cara={nuevo && !resuelto ? ((Math.floor(frame / 3) + k * 2) % 6) + 1 : d} />
+                  ))}
+                </span>
+                <span style={{ ...titular, fontSize: t.anota ? 72 : 48, textAlign: "right", color: t.anota ? COLOR.oro : COLOR.apagado, opacity: ve ? 1 : 0 }}>
+                  {t.anota ? `+${t.puntos}` : "Falla"}
+                  {(t.mate || t.tapon || t.tiempoMuerto) && (
+                    <div style={{ ...etiqueta, fontSize: 22, letterSpacing: 2, color: t.mate ? COLOR.oro : COLOR.lila }}>{t.mate ? "Mate" : t.tapon ? "Tapón" : "Tras t. muerto"}</div>
+                  )}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </Zona>
+  );
+};
+
 // --- Resultado --------------------------------------------------------------------------------------
 
 export const Resultado = ({ e }: De<"resultado">) => {

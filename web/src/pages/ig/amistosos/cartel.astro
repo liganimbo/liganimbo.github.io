@@ -1,0 +1,58 @@
+---
+// Cartel de los Amistosos de Navidad (18 dic): los 12 partidos, sin resultados.
+import Instagram from "../../../layouts/Instagram.astro";
+import FilaAmistoso from "../../../components/ig/FilaAmistoso.astro";
+import { todos } from "../../../lib/amistosos";
+---
+
+<Instagram titulo="Amistosos de Navidad" etiqueta="18-31 dic">
+  <section class="cartel">
+    <div class="antetitulo">Antes de la Temporada 1</div>
+    <h1 class="titular">Amistosos<br /><span class="oro">de Navidad</span></h1>
+    <p class="entradilla">12 partidos, uno al día. Cada franquicia juega uno en casa y otro fuera.</p>
+    <div class="lista">
+      {todos.map((a) => <FilaAmistoso a={a} sinResultado tam={46} />)}
+    </div>
+    <p class="nota suave">Partidos de verdad: semilla pública y todas las tiradas en la web.</p>
+  </section>
+</Instagram>
+
+<style>
+  .cartel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin-top: 22px;
+  }
+  .titular {
+    font-size: 92px;
+    margin-top: 6px;
+  }
+  .oro {
+    color: var(--oro);
+  }
+  .entradilla {
+    font-size: 26px;
+    line-height: 1.35;
+    margin: 12px 0 18px;
+    color: color-mix(in srgb, var(--texto) 80%, transparent);
+  }
+  .lista {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+  .lista :global(.fila-am) {
+    padding: 4px 22px;
+  }
+  .lista :global(.fila-am .nom) {
+    font-size: 32px;
+  }
+  .lista :global(.fila-am .res) {
+    font-size: 34px;
+  }
+  .nota {
+    font-size: 22px;
+    margin-top: 16px;
+  }
+</style>

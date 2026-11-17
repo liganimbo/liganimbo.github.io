@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<title>Calendario de diciembre</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Inter:wght@500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --fondo: #0d0f1c;
+    --texto: #f1f2f8;
+    --apagado: #a9adcf;
+    --pub: #ffc83d;
+    --reel: #9b95ff;
+    --story: #6ee7a8;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; width: 2400px; background: var(--fondo); }
+  body {
+    color: var(--texto);
+    font-family: Inter, sans-serif;
+    padding: 56px 60px 48px;
+    background:
+      radial-gradient(circle at 92% 0%, color-mix(in srgb, #4f46e5 50%, transparent), transparent 45%),
+      radial-gradient(circle at 0% 100%, color-mix(in srgb, #4f46e5 25%, transparent), transparent 40%),
+      var(--fondo);
+  }
+  header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 28px; }
+  h1 {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 800;
+    font-size: 104px;
+    line-height: 0.9;
+    text-transform: uppercase;
+    margin: 0;
+  }
+  h1 span { color: var(--pub); }
+  .leyenda { display: flex; gap: 26px; font-size: 24px; font-weight: 600; }
+  .leyenda span { display: flex; align-items: center; gap: 10px; }
+  .punto { width: 20px; height: 20px; border-radius: 6px; }
+  .semana {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .cab {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--apagado);
+    padding: 0 8px;
+  }
+  .dia {
+    min-height: 250px;
+    border-radius: 18px;
+    padding: 14px 14px 12px;
+    background: rgb(255 255 255 / 6%);
+    border: 1px solid rgb(255 255 255 / 8%);
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+  .dia.vacio { background: transparent; border-color: transparent; }
+  .dia.fuera { background: rgb(255 255 255 / 3%); }
+  .num {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 800;
+    font-size: 46px;
+    line-height: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .num small { font-family: Inter, sans-serif; font-size: 16px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--apagado); }
+  .item {
+    display: grid;
+    grid-template-columns: 58px 1fr;
+    gap: 8px;
+    align-items: start;
+    font-size: 19px;
+    line-height: 1.25;
+    padding: 6px 8px;
+    border-radius: 10px;
+    border-left: 6px solid var(--c);
+    background: color-mix(in srgb, var(--c) 13%, transparent);
+  }
+  .item.opc { opacity: 0.6; border-left-style: dashed; }
+  .hora { font-weight: 700; font-size: 16px; color: var(--c); padding-top: 2px; }
+  .que b { font-weight: 700; }
+  .arch { display: block; font-size: 15px; color: var(--apagado); margin-top: 1px; }
+  .P { --c: var(--pub); }
+  .R { --c: var(--reel); }
+  .S { --c: var(--story); }
+  footer { display: flex; justify-content: space-between; margin-top: 16px; font-size: 20px; color: var(--apagado); }
+  footer b { color: var(--texto); }
+</style>
+</head>
+<body>
+<header>
+  <h1>Diciembre <span>2026</span><br /><span style="color: var(--texto); font-size: 54px">Qué subir cada día · @liganimbo</span></h1>
+  <div class="leyenda">
+    <span><i class="punto" style="background: var(--pub)"></i>Publicación</span>
+    <span><i class="punto" style="background: var(--reel)"></i>Reel</span>
+    <span><i class="punto" style="background: var(--story)"></i>Story</span>
+    <span><i class="punto" style="border: 3px dashed var(--story)"></i>Story opcional (si pasan de ~30 vistas)</span>
+  </div>
+</header>
+<div id="cal"></div>
+<footer>
+  <span>En <b>instagram/</b>: publicaciones (por número) en <b>publicaciones/</b>, stories en <b>stories/</b>, Reels en <b>reels/</b> (reel-&lt;mes-día&gt;-&lt;id&gt;.mp4, con portada y texto)</span>
+  <span><b>Vie 1 ene · 13:30</b> · Carrusel: balance de los Amistosos (46-52)</span>
+</footer>
+<script>
+  // [tipo, hora, texto, archivo]; tipo: P publicación, R reel, S story, So story opcional.
+  const D = {
+    1: [["R", "18:30", "<b>Tráiler</b>", "T"], ["P", "19:00", "<b>Apertura</b>: NIMBO, escudo y LIGA (19:00, 19:05, 19:10)", "01-03"], ["S", "", "Juega tú (destacada)", "web + PDF + foto real"]],
+    2: [["P", "13:30", "Bienvenida", "04"], ["R", "20:00", "El farol", "R1"]],
+    3: [["R", "20:00", "La cuenta", "R2"]],
+    4: [["P", "13:30", "Carrusel: <b>cómo se juega</b>", "05-12"], ["S", "", "Reglas (destacada)", "05-12"], ["R", "20:00", "¿Dentro o fuera? 1: <b>la pregunta</b>", "DF1-1"]],
+    5: [["R", "13:30", "¿Dentro o fuera? 1: <b>la tirada</b>", "DF1-2"], ["R", "20:00", "Dos tiros por carta", "R3"]],
+    6: [["P", "13:30", "Carrusel: cómo funciona la liga", "13-20"], ["R", "20:00", "Los iconos", "R4"]],
+    7: [["R", "20:00", "¿Dentro o fuera? 2: <b>la pregunta</b>", "DF2-1"]],
+    8: [["R", "13:00", "¿Dentro o fuera? 2: <b>la tirada</b>", "DF2-2"], ["P", "13:30", "Franquicias 1/3", "21-25"], ["S", "", "Franquicias (destacada) y ¿Con quién vas?", "historia-con-quien-1"], ["R", "20:00", "Firmas 1/3", "FI1"]],
+    9: [["R", "20:00", "Los duelos", "R5"]],
+    10: [["P", "13:30", "Franquicias 2/3", "26-30"], ["S", "", "Franquicias (destacada) y ¿Con quién vas?", "historia-con-quien-2"], ["R", "20:00", "Firmas 2/3", "FI2"]],
+    11: [["R", "20:00", "¿Dentro o fuera? 3: <b>la pregunta</b> (con firma)", "DF3-1"]],
+    12: [["R", "13:00", "¿Dentro o fuera? 3: <b>la tirada</b>", "DF3-2"], ["P", "13:30", "Franquicias 3/3", "31-35"], ["S", "", "Franquicias (destacada) y ¿Con quién vas?", "historia-con-quien-3"], ["R", "20:00", "Firmas 3/3", "FI3"]],
+    13: [["R", "20:00", "El descanso", "R6"]],
+    14: [["So", "", "¿Dentro o fuera? (encuesta)", "historia-pregunta-1"], ["R", "20:00", "Muerte súbita", "R7"]],
+    15: [["P", "13:30", "Presentamos: Rocío Galindo", "36"], ["So", "", "Respuesta 1 y pregunta 2", "historia-respuesta-1, historia-pregunta-2"], ["R", "20:00", "Las 5 mejores cartas", "CA"]],
+    16: [["So", "", "Respuesta 2 y pregunta 3", "historia-respuesta-2, historia-pregunta-3"], ["R", "20:00", "¿Dentro o fuera? 4: <b>la pregunta</b>", "DF4-1"]],
+    17: [["R", "13:00", "¿Dentro o fuera? 4: <b>la tirada</b>", "DF4-2"], ["P", "13:30", "Presentamos: Emeka Udeh", "37"], ["So", "", "Respuesta 3", "historia-respuesta-3"], ["R", "20:00", "Mates y tapones", "R8"]],
+    18: [["S", "13:00", "¿Quién gana hoy?", "historia-hoy-VAL-VLU"], ["P", "13:30", "<b>Cartel: Amistosos de Navidad</b>", "38"], ["R", "20:00", "Vendaval – Búhos", "AM1"]],
+    19: [["S", "13:00", "¿Quién gana hoy?", "historia-hoy-SGR-TOR"], ["P", "13:30", "Presentamos: Ingrid Radić", "39"], ["R", "20:00", "Lobos – Gigantes", "AM2"]],
+    20: [["R", "20:00", "¿Dentro o fuera? 5: <b>la pregunta</b>", "DF5-1"]],
+    21: [["S", "13:00", "¿Quién gana hoy?", "historia-hoy-MIR-STE"], ["R", "13:30", "¿Dentro o fuera? 5: <b>la tirada</b>", "DF5-2"], ["R", "20:00", "Halcones – Relámpagos", "AM3"]],
+    22: [["S", "13:00", "¿Quién gana hoy?", "historia-hoy-PAL-EBA"], ["R", "20:00", "Albatros – Panteras", "AM4"]],
+    23: [["S", "13:00", "¿Quién gana hoy?", "historia-hoy-ALC-FER"], ["R", "20:00", "Cuervos – Forjadores", "AM5"]],
+    24: [["S", "13:00", "¿Quién gana hoy?", "historia-hoy-OST-BRE"], ["R", "20:00", "Coronas – Corsarios", "AM6"]],
+    25: [["S", "13:00", "¿Quién gana hoy?", "historia-hoy-STE-OST"], ["R", "20:00", "Relámpagos – Coronas", "AM7"]],
+    26: [["S", "13:00", "¿Quién gana hoy?", "historia-hoy-VLU-SGR"], ["R", "20:00", "Búhos – Lobos", "AM8"]],
+    27: [["P", "13:30", "Carrusel: <b>Amistosos, cómo van</b>", "40-45"], ["R", "20:00", "¿Dentro o fuera? 6: <b>la pregunta</b>", "DF6-1"]],
+    28: [["S", "13:00", "¿Quién gana hoy?", "historia-hoy-TOR-VAL"], ["R", "13:30", "¿Dentro o fuera? 6: <b>la tirada</b>", "DF6-2"], ["R", "20:00", "Gigantes – Vendaval", "AM9"]],
+    29: [["S", "13:00", "¿Quién gana hoy?", "historia-hoy-EBA-MIR"], ["R", "20:00", "Panteras – Halcones", "AM10"]],
+    30: [["S", "13:00", "¿Quién gana hoy?", "historia-hoy-FER-PAL"], ["R", "20:00", "Forjadores – Albatros", "AM11"]],
+    31: [["S", "13:00", "¿Quién gana hoy?", "historia-hoy-BRE-ALC"], ["R", "20:00", "Corsarios – Cuervos", "AM12"]],
+  };
+  const DIAS = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
+  // El 1 de diciembre de 2026 es martes: un hueco al principio y, al final, del 1 al 3 de enero.
+  const celdas = [null, ...Array.from({ length: 31 }, (_, i) => i + 1), "1 ene", "2 ene", "3 ene"];
+  const cal = document.getElementById("cal");
+  cal.innerHTML =
+    `<div class="semana">${DIAS.map((d) => `<div class="cab">${d}</div>`).join("")}</div>` +
+    Array.from({ length: celdas.length / 7 }, (_, s) => {
+      const fila = celdas.slice(s * 7, s * 7 + 7);
+      return `<div class="semana">${fila
+        .map((c, k) => {
+          if (c === null) return `<div class="dia vacio"></div>`;
+          if (typeof c === "string") {
+            const balance = c === "1 ene" ? `<div class="item P"><span class="hora">13:30</span><span class="que"><b>Balance de los Amistosos</b><span class="arch">46-52</span></span></div>` : "";
+            return `<div class="dia fuera"><div class="num">${c.split(" ")[0]}<small>enero</small></div>${balance}</div>`;
+          }
+          const items = (D[c] ?? [])
+            .map(([t, h, txt, a]) => `<div class="item ${t === "So" ? "S opc" : t}"><span class="hora">${h || "día"}</span><span class="que">${txt}<span class="arch">${a}</span></span></div>`)
+            .join("");
+          return `<div class="dia"><div class="num">${c}<small>${DIAS[k]}</small></div>${items}</div>`;
+        })
+        .join("")}</div>`;
+    }).join("");
+</script>
+</body>
+</html>

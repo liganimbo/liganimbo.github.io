@@ -1,0 +1,107 @@
+---
+// Portadas de las destacadas de Instagram (1080×1080). Instagram las recorta en círculo: el icono va centrado y con
+// margen, sobre el mismo fondo con degradado que la foto de perfil. Sin texto: el nombre lo pone Instagram debajo.
+import Dado from "../../../components/ig/Dado.astro";
+import Escudo from "../../../components/Escudo.astro";
+import Balon from "../../../components/marca/Balon.astro";
+import "../../../styles/temas.css";
+
+export function getStaticPaths() {
+  return ["juega", "reglas", "franquicias", "amistosos"].map((id) => ({ params: { id } }));
+}
+
+const { id } = Astro.params;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <title>Destacada {id} · Liga Nimbo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="icono">
+      {
+        id === "juega" && (
+          <div class="dados">
+            <Dado cara={5} lado={330} giro={-14} />
+            <Dado cara={6} lado={330} giro={10} />
+          </div>
+        )
+      }
+      {
+        id === "reglas" && (
+          <svg width="420" height="560" viewBox="0 0 63 88" class="carta" aria-label="Carta">
+            <defs>
+              <linearGradient id="cab" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#ffd76a" />
+                <stop offset="1" stop-color="#e8a317" />
+              </linearGradient>
+            </defs>
+            <rect x="1.5" y="1.5" width="60" height="85" rx="6" fill="#f5f6fb" stroke="#ffc83d" stroke-width="3" />
+            <path d="M1.5 7.5 Q1.5 1.5 7.5 1.5 H55.5 Q61.5 1.5 61.5 7.5 V20 H1.5 Z" fill="url(#cab)" />
+            <rect x="8" y="27" width="47" height="6" rx="3" fill="#151823" />
+            <rect x="8" y="38" width="30" height="4" rx="2" fill="#9ea2c2" />
+            <rect x="8" y="50" width="21" height="28" rx="4" fill="#e3e5f1" />
+            <rect x="34" y="50" width="21" height="28" rx="4" fill="#e3e5f1" />
+            <text x="18.5" y="71" text-anchor="middle" font-family="Barlow Condensed, sans-serif" font-weight="800" font-size="19" fill="#151823">5</text>
+            <text x="44.5" y="71" text-anchor="middle" font-family="Barlow Condensed, sans-serif" font-weight="800" font-size="19" fill="#151823">4</text>
+          </svg>
+        )
+      }
+      {
+        id === "franquicias" && (
+          <div class="escudos">
+            <Escudo id="VAL" tam={250} />
+            <Escudo id="OST" tam={300} />
+            <Escudo id="VLU" tam={250} />
+          </div>
+        )
+      }
+      {
+        id === "amistosos" && (
+          <svg width="520" height="520" viewBox="0 0 200 200" aria-label="Balón">
+            <Balon id="destacada" cx={100} cy={100} r={92} />
+          </svg>
+        )
+      }
+    </div>
+  </body>
+</html>
+
+<style is:global>
+  html,
+  body {
+    margin: 0;
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+  }
+  body {
+    display: grid;
+    place-items: center;
+    background:
+      radial-gradient(circle at 50% 32%, #5048c8 0%, transparent 52%),
+      radial-gradient(circle at 15% 90%, rgb(155 149 255 / 38%), transparent 50%),
+      radial-gradient(circle at 85% 12%, rgb(255 200 61 / 35%), transparent 42%),
+      #14163a;
+  }
+  .icono {
+    filter: drop-shadow(0 30px 50px rgb(0 0 0 / 45%));
+  }
+  .dados {
+    display: flex;
+    gap: 40px;
+  }
+  .carta {
+    rotate: -8deg;
+  }
+  .escudos {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+</style>

@@ -4,6 +4,7 @@ import Base from "../layouts/Base.astro";
 import Emblema from "../components/Emblema.astro";
 import { temporada, url } from "../lib/liga";
 import { USUARIO, cartasDestacadas, partidoDestacado } from "../lib/instagram";
+import { CARRUSELES, publicado, todos } from "../lib/amistosos";
 
 // Plan en orden de publicación: presentación, tres cartas y, después, cada jornada.
 // Un carrusel es una sola publicación con varias diapositivas; en la cuadrícula se ve la primera.
@@ -28,9 +29,21 @@ const plan: { ruta: string; texto: string; diapositivas?: string[]; alto?: numbe
     texto: `Carrusel: franquicias ${g} de 3`,
     diapositivas: [1, 2, 3, 4, 5].map((n) => `ig/equipos/${g}/${n}`),
   })),
+  // Presentamos (15, 17 y 19 dic), con el cartel de los Amistosos de Navidad el 18; después, cómo van (27 dic) y el balance (1 ene).
   ...cartasDestacadas()
-    .slice(0, 3)
+    .slice(0, 2)
     .map((j) => ({ ruta: `ig/carta/${j.id}`, texto: `Presentamos: ${j.nombre}` })),
+  { ruta: "ig/amistosos/cartel", texto: "Cartel: Amistosos de Navidad" },
+  ...cartasDestacadas()
+    .slice(2, 3)
+    .map((j) => ({ ruta: `ig/carta/${j.id}`, texto: `Presentamos: ${j.nombre}` })),
+  ...(["van", "balance"] as const)
+    .filter((que) => publicado(CARRUSELES[que].fecha))
+    .map((que) => ({
+      ruta: `ig/amistosos/${que}/1`,
+      texto: que === "van" ? "Carrusel: Amistosos, cómo van" : "Carrusel: balance de los Amistosos",
+      diapositivas: Array.from({ length: CARRUSELES[que].diapositivas }, (_, i) => `ig/amistosos/${que}/${i + 1}`),
+    })),
 ];
 for (let n = 1; n <= Math.min(3, temporada.jornadas.length); n++) {
   plan.push(
@@ -48,6 +61,7 @@ const historias: { ruta: string; texto: string }[] = [
     { ruta: `ig/historia/respuesta/${n}`, texto: `¿Dentro o fuera? ${n}: la respuesta, al día siguiente` },
   ]),
   ...[1, 2, 3].map((g) => ({ ruta: `ig/historia/con-quien/${g}`, texto: `¿Con quién vas? (franquicias ${g} de 3, encuesta de 4 opciones)` })),
+  ...todos.map((a) => ({ ruta: `ig/historia/hoy/${a.id}`, texto: `¿Quién gana hoy? ${a.fecha} (encuesta de 2 opciones, a las 13:00)` })),
   ...temporada.jornadas.slice(0, 3).map((j) => ({ ruta: `ig/historia/noche/${j.jornada}`, texto: `Noche Nimbo: resultados de la jornada ${j.jornada}` })),
 ];
 ---

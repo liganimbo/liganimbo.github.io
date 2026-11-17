@@ -1,11 +1,11 @@
-// Exporta los Reels a ../instagram: reel-<id>.mp4 y su portada (el primer fotograma, que es el gancho).
+// Exporta los Reels a ../instagram/reels: reel-<mes-día>-<id>.mp4, su portada (el primer fotograma, que es el gancho) y el texto.
 // Uso: npm run video            (todos)
 //      npm run video -- T DF1   (solo esos)
 import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 
-const SALIDA = path.resolve(import.meta.dirname, "../../instagram");
+const SALIDA = path.resolve(import.meta.dirname, "../../instagram/reels");
 const reels = JSON.parse(fs.readFileSync(path.resolve(import.meta.dirname, "../src/datos/diciembre.json"), "utf8"));
 const pedidos = process.argv.slice(2);
 const ids = pedidos.length ? pedidos : reels.map((r) => r.id);

@@ -30,6 +30,8 @@ export const pie: React.CSSProperties = {
   fontSize: 44,
   lineHeight: 1.35,
   color: COLOR.apagado,
+  // Un salto de línea en el texto es una línea aparte (en vez de unir frases con «·», que se cortan mal).
+  whiteSpace: "pre-line",
 };
 export const color = (c: Color = "texto") => COLOR[c];
 
