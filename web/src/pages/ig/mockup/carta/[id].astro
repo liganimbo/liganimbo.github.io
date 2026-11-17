@@ -1,0 +1,143 @@
+---
+// Una carta sola, a sangre (63×88 mm), para usarla como textura en el render 3D del mockup (scripts/mockup/).
+// Jugadores por su id; «dentro», «fuera» y «dorso», las cartas de partido.
+import "../../../../styles/temas.css";
+import "@fontsource/inter/latin-500.css";
+import "@fontsource/inter/latin-700.css";
+import "@fontsource/inter/latin-800.css";
+import "@fontsource/barlow-condensed/latin-700.css";
+import "@fontsource/barlow-condensed/latin-800.css";
+import Naipe from "../../../../components/Naipe.astro";
+import Emblema from "../../../../components/Emblema.astro";
+import { jugadores, mundo } from "../../../../lib/liga";
+import { REGLAS } from "../../../../motor/reglas.ts";
+
+export function getStaticPaths() {
+  const ids = mundo.franquicias.flatMap((f) => f.plantilla);
+  return [...ids, "dentro", "fuera", "dorso"].map((id) => ({ params: { id } }));
+}
+
+const { id } = Astro.params;
+const tipo = id === "dentro" || id === "fuera" ? id : null;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <title>Carta {id}</title>
+  </head>
+  <body>
+    {id !== "dentro" && id !== "fuera" && id !== "dorso" && <Naipe j={jugadores[id]} />}
+    {
+      tipo && (
+        <div class={`naipe eleccion ${tipo}`}>
+          <div class="el-sobre">Elección secreta</div>
+          <div class="el-palabra">{tipo}</div>
+          <div class="el-lineas">
+            <div>
+              <small>Si atacas</small>
+              {tipo === "dentro" ? `Tiro de ${REGLAS.puntos.dentro}. Entra si igualas la defensa.` : `Tiro de ${REGLAS.puntos.fuera}. -${REGLAS.castigoFuera} a la tirada; entra si igualas la defensa.`}
+            </div>
+            <div>
+              <small>Si defiendes</small>
+              Cierras {tipo}: +{REGLAS.bonusCierre} a la defensa si aciertas.
+            </div>
+          </div>
+        </div>
+      )
+    }
+    {
+      id === "dorso" && (
+        <div class="naipe dorso">
+          <Emblema variante="escudo" tam={150} />
+          <div class="dorso-sub">Baloncesto 3x3 · Cartas y dados</div>
+        </div>
+      )
+    }
+  </body>
+</html>
+
+<style is:global>
+  html,
+  body {
+    margin: 0;
+    width: 63mm;
+    height: 88mm;
+    overflow: hidden;
+    background: transparent;
+    font-family: Inter, sans-serif;
+  }
+  :root {
+    --titulo: "Barlow Condensed", sans-serif;
+  }
+  /* A sangre: sin esquinas redondeadas ni borde exterior (las esquinas las corta el modelo 3D). */
+  .naipe {
+    border-radius: 0 !important;
+  }
+  .eleccion {
+    padding: 4mm 4mm 3.5mm;
+    color: #f1f2f8;
+    border: 0 !important;
+    background: radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--fondo-1) 80%, #fff 20%), var(--fondo-1) 30%, var(--fondo-2) 95%) !important;
+  }
+  .dentro {
+    --fondo-1: #f47a2c;
+    --fondo-2: #b8430a;
+  }
+  .fuera {
+    --fondo-1: #4b4fe0;
+    --fondo-2: #1d2060;
+  }
+  .el-sobre {
+    font-size: 2.4mm;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #ffc83d;
+  }
+  .el-palabra {
+    font-family: var(--titulo);
+    font-weight: 800;
+    font-size: 17mm;
+    line-height: 0.9;
+    text-transform: uppercase;
+    margin: 3mm 0 auto;
+  }
+  .el-lineas {
+    display: flex;
+    flex-direction: column;
+    gap: 2.4mm;
+    font-size: 2.9mm;
+    line-height: 1.35;
+  }
+  .el-lineas div {
+    padding-top: 2mm;
+    border-top: 0.3mm solid color-mix(in srgb, #fff 30%, var(--fondo-2));
+  }
+  .el-lineas small {
+    display: block;
+    font-size: 2.1mm;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, #fff 65%, var(--fondo-2));
+  }
+  .dorso {
+    align-items: center;
+    justify-content: center;
+    border: 0 !important;
+    color: #f1f2f8;
+    background: radial-gradient(circle at 50% 38%, #3a3590 0%, #1c1b52 40%, #0d0f1c 75%) !important;
+  }
+  .dorso .emblema {
+    width: 46mm;
+    height: auto;
+  }
+  .dorso-sub {
+    margin-top: 5mm;
+    font-size: 2.6mm;
+    letter-spacing: 0.08em;
+    color: #b9b5ff;
+  }
+</style>

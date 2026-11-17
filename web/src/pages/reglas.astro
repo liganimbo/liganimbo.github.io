@@ -40,6 +40,8 @@ const enPista = CARTAS_POR_EQUIPO - 1;
   </section>
 
   <h2>Qué necesitas</h2>
+  <div class="necesitas">
+  <img class="foto-mazo" src={url("img/mazo.jpg")} alt="Las cartas de la Liga Nimbo en abanico, el mazo y dos dados sobre una mesa" width="720" height="900" loading="lazy" />
   <div class="material">
     <div class="tarjeta">
       <strong>{CARTAS_POR_EQUIPO} cartas por persona</strong>
@@ -57,6 +59,7 @@ const enPista = CARTAS_POR_EQUIPO - 1;
       <strong>Papel y lápiz</strong>
       <span class="apagado">Para el marcador y para contar los ataques.</span>
     </div>
+  </div>
   </div>
 
   <h2>Las cartas</h2>
@@ -210,6 +213,27 @@ const enPista = CARTAS_POR_EQUIPO - 1;
 </Base>
 
 <style>
+  .necesitas {
+    display: grid;
+    grid-template-columns: minmax(0, 260px) minmax(0, 1fr);
+    gap: 16px;
+    align-items: start;
+  }
+  .foto-mazo {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    display: block;
+  }
+  @media (max-width: 640px) {
+    .necesitas {
+      grid-template-columns: 1fr;
+    }
+    .foto-mazo {
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+    }
+  }
   .portada {
     padding: 28px;
     border-radius: 16px;

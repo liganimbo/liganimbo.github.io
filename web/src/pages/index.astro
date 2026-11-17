@@ -66,6 +66,7 @@ const destacados = [
   }
 
   <a class="jugar tarjeta" href={url("reglas")}>
+    <img class="foto-mesa" src={url("img/mesa.jpg")} alt="Una partida de Liga Nimbo en la mesa: cartas impresas, dos dados y las cartas de Dentro y Fuera" width="1600" height="667" loading="eager" />
     <div>
       <strong>Una liga que también puedes jugar tú.</strong> Cada partido de la liga se decide con cartas y dos dados. Aprende
       las reglas en un minuto, imprime las cartas y juega cualquier partido con la franquicia que quieras.
@@ -173,6 +174,14 @@ const destacados = [
     margin-top: 16px;
     border-color: var(--acento);
     background: var(--acento-suave);
+  }
+  .foto-mesa {
+    flex: 1 1 100%;
+    width: calc(100% + 32px);
+    height: auto;
+    margin: -16px -16px 4px;
+    border-radius: 12px 12px 0 0;
+    display: block;
   }
   .jugar:hover {
     color: inherit;
