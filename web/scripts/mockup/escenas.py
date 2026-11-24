@@ -24,6 +24,10 @@ escena.render.engine = "CYCLES"
 escena.cycles.device = "CPU"
 escena.cycles.samples = muestras
 escena.cycles.use_denoising = True
+if os.environ.get("MOTOR") == "EEVEE":
+    escena.render.engine = "BLENDER_EEVEE_NEXT"
+    escena.eevee.taa_render_samples = muestras
+    escena.eevee.use_raytracing = True
 escena.render.resolution_percentage = escala
 escena.render.filepath = salida
 # Colores fieles a los de las cartas (AgX los lava).
@@ -209,7 +213,8 @@ negro = None
 
 def dado(nombre, arriba, x, y, giro, z=0.0):
     global blanco, negro
-    blanco = blanco or material_liso("Dado", (0.93, 0.92, 0.9), 0.25, ss=0.15)
+    # EEVEE no se lleva bien con la translucidez en piezas tan pequeñas.
+    blanco = blanco or material_liso("Dado", (0.93, 0.92, 0.9), 0.25, ss=0.15 if escena.render.engine == "CYCLES" else 0.0)
     negro = negro or material_liso("Punto", (0.02, 0.02, 0.025), 0.35)
     lado = 0.016
     bpy.ops.mesh.primitive_cube_add(size=lado, location=(0, 0, 0))
@@ -297,7 +302,7 @@ def plantilla(fid):
 # =============================================================================================================
 
 
-def partida_en_mesa():
+def partida_en_mesa(sin_dados=False):
     """Vendaval contra Búhos: las de cada uno en pista, las elecciones reveladas, los dados y el suplente."""
     carta("Nia", "J11", -0.072, -0.135, 7)
     carta("Dalia", "J08", 0.0, -0.140, -1)
@@ -306,8 +311,9 @@ def partida_en_mesa():
         ficha(fx, fy)
     carta("Fuera", "fuera", -0.042, -0.025, 9)
     carta("Suplente", "dorso", 0.058, -0.022, -6, boca_abajo=True)
-    dado("Dado1", 5, -0.014, 0.05, 22)
-    dado("Dado2", 6, 0.017, 0.044, -14)
+    if not sin_dados:
+        dado("Dado1", 5, -0.014, 0.05, 22)
+        dado("Dado2", 6, 0.017, 0.044, -14)
     carta("Dentro", "dentro", 0.032, 0.118, 194)
     carta("Iker", "J35", -0.074, 0.212, 178)
     carta("Ximena", "J37", 0.0, 0.218, 183)
@@ -399,9 +405,99 @@ def mazo():
     camara((0.0, -0.2, 0.27), (0.0, 0.0, 0), 44, (0.02, -0.02, 0.0), 3.5)
 
 
-ESCENAS = {"mesa-story": mesa_story, "mesa-publicacion": mesa_publicacion, "web": web, "navidad": navidad, "mazo": mazo}
+# --- Animación: dados lanzados con física ------------------------------------------------------------------
+def lanzar(dados, fotogramas, impulso=(0.25, 1, 0.15), fuerza_impulso=float(os.environ.get("IMPULSO", "1.2"))):
+    """Simula la caída con cubos sencillos y pasa el movimiento a los dados de verdad, girados para que al pararse
+    quede arriba el valor pedido. dados: [(nombre, valor, salida, giro inicial en grados)]."""
+    escena.frame_start, escena.frame_end = 1, fotogramas
+    bpy.ops.rigidbody.world_add()
+    mundo_fisico = escena.rigidbody_world
+    mundo_fisico.substeps_per_frame = 120
+    mundo_fisico.solver_iterations = 40
+    mundo_fisico.point_cache.frame_end = fotogramas
+    suelo = [o for o in escena.objects if o.data and o.data.name.startswith("Plane")][0]
+    bpy.context.view_layer.objects.active = suelo
+    bpy.ops.rigidbody.object_add(type="PASSIVE")
+    suelo.rigid_body.friction = 0.7
+    suelo.rigid_body.collision_margin = 0.0002
+    cubos = []
+    for nombre, valor, salida, giro in dados:
+        bpy.ops.mesh.primitive_cube_add(size=0.016, location=salida, rotation=[math.radians(g) for g in giro])
+        c = bpy.context.object
+        c.name = f"Fisica {nombre}"
+        bpy.ops.rigidbody.object_add(type="ACTIVE")
+        c.rigid_body.mass = 0.005
+        c.rigid_body.friction = 0.5
+        c.rigid_body.restitution = 0.35
+        c.rigid_body.collision_margin = 0.0002
+        c.rigid_body.linear_damping = 0.1
+        c.rigid_body.angular_damping = 0.25
+        cubos.append(c)
+    # Sale de la mano: un golpe de viento en los primeros fotogramas les da la velocidad (Blender no deja ponerla).
+    bpy.ops.object.effector_add(type="WIND", location=(0, -0.3, 0.02))
+    viento = bpy.context.object
+    viento.rotation_euler = (Vector(impulso) - Vector((0, 0, 0))).to_track_quat("Z", "Y").to_euler()
+    viento.field.flow = 0
+    for f, fuerza in [(1, fuerza_impulso), (4, fuerza_impulso), (5, 0)]:
+        viento.field.strength = fuerza
+        viento.field.keyframe_insert("strength", frame=f)
+    recorrido = {c.name: [] for c in cubos}
+    for f in range(1, fotogramas + 1):
+        escena.frame_set(f)
+        for c in cubos:
+            recorrido[c.name].append(c.matrix_world.copy())
+    bpy.data.objects.remove(viento)
+    for c in cubos:
+        print("Dado", c.name, "acaba en", tuple(round(v, 3) for v in recorrido[c.name][-1].to_translation()))
+        bpy.data.objects.remove(c)
+    bpy.context.view_layer.objects.active = suelo
+    bpy.ops.rigidbody.object_remove()
+    bpy.ops.rigidbody.world_remove()
+    for (nombre, valor, *_), c in zip(dados, cubos):
+        final = recorrido[f"Fisica {nombre}"][-1].to_3x3()
+        # El eje del cubo que acaba mirando arriba es donde va la cara del valor pedido (la +Z del dado).
+        eje = max([Vector(v) for v in [(1, 0, 0), (-1, 0, 0), (0, 1, 0), (0, -1, 0), (0, 0, 1), (0, 0, -1)]], key=lambda v: (final @ v).z)
+        ajuste = Vector((0, 0, 1)).rotation_difference(eje).to_matrix().to_4x4()
+        d = dado(nombre, valor, 0, 0, 0)
+        d.rotation_mode = "QUATERNION"
+        for f, m in enumerate(recorrido[f"Fisica {nombre}"], start=1):
+            d.matrix_world = m @ ajuste
+            d.keyframe_insert("location", frame=f)
+            d.keyframe_insert("rotation_quaternion", frame=f)
+    return [recorrido[f"Fisica {nombre}"][-1].to_translation() for nombre, *_ in dados]
+
+
+def entrada():
+    """La entrada de los Reels: la cámara baja hacia la mesa mientras caen los dos dados (5 y 6)."""
+    resolucion(1080, 1920)
+    luz()
+    mesa()
+    partida_en_mesa(sin_dados=True)
+    finales = lanzar([("Dado1", 5, (-0.09, -0.2, 0.06), (10, 30, 5)), ("Dado2", 6, (-0.06, -0.22, 0.07), (40, -20, 70))], 90)
+    camara((0.0, -0.25, 0.36), (0.0, -0.02, 0), 40, (0, -0.03, 0), 4.0)
+    cam = escena.camera
+    bpy.ops.object.empty_add(location=sum(finales, Vector()) / len(finales))
+    cam.data.dof.focus_object = bpy.context.object
+    cam.keyframe_insert("location", frame=1)
+    cam.keyframe_insert("rotation_euler", frame=1)
+    cam.location = (0.0, -0.27, 0.17)
+    cam.rotation_euler = (Vector((0.0, 0.02, 0)) - cam.location).to_track_quat("-Z", "Y").to_euler()
+    cam.keyframe_insert("location", frame=90)
+    cam.keyframe_insert("rotation_euler", frame=90)
+    escena.render.use_motion_blur = True
+
+
+ANIMACIONES = {"entrada"}
+
+
+ESCENAS = {"mesa-story": mesa_story, "mesa-publicacion": mesa_publicacion, "web": web, "navidad": navidad, "mazo": mazo, "entrada": entrada}
 if nombre_escena.startswith("presentamos-"):
     presentamos(nombre_escena.split("-", 1)[1])
 else:
     ESCENAS[nombre_escena]()
-bpy.ops.render.render(write_still=True)
+if nombre_escena in ANIMACIONES:
+    escena.render.fps = 30
+    escena.render.image_settings.file_format = "PNG"
+    bpy.ops.render.render(animation=True)
+else:
+    bpy.ops.render.render(write_still=True)
